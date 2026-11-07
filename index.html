@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本草智答 · AI中医药知识问答与经典荐读智能体</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/appicon-180.png">
+<meta name="theme-color" content="#2F5D50">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Ma+Shan+Zheng&display=swap');
+:root{
+  --bg:#F5F1E8; --paper:#FFFFFF; --ink:#2B2B26; --ink2:#6B6A60; --ink3:#98958A;
+  --green:#2F5D50; --green-d:#234A3F; --green-l:#E7EFEA;
+  --red:#A63E28; --red-l:#F7E9E4;
+  --gold:#9A7B3F; --gold-l:#F3ECDC; --line:#E5E0D2;
+  --shadow:0 10px 40px rgba(43,43,38,.07);
+  --shadow-h:0 16px 48px rgba(43,43,38,.12);
+}
+/* 四季换肤 · 节气主色（朱印红与鎏金不随季变，保持印记感；--fx 为当季飘落物颜色） */
+html[data-season="春"]{--green:#3E8E5C;--green-d:#2C6A44;--green-l:#E2F1E4;--bg:#F0F7EA;--fx:#E8A7B4;--mglow:#E8A7B45C}
+html[data-season="夏"]{--green:#257A87;--green-d:#1B5B65;--green-l:#DFEFF0;--bg:#ECF4F3;--fx:#D9B23E;--mglow:#D9B23E59}
+html[data-season="秋"]{--green:#A8741F;--green-d:#835812;--green-l:#F5EBD2;--bg:#F8F1DE;--fx:#C98A2E;--mglow:#C98A2E59}
+html[data-season="冬"]{--green:#46566B;--green-d:#33404F;--green-l:#E5EAF0;--bg:#EEF1F5;--fx:#9FB4CC;--mglow:#9FB4CC66}
+/* 当季飘落物：春花瓣 · 夏流萤 · 秋红叶 · 冬初雪 */
+#seasonFx{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+#seasonFx span{position:absolute;top:-7vh;color:var(--fx);animation:seasFall linear infinite;will-change:transform;text-shadow:0 0 6px rgba(255,255,255,.5)}
+@keyframes seasFall{0%{transform:translate3d(0,-8vh,0) rotate(0deg)}50%{transform:translate3d(2.5vw,50vh,0) rotate(190deg)}100%{transform:translate3d(-1vw,110vh,0) rotate(380deg)}}
+@media(prefers-reduced-motion:reduce){#seasonFx{display:none}}
+.season-bar{display:flex;gap:8px;align-items:center;margin-top:16px;font-size:12.5px;color:var(--ink3);letter-spacing:1px;flex-wrap:wrap}
+.season-bar button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#FCFBF6;color:var(--ink2);font-family:inherit;font-size:14px;cursor:pointer;transition:all .3s;padding:0}
+.season-bar button:hover{border-color:var(--green);color:var(--green)}
+.season-bar button.on{background:var(--green);border-color:var(--green-d);color:#FBF7EC;box-shadow:0 3px 10px rgba(43,43,38,.18)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif;line-height:1.8;position:relative;transition:background-color .8s}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.33 0 0 0 0 0.28 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background:radial-gradient(ellipse 900px 500px at 85% -5%,rgba(47,93,80,.06),transparent 60%),
+            radial-gradient(ellipse 700px 420px at 0% 100%,rgba(166,62,40,.05),transparent 60%)}
+::selection{background:var(--green);color:#fff}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 70px;position:relative;z-index:1}
+
+/* ===== 头部 ===== */
+header{padding:44px 0 8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.seal-stamp{width:58px;height:58px;background:var(--red);border-radius:8px;display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:7px;box-shadow:0 4px 14px rgba(166,62,40,.3);transform:rotate(-3deg)}
+.seal-stamp span{color:#FBF3E4;font-size:19px;font-weight:700;line-height:1;display:block}
+.logo-group{flex:1;min-width:240px}
+.logo{font-size:34px;font-weight:900;letter-spacing:10px;color:var(--green);line-height:1.2}
+.logo em{font-style:normal;color:var(--red)}
+.sub{color:var(--ink2);font-size:13px;letter-spacing:3px;margin-top:4px}
+.head-verse{font-family:"Ma Shan Zheng","Noto Serif SC",serif;color:var(--ink3);font-size:15px;writing-mode:vertical-rl;letter-spacing:6px;border-left:1px solid var(--line);padding-left:14px;height:64px}
+
+/* ===== 导航 ===== */
+nav{display:flex;gap:6px;margin:26px 0 30px;border-bottom:1px solid var(--line);padding-bottom:0;position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;padding-top:8px;backdrop-filter:blur(4px)}
+nav button{border:none;background:none;font-family:inherit;font-size:15px;letter-spacing:3px;padding:10px 20px 14px;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;transition:all .25s;position:relative}
+nav button:hover{color:var(--green)}
+nav button.on{color:var(--green);border-bottom-color:var(--red);font-weight:600}
+.page{display:none;animation:fade .4s cubic-bezier(.2,.7,.3,1)}
+.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== 卡片 ===== */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:34px 38px;box-shadow:var(--shadow);position:relative;transition:box-shadow .3s}
+.card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(154,123,63,.14);border-radius:2px;pointer-events:none}
+h2{font-size:21px;letter-spacing:4px;color:var(--green);margin-bottom:6px;font-weight:700}
+h2 .dot{color:var(--red)}
+.desc{color:var(--ink2);font-size:13.5px;margin-bottom:20px;max-width:640px}
+.orn{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:var(--gold);font-size:12px;letter-spacing:4px}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold) 70%,transparent);opacity:.4}
+
+/* ===== 首页 ===== */
+.hero{display:flex;gap:26px;align-items:stretch;flex-wrap:wrap}
+.hero-main{flex:1.5;min-width:300px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero-main .watermark{position:absolute;right:-30px;bottom:-60px;font-family:"Ma Shan Zheng",serif;font-size:220px;color:rgba(47,93,80,.045);line-height:1;pointer-events:none;user-select:none}
+.hero-main::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56%;background:url("assets/ink-mountains.jpg") center bottom/cover no-repeat;opacity:.4;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent,#000 50%);mask-image:linear-gradient(180deg,transparent,#000 50%)}
+.hero-main>*{position:relative;z-index:1}
+.hero-cloud{position:absolute;top:-14px;right:-10px;width:120px;color:var(--gold);opacity:.45;pointer-events:none;user-select:none}
+.hero-main h1{font-size:30px;letter-spacing:6px;font-weight:900;margin-bottom:4px}
+.hero-main h1 em{font-style:normal;color:var(--red)}
+.hero-main .h-sub{color:var(--gold);font-size:14px;letter-spacing:4px;margin-bottom:14px}
+.hero-main p{margin:0 0 20px;color:var(--ink2);font-size:14.5px;position:relative}
+.hero-stats{display:flex;gap:0;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:22px;background:#FCFBF6}
+.hero-stats div{flex:1;text-align:center;padding:12px 4px;border-right:1px solid var(--line)}
+.hero-stats div:last-child{border-right:none}
+.hero-stats b{display:block;font-size:22px;color:var(--green);font-weight:700}
+.hero-stats span{font-size:12px;color:var(--ink3);letter-spacing:2px}
+.btn{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:3px;padding:12px 26px;font-family:inherit;font-size:14px;letter-spacing:3px;cursor:pointer;transition:all .25s;box-shadow:0 4px 14px rgba(47,93,80,.25)}
+.btn:hover{background:var(--green-d);transform:translateY(-2px);box-shadow:0 8px 22px rgba(47,93,80,.32)}
+.btn.red{background:var(--red);box-shadow:0 4px 14px rgba(166,62,40,.25)}
+.btn.red:hover{background:#8F3522;box-shadow:0 8px 22px rgba(166,62,40,.32)}
+.btn.ghost{background:none;color:var(--green);border:1px solid var(--green);box-shadow:none}
+.btn.ghost:hover{background:var(--green-l);transform:translateY(-2px)}
+.seal-side{display:flex;align-items:center;justify-content:center;min-width:230px;position:relative;border-radius:4px;background:linear-gradient(160deg,#F3E6E0,#EDDCD3);border:1px solid #E0C9BE}
+.seal-side .zi{font-family:"Ma Shan Zheng",serif;font-size:54px;letter-spacing:14px;color:var(--red);writing-mode:vertical-rl;text-shadow:0 2px 0 rgba(166,62,40,.15)}
+.seal-side .circle{position:absolute;width:150px;height:150px;border:1px solid rgba(166,62,40,.25);border-radius:50%}
+.seal-side .circle.c2{width:190px;height:190px;opacity:.5}
+
+/* ===== 每日本草 ===== */
+.daily{margin-top:22px;display:flex;gap:26px;align-items:flex-start}
+.daily-left{flex:none;width:110px;border-right:1px solid var(--line);padding-right:22px;text-align:center}
+.daily-left .big{font-family:"Ma Shan Zheng",serif;font-size:56px;color:var(--green);line-height:1.1}
+.daily-left .pinyin{font-size:11px;color:var(--ink3);letter-spacing:3px}
+.daily-main{flex:1}
+.daily-pic{flex:none;width:148px;align-self:center}
+.daily-pic .ph{width:148px;height:148px;border-radius:10px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);position:relative;background:#EFE9D8}
+.daily-pic .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.daily-pic:hover .ph img{transform:scale(1.06)}
+.daily-pic .cap{display:block;text-align:center;font-size:11px;color:var(--ink3);letter-spacing:3px;margin-top:8px}
+.daily-tag{display:inline-flex;align-items:center;gap:8px;background:var(--gold-l);color:var(--gold);font-size:12px;letter-spacing:2px;border-radius:3px;padding:4px 12px;margin-bottom:10px}
+.daily h3{font-size:20px;color:var(--ink);margin-bottom:2px}
+.daily .flavor{color:var(--red);font-size:13px;margin-bottom:8px}
+.daily .src{color:var(--ink2);font-size:12.5px;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.daily .ask{margin-top:12px}
+.daily .ask a{color:var(--green);font-size:13.5px;text-decoration:none;border-bottom:1px dashed var(--green);padding-bottom:2px;transition:all .2s}
+.daily .ask a:hover{color:var(--red);border-bottom-color:var(--red)}
+
+/* ===== 体质辨识 ===== */
+.q-item{margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--line)}
+.q-item:last-of-type{border-bottom:none}
+.q-num{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--green-l);color:var(--green);font-size:13px;text-align:center;line-height:26px;margin-right:10px;font-weight:600}
+.q-item p{font-size:15px;margin-bottom:10px}
+.opts{display:flex;gap:8px;flex-wrap:wrap;padding-left:36px}
+.opts button{border:1px solid var(--line);background:#FCFBF6;border-radius:3px;padding:6px 18px;font-family:inherit;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .2s}
+.opts button:hover{border-color:var(--green);color:var(--green)}
+.opts button.sel{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 3px 10px rgba(47,93,80,.25)}
+.result{text-align:center}
+.const-name{font-family:"Ma Shan Zheng",serif;font-size:52px;letter-spacing:14px;color:var(--red);margin:8px 0 4px}
+.bar-row{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--ink2);margin:6px 0}
+.bar-row .nm{width:60px;text-align:right;flex:none}
+.bar{flex:1;height:8px;background:#EFECE1;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#4A7A6A);border-radius:4px;transition:width .8s cubic-bezier(.2,.7,.3,1)}
+.bar-row.top .bar i{background:linear-gradient(90deg,var(--red),#C4624A)}
+.bar-row.top .nm,.bar-row.top .sc{color:var(--red);font-weight:600}
+.bar-row .sc{width:28px;flex:none}
+.book-rec{margin-top:18px;text-align:left;border-top:1px dashed var(--line);padding-top:16px}
+.book-rec h4{color:var(--gold);letter-spacing:3px;font-size:14px;margin-bottom:8px}
+
+/* ===== 问答 ===== */
+.chat-box{height:440px;overflow-y:auto;background:#FCFBF6;border:1px solid var(--line);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.chat-box::-webkit-scrollbar{width:6px}
+.chat-box::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.msg{max-width:80%;font-size:14px;animation:pop .3s cubic-bezier(.2,.7,.3,1)}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+.msg .who{font-size:11.5px;color:var(--ink3);letter-spacing:3px;margin-bottom:4px}
+.msg .bd{border-radius:4px;padding:12px 16px;line-height:1.8}
+.msg.bot .bd{background:#fff;border:1px solid var(--line);border-left:3px solid var(--green)}
+.msg.me{align-self:flex-end}
+.msg.me .bd{background:var(--green);color:#fff}
+.msg.bot .bd b{color:var(--red)}
+.msg.bot{display:flex;gap:12px;align-items:flex-start}
+.bot-avatar{width:42px;height:42px;border-radius:50%;background:var(--green-l);flex:none;object-fit:contain;object-position:center bottom;padding:3px;box-shadow:0 2px 8px rgba(43,43,38,.12),0 0 0 2px var(--green-l),0 0 12px var(--mglow,transparent)}
+.msg.bot>div:nth-child(2){flex:1;min-width:0}
+.bot-id{display:flex;align-items:center;gap:12px;padding:2px 4px 14px}
+.bot-id img{width:52px;height:52px;border-radius:50%;background:var(--green-l);border:2px solid #fff;object-fit:contain;object-position:center bottom;padding:3px;box-shadow:0 4px 12px rgba(43,43,38,.15);transition:transform .3s}
+.bot-id img.think{animation:think .7s ease-in-out infinite}
+@keyframes think{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-9deg) translateY(-2px)}75%{transform:rotate(9deg) translateY(-2px)}}
+.bot-id img.happy{animation:pop .55s ease}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.22) rotate(-8deg) translateY(-4px)}70%{transform:scale(.96) rotate(3deg)}100%{transform:scale(1)}}
+.bot-id b{font-size:15px;letter-spacing:2px;color:var(--green)}
+.bot-id span{display:block;font-size:12px;color:var(--ink3);letter-spacing:1px}
+.bot-id .online{margin-left:auto;font-size:12px;color:var(--green);letter-spacing:1px}
+.bot-id .online::before{content:"●";margin-right:5px;animation:blink 1.6s infinite}
+.side-mascot{width:158px;height:auto;position:absolute;bottom:0;left:50%;transform:translateX(-50%);filter:drop-shadow(0 12px 16px rgba(43,43,38,.22)) drop-shadow(0 3px 6px rgba(43,43,38,.1)) drop-shadow(0 0 16px var(--mglow,transparent));z-index:1;cursor:pointer;animation:breathe 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.mascot-badge{position:absolute;bottom:78px;left:calc(50% + 42px);width:30px;height:30px;border-radius:50%;background:var(--green);color:#FBF3E4;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:2;border:2px solid #FBF3E4;box-shadow:0 3px 8px rgba(43,43,38,.28);font-family:"Ma Shan Zheng",cursive;transition:background .6s ease;pointer-events:none}
+.mascot-badge::after{content:"藥"}
+html[data-season="春"] .mascot-badge::after{content:"春"}
+html[data-season="夏"] .mascot-badge::after{content:"夏"}
+html[data-season="秋"] .mascot-badge::after{content:"秋"}
+html[data-season="冬"] .mascot-badge::after{content:"冬"}
+.side-mascot.acting{animation:none}
+@keyframes breathe{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}50%{transform:translateX(-50%) scale(1.025) translateY(-4px)}}
+.mascot-bubble{position:absolute;bottom:172px;left:50%;transform:translateX(-50%) translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:9px 13px;font-size:12.5px;line-height:1.6;max-width:170px;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.5px}
+.mascot-bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #FBF3E4}
+.mascot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.mascot-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;color:rgba(166,62,40,.65);background:rgba(251,243,228,.85);border:1px solid rgba(166,62,40,.25);padding:3px 10px;border-radius:999px;z-index:3;pointer-events:none;transition:opacity .4s}
+.mascot-hint.hide{opacity:0}
+.seal-side{overflow:hidden;min-height:440px}
+.seal-side .zi{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:30px;letter-spacing:8px;writing-mode:vertical-rl;background:var(--red);color:#FBF3E4;padding:16px 8px;border-radius:6px;box-shadow:0 4px 12px rgba(166,62,40,.28)}
+.typing{display:inline-flex;gap:5px;padding:6px 2px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}
+.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.kv{margin:5px 0}
+.kv .k{color:var(--gold);margin-right:8px}
+.kv .k::before{content:"◈ "}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 16px;font-family:inherit;font-size:12.5px;color:var(--green);cursor:pointer;transition:all .2s}
+.chips button:hover{border-color:var(--green);background:var(--green-l);transform:translateY(-1px)}
+.input-row{display:flex;gap:10px;margin-top:14px}
+.input-row input{flex:1;border:1px solid var(--line);border-radius:3px;padding:12px 16px;font-family:inherit;font-size:14px;background:#fff;transition:border .2s,box-shadow .2s}
+.input-row input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(47,93,80,.1)}
+
+/* ===== 荐读 ===== */
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filter button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 18px;font-family:inherit;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .2s}
+.filter button.sel{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 3px 10px rgba(166,62,40,.25)}
+.books{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.book{border:1px solid var(--line);border-radius:4px;padding:20px 22px;background:#fff;position:relative;overflow:hidden;transition:all .3s}
+.book::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);opacity:0;transition:opacity .3s}
+.book:hover{transform:translateY(-3px);box-shadow:var(--shadow-h);border-color:#D8D2C0}
+.book:hover::after{opacity:1}
+.book h4{font-size:17px;color:var(--ink);letter-spacing:2px}
+.book .au{font-size:12px;color:var(--ink3);margin-bottom:8px}
+.book p{font-size:13px;color:var(--ink2);margin:6px 0}
+.book .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.book .fit{color:var(--gold);font-size:12.5px}
+.fit-badge{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-size:11px;border-radius:0 4px 0 4px;padding:4px 12px;letter-spacing:2px}
+.tag{background:var(--green-l);color:var(--green);font-size:12px;border-radius:3px;padding:2px 10px}
+.diff{display:inline-block;font-size:11px;border-radius:10px;padding:1px 10px;margin-left:8px;vertical-align:2px;letter-spacing:1px;font-weight:400}
+.diff.ez{background:var(--green-l);color:var(--green)}
+.diff.mid{background:var(--gold-l);color:var(--gold)}
+.diff.hard{background:var(--red-l);color:var(--red)}
+.book .hl{margin:10px 0 6px;padding:9px 14px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;font-size:13.5px;color:var(--ink);line-height:1.75;letter-spacing:.5px}
+.book .hl span{display:block;margin-top:4px;font-size:11.5px;color:var(--ink3);text-align:right}
+.book .why{color:var(--green);font-size:12.5px}
+.today-badge{position:absolute;top:0;left:0;background:var(--gold);color:#fff;font-size:11px;border-radius:4px 0 4px 0;padding:4px 12px;letter-spacing:2px}
+.read-path{background:var(--paper);border:1px dashed var(--gold);border-radius:4px;padding:10px 16px;font-size:12.5px;color:var(--ink2);margin-bottom:16px;line-height:2}
+.read-path b{color:var(--red);font-family:"Ma Shan Zheng",serif;font-weight:400;margin-right:10px;font-size:14px}
+.read-path em{font-style:normal;color:var(--gold)}
+
+/* ===== 看图辨药 ===== */
+.game-round{text-align:center;font-size:12px;color:var(--ink3);letter-spacing:3px;margin-bottom:14px}
+.game-pic{width:190px;height:190px;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);margin:0 auto 16px;position:relative}
+.game-pic img{width:100%;height:100%;object-fit:cover;display:block;animation:zoomin .4s ease}
+@keyframes zoomin{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.game-pic.shake{animation:shake .4s}
+.game-opts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:520px;margin:0 auto 16px}
+.game-opts button{min-width:116px;border:1.5px solid var(--line);background:#FCFBF6;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:15px;letter-spacing:3px;color:var(--ink);cursor:pointer;transition:all .25s}
+.game-opts button:hover:not(:disabled){border-color:var(--green);color:var(--green);transform:translateY(-2px);box-shadow:0 6px 14px rgba(47,93,80,.16)}
+.game-opts button:disabled{cursor:default;opacity:.55}
+.game-opts button.ok{background:var(--green);border-color:var(--green);color:#fff;opacity:1;box-shadow:0 4px 12px rgba(47,93,80,.3)}
+.game-opts button.bad{background:var(--red-l);border-color:var(--red);color:var(--red);opacity:1}
+.game-fb{max-width:500px;margin:0 auto;text-align:center;font-size:13.5px;color:var(--ink2);min-height:52px;line-height:1.9}
+.game-fb b{color:var(--green)}
+.game-fb .good{color:var(--red)}
+.game-score{display:flex;max-width:360px;margin:0 auto 18px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#FCFBF6}
+.game-score div{flex:1;text-align:center;padding:10px 4px;border-right:1px solid var(--line)}
+.game-score div:last-child{border-right:none}
+.game-score b{display:block;font-size:22px;color:var(--red);font-family:"Ma Shan Zheng",serif;font-weight:400;line-height:1.2}
+.game-score span{font-size:11px;color:var(--ink3);letter-spacing:2px}
+.game-end{text-align:center}
+.game-end .title{font-family:"Ma Shan Zheng",serif;font-size:44px;color:var(--red);margin:6px 0 10px;animation:zoomin .5s ease}
+.game-end .seal{display:inline-block;border:2px solid var(--red);color:var(--red);border-radius:8px;padding:8px 22px;font-family:"Ma Shan Zheng",serif;font-size:20px;letter-spacing:6px;margin-bottom:14px;transform:rotate(-3deg)}
+.game-end p{color:var(--ink2);font-size:14px;max-width:460px;margin:0 auto 18px}
+
+/* ===== 知识竞赛计时 ===== */
+.game-timer{max-width:360px;margin:0 auto 14px;display:flex;align-items:center;gap:10px}
+.game-timer .bar{flex:1;height:7px;background:#EDE8DC;border-radius:4px;overflow:hidden}
+.game-timer .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px}
+.game-timer .sec{font-family:"Ma Shan Zheng",serif;font-size:18px;color:var(--red);min-width:44px;text-align:right}
+.game-timer .bar i.low{background:var(--red)}
+
+/* ===== 岐黄打卡 ===== */
+.ci-banner{background:var(--paper);border:1px dashed var(--gold);border-radius:4px;padding:10px 16px;margin-bottom:18px;font-size:13px;color:var(--ink2);text-align:center;letter-spacing:1px}
+.ci-stats{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#FCFBF6;margin-bottom:18px;flex-wrap:wrap}
+.ci-stats div{flex:1;text-align:center;padding:14px 6px;border-right:1px solid var(--line);min-width:86px}
+.ci-stats div:last-child{border-right:none}
+.ci-stats b{display:block;font-size:26px;color:var(--red);font-family:"Ma Shan Zheng",serif;font-weight:400;line-height:1.25}
+.ci-stats span{font-size:11px;color:var(--ink3);letter-spacing:2px}
+.ci-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:360px;margin:0 auto 8px}
+.ci-cal .cell{aspect-ratio:1;border-radius:6px;border:1px dashed rgba(152,149,138,.45);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink3);background:#FAF8F0}
+.ci-cal .cell.hit{border:1px solid var(--green);background:var(--green);color:#F7F3E6;font-weight:600;position:relative}
+.ci-cal .cell.hit::after{content:"✓";position:absolute;right:3px;bottom:1px;font-size:9px;opacity:.85}
+.ci-cal .cell.today{border-color:var(--red);box-shadow:0 0 0 2px rgba(166,62,40,.18)}
+.ci-cal .cell.wk{font-size:10px;color:var(--gold);border:none;background:none}
+.ci-month{text-align:center;font-size:12.5px;color:var(--ink3);letter-spacing:2px;margin-bottom:12px}
+.ci-quote{text-align:center;font-family:"Ma Shan Zheng",serif;font-size:17px;color:var(--green);margin:16px 0 6px}
+.ci-quote-src{text-align:center;font-size:11.5px;color:var(--ink3);margin-bottom:14px}
+
+/* ===== 本草图鉴集章 ===== */
+.al-progress{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px dashed var(--gold);border-radius:4px;padding:12px 18px;margin-bottom:18px}
+.al-progress .num{font-family:"Ma Shan Zheng",serif;font-size:30px;color:var(--red);line-height:1;white-space:nowrap}
+.al-progress .num small{font-size:14px;color:var(--ink3)}
+.al-progress .bar{flex:1;height:8px;background:#EDE8DC;border-radius:4px;overflow:hidden}
+.al-progress .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px;transition:width .6s ease}
+.al-progress .title{white-space:nowrap}
+.al-progress .title b{display:block;font-family:"Ma Shan Zheng",serif;font-size:17px;color:var(--green);font-weight:400}
+.al-progress .title span{font-size:11px;color:var(--ink3)}
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:14px}
+.al-card{border:1px solid var(--line);border-radius:8px;background:#FCFBF6;padding:10px;text-align:center;position:relative;transition:transform .25s,box-shadow .25s}
+.al-card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(47,93,80,.14)}
+.al-pic{width:100%;aspect-ratio:1;border-radius:6px;overflow:hidden;border:1px solid var(--line);position:relative}
+.al-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.al-card.locked .al-pic img{filter:grayscale(1) brightness(1.28) blur(2px);opacity:.4}
+.al-card.locked{background:#F5F2E9}
+.al-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Ma Shan Zheng",serif;font-size:56px;color:var(--ink3);opacity:.8;pointer-events:none;transform:rotate(-4deg)}
+.al-card b{display:block;margin-top:8px;font-size:15px;letter-spacing:2px;color:var(--ink)}
+.al-card.locked b{color:var(--ink3)}
+.al-card span{display:block;font-size:11px;color:var(--ink3);margin-top:3px;min-height:16px}
+.al-seal{position:absolute;top:16px;right:16px;background:rgba(178,44,38,.92);color:#fff;font-family:"Ma Shan Zheng",serif;font-size:11px;border-radius:3px;padding:3px 6px;letter-spacing:1px;transform:rotate(6deg);box-shadow:0 2px 6px rgba(178,44,38,.35)}
+.al-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#F5EFE2;font-size:13.5px;letter-spacing:2px;border-radius:999px;padding:10px 26px;box-shadow:0 8px 24px rgba(0,0,0,.28);z-index:99;animation:toastin .35s ease}
+@keyframes toastin{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ===== 页脚 ===== */
+footer{margin-top:50px;text-align:center;color:var(--ink3);font-size:12px;letter-spacing:2px;position:relative}
+footer::before{content:"";display:block;width:200px;height:1px;margin:0 auto 18px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);letter-spacing:6px;margin-bottom:6px}
+/* ===== 首页扩展 ===== */
+.home-steps{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.home-steps .step{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 18px 7px 9px;font-size:13px;color:var(--ink2);box-shadow:var(--shadow);letter-spacing:1px}
+.home-steps .step b{width:26px;height:26px;border-radius:50%;background:var(--red);color:#FBF3E4;display:grid;place-items:center;font-size:13px;font-family:"Ma Shan Zheng",serif}
+.home-steps .arr{color:var(--gold);font-size:15px}
+.home-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.feat{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:24px 16px 20px;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;box-shadow:var(--shadow);text-align:center}
+.feat::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--green),var(--gold));opacity:0;transition:opacity .3s}
+.feat:hover{transform:translateY(-4px);box-shadow:var(--shadow-h);border-color:#D8D2C0}
+.feat:hover::after{opacity:1}
+.feat .gly{font-family:"Ma Shan Zheng",serif;font-size:32px;width:62px;height:62px;margin:0 auto 12px;border-radius:12px;background:var(--green-l);color:var(--green);display:grid;place-items:center;transition:all .3s}
+.feat:hover .gly{background:var(--red-l);color:var(--red);transform:rotate(-5deg)}
+.feat b{display:block;font-size:15.5px;letter-spacing:3px;color:var(--ink)}
+.feat span{display:block;font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.7}
+.feat .more{position:absolute;right:12px;top:8px;color:var(--line);font-size:20px;transition:all .3s}
+.feat:hover .more{color:var(--gold);transform:translateX(3px)}
+.grid2{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;margin-top:22px;align-items:stretch}
+.grid2>.card{padding:26px 30px}
+#termCard{position:relative;overflow:hidden}
+#termCard::after{content:"";position:absolute;right:-70px;bottom:-60px;width:58%;height:82%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.24;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 45%,transparent);mask-image:radial-gradient(closest-side,#000 45%,transparent)}
+#termCard>*{position:relative;z-index:1}
+/* 当季标志插画：圆形印框挂画 */
+.season-img{float:right;width:116px;height:116px;object-fit:cover;border-radius:50%;border:2px solid var(--gold);box-shadow:0 6px 18px rgba(43,43,38,.16);margin:2px 4px 10px 16px;transition:transform .5s;opacity:.95}
+.season-img:hover{transform:rotate(3deg) scale(1.04)}
+@media(max-width:720px){.season-img{width:92px;height:92px}}
+.grid2 .daily{margin-top:0}
+.term-name{font-family:"Ma Shan Zheng",serif;font-size:42px;color:var(--red);line-height:1.15}
+.quote{font-size:13.5px;color:var(--ink);letter-spacing:1px;line-height:2;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.quote .src{display:block;font-size:12px;color:var(--gold);margin-top:4px;letter-spacing:2px}
+.phys-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-l);border:1px dashed var(--gold);color:var(--gold);border-radius:3px;padding:8px 14px;font-size:12.5px;letter-spacing:1px;cursor:pointer;line-height:1.6}
+.phys-badge:hover{background:#EDE3C9}
+.phys-badge b{color:var(--red)}
+.last-phys{background:var(--green-l);border:1px dashed var(--green);border-radius:3px;padding:10px 14px;font-size:13px;color:var(--ink2);margin-bottom:18px;line-height:1.9}
+.last-phys b{color:var(--red)}
+.last-phys a{color:var(--green);cursor:pointer;border-bottom:1px dashed var(--green);padding-bottom:1px}
+#posterMask{position:fixed;inset:0;background:rgba(30,28,22,.55);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:99;padding:20px}
+#posterMask.on{display:flex}
+#posterMask img{max-height:76vh;max-width:88vw;border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+#posterMask .tip{color:#FBF3E4;font-size:13px;letter-spacing:2px}
+/* ===== 宣传横幅（滚动跑马灯） ===== */
+.promo-bar{background:linear-gradient(90deg,var(--green),#3E7264 55%,var(--green));color:#F3EEDD;border-radius:4px;padding:9px 0;margin:0 0 14px;overflow:hidden;font-size:13px;letter-spacing:2px;box-shadow:var(--shadow)}
+.promo-inner{display:inline-block;white-space:nowrap;animation:promoScroll 30s linear infinite}
+.promo-inner b{color:#F0D48A;font-family:"Ma Shan Zheng",serif;font-weight:400}
+.promo-inner .sep{opacity:.5;margin:0 6px}
+@keyframes promoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ===== 经典选读弹层 ===== */
+.read-mask{display:none;position:fixed;inset:0;background:rgba(43,43,38,.55);z-index:60;backdrop-filter:blur(3px)}
+.read-mask.on{display:flex;align-items:center;justify-content:center;padding:18px}
+.read-modal{background:#F7F3E8;border-radius:8px;max-width:760px;width:100%;max-height:86vh;overflow-y:auto;position:relative;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.35);animation:zoomin .3s ease}
+.rm-cover{position:relative;height:230px;overflow:hidden}
+.rm-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.rm-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,43,38,0) 40%,rgba(247,243,232,1) 100%)}
+.rm-title{position:absolute;left:26px;bottom:14px;z-index:2}
+.rm-title h3{font-size:26px;letter-spacing:4px;color:var(--ink)}
+.rm-title span{font-size:12.5px;color:var(--ink2)}
+.rm-close{position:absolute;top:12px;right:14px;z-index:3;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#F7F3E8;color:var(--ink2);font-size:15px;cursor:pointer}
+.rm-close:hover{color:var(--red);border-color:var(--red)}
+.rm-body{padding:4px 30px 28px}
+.rm-meta{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.rm-passage{background:#fff;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;padding:14px 18px;margin:0 0 14px}
+.rm-passage .pt{font-size:15px;color:var(--ink);line-height:2;letter-spacing:1px}
+.rm-passage .pt .src{display:block;text-align:right;font-size:11.5px;color:var(--ink3);margin-top:4px}
+.rm-passage .tr{margin-top:8px;font-size:13px;color:var(--ink2);line-height:1.9}
+.rm-passage .tr::before{content:"⇣ 白话";color:var(--gold);font-size:11px;letter-spacing:2px;display:block;margin-bottom:2px}
+.rm-guide{font-size:13px;color:var(--green);line-height:1.9;margin:4px 0 6px}
+.rm-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+/* ===== 书卡阅读按钮 ===== */
+.book .read-btn{margin-top:12px;width:100%;border:1px solid var(--gold);background:#F5EBD4;color:#7A5B1E;border-radius:4px;padding:8px 0;font-family:inherit;font-size:13px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.book .read-btn:hover{background:var(--gold);color:#fff}
+/* ===== 辨药问答型考题 ===== */
+.game-qtext{max-width:560px;margin:0 auto 16px;background:var(--paper);border:1px dashed var(--gold);border-radius:6px;padding:16px 20px;text-align:center;font-size:15px;line-height:1.9;color:var(--ink);letter-spacing:.5px}
+.game-qtext .qt-tag{display:inline-block;font-size:11px;color:var(--gold);letter-spacing:3px;border:1px solid var(--gold);border-radius:999px;padding:2px 12px;margin-bottom:8px}
+/* ===== 挑战战帖 toast ===== */
+.chal-toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(80px);background:var(--green);color:#F3EEDD;border-radius:999px;padding:10px 24px;font-size:13.5px;letter-spacing:1px;box-shadow:0 10px 26px rgba(47,93,80,.4);z-index:80;transition:transform .35s ease;pointer-events:none}
+.chal-toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:720px){.books,.grid2{grid-template-columns:1fr}.home-feats{grid-template-columns:1fr 1fr}.head-verse{display:none}.daily{flex-direction:column}.daily-left{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;width:100%;display:flex;gap:14px;align-items:baseline;justify-content:center}nav{overflow-x:auto;justify-content:flex-start}nav button{flex:none;white-space:nowrap}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="seal-stamp"><span>本</span><span>草</span></div>
+  <div class="logo-group">
+    <div class="logo">本草<em>智答</em></div>
+    <div class="sub">AI中医药知识问答与经典荐读智能体</div>
+  </div>
+  <div class="head-verse">传承岐黄薪火 · 智启阅读之门</div>
+</header>
+<nav id="nav">
+  <button data-p="home" class="on">首页</button>
+  <button data-p="quiz">体质辨识</button>
+  <button data-p="chat">本草问答</button>
+  <button data-p="read">经典荐读</button>
+  <button data-p="album">本草图鉴</button>
+  <button data-p="game">看图辨药</button>
+  <button data-p="checkin">岐黄打卡</button>
+</nav>
+<div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
+
+<section class="page on" id="p-home">
+  <div class="hero">
+    <div class="card hero-main">
+      <div class="watermark">答</div>
+      <svg class="hero-cloud" viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 6 0 11 4 13 9 6-1 11 3 12 8 1 6-4 13-12 13H14z" opacity=".85"/><path d="M30 44c2-4 6-6 10-5" opacity=".5"/><path d="M78 54c-4 0-7-3-7-6s3-6 6-6c1-4 4-7 9-7 4 0 7 2 8 5 4 0 7 3 7 6 1 4-3 8-8 8H78z" opacity=".6"/><path d="M92 54c1-2 3-4 5-3" opacity=".4"/></svg>
+      <div class="h-sub">—— 一部会对话的本草纲目 ——</div>
+      <h1>本草<em>智答</em></h1>
+      <p>先识体质，再问本草，后读经典。「本草智答」将中医体质辨识、本草知识问答与经典书目荐读融为一体，让千年岐黄之学以对话的方式，走近每一位读者。</p>
+      <div class="hero-stats">
+        <div><b>14</b><span>味本草</span></div>
+        <div><b>6</b><span>首名方</span></div>
+        <div><b>3</b><span>处穴位</span></div>
+        <div><b>9</b><span>种体质</span></div>
+        <div><b>9/27</b><span>题国标测评</span></div>
+        <div><b>12</b><span>部经典</span></div>
+        <div><b id="alStat">0</b><span>已集图鉴</span></div>
+        <div><b id="ciStat">0</b><span>连续打卡</span></div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn red" onclick="go('quiz')">开始体质辨识</button>
+        <button class="btn ghost" onclick="go('chat')">进入本草问答</button>
+        <span class="phys-badge" id="physBadge" style="display:none" onclick="go('quiz')"></span>
+      </div>
+      <div class="season-bar">
+        <b style="color:var(--gold);letter-spacing:2px">◈ 四季更衣</b>
+        <button data-s="春" onclick="setSeason('春')">春</button>
+        <button data-s="夏" onclick="setSeason('夏')">夏</button>
+        <button data-s="秋" onclick="setSeason('秋')">秋</button>
+        <button data-s="冬" onclick="setSeason('冬')">冬</button>
+        <span>页面主色与飘落物随二十四节气自动更衣 · 点字即刻预览四季</span>
+      </div>
+    </div>
+    <div class="seal-side">
+      <div class="circle"></div><div class="circle c2"></div>
+      <span class="zi">岐黄薪火</span>
+      <div class="mascot-bubble" id="mascotBubble"></div>
+      <img class="side-mascot" id="mascot" src="assets/mascot-idle.png" alt="本草智答 · AI小药童" title="点我互动">
+      <span class="mascot-badge" title="小药童的时令腰牌"></span>
+      <span class="mascot-hint" id="mascotHint">点我互动</span>
+    </div>
+  </div>
+  <div class="home-steps">
+    <span class="step"><b>一</b>识体质 · 知自身寒热</span><span class="arr">→</span>
+    <span class="step"><b>二</b>问本草 · 解日常疑惑</span><span class="arr">→</span>
+    <span class="step"><b>三</b>读经典 · 悟养生之道</span><span class="arr">→</span>
+    <span class="step"><b>四</b>集图鉴 · 藏百草画像</span><span class="arr">→</span>
+    <span class="step"><b>五</b>战竞赛 · 过目识药名</span><span class="arr">→</span>
+    <span class="step"><b>六</b>勤打卡 · 日日岐黄缘</span>
+  </div>
+  <div class="home-feats">
+    <div class="feat" onclick="go('quiz')"><span class="more">→</span><div class="gly">体</div><b>体质辨识</b><span>9 题速测 / 27 题国标<br>AI 判定九种体质与兼夹</span></div>
+    <div class="feat" onclick="go('chat')"><span class="more">→</span><div class="gly">问</div><b>本草问答</b><span>中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span></div>
+    <div class="feat" onclick="go('game')"><span class="more">→</span><div class="gly">辨</div><b>看图辨药</b><span>练习+知识竞赛双模式<br>混合题库考眼力考学问</span></div>
+    <div class="feat" onclick="go('album')"><span class="more">→</span><div class="gly">鉴</div><b>本草图鉴</b><span>集章点亮工笔画像<br>集齐十四味做园主</span></div>
+    <div class="feat" onclick="go('read')"><span class="more">→</span><div class="gly">读</div><b>经典荐读</b><span>十二部岐黄经典<br>点开即读原文选段</span></div>
+    <div class="feat" onclick="go('checkin')"><span class="more">→</span><div class="gly">勤</div><b>岐黄打卡</b><span>图书馆文化节读者专区<br>每日一格集满本草</span></div>
+    <div class="feat" onclick="askKB('药食同源')"><span class="more">→</span><div class="gly">食</div><b>药食同源</b><span>厨房里的本草智慧<br>生姜山药皆是药</span></div>
+  </div>
+  <div class="grid2">
+    <div class="card daily" id="daily"></div>
+    <div class="card" id="termCard"></div>
+  </div>
+</section>
+
+<section class="page" id="p-quiz">
+  <div class="card" id="quizBody">
+    <div class="orn">体 质 辨 识</div>
+    <h2>九种体质<span class="dot"> · </span>识己而后养生</h2>
+    <p class="desc">依据中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）标准设计，请按<b>近一年的实际感受</b>选择"没有 → 总是"五级作答。系统按国标算法计算各体质<b>转化分数</b>并判定"是 / 倾向是 / 否"，给出主导体质与兼夹倾向。赶时间选 <b>9 题速测版</b>（每种体质 1 题，约 1 分钟），想更精准选 <b>27 题完整版</b>（每种体质 3 条目，约 3 分钟）。（本测试仅供健康文化科普，不构成医疗诊断建议）</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin:14px 0 4px;flex-wrap:wrap">
+      <button class="btn red" id="btnQuick" onclick="setQuizMode('quick')">⚡ 9 题速测版</button>
+      <button class="btn ghost" id="btnFull" onclick="setQuizMode('full')">📋 27 题国标完整版</button>
+    </div>
+    <div class="last-phys" id="lastPhys" style="display:none"></div>
+    <div id="qList"></div>
+    <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="calcQuiz()">提交 · AI判定体质</button></div>
+  </div>
+  <div class="card result" id="quizResult" style="display:none"></div>
+</section>
+
+<section class="page" id="p-chat">
+  <div class="chips" id="chips"></div>
+  <div class="card" style="padding:18px 22px 22px">
+    <div class="bot-id">
+      <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答">
+      <div><b>本草智答</b><span>你的 AI 小药童 · 熟读经典 有问必答</span></div>
+      <span class="online">在线</span>
+    </div>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-row">
+      <input id="chatInput" placeholder="试着问：黄芪有什么功效？ / 上火了怎么办？ / 四君子汤…" onkeydown="if(event.key==='Enter')send()">
+      <button class="btn" onclick="send()">提 问</button>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p-read">
+  <div class="card">
+    <div class="orn">经 典 荐 读</div>
+    <h2>读经典<span class="dot"> · </span>识本草</h2>
+    <p class="desc">精选十二部中医药经典，每部附名句金句、药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开 AI 水墨插画与<b>原文选读+白话译文</b>。完成体质辨识后，将为你点亮与你体质契合的书目。</p>
+    <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
+    <div class="filter" id="filter"></div>
+    <div class="books" id="books"></div>
+  </div>
+</section>
+
+<section class="page" id="p-album">
+  <div class="card">
+    <div class="orn">本 草 图 鉴</div>
+    <h2>集章录<span class="dot"> · </span>百草园藏画</h2>
+    <p class="desc">你与本草的每一次相遇都会被药童记在小本本上：<b>问答里问到</b>、<b>辨药答对</b>、<b>每日本草打卡</b>，都能点亮对应的工笔画像并盖上朱印。集齐十四味，便是百草园主。</p>
+    <div id="albumArea"></div>
+  </div>
+</section>
+
+<section class="page" id="p-game">
+  <div class="card" id="gameBody">
+    <div class="orn">看 图 辨 药</div>
+    <h2>药圃小试<span class="dot"> · </span>过目识本草</h2>
+    <p class="desc">练习模式：药童随机捧出一味药的工笔画像，看看你能否喊出它的名字，答错也不亏——药童会科普一味药的小知识。知识竞赛：每题限时 10 秒，<b>混合出卷</b>——4 道看图辨药 + 4 道<b>经典著作考点</b>（十二部经典的作者、名句、成书之最）+ 2 道<b>辨药眼力</b>相似药材题，答完领称号、发战帖。</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
+      <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 答错有讲解</button>
+      <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 10 秒</button>
+    </div>
+    <div id="gameArea"></div>
+  </div>
+</section>
+
+<section class="page" id="p-checkin">
+  <div class="card" id="checkinBody">
+    <div class="orn">岐 黄 打 卡</div>
+    <h2>每日一格<span class="dot"> · </span>集满本草</h2>
+    <p class="desc">图书馆中医药文化节 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
+    <div id="checkinArea"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="orn2">本草有灵 · 智答无界</div>
+  本草智答 · 书香岐黄AI赋能——图书馆"AI+管理服务"大赛参赛作品 · 知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议
+</footer>
+</div>
+<div class="read-mask" id="readMask" onclick="if(event.target===this)closeRead()"></div>
+
+<script>
+const HERBS=[
+ {n:"黄芪",f:"甘，微温 · 归脾、肺经",e:"补气升阳、固表止汗、利水消肿，被誉为\u201c补气之长\u201d，是气虚体质的常用之品。",s:"《神农本草经》列为上品：\u201c主痈疽久败疮……补虚。\u201d李时珍《本草纲目》释其名曰：\u201c耆，长也。黄耆色黄，为补药之长。\u201d",b:"《神农本草经》《本草纲目》草部"},
+ {n:"当归",f:"甘、辛，温 · 归肝、心、脾经",e:"补血活血、调经止痛、润肠通便，素有\u201c血中圣药\u201d之称。",s:"《本草纲目》：\u201c当归治头痛、心腹诸痛，润肠胃筋骨皮肤。\u201d古人取\u201c能使气血各有所归\u201d之义命名。",b:"《本草纲目》《千金方》"},
+ {n:"枸杞子",f:"甘，平 · 归肝、肾经",e:"滋补肝肾、益精明目，为平补之剂，适合日常泡饮。",s:"《本草纲目》载：\u201c枸杞久服坚筋骨，轻身不老。\u201d陆游诗云\u201c雪霁茅堂钟磬清，晨斋枸杞一杯羹\u201d。",b:"《本草纲目》《随息居饮食谱》"},
+ {n:"金银花",f:"甘，寒 · 归肺、心、胃经",e:"清热解毒、疏散风热，为治一切内痈外痈之要药。",s:"《本草纲目》：\u201c忍冬久服轻身长年。\u201d花初开色白、后转黄，故名金银花。",b:"《本草纲目》《温病条辨》"},
+ {n:"陈皮",f:"辛、苦，温 · 归脾、肺经",e:"理气健脾、燥湿化痰，\u201c陈久者良\u201d，广东新会陈皮最负盛名。",s:"《本草纲目》：\u201c橘皮，苦能泄能燥，辛能散，温能和。\u201d以\u201c陈\u201d字入名，取陈久之气不峻之理。",b:"《本草纲目》果部"},
+ {n:"茯苓",f:"甘、淡，平 · 归心、脾、肾经",e:"利水渗湿、健脾宁心，四季可用，药性平和。",s:"《神农本草经》列为上品：\u201c主胸胁逆气……久服安魂养神。\u201d古人云\u201c千年之松，下有茯苓\u201d。",b:"《神农本草经》《本草纲目》"},
+ {n:"甘草",f:"甘，平 · 归心、肺、脾、胃经",e:"补脾益气、清热解毒、调和诸药，有\u201c国老\u201d之誉。",s:"《本草纲目》：\u201c甘草外赤中黄，色兼坤离……调和众药有功，故有国老之号。\u201d",b:"《神农本草经》《本草纲目》"},
+ {n:"菊花",f:"甘、苦，微寒 · 归肺、肝经",e:"疏散风热、平肝明目、清热解毒，常与枸杞同泡以养目。",s:"《神农本草经》列为上品：\u201c主诸风头眩、肿痛……久服利血气，轻身耐老。\u201d",b:"《神农本草经》《随息居饮食谱》"},
+ {n:"山楂",f:"酸、甘，微温 · 归脾、胃、肝经",e:"消食化积、行气散瘀，尤善消肉食油腻之积。",s:"《本草纲目》：\u201c化饮食，消肉积、癥瘕、痰饮痞满吞酸。\u201d糖葫芦即源自其消食之用。",b:"《本草纲目》果部"},
+ {n:"生姜",f:"辛，微温 · 归肺、脾、胃经",e:"解表散寒、温中止呕、温肺止咳，有\u201c呕家圣药\u201d之称。",s:"《本草纲目》：\u201c姜辛而不荤，去邪辟恶……可蔬可和，可果可药。\u201d孔子\u201c不撤姜食\u201d，亦重其养生之功。",b:"《本草纲目》菜部"},
+ {n:"人参",f:"甘、微苦，微温 · 归脾、肺、心经",e:"大补元气、复脉固脱、补脾益肺、生津安神，为补气第一要药。",s:"《神农本草经》列为上品：\u201c主补五脏，安精神……久服轻身延年。\u201d",b:"《神农本草经》《本草纲目》草部"},
+ {n:"莲子",f:"甘、涩，平 · 归脾、肾、心经",e:"补脾止泻、益肾涩精、养心安神，是药食同源的代表。",s:"《本草纲目》：\u201c莲之味甘，气温而性啬……乃脾之果也。\u201d",b:"《本草纲目》《随息居饮食谱》"},
+ {n:"山药",f:"甘，平 · 归脾、肺、肾经",e:"补脾养胃、生津益肺、补肾涩精，平补三焦，老幼皆宜。",s:"《本草纲目》薯蓣条：\u201c益肾气，健脾胃……久服耳目聪明，轻身不饥延年。\u201d",b:"《本草纲目》《随息居饮食谱》"},
+ {n:"薄荷",f:"辛，凉 · 归肺、肝经",e:"疏散风热、清利头目、利咽透疹，其气清凉，为辛凉解表之品。",s:"《本草纲目》：\u201c薄荷辛能发散，凉能清利，专于消风散热。\u201d",b:"《本草纲目》草部"}
+];
+const FORMULAS=[
+ {n:"四君子汤",s:"《太平惠民和剂局方》",d:"人参（党参）、白术、茯苓、甘草四味。功效益气健脾，主治脾胃气虚证——面色萎白、语声低微、食少便溏。四味皆平和之品，如君子致中和，故名\u201c四君子\u201d，为补气剂的基础方。",b:"《汤头歌诀》《伤寒论》讲义"},
+ {n:"六味地黄丸",s:"钱乙《小儿药证直诀》",d:"熟地黄、山萸肉、山药、泽泻、牡丹皮、茯苓，三补三泻、滋阴补肾。原为儿科\u201c地黄丸\u201d，后世广泛用于肾阴亏虚之证。",b:"《小儿药证直诀》《汤头歌诀》"},
+ {n:"逍遥散",s:"《太平惠民和剂局方》",d:"柴胡、当归、白芍、白术、茯苓、甘草、薄荷、生姜。功效疏肝解郁、养血健脾，主治肝郁血虚脾弱证，为调和肝脾的名方。",b:"《汤头歌诀》《温病条辨》"},
+ {n:"藿香正气散",s:"《太平惠民和剂局方》",d:"藿香、紫苏、白芷、大腹皮、茯苓、白术等。解表化湿、理气和中，为夏月感寒伤湿、脾胃不和之常用方。",b:"《汤头歌诀》《本草纲目》"},
+ {n:"桂枝汤",s:"张仲景《伤寒论》",d:"桂枝、芍药、生姜、大枣、甘草五味。解肌发表、调和营卫，被誉为\u201c群方之冠\u201d。服药后啜热稀粥以助药力，体现仲景护胃气的巧思。",b:"《伤寒论》《汤头歌诀》"},
+ {n:"玉屏风散",s:"《医方类聚》引《世医得效方》",d:"黄芪、白术、防风三味。益气固表止汗，如御风之屏障，故名\u201c玉屏风\u201d。表虚自汗、易感风邪者宜之。",b:"《汤头歌诀》《本草纲目》"}
+];
+const ACUP=[
+ {n:"足三里",d:"位于小腿外侧，犊鼻下3寸。为足阳明胃经合穴，\u201c肚腹三里留\u201d，常灸足三里可健脾和胃、扶正培元，民间有\u201c常灸足三里，胜吃老母鸡\u201d之谚。",b:"《针灸大成》"},
+ {n:"涌泉",d:"位于足底前部凹陷处，为足少阴肾经井穴。肾经之气如源泉之水，涌出足下，故名。睡前按揉可引火归元、助眠安神。",b:"《针灸大成》《黄帝内经》"},
+ {n:"合谷",d:"位于手背第一、二掌骨之间，\u201c面口合谷收\u201d，为手阳明大肠经原穴，头面部病症常用要穴。",b:"《针灸大成》"}
+];
+const TOPICS=[
+ {n:"上火",d:"中医认为\u201c上火\u201d多因阴阳失衡、内火炽盛，可分为实火与虚火：实火者面红目赤、口舌生疮、小便短赤，宜清热泻火，可饮金银花、菊花茶；虚火者午后潮热、口干咽燥，宜滋阴降火，可酌用麦冬、石斛。《本草纲目》云\u201c去火除烦，莫过于水\u201d，调畅情志、忌辛辣烧烤亦是要诀。",b:"《本草纲目》《温病条辨》",k:["口舌生疮","实火","虚火","火气"]},
+ {n:"湿气",d:"湿为阴邪，易困脾胃。舌苔白厚腻、身体困重、大便黏滞者多为痰湿。祛湿三法：健脾（山药、茯苓煮粥）、行气（陈皮泡水）、动养（微汗运动）。古人云\u201c千寒易除，一湿难去\u201d，贵在持之以恒。",b:"《本草纲目》《随息居饮食谱》",k:["祛湿","湿气重"]},
+ {n:"中医体质",d:"中医体质学说将人分为平和、气虚、阳虚、阴虚、痰湿、湿热、血瘀、气郁、特禀九种体质，其思想可上溯至《黄帝内经》\u201c阴阳二十五人\u201d篇。体质决定易感疾病与养生方向，辨清体质，方能因人施养。",b:"《黄帝内经》",k:["九种体质","体质是什么"]},
+ {n:"药食同源",d:"\u201c药食同源\u201d指许多食物兼具药物之性：生姜、山药、莲子、山楂、枸杞、菊花皆在其列。《黄帝内经》云\u201c五谷为养，五果为助，五畜为益，五菜为充\u201d，饮食调养首重五谷与四时。",b:"《黄帝内经》《随息居饮食谱》",k:["食疗","食补"]},
+ {n:"熬夜",d:"《黄帝内经》云：\u201c阳气尽则卧，阴气尽则寤。\u201d子时（23点—1点）胆经当令、丑时肝经当令，此时不眠则肝胆不得休养，易致阴虚火旺、面色晦暗。养生第一课，即在\u201c起居有常，不妄作劳\u201d。",b:"《黄帝内经》",k:["失眠","睡不好","晚睡","睡不着","入睡困难","多梦","睡眠"]},
+ {n:"养生",d:"《黄帝内经》养生总纲十六字：\u201c法于阴阳，和于术数，食饮有节，起居有常。\u201d顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔，如是则形体不敝，精神不散。",b:"《黄帝内经》《千金方》",k:["保健","怎么养生"]},
+ {n:"感冒",d:"感冒先别急着灌药！中医把感冒分成两路：风寒感冒——怕冷重、流清鼻涕，来碗生姜红糖水，捂被子发发汗，把寒气请出去；风热感冒——喉咙痛、流黄鼻涕，金银花、菊花茶安排上，清热又利咽。《伤寒论》里的桂枝汤就是治感冒的祖师爷方子。不过要是高烧不退，别跟本药童犟，赶紧去医院！",b:"《伤寒论》《温病条辨》",k:["风寒感冒","风热感冒","流鼻涕","着凉","伤风"]},
+ {n:"咳嗽",d:"咳嗽也分性格：寒咳痰白稀，烤个橘子或炖点冰糖雪梨加片姜；热咳痰黄稠，雪梨炖冰糖，薄荷利咽也不错。老祖宗说\u201c五脏六腑皆令人咳\u201d——咳超过两周还没好，请放下手机直奔医院，这题药童不背锅〜",b:"《本草纲目》《伤寒论》",k:["止咳","痰多","嗓子痒","喉咙不舒服"]},
+ {n:"便秘",d:"嗯…这个话题有味道但很重要！中医看便秘：肠燥型多吃润物——黑芝麻、核桃、蜂蜜水；气虚型推动无力——补气才管用，黄芪、山药安排上；上火型少吃辣多喝水。再送一招祖传秘方：早上空腹温水一杯 + 顺时针揉腹一百下 + 别带手机进厕所〜",b:"《本草纲目》《随息居饮食谱》",k:["排便","拉不出","大便干","消化不好"]},
+ {n:"痛经",d:"姑娘们看过来！中医认为\u201c不通则痛，不荣则痛\u201d：受凉型喝点红糖姜茶、热水袋敷肚子，当归生姜羊肉汤是暖宫名膳；气滞型经前胀痛，玫瑰花茶疏疏肝。经期忌生冷、忌熬夜、忌生气（说的就是你，跟人吵架那次）。痛到打滚请及时就医，别硬扛！",b:"《本草纲目》《伤寒论》",k:["月经","例假","姨妈痛","经期"]},
+ {n:"减肥",d:"本药童掐指一算，问这题的朋友最多！中医看肥胖多与痰湿有关——茯苓、陈皮、山楂是祛湿消积三剑客；荷叶茶、冬瓜汤也是刮油好手。但！是！《内经》说\u201c起居有常，不妄作劳\u201d，管住嘴迈开腿才是正道；减肥药和纯饿肚子这种歪门邪道，药童摇头拒绝〜",b:"《本草纲目》《随息居饮食谱》",k:["瘦身","刮油","减脂","瘦","体重"]},
+ {n:"痘痘",d:"脸上的痘，是身体写的吐槽信！额头痘多为心火旺——少熬夜，菊花、金银花茶降降火；口周痘多脾胃湿热——火锅奶茶先停一停（药童知道这很难）；下巴痘注意规律作息。记住：挤痘一时爽，痘坑火葬场。反复爆痘严重请找皮肤科大夫把把脉〜",b:"《本草纲目》《温病条辨》",k:["痤疮","粉刺","长痘","冒痘"]},
+ {n:"口臭",d:"开口跪的尴尬，中医有解！多数口臭源于胃火或积食：山楂消食、陈皮理气、薄荷清新口气，饭后含两片；晚餐七分饱、少辛辣烧烤。若长期口臭还伴反酸，建议查查幽门螺杆菌——这题超纲了，交给现代医学兄台！",b:"《本草纲目》《随息居饮食谱》",k:["口气","口气重","口气清新"]},
+ {n:"贫血",d:"脸色苍白、蹲下起身眼冒金星？中医叫血虚！食补三宝：红枣、桂圆、猪肝；当归更是\u201c血中圣药\u201d，当归生姜羊肉汤是医圣张仲景的暖身名方。划重点：贫血原因很多（缺铁、地贫……），先验血查明原因，食补才补对方向哦〜",b:"《本草纲目》《伤寒论》",k:["血虚","补血","脸色苍白","头晕"]},
+ {n:"手脚冰凉",d:"空调房里裹毯子的朋友请集合！这多是阳虚或气血不畅：生姜、当归入膳温温阳；睡前热水泡脚15分钟，泡到微微出汗即可，再按按涌泉穴引火归元；白天多动动，让气血跑起来。药童口诀：秋裤不是时尚敌人，是养生战袍！",b:"《伤寒论》《针灸大成》",k:["怕冷","手脚冷","体寒","暖不起来"]},
+ {n:"疲劳",d:"明明睡了8小时还是累成电量1%？中医的\u201c虚\u201d分好几种：干活就喘、说话没劲多半是气虚——黄芪、山药、莲子煮粥；睡再多还困、舌边有齿痕多半是脾虚湿重——陈皮、茯苓安排；心烦手心热睡不好是阴虚——枸杞、麦冬泡水。对号入座，或去「体质辨识」做个小测试，两分钟锁定你的虚法〜",b:"《黄帝内经》《神农本草经》",k:["乏力","累","没精神","疲惫","提不起劲","犯困"]},
+ {n:"本草",d:"好问题，这可是本店招牌的\u201c本\u201d字来源！\u201c本草\u201d是古代对中药的统称——因药物中草木类占绝大多数，\u201c本\u201d取根本本源之意，故称\u201c本草\u201d。现存最早药物学专著是汉代《神农本草经》（收药365味），巅峰之作是明代李时珍《本草纲目》（收药1892种）。历代研究中药的学问就叫\u201c本草学\u201d。本药童肚里的黄芪、当归、枸杞，都是正儿八经的本草出身哦〜",b:"《神农本草经》《本草纲目》",k:["什么是本草","本草是什么","中药是什么","中医药是什么"]}
+];
+/* ===== 相似药材外观辨别：长得像不难认，看懂要点一眼分清 ===== */
+const LOOKALIKES=[
+ {a:"金银花",b:"菊花",sA:"棒状花蕾，上粗下细、略弯曲，初开色白、后转金黄",sB:"扁球状或团状的头状花序，舌状花瓣多而舒展",tip:"金银花是<b>棒状花蕾</b>：上粗下细、略弯曲，初开色白如银、后转金黄，故得名「金银」；菊花则是<b>扁球状团花</b>：舌状花瓣多而舒展，气清香。一句话：一个是「小棒槌」，一个是「小绒球」。",gj:"银花如棒槌，菊花似绒球"},
+ {a:"黄芪",b:"甘草",sA:"切片断面\u201c金盏银盘\u201d、皮部有菊花心状裂隙，嚼之有豆腥味",sB:"外皮红棕、断面纤维性，入口味甜而特殊",tip:"黄芪饮片断面有著名的<b>「金盏银盘」</b>：外层黄白、中心鲜黄，皮部有菊花心状裂隙，嚼之有<b>豆腥味</b>；甘草外皮红棕、断面纤维性，最标志性的是<b>味甜而特殊</b>——「国老」的甜是刻进药骨里的。",gj:"黄芪金盏银盘豆腥气，甘草红皮入口甜"},
+ {a:"当归",b:"党参",sA:"断面黄白色、散布棕色油点（朱砂点），香气浓郁特异",sB:"根头顶部有密集疣状突起的茎痕（狮子盘头），气微味微甜",tip:"当归表面黄棕色，断面黄白色、散布<b>棕色油点（朱砂点）</b>，香气浓郁特异；党参根头顶有密集疣状突起的茎痕，人称<b>「狮子盘头」</b>，断面有裂隙或放射状纹理，气微、味微甜。",gj:"当归朱砂点，党参狮子头"},
+ {a:"山药",b:"天麻",sA:"表面黄白光滑，断面洁白、富粉性",sB:"一端有红棕色干枯芽苞（鹦哥嘴），断面角质半透明",tip:"山药表面黄白、有纵沟，断面<b>洁白、富粉性</b>；天麻一端有红棕色干枯芽苞，人称<b>「鹦哥嘴」</b>，另一端有圆脐形疤痕（像肚脐眼），断面角质、<b>半透明</b>有光泽。",gj:"山药白胖带粉，天麻鹦哥嘴上戴"},
+ {a:"陈皮",b:"青皮",sA:"成熟果皮，色橙红、内面白色海绵状，质薄而软",sB:"未成熟果皮，色青黑、质硬皮厚，气味峻烈",tip:"陈皮是<b>成熟</b>橘子的果皮：色橙红或红棕，外露油点、内面白色海绵状，质薄而软；青皮是<b>未成熟</b>的青色果皮或幼果：色青黑、质硬、皮厚，气味更峻烈。同源不同龄，越生越猛。",gj:"陈皮红软性温和，青皮色青力更峻"},
+ {a:"枸杞子",b:"五味子",sA:"长卵形，表面红色至暗红、皱缩，味甘微酸",sB:"小球形浆果干缩而成，尝一口五味俱全",tip:"枸杞子呈<b>长卵形</b>：表面红色至暗红、皱缩，顶端有小凸起状花柱痕，味甘、微酸；五味子是<b>小球形</b>浆果干缩而成，皱缩成团，五味俱全——酸、甘、辛、苦、咸一样不落。",gj:"枸杞长卵甜微酸，五味圆球五样味"}
+];
+const KB=[
+ ...LOOKALIKES.map(l=>({keys:[`${l.a}和${l.b}`,`${l.b}和${l.a}`,`${l.a}与${l.b}`,`${l.b}与${l.a}`,`区分${l.a}`,`区分${l.b}`,`分辨${l.a}`,`分辨${l.b}`,`辨别${l.a}`,`辨别${l.b}`,`${l.a}相似`,`${l.b}相似`],cat:`辨别 · ${l.a}/${l.b}`,ans:`<b>火眼金睛 · ${l.a} vs ${l.b}</b><div class="kv"><span class="k">分辨要点</span>${l.tip}</div><div class="kv"><span class="k">药童口诀</span>「${l.gj}」</div><div style="margin-top:8px"><button class="btn ghost" onclick="go('game')">去知识竞赛练练辨药眼力 →</button></div>`})),
+ ...HERBS.map(h=>({keys:[h.n],herb:h.n,ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>`,cat:h.n})),
+ ...FORMULAS.map(f=>({keys:[f.n,f.n.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n})),
+ ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">定位功效</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
+ ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],ans:`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
+];
+const SYNONYM={"黄耆":"黄芪","杞子":"枸杞子","忍冬":"金银花","六味地黄":"六味地黄丸","三里":"足三里","人参须":"人参","菊花茶":"菊花","枸杞茶":"枸杞子","洋参":"人参","熟地":"六味地黄丸","按摩哪个穴位":"穴位","艾灸":"足三里"};
+const CONSTITUTION_ALIASES=[
+ ["平和质",["平和体质","平和质"]],
+ ["气虚质",["气虚体质","气虚质","气虚"]],
+ ["阳虚质",["阳虚体质","阳虚质","阳虚"]],
+ ["阴虚质",["阴虚体质","阴虚质","阴虚"]],
+ ["痰湿质",["痰湿体质","痰湿质","痰湿","湿气体质"]],
+ ["湿热质",["湿热体质","湿热质","湿热"]],
+ ["血瘀质",["血瘀体质","血瘀质","血瘀"]],
+ ["气郁质",["气郁体质","气郁质","气郁","肝郁"]],
+ ["特禀质",["特禀体质","特禀质","过敏体质","特禀"]]
+];
+function constitutionAns(c){
+  const o=CONSTITUTIONS[c];
+  return `<b>${c} · 药童调养锦囊</b><div class="kv"><span class="k">体质画像</span>${o.d}</div><div class="kv"><span class="k">调养锦囊</span>${o.adv}</div><div class="kv"><span class="k">荐读书目</span>${o.books.map(x=>"《"+x+"》").join("　")}</div><div class="kv" style="color:var(--ink2)">想知道自己是不是${c}？去「体质辨识」做做 9 道速测小题（还有 27 题完整版），比算命准多了〜</div>`;
+}
+const CONSTITUTIONS={
+ "平和质":{d:"阴阳气血调和，体态适中、面色红润、精力充沛。",adv:"顺应四时即可，坚持\u201c食饮有节，起居有常\u201d。",books:["黄帝内经"]},
+ "气虚质":{d:"元气不足，易疲乏、气短、自汗，语声低微。",adv:"宜补气：山药、莲子、黄芪炖汤；忌过度劳累，可习八段锦。",books:["神农本草经","四君子汤"]},
+ "阳虚质":{d:"阳气不足，畏寒喜暖、手足不温、喜热饮食。",adv:"宜温阳：生姜、当归入膳；晒背艾灸，冬季尤重保暖。",books:["黄帝内经","伤寒论"]},
+ "阴虚质":{d:"阴液亏少，手足心热、口干咽燥、易失眠。",adv:"宜滋阴：枸杞、麦冬泡饮；子时前入睡，少熬夜少辛辣。",books:["黄帝内经","六味地黄丸"]},
+ "痰湿质":{d:"痰湿凝聚，体形偏胖、腹部松软、身重不爽。",adv:"宜健脾祛湿：茯苓、陈皮煮粥；控甜腻，坚持微汗运动。",books:["本草纲目","四君子汤"]},
+ "湿热质":{d:"湿热内蕴，面部油腻、口苦口臭、易生痤疮。",adv:"宜清热利湿：金银花、菊花代茶；忌辛辣烧烤，居处避潮湿。",books:["本草纲目","温病条辨"]},
+ "血瘀质":{d:"血行不畅，肤色晦暗、易生瘀斑、口唇偏暗。",adv:"宜行气活血：山楂、玫瑰花茶；多舒展运动，忌久坐久卧。",books:["本草纲目","伤寒论"]},
+ "气郁质":{d:"气机郁滞，神情抑郁、多愁善感、胸胁胀满。",adv:"宜疏肝理气：陈皮、薄荷代茶；逍遥散为调肝名方，多交友多抒怀。",books:["黄帝内经","逍遥散"]},
+ "特禀质":{d:"先天禀赋特殊，易过敏，对药物、食物、花粉敏感。",adv:"宜益气固表：取玉屏风散之意，避免接触致敏之物，饮食清淡。",books:["神农本草经","玉屏风散"]}
+};
+const QUIZ=[
+ {q:"你精力充沛，累了一天睡一觉就能缓过来吗？",c:"平和质"},
+ {q:"你容易感到疲乏、气短、说话有气无力吗？",c:"气虚质"},
+ {q:"你比别人怕冷，手脚经常发凉吗？",c:"阳虚质"},
+ {q:"你常感到手脚心发热、口燥咽干、总想喝水吗？",c:"阴虚质"},
+ {q:"你感到身体沉重不爽快、腹部肥满松软吗？",c:"痰湿质"},
+ {q:"你面部或鼻部有油腻感，或容易生痤疮吗？",c:"湿热质"},
+ {q:"你的皮肤会不知不觉出现青紫瘀斑（皮下出血）吗？",c:"血瘀质"},
+ {q:"你常感到闷闷不乐、情绪低沉吗？",c:"气郁质"},
+ {q:"你不感冒时也会打喷嚏、鼻塞、流鼻涕吗？",c:"特禀质"},
+ {q:"你对季节、气候和环境的变化适应得很快吗？",c:"平和质"},
+ {q:"你稍一活动就容易出虚汗吗？",c:"气虚质"},
+ {q:"你的胃部、背部或腰膝部总是怕冷吗？",c:"阳虚质"},
+ {q:"你容易便秘或大便干燥吗？",c:"阴虚质"},
+ {q:"你额头爱出油，或嘴里常有黏腻感吗？",c:"痰湿质"},
+ {q:"你常感到口苦，或嘴里有异味吗？",c:"湿热质"},
+ {q:"你面色晦暗，或有明显褐斑、黑眼圈吗？",c:"血瘀质"},
+ {q:"你容易精神紧张、焦虑不安、多愁善感吗？",c:"气郁质"},
+ {q:"你因季节变化、异味等原因容易过敏或咳喘吗？",c:"特禀质"},
+ {q:"你睡眠踏实、很少生病吗？",c:"平和质"},
+ {q:"你比一般人容易患感冒，或喜欢安静、懒得说话吗？",c:"气虚质"},
+ {q:"你受凉或吃（喝）凉的东西后容易腹泻吗？",c:"阳虚质"},
+ {q:"你眼睛常干涩，或皮肤干燥吗？",c:"阴虚质"},
+ {q:"你感觉喉咙常有痰堵着，或舌苔偏厚腻吗？",c:"痰湿质"},
+ {q:"你的大便黏滞不爽、有解不尽的感觉吗？",c:"湿热质"},
+ {q:"你口唇颜色偏暗，或身体某处固定位置刺痛吗？",c:"血瘀质"},
+ {q:"你常无缘无故叹气，或咽喉部有异物感吗？",c:"气郁质"},
+ {q:"你的皮肤容易起荨麻疹（风团），或一抓就发红吗？",c:"特禀质"}
+];
+const BOOKS=[
+ {t:"黄帝内经",au:"· 佚名 · 成书于战国至秦汉",d:"中医理论的奠基之作，讲阴阳五行、藏象经络与养生总纲。读它不是读医书，而是读一种\u201c顺应自然\u201d的宇宙观。",hl:"上工治未病，不治已病。",hs:"——《黄帝内经·素问》",diff:"硬核",why:"中医界的《论语》，字字是总纲。别硬啃，先读《上古天真论》，读顺了再往外延。",tg:["养生","理论"],fit:["阳虚质","气郁质","平和质"]},
+ {t:"神农本草经",au:"· 佚名 · 汉代",d:"我国现存最早的药物学专著，载药365味，分上中下三品。人参、黄芪、甘草皆在其中，读来如见先民与草木的初识。",hl:"上药养命以应天，中药养性以应人。",hs:"——《神农本草经·序录》",diff:"进阶",why:"365味药像365张名片，翻到人参、黄芪那页，看看两千年前古人怎么夸它们。",tg:["本草","启蒙"],fit:["气虚质","特禀质"]},
+ {t:"伤寒论",au:"· 张仲景 · 东汉",d:"辨证论治的开山之作。桂枝汤、小柴胡汤沿用至今，理法方药一线贯穿，被誉为\u201c方书之祖\u201d。",hl:"观其脉证，知犯何逆，随证治之。",hs:"——《伤寒论·太阳病篇》",diff:"硬核",why:"医圣心法，历代名医必修。初读别贪多，把桂枝汤那一条读懂，就是胜利。",tg:["临床","方剂"],fit:["阳虚质","血瘀质"]},
+ {t:"本草纲目",au:"· 李时珍 · 明代",d:"159万字、载药1892种的博物学巨著，不止于药：谷菜果木、禽兽虫鱼皆有考据。达尔文亦称之为\u201c中国古代的百科全书\u201d。",hl:"脑为元神之府。",hs:"——《本草纲目·辛夷条》",diff:"进阶",why:"159万字的明代百科全书，当《辞海》翻最快乐，哪里好奇翻哪里，从头硬读会累趴。",tg:["本草","文化"],fit:["痰湿质","湿热质"]},
+ {t:"千金方",au:"· 孙思邈 · 唐代",d:"\u201c人命至重，有贵千金\u201d，药王孙思邈以医德立书，集唐以前方剂之大成，\u201c大医精诚\u201d即出自其序。",hl:"人命至重，有贵千金，一方济之，德逾于此。",hs:"——《千金方·序》",diff:"进阶",why:"药王的行医心得加养生宝典，《大医精诚》必读，读完你对\u201c医者仁心\u201d四个字会有新理解。",tg:["临床","医德"],fit:["平和质"]},
+ {t:"温病条辨",au:"· 吴鞠通 · 清代",d:"温病学派的集大成之作，银翘散、桑菊饮等名方出自此书，是读懂\u201c清热\u201d一脉的钥匙。",hl:"凡病温者，始于上焦，在手太阴。",hs:"——《温病条辨·上焦篇》",diff:"硬核",why:"与《伤寒论》寒温并峙，读完你就知道\u201c上火\u201d\u201c清热\u201d背后的门派之争。",tg:["临床","方剂"],fit:["湿热质"]},
+ {t:"汤头歌诀",au:"· 汪昂 · 清代",d:"把方剂编成七言歌诀：\u201c四君子汤中和义，参术茯苓甘草比。\u201d朗朗上口，是学方的启蒙第一书。",hl:"四君子汤中和义，参术茯苓甘草比。",hs:"——《汤头歌诀》",diff:"入门",why:"把方剂编成了\u201c古代rap\u201d，背会三首歌诀，你已经超过一半中医爱好者了。",tg:["启蒙","方剂"],fit:["气虚质","阴虚质"]},
+ {t:"随息居饮食谱",au:"· 王孟英 · 清代",d:"一部\u201c吃货友好\u201d的食疗经典，载食药330种，讲四时饮食宜忌，药食同源理念的通俗读本。",hl:"绿豆甘凉，煮食清胆养胃，解暑止渴。",hs:"——《随息居饮食谱》",diff:"入门",why:"让吃货心安理得读医书的经典，看完你会重新审视自家厨房。",tg:["食疗","养生"],fit:["痰湿质","气郁质"]},
+ {t:"难经",au:"· 相传扁鹊 · 战国",d:"《黄帝内经》的\u201c课后习题集\u201d，专答疑难：论脉、论经络、论脏腑，独取寸口的诊脉之法由此发扬。",hl:"望而知之谓之神，闻而知之谓之圣。",hs:"——《难经·六十一难》",diff:"硬核",why:"摸脉的学问大半在这里，手感派必读。读完你对\u201c号脉\u201d这件事也能门儿清一点。",tg:["理论","临床"],fit:["平和质"]},
+ {t:"肘后备急方",au:"· 葛洪 · 东晋",d:"中国第一部\u201c急救手册\u201d，专收简、便、验、廉的应急之法。屠呦呦由此悟出青蒿素提取之道，让古籍照进现实。",hl:"青蒿一握，以水二升渍，绞取汁，尽服之。",hs:"——《肘后备急方·治寒热诸疟》",diff:"进阶",why:"东晋版急救手册，屠呦呦奶奶凭\u201c青蒿一握\u201d拿了诺奖——古籍里真的藏着未来。",tg:["临床","文化"],fit:["湿热质","痰湿质"]},
+ {t:"医学三字经",au:"· 陈修园 · 清代",d:"陈修园把整部中医源流编成三字韵语，医史源流、诊法方药一气呵成，是医史入门的最佳读物。",hl:"医之始，本岐黄；灵枢作，素问详。",hs:"——《医学三字经》开篇",diff:"入门",why:"把整部中医史编成三字经，背完等于把中医源流过了遍电影，学生党狂喜。",tg:["启蒙","文化"],fit:["平和质","气郁质"]},
+ {t:"饮膳正要",au:"· 忽思慧 · 元代",d:"中国第一部营养学专著，元代饮膳太医忽思慧所作，讲妊娠食忌、饮酒避忌、四时所宜，堪称皇家\u201c食堂说明书\u201d。",hl:"养生避忌、食疗诸法条分缕析，七百年前的宫廷营养学全景图。",hs:"◈ 药童看点",diff:"入门",why:"元代皇家\u201c食堂说明书\u201d，看完你就知道宫廷里怎么吃饭养生，连孕妇忌口都列了清单。",tg:["食疗","养生"],fit:["痰湿质","气虚质"]}
+];
+/* 应时荐读：按四季节气划分书单（以立春2/4、立夏5/6、立秋8/8、立冬11/7为界），当季书单内按日期轮换 */
+const SEASON_READS={
+ 春:{list:["医学三字经","汤头歌诀","神农本草经"],why:"春主生发，万物启蒙，正是读入门书打基础的好时节"},
+ 夏:{list:["温病条辨","肘后备急方","饮膳正要"],why:"夏月暑湿当令，清热祛湿一脉最应景，急救方书也常翻常新"},
+ 秋:{list:["随息居饮食谱","千金方","本草纲目"],why:"秋燥宜润，平补食疗正当时，跟着书里学润燥养肺"},
+ 冬:{list:["伤寒论","黄帝内经","难经"],why:"冬主封藏，寒证当道，宜啃硬核经典打底子，来年开春再发力"}
+};
+/* ===== 经典选读：点击荐读书卡即翻开——AI水墨插画 + 原文选段 + 白话译文 + 药童领读 ===== */
+const BOOK_IMG={黄帝内经:"neijing",神农本草经:"shennong",伤寒论:"shanghan",本草纲目:"bencao",千金方:"qianjin",温病条辨:"wenbing",汤头歌诀:"tangtou",随息居饮食谱:"suixi",难经:"nanjing",肘后备急方:"zhouhou",医学三字经:"sanzijing",饮膳正要:"yinshan"};
+const BOOK_READS={
+ "黄帝内经":{
+  ps:[
+   {t:"素问 · 上古天真论",s:"上古之人，其知道者，法于阴阳，和于术数，食饮有节，起居有常，不妄作劳，故能形与神俱，而尽终其天年，度百岁乃去。",tr:"上古懂得养生之道的人，能取法天地阴阳的自然规律、调和修身养性的法术，饮食有节制，作息有规律，不过度操劳，所以形体与精神都健旺，能活到自然寿命的尽头，过了百岁才离开人世。"},
+   {t:"素问 · 四气调神大论",s:"春三月，此谓发陈。天地俱生，万物以荣。夜卧早起，广步于庭，被发缓形，以使志生。",tr:"春季的三个月，是万物推陈出新的时节。天地间生机萌发，万物欣欣向荣。人们应当晚睡早起，在庭院里缓缓散步，披散头发、放松形体，让心志随春天一同生发。"},
+   {t:"素问 · 上古天真论",s:"恬惔虚无，真气从之；精神内守，病安从来。",tr:"心境安闲清静而没有过多贪求，真气便顺畅运行；精与神都守持于内，疾病又从哪里来呢？"}],
+  g:"不必从头硬啃。先读《上古天真论》感受两千年前的生活智慧，再读《四气调神大论》学四季作息——把它当「生活哲学书」读，比当医书读轻松得多。"},
+ "神农本草经":{
+  ps:[
+   {t:"序录",s:"上药一百二十种为君，主养命以应天；中药一百二十种为臣，主养性以应人；下药一百二十五种为佐使，主治病以应地。",tr:"上品药一百二十种作为主药，功用是保养生命、顺应天道；中品药一百二十种作为辅药，功用是颐养性情、顺应人事；下品药一百二十五种作为佐使药，功用是主治疾病、顺应地气。"},
+   {t:"序录",s:"疗寒以热药，疗热以寒药。",tr:"治疗寒证要用热性药，治疗热证要用寒性药——十个字道尽两千年的用药总纲。"},
+   {t:"上品 · 人参",s:"人参，味甘微寒。主补五脏，安精神，定魂魄，止惊悸，除邪气，明目，开心益智。久服轻身延年。",tr:"人参味甘而性微寒，主补养五脏，安养精神、稳定魂魄、止住心悸、驱除邪气，让人眼明心亮、思维敏锐。长久服用人会身轻体健、延年益寿。"}],
+  g:"当「药材名片集」翻最有味：随手挑一味熟悉的药——人参、黄芪、甘草，看看两千年前古人是怎么认识它的，再对照今天的知识，常有惊喜。"},
+ "伤寒论":{
+  ps:[
+   {t:"辨太阳病脉证并治",s:"太阳中风，阳浮而阴弱。阳浮者，热自发；阴弱者，汗自出。啬啬恶寒，淅淅恶风，翕翕发热，鼻鸣干呕者，桂枝汤主之。",tr:"太阳中风证：脉象浮而缓弱。脉浮所以发热，脉弱所以自汗。怕冷得瑟瑟缩缩、怕风得淅淅飕飕、发热温和不炽烈，兼见鼻塞鸣响、干呕的，用桂枝汤主治。"},
+   {t:"桂枝汤方后注",s:"桂枝三两，芍药三两，甘草二两（炙），生姜三两，大枣十二枚……服已须臾，啜热稀粥一升余，以助药力。",tr:"桂枝汤由五味家常之物组成；服下药后稍过片刻，喝上一升多热稀粥来帮助药力——医圣连「送药的一碗粥」都安排得明明白白。"},
+   {t:"辨太阳病脉证并治",s:"观其脉证，知犯何逆，随证治之。",tr:"观察病人的脉象与证候，弄清病情的变化，跟随证候的变化来施治——这十二个字是「辨证论治」的灵魂。"}],
+  g:"别被条文吓住：第一课就是把桂枝汤那条读懂——五味家常之物治感冒，服药还要喝热粥助汗，仲景的细心可见一斑。"},
+ "本草纲目":{
+  ps:[
+   {t:"辛夷条",s:"脑为元神之府。",tr:"大脑是精神活动的府邸——在「心主神明」的时代，李时珍把思维的宝座指给了脑。"},
+   {t:"王世贞序",s:"博而不繁，详而有要，综核究竟，直窥渊海。实性理之精微，格物之通典。",tr:"广博却不繁乱，详尽而能抓住要点，综考核实穷究本源，直探学问的深海。实在是探究性理精微、考察万物通达的典籍。"},
+   {t:"李时珍言志诗",s:"身如逆流船，心比铁石坚。望父全儿志，至死不怕难。",tr:"我像一条逆流而上的船，心志比铁石还坚硬。只愿父亲成全我的志向，至死也不怕艰难。——这是李时珍立志重修本草时写给父亲的话。"}],
+  g:"159万字的明代百科全书，正确打开方式是「检索」：想到什么查什么——荔枝怎么吃、水银有多毒、蜂蜜怎么酿，条条有考据，翻到哪页都停不下来。"},
+ "千金方":{
+  ps:[
+   {t:"大医精诚",s:"凡大医治病，必当安神定志，无欲无求，先发大慈恻隐之心，誓愿普救含灵之苦。",tr:"凡是优秀的医生治病，必定安定心神、没有私欲贪求，首先怀有慈悲怜悯之心，立誓普救世间众生的疾苦。"},
+   {t:"养性序",s:"善养生者，先饥而食，先渴而饮。食欲数而少，不欲顿而多。",tr:"懂得养生的人，在饥饿感来临之前先吃饭，在口渴之前先饮水。进食宁可少食多餐，不可一顿猛吃。"}],
+  g:"《大医精诚》一篇必读——这是中国医学史上的「医德宣言」。读完再看孙思邈百余岁的传说，便懂什么叫仁者寿。"},
+ "温病条辨":{
+  ps:[
+   {t:"上焦篇",s:"凡病温者，始于上焦，在手太阴。",tr:"凡是温病，都从上焦开始，病位在手太阴肺经——温邪从口鼻而入，先伤于肺。"},
+   {t:"上焦篇",s:"太阴风温，但咳，身不甚热，微渴者，辛凉轻剂银翘散主之。",tr:"手太阴的风温病，只咳嗽、发热不高、微微口渴的，用辛凉轻剂银翘散主治——今天药店的银翘解毒片，源头就在这一条。"}],
+  g:"读完《伤寒论》再读它，能看懂中医史上寒温两派的「华山论剑」；感冒嗓子疼时翻翻银翘散，会对「上火」俩字有全新理解。"},
+ "汤头歌诀":{
+  ps:[
+   {t:"补剂 · 四君子汤",s:"四君子汤中和义，参术茯苓甘草比。益以夏陈名六君，祛痰补气阳虚饵。",tr:"四君子汤取君子「致中和」之义，由人参（党参）、白术、茯苓、甘草四味组成；再加半夏、陈皮就叫做六君子汤，是祛痰补气、治疗阳虚的良药。"},
+   {t:"理血 · 四物汤",s:"四物地芍与归芎，血家百病此方通。",tr:"四物汤由熟地黄、白芍、当归、川芎四味组成，血分方面的多种病症都可用它化裁通治。"}],
+  g:"全书就是一本「古代RAP歌词本」：七字一句，平仄押韵。每天背一首，一个月下来，常见方剂就装进肚子里了。"},
+ "随息居饮食谱":{
+  ps:[
+   {t:"谷食类 · 绿豆",s:"绿豆甘凉，煮食清胆养胃，解暑止渴，利小便，止泻痢。",tr:"绿豆味甘性凉，煮着吃能清胆养胃，解暑止渴，通利小便，止住腹泻痢疾。"},
+   {t:"药童选读 · 体例",s:"王孟英写此书自出机杼：每味食物但言性味、功效与宜忌，不炫技、不掉书袋，寻常人家照着吃就对了。",tr:"（药童白话）这本书的独特之处在于「实用」：不讲玄理，只告诉你这味食物什么性子、什么人适合吃、什么情况千万别吃。"}],
+  g:"给「吃货」准备的中医入门书：看完你会重新审视自家厨房——原来绿豆、梨、萝卜、莲藕，都是排队入典的「药」。"},
+ "难经":{
+  ps:[
+   {t:"一难",s:"十二经皆有动脉，独取寸口，以决五脏六腑死生吉凶之法，何谓也？",tr:"全身十二经脉都有搏动的部位，为什么单独切按手腕寸口处，就能判断五脏六腑的疾病吉凶呢？——全书的答疑从这一个「为什么」开始。"},
+   {t:"六十一难",s:"望而知之谓之神，闻而知之谓之圣，问而知之谓之工，切脉而知之谓之巧。",tr:"一望便知病情的叫「神」，一听便知的叫「圣」，一问便知的叫「工」，切脉而知的叫「巧」。望闻问切四诊的段位表，就出自这里。"}],
+  g:"《黄帝内经》的「课后习题集」：专挑疑难问题单刀直入。对号脉好奇的人，这是最好的第一本书——八十一个「为什么」答完，你也能聊两句寸关尺。"},
+ "肘后备急方":{
+  ps:[
+   {t:"治寒热诸疟方",s:"青蒿一握，以水二升渍，绞取汁，尽服之。",tr:"取一把青蒿，用两升水浸泡，绞出汁水，全部服下。一千五百年后，屠呦呦正是循着这行字，改用低温提取法获得了青蒿素。"},
+   {t:"卷七 · 治为犬所咬",s:"仍杀所咬犬，取脑敷之，后不复发。",tr:"把咬人的狗杀掉，取它的脑髓敷在伤口上，此后就不会发病——这是世界上最早的「免疫疗法」思路，比西方疫苗思想早了一千多年。"}],
+  g:"东晋版「急救手册」：不谈高深理论，专教救命的实用法子。青蒿与狂犬脑两条记录，一个拿了诺贝尔奖，一个领先世界千年——古籍里真的藏着未来。"},
+ "医学三字经":{
+  ps:[
+   {t:"医学源流第一",s:"医之始，本岐黄。灵枢作，素问详。越汉季，有南阳。六经辨，圣道彰。",tr:"医学的起源，本于岐伯与黄帝。《灵枢》写成，《素问》详备其理。越过汉代到了张仲景（南阳人），辨明六经辨证，医圣之道才彰明于世。"},
+   {t:"中风第二",s:"人百病，首中风。骤然得，八方通。",tr:"人类百般疾病里，最急重的首推中风。它骤然发作，医者须用八方药迅速通达救治。"}],
+  g:"把整部中医史编成三字韵语，背完开篇一节，中医源流脉络就装进脑子里了——学生党、科普爱好者入门首选。"},
+ "饮膳正要":{
+  ps:[
+   {t:"卷中 · 米谷品",s:"酒，味苦甘辣，大热，有毒。主行药势……通血脉，厚肠胃，润肌肤，消忧愁。少饮为佳，多饮伤神。",tr:"酒味苦甘而辛辣，性大热，有毒。能助药力运行、通利血脉、滋养肌肤。少饮为佳，多饮则损伤心神——七百年前的宫廷太医早就把话说透了。"},
+   {t:"卷一 · 养生避忌（开篇引《素问》）",s:"夫上古之人，其知道者，起居有常，食饮有节，不妄作劳，故能形与神俱。",tr:"上古懂得养生之道的人，作息有规律，饮食有节制，不过度操劳，所以形体与精神都健旺——忽思慧在开篇引用《内经》总纲，可见这部「皇家食堂说明书」的底色仍是养生正道。"}],
+  g:"中国第一部营养学专著，元代皇家「食堂说明书」：什么季节吃什么、孕妇忌口什么、喝酒怎么防醉，条条列得清清楚楚，像一份七百年前的膳食指南。"}
+};
+/* 四季养生锦囊：问答里问"春/夏/秋/冬 + 养生"即按季作答 */
+const SEASON_CARE={
+ 春:{pr:"《素问》云「春三月，此谓发陈」——万物生发，人身阳气也跟着往外冒，养生头等大事是<b>疏肝理气</b>",
+     eat:"省酸增甘：山药、大枣、小米、菠菜最养脾胃，少碰酸涩收敛之品；枸杞菊花茶疏肝明目正当时",
+     live:"夜卧早起，广步于庭——多出门踏青晒太阳；「春捂」要记牢：下厚上薄，别急着换单鞋露脚踝",
+     tip:"春困不是病，按揉太阳穴、风池穴提神；过敏体质少去花粉密集处，出门戴口罩"},
+ 夏:{pr:"夏属火，通于心——「夏三月，此谓蕃秀」，养生核心是<b>养心安神</b>，心静自然凉",
+     eat:"清淡为主：苦瓜、莲子清心火，绿豆汤解暑（脾胃虚寒者少喝）；酸梅汤生津止渴；「冬吃萝卜夏吃姜」，晨起两三片姜温中散寒",
+     live:"可晚睡早起（顺应阳气盛于外）+ 午休 15-30 分钟养心；空调 26℃ 起步，冷饮别贪——一时爽，脾阳两行泪",
+     tip:"出汗多是阳气外泄的正常表现，及时补水；大汗后别立刻冲凉水澡，毛孔骤闭反受寒"},
+ 秋:{pr:"秋属金，通于肺——「秋三月，此谓容平」，天高物燥，养生要点是<b>润肺防燥</b>",
+     eat:"白色入肺：雪梨、百合、银耳、蜂蜜、莲藕都是润燥好手；「贴秋膘」因人而异，痰湿体质悠着点",
+     live:"早卧早起，与鸡俱兴；「春捂秋冻」要有度——早晚记得添衣；多登高望远，防「悲秋」伤肺",
+     tip:"咽干咳嗽炖个冰糖雪梨；皮肤干燥别使劲搓澡，浴后趁湿气未散抹润肤露"},
+ 冬:{pr:"冬属水，通于肾——「冬三月，此谓闭藏」，养生讲究一个<b>藏</b>字：藏阳气、藏精气",
+     eat:"冬令进补正当时：经典名膳<b>当归生姜羊肉汤</b>温阳散寒（当归这味药终于主场作战）；萝卜白菜也养人；虚不受补者先调脾胃再进补",
+     live:"早卧晚起，必待日光——作息跟着太阳走；保暖护住脖颈、肚腹、脚踝三处；睡前热水泡脚最助眠",
+     tip:"冬主封藏，睡好「子午觉」最攒本钱；晨练别起太早，等日出发完、热身充分再动"}
+};
+/* 四季标志插画：首页节气卡圆形印框挂画，随节气更衣（AI 水墨插画） */
+const SEASON_IMG={春:"season-spring.jpg",夏:"season-summer.jpg",秋:"season-autumn.jpg",冬:"season-winter.jpg"};
+/* 当季限定金句：四季各藏一句《素问·四气调神大论》的应季原文——只有当前季节的金句会登场，别季不露面 */
+const SEASON_GREET={
+ 春:{q:"春三月，此谓发陈。天地俱生，万物以荣。",w:"万物生发的时节，正好翻开《黄帝内经》学养生，把阳气一起\u201c发\u201d起来"},
+ 夏:{q:"夏三月，此谓蕃秀。天地气交，万物华实。",w:"草木蕃秀的时节，心火当令，读一卷《饮膳正要》清清爽爽过夏天"},
+ 秋:{q:"秋三月，此谓容平。天气以急，地气以明。",w:"天高物燥的时节，宜润肺防燥，宜读一卷《随息居饮食谱》"},
+ 冬:{q:"冬三月，此谓闭藏。水冰地坼，无扰乎阳。",w:"万物闭藏的时节，早卧晚起，围炉读《伤寒论》最相宜"}
+};
+function updateSeasonImg(){const si=$("#seasonImg");if(si)si.src="assets/"+SEASON_IMG[seasonOf()];}
+function seasonOf(){
+  if(window._seasonOv)return window._seasonOv; // 四季预览：人工切换优先于真实节气
+  const n=new Date(),m=n.getMonth()+1,d=n.getDate();
+  return (m>11||(m===11&&d>=7)||m<2||(m===2&&d<4))?"冬":(m<5||(m===5&&d<6))?"春":(m<8||(m===8&&d<8))?"夏":"秋";
+}
+/* 当季飘落物：春花瓣 · 夏流萤 · 秋红叶 · 冬初雪（纯 CSS 动画，关闭系统动效时自动隐藏） */
+function buildSeasonFx(s){
+  let fx=document.getElementById("seasonFx");
+  if(!fx){fx=document.createElement("div");fx.id="seasonFx";document.body.appendChild(fx);}
+  const C={春:"❀",夏:"✦",秋:"❦",冬:"❄"};
+  let h="";
+  for(let i=0;i<18;i++){
+    h+=`<span style="left:${(Math.random()*100).toFixed(1)}vw;font-size:${(10+Math.random()*12).toFixed(1)}px;animation-duration:${(8+Math.random()*9).toFixed(1)}s;animation-delay:${(-Math.random()*17).toFixed(1)}s;opacity:${(.4+Math.random()*.45).toFixed(2)}">${C[s]}</span>`;
+  }
+  fx.innerHTML=h;
+}
+/* 四季预览切换：更衣 + 换飘落物 + 今日荐读跟随当季重算 */
+function setSeason(s){
+  window._seasonOv=s;
+  document.documentElement.dataset.season=s;
+  buildSeasonFx(s);
+  document.querySelectorAll(".season-bar button").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+  if(typeof renderBooks==="function")renderBooks();
+  if(typeof renderChips==="function")renderChips(); // 快捷问题随季更衣
+  updateSeasonImg(); // 当季插画同步更换
+  if(typeof bubble==="function"){const g=SEASON_GREET[s];bubble("本草智答",`叮！已换上<b>${s}季皮肤</b>〜 ${s}季限定金句奉上：「${g.q}」${g.w}。`);} // 换季即换金句，别季金句不露面
+}
+document.documentElement.dataset.season=seasonOf(); // 四季换肤：主色随节气更衣
+buildSeasonFx(seasonOf());
+document.querySelectorAll(".season-bar button").forEach(b=>b.classList.toggle("on",b.dataset.s===document.documentElement.dataset.season));
+/* 经典书目接入问答库：问书名（含别名）即答完整书卡，unshift 保证与同名话题打平时书卡优先 */
+const BOOK_ALIASES={"黄帝内经":["内经","素问","灵枢"],"神农本草经":["本草经"],"本草纲目":["纲目"],"千金方":["千金要方","备急千金要方"],"肘后备急方":["肘后方","肘后"],"随息居饮食谱":["随息居"],"医学三字经":["三字经"],"汤头歌诀":["汤头歌"]};
+KB.unshift(...BOOKS.map(b=>({keys:[b.t,...(BOOK_ALIASES[b.t]||[])],cat:b.t,ans:`<b>经典 · 《${b.t}》</b><div class="kv"><span class="k">作者年代</span>${b.au}</div><div class="kv"><span class="k">名句金句</span>\u201c${b.hl}\u201d${b.hs}</div><div class="kv"><span class="k">内容看点</span>${b.d}</div><div class="kv"><span class="k">药童导读</span>${b.why}</div><div class="kv"><span class="k">难度与适合</span>${b.diff} · 适合${b.fit.join("、")}</div><div style="margin-top:8px"><button class="btn ghost" onclick="openRead('${b.t}')">📖 翻开《${b.t}》读选段 →</button></div><div class="kv" style="color:var(--ink2)">完整金句卡与荐读路线，去「经典荐读」页面翻翻〜</div>`})));
+/* ===== 经典作者档案：问「李时珍是谁」「本草纲目的作者是谁」都能聊 ===== */
+const AUTHORS={
+ "黄帝内经":{n:"佚名医家（托名黄帝与岐伯）",era:"战国至秦汉",names:["黄帝","岐伯","岐黄"],bio:"《内经》并非黄帝亲笔，而是战国至秦汉间众多医家的集体智慧，假托黄帝与岐伯君臣问答以示学问正统。今日中医雅称「岐黄之术」，正是从这两位\u201c署名作者\u201d而来。",fun:"黄帝负责提问，岐伯负责回答——史上最成功的\u201c学术双人相声\u201d，一演就是两千年。"},
+ "神农本草经":{n:"佚名（托名神农）",era:"汉代成书",names:["神农"],bio:"\u201c神农尝百草\u201d只是传说，书成于汉代，由无名医家整理先秦用药经验而成。托名农耕始祖神农，表达的是\u201c药食同源\u201d的敬意。",fun:"神农本人若读到此书大概会疑惑：我尝过的草，怎么有好几味连我在书里都没见过？"},
+ "伤寒论":{n:"张仲景（名机）",era:"东汉",names:["张仲景","仲景"],bio:"东汉南阳人，被尊为「医圣」。因宗族十年间三分之二死于疫病，愤而\u201c勤求古训，博采众方\u201d，著《伤寒杂病论》，后世整理为《伤寒论》与《金匮要略》两部分。",fun:"民间传说他发明了饺子（\u201c祛寒娇耳汤\u201d）给冻伤的乡亲治病——医圣的副业也很治愈。"},
+ "本草纲目":{n:"李时珍（字东璧）",era:"明（1518-1593）",names:["李时珍","时珍"],bio:"湖北蕲州人。因发现旧本草谬误颇多，\u201c渔猎群书，搜罗百氏\u201d，历时27年、三易其稿著成《本草纲目》，此后又奔走十年促成刻印，遗嘱仍是进献此书。",fun:"为写本草他亲口试药、上山采标本，还专门养过一条蛇观察习性——明代的\u201c硬核科普博主\u201d。"},
+ "千金方":{n:"孙思邈",era:"唐",names:["孙思邈","思邈"],bio:"京兆华原（今陕西铜川）人，尊称「药王」。以\u201c人命至重，有贵千金\u201d立书名，开篇《大医精诚》是中国医德的千古典范。相传他活过百岁，是史上最长寿的医家之一。",fun:"唐太宗都召他入宫请教养生之道，他却一心扎根民间行医——皇帝的面子大不过百姓的病。"},
+ "温病条辨":{n:"吴鞠通（名瑭）",era:"清",names:["吴鞠通","吴瑭","鞠通"],bio:"江苏淮安人。19岁父亲病故，愤而弃科举学医，后著《温病条辨》，确立温病三焦辨证体系，银翘散、桑菊饮等名方皆出其手。",fun:"他因亲人病故而学医——从\u201c焦虑的家属\u201d到温病学派集大成者，这份执念改写了中医史。"},
+ "汤头歌诀":{n:"汪昂（字讱庵）",era:"清初",names:["汪昂","讱庵"],bio:"安徽休宁人，本为明末秀才，入清后弃科举、专攻医药普及，另著有《本草备要》。《汤头歌诀》把方剂编成七言歌诀，是学方的启蒙第一书。",fun:"古代医界\u201c押韵狂魔\u201d：把几百首方剂全写进七言歌词里，背下来就等于方剂学入门。"},
+ "随息居饮食谱":{n:"王孟英（名士雄）",era:"清",names:["王孟英","王士雄","孟英"],bio:"浙江海宁人，温病四大家之一。幼年丧父、家贫自学，一生行医于乱世。《随息居饮食谱》载食药330种，是\u201c药食同源\u201d理念的通俗读本。",fun:"他的书斋名「随息居」，大意是\u201c随遇而安地过日子\u201d——乱世医家的淡然，都写在书名里了。"},
+ "难经":{n:"相传扁鹊（秦越人）",era:"战国",names:["扁鹊","秦越人"],bio:"扁鹊本名秦越人，渤海郡人，脉学的开山宗师。《难经》以八十一个问答\u201c举难释疑\u201d，相传出自他手（学界认为成书当在汉代）。",fun:"「望而知之谓之神」的段位表出自此书——若按此标准，扁鹊见蔡桓公那一眼，堪称神级开局。"},
+ "肘后备急方":{n:"葛洪（号抱朴子）",era:"东晋",names:["葛洪","抱朴子"],bio:"江苏句容人，炼丹家、医药学家双修。《肘后备急方》专收\u201c简、便、验、廉\u201d的急救之法，屠呦呦循\u201c青蒿一握\u201d记载获灵感提取青蒿素，摘得诺贝尔奖。",fun:"他在深山炼丹时顺手记下的方子，一千六百年后救了数百万疟疾患者——炼丹的副业救了医学的场子。"},
+ "医学三字经":{n:"陈修园（名念祖）",era:"清",names:["陈修园","陈念祖","修园"],bio:"福建长乐人，医学教育家。一生致力于中医普及、著作等身，《医学三字经》把中医源流、诊法方药编成三字韵语，是医史入门第一书。",fun:"清代中医界的\u201c教材编写组组长\u201d：他写的启蒙读物，至今仍是中医爱好者的开学第一课。"},
+ "饮膳正要":{n:"忽思慧",era:"元",names:["忽思慧"],bio:"元代宫廷饮膳太医，兼通蒙汉医药与营养之学，主持编成中国第一部营养学专著《饮膳正要》，讲妊娠食忌、饮酒避忌、四时所宜。",fun:"身份相当于元代皇家「首席营养师」，给皇帝一家写膳食说明书，一写写成了传世经典。"}
+};
+const AUTHOR2BOOK={};Object.keys(AUTHORS).forEach(bt=>AUTHORS[bt].names.forEach(n=>AUTHOR2BOOK[n]=bt));
+function authorCard(bt){
+  const a=AUTHORS[bt];
+  return `<b>作者 · ${a.n}</b><div class="kv"><span class="k">年代</span>${a.era}</div><div class="kv"><span class="k">其人其事</span>${a.bio}</div><div class="kv"><span class="k">药童八卦</span>${a.fun}</div><div style="margin-top:8px"><button class="btn ghost" onclick="openRead('${bt}')">📖 看看《${bt}》里的金句 →</button></div><div class="kv" style="color:var(--ink2)">竞赛「经典考点」也会考作者哦，去「看图辨药」页过过招〜</div>`;
+}
+const STATES={"1":"没有","2":"偶尔","3":"有时","4":"经常","5":"总是"};
+let quizAns={},lastQuiz=null;
+const $=s=>document.querySelector(s);
+
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.p));
+function go(p){
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+  document.querySelectorAll(".page").forEach(s=>s.classList.remove("on"));
+  $("#p-"+p).classList.add("on");
+  if(p==="album")renderAlbum();
+  if(p==="checkin")renderCheckin();
+  if(p!=="game"&&window._game&&window._game.timer){clearInterval(window._game.timer);window._game.timer=null;} // 离开药圃自动停表
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ===== 小药童：待机 + 点击互动 ===== */
+(function(){
+  const IDLE="assets/mascot-idle.png", ACT="assets/mascot-anim.webp";
+  const ACT_MS=5100; // 60帧×83ms≈5s，留一点余量
+  const TIPS=[
+    "上工治未病，不治已病。——《黄帝内经》",
+    "春养肝，夏养心，秋润肺，冬补肾。",
+    "黄芪泡水好，气虚之人宜，感冒发烧停一停~",
+    "睡前泡脚胜吃补药，水温40度刚刚好。",
+    "怒伤肝，喜伤心，思伤脾——情绪也是药引子。",
+    "饭后百步走，活到九十九。",
+    "本草智答在线，有问必答，点上面按钮来聊聊？",
+    "人参虽好，可不要贪服哦，辨证进补才有效。"
+  ];
+  const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
+  let acting=false,tipTimer,hintShown=false,tipSeason=null;
+  // 预载动作 WebP，点击时零延迟
+  const pre=new Image();pre.src=ACT;
+  function showTip(){
+    const s=seasonOf();
+    let t;
+    if(tipSeason!==s){
+      // 每季第一触：只出当前季节皮肤的限定金句，别季金句不露面
+      const g=SEASON_GREET[s];
+      t=`【${s}季限定】「${g.q}」${g.w}`;
+      tipSeason=s;
+    }else{
+      t=pick(TIPS);
+    }
+    bubble.textContent=t;
+    bubble.classList.add("show");
+    clearTimeout(tipTimer);
+    tipTimer=setTimeout(()=>bubble.classList.remove("show"),ACT_MS+1500);
+  }
+  function act(auto){
+    if(acting)return;
+    acting=true;
+    img.classList.add("acting");
+    img.src=ACT;
+    showTip();
+    if(!hintShown){hint.classList.add("hide");hintShown=true;}
+    setTimeout(()=>{
+      img.src=IDLE;
+      img.classList.remove("acting");
+      acting=false;
+    },ACT_MS);
+  }
+  img.addEventListener("click",()=>act(false));
+  // 进页面 3 秒后自动打个招呼
+  setTimeout(()=>act(true),3000);
+})();
+
+/* 本草插画映射（每日本草卡 + 看图辨药共用） */
+const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"jinyinhua",陈皮:"chenpi",茯苓:"fuling",甘草:"gancao",菊花:"juhua",山楂:"shanzha",生姜:"shengjiang",人参:"renshen",莲子:"lianzi",山药:"shanyao",薄荷:"bohe"};
+(function(){
+  const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+  const h=HERBS[doy%HERBS.length];
+  unlockHerb(h.n,true); // 每日本草自动集章（静默）
+  $("#daily").innerHTML=`<div class="daily-left"><div class="big">${h.n.slice(0,2)}</div><div class="pinyin">每 日 一 味</div></div>
+  <div class="daily-main"><span class="daily-tag">◈ 每日本草 · ${new Date().getMonth()+1}月${new Date().getDate()}日</span>
+  <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:14px">${h.e}</p>
+  <div class="src">${h.s}</div>
+  <div class="ask"><a href="#" onclick="askKB('${h.n}');return false">问一问「本草智答」：${h.n}怎么吃？ →</a></div></div>
+  <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'"></div><span class="cap">本 草 对 照</span></div>`;
+})();
+
+/* ===== 看图辨药小游戏 ===== */
+const GAME_OK=["答对了！这味药跟你有缘〜","好眼力！药童考不倒你。","正是此药！看来你没白来药圃。","稳！这题闭着眼都该会〜"];
+const GAME_BAD=["哎呀不对，这味其实是","差一点点！正确答案是","药童急得直跺脚：人家叫","此药表示很委屈，明明叫"];
+const GAME_MCQ_BAD=["哎呀不对，正解是","差一点点！正确答案是","药童翻书给你看：答案是","这题的正确答案是"];
+function shuffleArr(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const CONTEST_LIMIT=10; // 竞赛模式每题限时（秒）
+/* 经典著作考点题库（全部取材于「经典荐读」十二部书目，在问答里问书名都能学到答案） */
+const BOOK_QS=[
+ {q:"\u201c上工治未病，不治已病\u201d这句名言出自哪部经典？",opts:["黄帝内经","伤寒论","千金方","难经"],a:"黄帝内经",fb:"《黄帝内经》主张最高明的医生在疾病未发时就调治——本站「体质辨识」的立意正源于此。"},
+ {q:"我国现存最早的药物学专著是？",opts:["神农本草经","本草纲目","千金方","温病条辨"],a:"神农本草经",fb:"汉代《神农本草经》载药365味、分上中下三品，比《本草纲目》早了一千多年。"},
+ {q:"《伤寒论》的作者是？",opts:["李时珍","张仲景","孙思邈","葛洪"],a:"张仲景",fb:"医圣张仲景著《伤寒杂病论》，后世整理为《伤寒论》与《金匮要略》两部分。"},
+ {q:"被誉为\u201c方书之祖\u201d的是哪部著作？",opts:["千金方","伤寒论","汤头歌诀","温病条辨"],a:"伤寒论",fb:"桂枝汤、小柴胡汤等名方沿用至今，理法方药一线贯穿，故称\u201c方书之祖\u201d。"},
+ {q:"《本草纲目》全书收载药物约多少种？",opts:["365 种","844 种","1892 种","330 种"],a:"1892 种",fb:"159万字、载药1892种，达尔文亦称之为\u201c中国古代的百科全书\u201d。"},
+ {q:"\u201c人命至重，有贵千金\u201d出自哪部著作？",opts:["千金方","黄帝内经","伤寒论","难经"],a:"千金方",fb:"孙思邈以医德立书：\u201c人命至重，有贵千金，一方济之，德逾于此。\u201d"},
+ {q:"《大医精诚》这篇医德名篇出自？",opts:["千金方","本草纲目","黄帝内经","医学三字经"],a:"千金方",fb:"孙思邈在《千金方》开篇立\u201c大医精诚\u201d之训：先发大慈恻隐之心，誓愿普救含灵之苦。"},
+ {q:"屠呦呦受哪部古籍\u201c青蒿一握\u201d记载启发提取出青蒿素？",opts:["肘后备急方","本草纲目","随息居饮食谱","温病条辨"],a:"肘后备急方",fb:"葛洪《肘后备急方》载\u201c青蒿一握，以水二升渍，绞取汁，尽服之\u201d——古籍里藏着诺奖。"},
+ {q:"《温病条辨》的作者是？",opts:["汪昂","吴鞠通","王孟英","陈修园"],a:"吴鞠通",fb:"清代吴鞠通著《温病条辨》，银翘散、桑菊饮等名方皆出于此。"},
+ {q:"\u201c四君子汤中和义，参术茯苓甘草比\u201d这首歌诀出自？",opts:["汤头歌诀","伤寒论","千金方","医学三字经"],a:"汤头歌诀",fb:"清代汪昂把方剂编成七言歌诀，朗朗上口，堪称\u201c古代RAP歌词本\u201d。"},
+ {q:"中国第一部营养学专著是？",opts:["随息居饮食谱","饮膳正要","千金方","本草纲目"],a:"饮膳正要",fb:"元代饮膳太医忽思慧所作，讲妊娠食忌、饮酒避忌、四时所宜，堪称皇家\u201c食堂说明书\u201d。"},
+ {q:"《难经》相传的作者是？",opts:["扁鹊","华佗","张仲景","葛洪"],a:"扁鹊",fb:"相传为扁鹊（秦越人）所作，是《黄帝内经》的\u201c课后习题集\u201d，独取寸口诊脉法由此发扬。"},
+ {q:"载食药330种、讲四时饮食宜忌的清代食疗经典是？",opts:["饮膳正要","随息居饮食谱","本草纲目","汤头歌诀"],a:"随息居饮食谱",fb:"王孟英《随息居饮食谱》是\u201c吃货友好\u201d的药食同源通俗读本。"},
+ {q:"\u201c望而知之谓之神，闻而知之谓之圣\u201d出自？",opts:["黄帝内经","难经","伤寒论","医学三字经"],a:"难经",fb:"《难经·六十一难》给望闻问切排了段位：神、圣、工、巧。"},
+ {q:"《医学三字经》的作者是清代医家？",opts:["陈修园","汪昂","忽思慧","王孟英"],a:"陈修园",fb:"陈修园把整部中医源流编成三字韵语：\u201c医之始，本岐黄；灵枢作，素问详。\u201d"},
+ {q:"银翘散、桑菊饮等名方出自哪部著作？",opts:["伤寒论","温病条辨","千金方","四君子汤"],a:"温病条辨",fb:"温病学派集大成之作，今天药店的银翘解毒片，源头就在此书。"},
+ {q:"《神农本草经》将365味药分为？",opts:["寒热温三性","君臣佐三等","上中下三品","天地人三才"],a:"上中下三品",fb:"\u201c上药养命以应天，中药养性以应人，下药主治病以应地。\u201d"},
+ {q:"\u201c脑为元神之府\u201d这一论断出自？",opts:["本草纲目","黄帝内经","难经","千金方"],a:"本草纲目",fb:"李时珍在《本草纲目·辛夷条》中提出，在\u201c心主神明\u201d的时代把思维的宝座指给了脑。"},
+ {q:"把中医源流编成三字韵语、医史入门首选的书是？",opts:["医学三字经","汤头歌诀","难经","饮膳正要"],a:"医学三字经",fb:"背完开篇\u201c医之始，本岐黄\u201d，中医源流脉络就装进脑子里了。"},
+ {q:"\u201c凡病温者，始于上焦，在手太阴\u201d出自？",opts:["温病条辨","伤寒论","难经","千金方"],a:"温病条辨",fb:"温病从口鼻而入、先伤于肺——\u201c清热\u201d一脉的理论总纲。"}
+];
+/* 辨药眼力：由相似药材数据生成选择题（一对两题，各考一味） */
+function pairQuestions(l){
+  const others=shuffleArr(HERBS.map(h=>h.n).filter(n=>n!==l.a&&n!==l.b)).slice(0,2);
+  const fb=`${l.tip}<br><b>口诀：「${l.gj}」</b>`;
+  return [
+   {kind:"mcq",tag:"辨药眼力",q:`一味饮片：${l.sA}。它最可能是？`,opts:shuffleArr([l.a,l.b,...others]),a:l.a,fb},
+   {kind:"mcq",tag:"辨药眼力",q:`一味药材：${l.sB}。它最可能是？`,opts:shuffleArr([l.a,l.b,...others]),a:l.b,fb}
+  ];
+}
+function imgQuestion(h){
+  const wrong=shuffleArr(HERBS.filter(x=>x.n!==h.n)).slice(0,3).map(x=>x.n);
+  return {kind:"img",tag:"看图辨药",h,opts:shuffleArr([h.n,...wrong])};
+}
+function setGameMode(m){
+  const g=window._game;
+  if(g&&g.timer){clearInterval(g.timer);g.timer=null;} // 切模式先停表
+  $("#btnPractice").className=m==="practice"?"btn red":"btn ghost";
+  $("#btnContest").className=m==="contest"?"btn red":"btn ghost";
+  startGame(m);
+}
+function startGame(mode){
+  mode=mode||((window._game&&window._game.mode)||"practice");
+  let qs;
+  if(mode==="contest"){
+    /* 竞赛混合出卷：4 图像 + 4 经典考点 + 2 辨药眼力，打乱呈题 */
+    const imgs=shuffleArr(HERBS).slice(0,4).map(imgQuestion);
+    const books=shuffleArr(BOOK_QS).slice(0,4).map(q=>({kind:"mcq",tag:"经典考点",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
+    const pairs=shuffleArr(LOOKALIKES).slice(0,2).map(l=>pairQuestions(l)[Math.random()<.5?0:1]);
+    qs=shuffleArr([...imgs,...books,...pairs]);
+  }else{
+    qs=shuffleArr(HERBS).slice(0,10).map(imgQuestion);
+  }
+  window._game={qs,i:0,score:0,mode,timer:null};
+  renderGameQ();
+}
+function renderGameQ(){
+  const g=window._game;
+  if(g.timer){clearInterval(g.timer);g.timer=null;}
+  if(g.i>=g.qs.length)return endGame();
+  const q=g.qs[g.i];
+  const contest=g.mode==="contest";
+  const body=q.kind==="mcq"
+    ? `<div class="game-qtext"><span class="qt-tag">◈ ${q.tag} ◈</span><br>${q.q}</div>`
+    : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.jpg" alt="本草工笔插画"></div>`;
+  $("#gameArea").innerHTML=`
+    ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">10s</span></div>`:""}
+    <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / 10</b><span>第几道题</span></div></div>
+    <div class="game-round">◈ 第 ${g.i+1} 题 · ${q.kind==="mcq"?q.tag:"请辨识"}${contest?" · 限时作答":""} ◈</div>
+    ${body}
+    <div class="game-opts">${q.opts.map(o=>`<button onclick="pickGame('${o}')">${o}</button>`).join("")}</div>
+    <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":"药童搓搓手：这一题答错也不亏，我会科普一段小知识〜"}</div>`;
+  if(contest)startTimer();
+}
+function startTimer(){
+  const g=window._game;let left=CONTEST_LIMIT;
+  const bar=$("#tmBar"),sec=$("#tmSec");
+  const tick=()=>{
+    left-=0.1;
+    if(left<=0){clearInterval(g.timer);g.timer=null;pickGame(null);return;} // 超时判负
+    if(bar){bar.style.width=(left/CONTEST_LIMIT*100)+"%";if(left<=3)bar.classList.add("low");}
+    if(sec)sec.textContent=Math.ceil(left)+"s";
+  };
+  g.timer=setInterval(tick,100);
+}
+function pickGame(name){
+  const g=window._game,q=g.qs[g.i];
+  const contest=g.mode==="contest";
+  if(g.timer){clearInterval(g.timer);g.timer=null;}
+  const ansN=q.kind==="mcq"?q.a:q.h.n;
+  const right=name===ansN;
+  const btns=document.querySelectorAll("#gameArea .game-opts button");
+  btns.forEach(b=>{b.disabled=true;if(b.textContent===ansN)b.classList.add("ok");});
+  if(right)g.score++;
+  else{
+    btns.forEach(b=>{if(b.textContent===name)b.classList.add("bad");});
+    const pic=$("#gamePic");if(pic)pic.classList.add("shake");
+  }
+  if(contest){
+    // 竞赛节奏：短反馈自动进入下一题，不打断比拼
+    $("#gameFb").innerHTML=right?`<b class="good">✔ 中！</b>`:(name===null?`⏱ 超时！正解：<b>${ansN}</b>`:`✘ 差矣，正解：<b>${ansN}</b>`);
+    unlockHerb(q.kind==="img"&&right?q.h.n:null,true);
+    setTimeout(nextGame,q.kind==="mcq"?1600:1200);
+    return;
+  }
+  if(q.kind==="img"&&right)unlockHerb(q.h.n);
+  $("#gameFb").innerHTML=(right?`<b class="good">✔ ${pick(GAME_OK)}</b>`:`✘ ${pick(q.kind==="mcq"?GAME_MCQ_BAD:GAME_BAD)}<b>${ansN}</b>`)
+    +(q.kind==="mcq"?`<br>${q.fb}`:`<br><b>${q.h.n}</b> · ${q.h.f}<br>${q.h.e}`)
+    +`<div style="margin-top:8px"><button class="btn ghost" onclick="nextGame()">${g.i>=g.qs.length-1?"看成绩 →":"下一题 →"}</button></div>`;
+}
+function nextGame(){window._game.i++;renderGameQ();}
+function endGame(){
+  const g=window._game;
+  if(g.timer){clearInterval(g.timer);g.timer=null;}
+  const s=g.score,contest=g.mode==="contest";
+  if(contest){
+    let best=null;try{best=JSON.parse(localStorage.getItem("bzContestBest")||"null");}catch(e){}
+    if(!best||s>best.s){best={s,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日"};localStorage.setItem("bzContestBest",JSON.stringify(best));}
+  }
+  const r=s===10?["坐堂神医","十问十中！混合题库都难不倒你，李时珍看了都想收你当徒弟，药童甘愿给您打下手〜"]
+    :s>=8?["游方郎中","走方行医的眼力已经有了！经典考点也难不住你，再翻翻荐读里的选段，便可出师。"]
+    :s>=5?["药童同门","基本功扎实！论辈分和药童算同门师兄弟——经典选段再补补课，下轮冲高分。"]
+    :s>=3?["抓药学徒","柜台后站稳了！常来药圃转转、翻翻「经典荐读」的阅读选段，眼力与学问都是养出来的〜"]
+    :["药圃看门的","药童替你捏一把汗……不过没关系，荐读页每部书都能点开读选段，读完再来战！"];
+  try{if(!contest){const b=JSON.parse(localStorage.getItem("bzGameBest")||"null");if(!b||s>b.s)localStorage.setItem("bzGameBest",JSON.stringify({s,t:r[0]}));}}catch(e){}
+  $("#gameArea").innerHTML=`
+    <div class="game-end">
+      <div class="game-score"><div><b>${s}</b><span>答对</span></div><div><b>10</b><span>总题数</span></div></div>
+      <div class="title">${r[0]}</div>
+      <div class="seal">百草园 · 授</div>
+      <p>${contest?"（知识竞赛 · 每题限时 "+CONTEST_LIMIT+" 秒）":""}${r[1]}</p>
+      ${contest?`<p style="font-size:12.5px;color:var(--ink3)">◈ 竞赛最佳成绩已记入名帖：${s} / 10</p>`:""}
+      <button class="btn red" onclick="startGame()">${contest?"再战一轮":"再来一轮"}</button>
+      <button class="btn ghost" onclick="copyChallenge(${s},'${r[0]}')">📣 发起挑战 · 复制战帖</button>
+      <button class="btn ghost" onclick="go('read')">读读经典 →</button>
+      <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
+      <button class="btn ghost" onclick="go('checkin')">去打卡 →</button>
+    </div>`;
+}
+/* 挑战战帖：一键复制成绩+称号+链接，转发好友过招 */
+function copyChallenge(s,title){
+  const txt=`【本草战帖 · 书香岐黄】我在「本草智答」知识竞赛中答对 ${s}/10，荣获「${title}」称号！识体质、问本草、读经典、战竞赛——你也来过过招？药童在百草园等你想胜负〜 ${location.href.split("#")[0]}`;
+  const done=()=>{const t=document.createElement("div");t.className="chal-toast";t.textContent="⚔ 战帖已复制！快去粘贴给你的好友吧";document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),400);},2400);};
+  const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(fallback);}else fallback();
+}
+startGame(); // 载入即备好第一题
+
+/* ===== 本草图鉴集章系统 ===== */
+/* 注意：_alStore 必须用 var——每日本草 IIFE 在脚本前部就会调用 unlockHerb，let 会落入 TDZ 直接崩页 */
+var _alStore=null;
+function alGet(){
+  if(_alStore)return _alStore;
+  try{_alStore=JSON.parse(localStorage.getItem("bzAlbum")||"{}");}catch(e){_alStore={};}
+  return _alStore;
+}
+function alSave(d){_alStore=d;try{localStorage.setItem("bzAlbum",JSON.stringify(d));}catch(e){}}
+function alCount(){return Object.keys(alGet()).length;}
+const AL_TITLES=[[14,"百草园主","十四味本草尽收囊中"],[10,"百草通","再集四味就满园了"],[5,"渐入佳境","过半在望，继续加油"],[1,"初识百草","每次相遇都会点亮一枚"],[0,"未启程","问药童、玩辨药都能集章"]];
+function unlockHerb(name,silent){
+  if(!name)return false;
+  const d=alGet();
+  if(d[name])return false;
+  d[name]=new Date().getMonth()+1+"月"+new Date().getDate()+"日";
+  alSave(d);
+  const n=alCount();
+  if(!silent){
+    let extra="";
+    if(n===5)extra="！集满5味，渐入佳境〜";
+    else if(n===10)extra="！十味入手，堪称百草通！";
+    else if(n===14)extra="！十四味全收，百草园主就是你了！";
+    alToast("◈ 集章成功 · "+name+extra);
+  }
+  return true;
+}
+function alToast(msg){
+  const t=document.createElement("div");
+  t.className="al-toast";t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2600);
+}
+/* ===== 岐黄打卡（阅读打卡 · 文化节读者互动） ===== */
+const CI_QUOTES=[
+ ["读书不如读无字之书，识药先识身边之药","药童语录"],
+ ["善言天者，必应于人；善言古者，必验于今","《素问·气交变大论》"],
+ ["上工治未病，不治已病","《黄帝内经》"],
+ ["安身之本，必资于食；救疾之速，必凭于药","孙思邈《千金要方》"],
+ ["不知易，不足以言太医","孙思邈"],
+ ["纸上得来终觉浅，绝知此事要躬行","陆游《冬夜读书示子聿》"],
+ ["读书之乐何处寻，数点梅花天地心","翁森《四时读书乐》"],
+ ["本草虽微，可养性命；经典虽古，可启新知","药童语录"]
+];
+function ciGet(){try{return JSON.parse(localStorage.getItem("bzCheckin")||"null")||{d:[]};}catch(e){return{d:[]};}}
+function ciSave(c){try{localStorage.setItem("bzCheckin",JSON.stringify(c));}catch(e){}}
+function ciKey(dt){dt=dt||new Date();return dt.getFullYear()+"-"+(dt.getMonth()+1)+"-"+dt.getDate();}
+function ciStreak(){
+  const set=new Set(ciGet().d);
+  let n=0;const cur=new Date();
+  if(!set.has(ciKey(cur)))cur.setDate(cur.getDate()-1); // 今天未打不影响昨日连击
+  while(set.has(ciKey(cur))){n++;cur.setDate(cur.getDate()-1);}
+  return n;
+}
+function doCheckin(){
+  const c=ciGet(),k=ciKey();
+  if(c.d.includes(k)){alToast("◈ 今日已打过卡啦，明早再来〜");return;}
+  c.d.push(k);ciSave(c);
+  // 打卡联动：静默点亮今日本草章（若未集），合并一条提示
+  const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+  const h=HERBS[doy%HERBS.length];
+  const fresh=unlockHerb(h.n,true);
+  const n=alCount();
+  alToast("◈ 打卡成功 · 连续 "+ciStreak()+" 天"+(fresh?"，顺手点亮「"+h.n+"」图鉴印（"+n+"/14）":""));
+  renderCheckin();ciStatSync();
+}
+function ciStatSync(){const el=$("#ciStat");if(el)el.textContent=ciStreak();}
+function renderCheckin(){
+  const c=ciGet(),k=ciKey(),done=c.d.includes(k);
+  const streak=ciStreak(),total=c.d.length;
+  const n=alCount(),t=AL_TITLES.find(x=>n>=x[0]);
+  let g=null;try{g=JSON.parse(localStorage.getItem("bzContestBest")||"null");}catch(e){}
+  const p=physGet();
+  const q=CI_QUOTES[total%CI_QUOTES.length];
+  // 本月日历：周一至周日表头，按当月实际排布
+  const now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  const first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();
+  let lead=(first.getDay()+6)%7; // 周一=0
+  const hitSet=new Set(c.d);
+  let cells=["一","二","三","四","五","六","日"].map(w=>`<div class="cell wk">${w}</div>`).join("");
+  for(let i=0;i<lead;i++)cells+='<div class="cell"></div>';
+  for(let d=1;d<=days;d++){
+    const key=y+"-"+(m+1)+"-"+d,hit=hitSet.has(key),today=d===now.getDate();
+    cells+=`<div class="cell${hit?" hit":""}${today?" today":""}" title="${m+1}月${d}日${hit?" · 已打卡":""}">${d}</div>`;
+  }
+  $("#checkinArea").innerHTML=`
+    <div class="ci-banner">◈ 图书馆中医药文化节 · 读者阅读打卡专区 —— 每日一格，把岐黄之学读成习惯 ◈</div>
+    <div class="ci-stats">
+      <div><b>${streak}</b><span>连续打卡</span></div>
+      <div><b>${total}</b><span>累计天数</span></div>
+      <div><b>${n} / 14</b><span>本草集章</span></div>
+      <div><b>${g?g.s+" / 10":"—"}</b><span>竞赛最佳</span></div>
+      <div><b>${p?p.n.slice(0,2):"—"}</b><span>体质档案</span></div>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      ${done?`<button class="btn ghost" style="cursor:default">✓ 今日已打卡 · 明日再来</button>`
+        :`<button class="btn red" onclick="doCheckin()">◈ 今日签到 · 点亮一格</button>`}
+    </div>
+    <div class="ci-month">${y} 年 ${m+1} 月</div>
+    <div class="ci-cal">${cells}</div>
+    <div class="ci-quote">「${q[0]}」</div>
+    <div class="ci-quote-src">—— ${q[1]}</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px">
+      <button class="btn ghost" onclick="makePoster()">生成我的名帖 →</button>
+      <button class="btn ghost" onclick="go('game')">去知识竞赛 →</button>
+      <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
+    </div>`;
+}
+renderCheckin(); // 载入即渲染（页面隐藏时无妨）
+function renderAlbum(){
+  const d=alGet(),n=alCount();
+  const t=AL_TITLES.find(x=>n>=x[0]);
+  $("#albumArea").innerHTML=`
+    <div class="al-progress">
+      <div class="num">${n}<small> / 14</small></div>
+      <div class="bar"><i style="width:${Math.round(n/14*100)}%"></i></div>
+      <div class="title"><b>${t[1]}</b><span>${t[2]}</span></div>
+    </div>
+    <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="makePoster()">◈ 生成我的名帖</button></div>
+    <div class="album-grid">${HERBS.map(h=>{
+      const got=d[h.n];
+      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
+        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="未解锁"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
+    }).join("")}</div>
+    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 看图辨药答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
+    <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
+}
+function physGet(){try{return JSON.parse(localStorage.getItem("bzPhysique")||"null");}catch(e){return null;}}
+/* 回填：首页图鉴计数 + 体质档案徽标（首页）与提示条（辨识页） */
+(function(){
+  const el=$("#alStat");if(el)el.textContent=alCount();
+  ciStatSync();
+  const p=physGet();if(!p)return;
+  const badge=$("#physBadge");
+  if(badge){badge.style.display="inline-flex";badge.innerHTML=`◈ 你的体质档案：<b>${p.n}</b>（${p.j}）· ${p.d}辨识 · 点击复查`;}
+  const lp=$("#lastPhys");
+  if(lp){lp.style.display="block";lp.innerHTML=`◈ 上次辨识：<b>${p.n}</b>（${p.j}）· ${p.d} —— <a onclick="go('chat');setTimeout(()=>send('${p.n.replace("质","")}体质怎么调理'),80)">咨询药童调理</a> · 下方量表重新作答即可更新档案`;}
+})();
+
+/* ===== 本草名帖 · 一键生成分享海报（纯前端 canvas，无服务器） ===== */
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
+function posterData(){
+  const p=physGet(),al=alGet(),names=Object.keys(al),n=names.length;
+  const t=AL_TITLES.find(x=>n>=x[0]);
+  let g=null;try{g=JSON.parse(localStorage.getItem("bzGameBest")||"null");}catch(e){}
+  let cb=null;try{cb=JSON.parse(localStorage.getItem("bzContestBest")||"null");}catch(e){}
+  const ci=ciStreak(),ciTotal=ciGet().d.length;
+  const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+  const season=seasonOf(),sRec=SEASON_READS[season];
+  return {p,names,n,t,g,cb,ci,ciTotal,season,book:sRec.list[doy%sRec.list.length]};
+}
+function drawPoster(D,qrImg){
+  const W=600,H=880,c=document.createElement("canvas");c.width=W;c.height=H;
+  const x=c.getContext("2d");
+  const ZH='"Ma Shan Zheng","Noto Serif SC","STSong",serif', SONG='"Noto Serif SC","STSong",serif';
+  /* 纸底 + 水印 + 双边框 */
+  x.fillStyle="#F5F1E8";x.fillRect(0,0,W,H);
+  x.textAlign="center";x.textBaseline="alphabetic";
+  x.fillStyle="rgba(47,93,80,.05)";x.font="230px "+ZH;x.fillText("帖",W/2,H/2+95);
+  x.strokeStyle="rgba(154,123,63,.55)";x.lineWidth=2;x.strokeRect(18,18,W-36,H-36);
+  x.strokeStyle="rgba(154,123,63,.22)";x.lineWidth=1;x.strokeRect(28,28,W-56,H-56);
+  /* 题名 */
+  x.fillStyle="#2B2B26";x.font="56px "+ZH;x.fillText("本 草 名 帖",W/2,122);
+  x.fillStyle="#9A7B3F";x.font="19px "+ZH;x.fillText("—— 本草智答 · 百草园谨制 ——",W/2,158);
+  x.strokeStyle="rgba(154,123,63,.35)";x.beginPath();x.moveTo(130,192);x.lineTo(W/2-18,192);x.moveTo(W/2+18,192);x.lineTo(W-130,192);x.stroke();
+  x.fillStyle="#9A7B3F";x.font="15px "+ZH;x.fillText("◈",W/2,197);
+  /* 体质 */
+  if(D.p){
+    x.fillStyle="#A63E28";x.font="44px "+ZH;x.fillText(D.p.n+"（"+D.p.j+"）",W/2,254);
+    x.fillStyle="#98958A";x.font="13px "+SONG;x.fillText("辨识于 "+D.p.d+" · 中华中医药学会九种体质量表",W/2,284);
+  }else{
+    x.fillStyle="#98958A";x.font="16px "+SONG;x.fillText("尚未辨识体质 · 9 题速测等你作答",W/2,260);
+  }
+  /* 辨药（练习最佳 + 竞赛最佳）+ 集章 + 打卡 */
+  x.fillStyle="#2B2B26";x.font="20px "+SONG;
+  x.fillText(D.g?("辨药小试 · 最高 "+D.g.s+" / 10 · "+D.g.t):"药圃初来乍到 · 尚未留名",W/2,334);
+  if(D.cb)x.fillText("知识竞赛 · 最佳 "+D.cb.s+" / 10"+(D.cb.d?"（"+D.cb.d+"）":""),W/2,362);
+  x.fillText("集章 "+D.n+" / 14 · "+D.t[1]+(D.ciTotal?" · 打卡累计 "+D.ciTotal+" 天":""),W/2,388);
+  /* 十四枚小印阵 */
+  const cell=44,cols=7,gx=W/2-cols*cell/2,gy=412;
+  for(let i=0;i<14;i++){
+    const cx=gx+(i%cols)*cell+(cell-36)/2,cy=gy+Math.floor(i/cols)*cell,nm=HERBS[i].n;
+    if(D.names.includes(nm)){
+      x.fillStyle="#A63E28";rr(x,cx,cy,36,36,6);x.fill();
+      x.fillStyle="#FBF3E4";x.font="20px "+ZH;x.fillText(nm[0],cx+18,cy+27);
+    }else{
+      x.strokeStyle="rgba(152,149,138,.5)";x.setLineDash([3,3]);rr(x,cx,cy,36,36,6);x.stroke();x.setLineDash([]);
+      x.fillStyle="rgba(152,149,138,.7)";x.font="16px "+ZH;x.fillText("？",cx+18,cy+26);
+    }
+  }
+  /* 今日荐读 + 名句 */
+  x.fillStyle="#9A7B3F";x.font="15px "+SONG;x.fillText("时值"+D.season+" · 今日荐读",W/2,548);
+  const bk=BOOKS.find(b=>b.t===D.book);
+  x.fillStyle="#2B2B26";x.font="32px "+ZH;x.fillText("《"+bk.t+"》",W/2,590);
+  x.fillStyle="#6B6A60";x.font="15px "+SONG;
+  const q="「"+bk.hl+"」";
+  if(q.length<=16)x.fillText(q,W/2,636);
+  else{const mid=Math.ceil(q.length/2);x.fillText(q.slice(0,mid),W/2,636);x.fillText(q.slice(mid),W/2,662);}
+  /* 二维码：扫码同游百草园 */
+  if(qrImg&&qrImg.complete&&qrImg.naturalWidth){
+    const QS=104,qx=W/2-QS/2,qy=694;
+    x.fillStyle="#FDFBF4";rr(x,qx-8,qy-8,QS+16,QS+16,8);x.fill();
+    x.strokeStyle="rgba(154,123,63,.4)";x.lineWidth=1;x.strokeRect(qx-8.5,qy-8.5,QS+17,QS+17);
+    x.drawImage(qrImg,qx,qy,QS,QS);
+    x.fillStyle="#9A7B3F";x.font="14px "+SONG;x.fillText("◈ 扫码同游百草园 · 图书馆中医药文化节读者互动 ◈",W/2,qy+QS+28);
+  }
+  /* 落款 + 大朱印 */
+  const now=new Date();
+  x.fillStyle="#98958A";x.font="13px "+SONG;
+  x.fillText(now.getFullYear()+" 年 "+(now.getMonth()+1)+" 月 "+now.getDate()+" 日 · 本草智答谨识",W/2,H-40);
+  x.save();x.translate(W-92,H-108);x.rotate(-0.08);
+  x.fillStyle="#A63E28";rr(x,-33,-33,66,66,7);x.fill();
+  x.fillStyle="#FBF3E4";x.font="23px "+ZH;
+  x.fillText("本",-16,-13);x.fillText("草",16,-13);x.fillText("智",-16,17);x.fillText("答",16,17);
+  x.restore();
+  try{return c.toDataURL("image/png");}
+  catch(e){if(qrImg)return drawPoster(D,null);throw e;} /* file:// 下外部图片会污染画布 → 去码重画 */
+}
+function showPoster(url){
+  let m=$("#posterMask");
+  if(!m){
+    m=document.createElement("div");m.id="posterMask";
+    m.innerHTML='<img alt="本草名帖"><p class="tip">长按图片可保存 · 或点击下载</p><a class="btn red" download="本草名帖.png">下 载 名 帖</a>';
+    m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("on");});
+    document.body.appendChild(m);
+  }
+  m.querySelector("img").src=url;
+  m.querySelector("a").href=url;
+  m.classList.add("on");
+}
+/* 二维码内嵌 base64：file:// 本地打开也能正常出帖（外部图片会污染画布导致导出失败） */
+const QR_DATA="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyCAIAAABnRsZeAAAHvUlEQVR4nO3dMW4kRxZF0abQq6oVjaHljDEr4lro0qA/rgABgUbnjY6fyXNcgaxiFnkRDTyE3r4+P34AdP4KvxeArAA9pxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrQExWgJisADFZAWKyAsRkBYjJChCTFSD288oXv/7+z49nef/v/448jSuve+VdnXrdmZ/RqU9/pitPw2kFiMkKEJMVICYrQExWgJisADFZAWKyAsRkBZi0sl3bt+C84o5ryCvb0PV/3bc6PfXpX/mJnvc0Tv0tOK0AMVkBYrICxGQFiMkKEJMVICYrQExWgJisAPdZ2d7xrtM73la77z2fWqzue84zN9avG/4trDmtADFZAWKyAsRkBYjJChCTFSAmK0BMVoCYrABPWdny6/bdovq8m19PrXv5J6cVICYrQExWgJisADFZAWKyAsRkBYjJCiArwGxWtn/IHe9n3bejPbVntaP9M/wjCIjJChCTFSAmK0BMVoCYrAAxWQFisgLEZAV4ysr21P/L/o4/0b6168zd8KnXPbXBfX/c34LTChCTFSAmK0BMVoCYrAAxWQFisgLEZAWIyQpwn5Wte0N//WnMXOju+9q1U6+7z2vku9rHaQWIyQoQkxUgJitATFaAmKwAMVkBYrICxGQFmLSyfd4dnDOXlFee86nPaOZueB9/C//ktALEZAWIyQoQkxUgJitATFaAmKwAMVkBYrICxN6+Pj9++4ufd+foqW3o2r4bZ6943k90xXf7fV5zWgFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBJt1le8XMreSpXem+1z21hN63oz21Z933G/u+7ec99RvrtALEZAWIyQoQkxUgJitATFaAmKwAsgLM5rQCTLrLdm3mjaT79p3P25Xe8T7afa878zu/Rv6VOa0AMVkBYrICxGQFiMkKEJMVICYrQExWgJisAE+5y3Zt33bwjvvOK05tNE895+c9ydfIjfWa0woQkxUgJitATFaAmKwAMVkBYrICxGQFiMkKcJ+V7R3vdt23Kz21Z933rE59CjPv/f1uK+o1pxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMVYNLK9o63t850arE6857UK+/qedvu1/J1r7yrfX+/TitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrQOzt6/Pjt7945kbzeZvUK3vHfYvVK697xz3rKe/b3rO7bIHb8I8gICYrQExWgJisADFZAWKyAsRkBYjJCjDpLtt9K707bkOv2Hdf6fPuKl7zriY8DacVICYrQExWgJisADFZAWKyAsgKMJvTChCTFWDSXbb7zLw1dub2d+bTuOPW+Xm38556zk4rQExWgJisADFZAWKyAsRkBYjJChCTFSAmK8Ckle3ztoOnlpQzt5Iz170zfyf3ffqvG34KTitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrQOznj21mbgdnLoNPvec7Po3nLWVfh3bh+zitADFZAWKyAsRkBYjJChCTFSAmK0BMVoCYrABPucv21H2lM3eWp9aQM+/BPbXPvuNOeubP67QCxGQFiMkKEJMVICYrQExWgJisADFZAWKyAky6y3bfGvLU+vPUvvPUBvfU5njteXe77nPqOa85rQAxWQFisgLEZAWIyQoQkxUgJitATFaAmKwAk1a2z1us7tsdnroXdm3fT3Tq873ytTMXq6/ld565KnZaAWKyAsRkBYjJChCTFUBWgNmcVoCYrAAxWQEmrWz3ObX+PPW1a6c2mlc879bYmZvytVMbXKcVICYrQExWgJisADFZAWKyAsRkBYjJChCTFeB7rGz3mbnBXbvynWeuXWfule+4OX6NvNnXaQWIyQoQkxUgJitATFaAmKwAMVkBYrICxGQFiL19fX789hef2pWuzbxVlAl75bU7/m68H1pvrzmtADFZAWKyAsRkBYjJChCTFSAmK0BMVoCYrACTVrbfzant7x03qad+3n3u+CSvsLIFBvGPICAmK0BMVoCYrAAxWQFisgLEZAWIyQoQ+/nd7v68siw8dW/olee8bxl8x93wvt/YU1vntVOv67QCxGQFiMkKEJMVICYrQExWgJisADFZAWKyAkxa2c5c+K3NXKzu+85r69eduXa98q5mfgrPWwY7rQAxWQFisgLEZAWQFWA2pxUgJitATFaAmKwA91nZrs38P93vc8et5MzXXZu5DN7n1K3Aa04rQExWgJisADFZAWKyAsRkBYjJChCTFSAmK8BTVrbfzb5bVNeu7CxP3ft7xXe7rfZ16FbgNacVICYrQExWgJisADFZAWKyAsRkBYjJChCTFSBmZXsDM/ed+25RnXlr7Knbl18j7wxec1oBYrICxGQFiMkKEJMVICYrQExWgJisADFZAZ6ysp25Dtz3nmfeC/vdbtg99Qm+H7oz+NRfmdMKEJMVICYrQExWgJisADFZAWKyAsRkBYjJChB7+/r8+O0vnnnn6BXPu1V033u2lP31pzHzruJ9r+u0AsRkBYjJChCTFSAmK0BMVoCYrAAxWQFisgJMWtkC/JvTChCTFSAmK0BMVoCYrAAxWQFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrwI/W/wFtOu8CUG2QNQAAAABJRU5ErkJggg==";
+function makePoster(){
+  const qr=new Image();
+  const go=()=>showPoster(drawPoster(posterData(),qr));
+  const run=()=>{if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load('56px "Ma Shan Zheng"'),document.fonts.load('20px "Noto Serif SC"')]).then(go).catch(go);}else go();};
+  qr.onload=run;qr.onerror=run; // 二维码加载失败则照常出帖
+  qr.src=QR_DATA;
+}
+
+/* ===== 节气养生 + 岐黄名句 ===== */
+(function(){
+  const TERMS=[
+    ["小寒",1,5,"防寒保暖，护住阳气"],["大寒",1,20,"冬藏收尾，静待春归"],
+    ["立春",2,4,"春捂秋冻，助阳生发"],["雨水",2,19,"健脾祛湿，少酸多甘"],
+    ["惊蛰",3,6,"起居有常，舒展筋骨"],["春分",3,21,"阴阳各半，饮食求平"],
+    ["清明",4,5,"踏青疏肝，慎防春困"],["谷雨",4,20,"祛湿养肝，备迎立夏"],
+    ["立夏",5,6,"养心为先，午间小憩"],["小满",5,21,"清利湿热，少食生冷"],
+    ["芒种",6,6,"防暑祛湿，勤换衣衫"],["夏至",6,21,"护阳补阴，勿贪凉饮冷"],
+    ["小暑",7,7,"静心防暑，绿豆解暑"],["大暑",7,23,"冬病夏治，三伏宜灸"],
+    ["立秋",8,8,"贴秋膘，先润燥"],["处暑",8,23,"早睡早起，缓添衣"],
+    ["白露",9,8,"白露身不露，防秋凉"],["秋分",9,23,"阴阳相半，润燥养肺"],
+    ["寒露",10,8,"寒露脚不露，暖足安眠"],["霜降",10,23,"平补脾胃，萝卜山药"],
+    ["立冬",11,7,"冬藏开始，早卧晚起"],["小雪",11,22,"温补驱寒，晒背取暖"],
+    ["大雪",12,7,"进补正当时，锻炼勿过早"],["冬至",12,22,"一阳初生，静养守阳"]
+  ];
+  const now=new Date(),m=now.getMonth()+1,d=now.getDate();
+  let t=TERMS[TERMS.length-1];
+  for(const x of TERMS){if(m<x[1]||(m===x[1]&&d<x[2]))break;t=x;}
+  const doy=Math.floor((Date.now()-new Date(now.getFullYear(),0,0))/864e5);
+  const QUOTES=[
+    ["恬淡虚无，真气从之；精神内守，病安从来。","《素问·上古天真论》"],
+    ["正气存内，邪不可干。","《素问·刺法论》"],
+    ["上工治未病，不治已病。","《黄帝内经》"],
+    ["食饮有节，起居有常，不妄作劳。","《素问·上古天真论》"],
+    ["人命至重，有贵千金，一方济之，德逾于此。","唐·孙思邈《备急千金要方》"],
+    ["治病必求于本。","《素问·阴阳应象大论》"],
+    ["\u201c千年之松，下有茯苓。\u201d草木有本心，本草亦有性情。","《淮南子》与《本草纲目》"],
+    ["秋冬养阴，春夏养阳，以从其根。","《素问·四气调神大论》"]
+  ];
+  const q=QUOTES[doy%QUOTES.length];
+  window.CUR_TERM=t; // 供问答联动读取当前节气
+  $("#termCard").innerHTML=`
+    <div class="orn">节 气 · 养 生</div>
+    <img class="season-img" id="seasonImg" src="assets/${SEASON_IMG[seasonOf()]}" alt="当季插画 · ${seasonOf()}">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <span class="term-name">${t[0]}</span>
+      <span style="font-size:12px;color:var(--ink3);letter-spacing:3px">当前节气 · 农历岁时</span>
+    </div>
+    <p style="font-size:13.5px;color:var(--ink2);margin:10px 0 0">◈ ${t[3]}</p>
+    <div class="quote">「${q[0]}」<span class="src">—— ${q[1]}</span></div>
+    <div style="margin-top:14px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="askKB('怎么养生')">问问小药童：顺时而养 →</button></div>`;
+})();
+
+let quizMode="quick",QUIZ_ACT=QUIZ.slice(0,9); // 速测版默认：每种体质取第 1 条目
+function setQuizMode(m){
+  quizMode=m;
+  QUIZ_ACT=m==="quick"?QUIZ.slice(0,9):QUIZ;
+  quizAns={};
+  $("#btnQuick").className=m==="quick"?"btn red":"btn ghost";
+  $("#btnFull").className=m==="full"?"btn red":"btn ghost";
+  renderQuiz();
+}
+function renderQuiz(){
+  $("#qList").innerHTML=QUIZ_ACT.map((it,i)=>`<div class="q-item"><p><span class="q-num">${i+1}</span>${it.q}</p>
+    <div class="opts" data-i="${i}">${[1,2,3,4,5].map(v=>`<button data-v="${v}">${STATES[v]}</button>`).join("")}</div></div>`).join("");
+  document.querySelectorAll(".opts").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    g.querySelectorAll("button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+    quizAns[g.dataset.i]=+b.dataset.v;
+  }));
+}
+renderQuiz();
+function calcQuiz(){
+  if(Object.keys(quizAns).length<QUIZ_ACT.length){alert("还有题目未作答哦");return;}
+  // ===== 国标算法：原始分 → 转化分数 → 判定（速测版条目数=1，公式同样适用）=====
+  const cnt={},raw={};
+  Object.keys(CONSTITUTIONS).forEach(k=>{cnt[k]=0;raw[k]=0;});
+  QUIZ_ACT.forEach((it,i)=>{const v=quizAns[i];raw[it.c]+=it.rev?(6-v):v;cnt[it.c]++;});
+  const tf={}; // 转化分数=[(原始分-条目数)/(条目数×4)]×100，0~100
+  Object.keys(raw).forEach(k=>{tf[k]=Math.round((raw[k]-cnt[k])/(cnt[k]*4)*100);});
+  const biased=Object.entries(tf).filter(([k])=>k!=="平和质").sort((a,b)=>b[1]-a[1]);
+  const hit=biased.filter(([,v])=>v>=40);          // 偏颇"是"
+  const lean=biased.filter(([,v])=>v>=30&&v<40);   // 偏颇"倾向是"
+  const ping=tf["平和质"];
+  const pingIs=ping>=60&&biased[0][1]<30;          // 平和"是"
+  let name,judge;
+  if(pingIs&&hit.length===0){name="平和质";judge="是";}
+  else if(hit.length){name=hit[0][0];judge="是";}
+  else if(lean.length){name=lean[0][0];judge="倾向是";}
+  else{name="平和质";judge="基本是";}
+  lastQuiz=name;
+  /* 体质档案持久化：刷新不丢，首页徽标与辨识页提示条回显 */
+  try{localStorage.setItem("bzPhysique",JSON.stringify({n:name,j:judge,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日"}));}catch(e){}
+  renderBooks();
+  const c=CONSTITUTIONS[name];
+  const rows=[...biased,["平和质",ping]];
+  const badges=Object.fromEntries([
+    ...hit.map(([k])=>[k,"是"]),
+    ...lean.map(([k])=>[k,"倾向"]),
+    ...(pingIs||(!hit.length&&!lean.length)?[["平和质",judge==="是"?"是":"基本"]]:[])
+  ]);
+  const recBooks=BOOKS.filter(b=>c.books.some(bk=>b.t.includes(bk)||bk.includes(b.t.slice(0,3))));
+  const recF=FORMULAS.filter(f=>c.books.includes(f.n));
+  $("#quizResult").style.display="block";
+  $("#quizResult").innerHTML=`
+   <div class="orn">A I · 判 定</div>
+   <div class="const-name">${name.slice(0,3)}<span style="font-size:20px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
+   <p style="color:var(--ink2);font-size:14px;max-width:520px;margin:0 auto">${c.d}</p>
+   ${hit.length>1?`<p style="font-size:13px;color:var(--red);margin-top:8px">◈ 检出兼夹体质：${hit.slice(1).map(([k])=>k).join("、")}</p>`:""}
+   <div style="max-width:460px;margin:20px auto 0">
+     ${rows.map(([k,v])=>`<div class="bar-row ${k===name?"top":""}"><span class="nm">${k.slice(0,3)}</span><span class="bar"><i style="width:0" data-w="${v}"></i></span><span class="sc">${v}${badges[k]?`<em style="font-style:normal;color:${badges[k]==="是"?"var(--red)":"var(--gold)"};font-size:10px;margin-left:3px">${badges[k]}</em>`:""}</span></div>`).join("")}
+     <p style="font-size:11px;color:var(--ink3);text-align:left;margin-top:8px;line-height:1.7">判定依据 · 中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）：偏颇体质转化分 ≥40 判"是"、30~39 判"倾向是"、＜30 判"否"；平和质需转化分 ≥60 且八种偏颇体质均＜30。</p>
+   </div>
+   <div class="book-rec">
+     <h4>◈ 养生建议</h4><p style="font-size:14px">${c.adv}</p>
+     ${recF.length?`<h4 style="margin-top:14px">◈ 相关名方</h4>${recF.map(f=>`<p style="font-size:14px"><b>${f.n}</b>——${f.d.slice(0,40)}……</p>`).join("")}`:""}
+     <h4 style="margin-top:14px">◈ 为你荐读</h4>
+     ${recBooks.map(b=>`<p style="font-size:14px"><b>《${b.t}》</b><span style="color:var(--ink2)">——${b.d}</span></p>`).join("")}
+   </div>
+   <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+     <button class="btn" onclick="askKB('${name.replace("质","")}体质')">向本草智答咨询${name.slice(0,2)}调养</button>
+     <button class="btn ghost" onclick="go('read')">查看经典荐读 →</button>
+     <button class="btn ghost" onclick="go('game')">去药圃练辨药 →</button>
+   </div>
+   <p class="small-note" style="font-size:12px;color:var(--ink3);margin-top:14px">* 基于《中医体质分类与判定》简化量表的文化科普测试（速测版每体质 1 条目 · 完整版每体质 3 条目），结果仅供参考，非医疗诊断</p>`;
+  $("#quizResult").scrollIntoView({behavior:"smooth"});
+  setTimeout(()=>document.querySelectorAll("#quizResult .bar i").forEach(b=>b.style.width=b.dataset.w+"%"),60);
+}
+
+/* 快捷问题：末位随真实季节轮换（与四季换肤共用 seasonOf，预览切换时同步更衣） */
+const CHIP_SEASON={春:"春天怎么养生",夏:"夏天吃什么好",秋:"秋天怎么防燥",冬:"冬天进补吃什么"};
+function chipQ(){return["气虚体质怎么调理","感冒了怎么办","抽个养生签","黄芪和甘草怎么区分",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书","四君子汤"];}
+function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("");}
+renderChips();
+function bubble(who,html,me){
+  const d=document.createElement("div");d.className="msg "+(me?"me":"bot");
+  d.innerHTML=me?`<div class="who">${who}</div><div class="bd">${html}</div>`
+    :`<img class="bot-avatar" src="assets/mascot3d.png" alt="本草智答"><div><div class="who">${who}</div><div class="bd">${html}</div></div>`;
+  $("#chatBox").appendChild(d);$("#chatBox").scrollTop=$("#chatBox").scrollHeight;
+  return d;
+}
+function typing(){
+  return bubble("本草智答",'<span class="typing"><i></i><i></i><i></i></span>');
+}
+function greet(){bubble("本草智答","你好呀！我是<b>本草智答</b>，一只熟读经典的小药童〜 中药、方剂、穴位、九种体质调养，感冒、便秘、减肥、失眠这些生活小难题，尽管来问。答不上来的话……那一定是问题太偏了（叉腰）。");}greet();
+function norm(s){Object.keys(SYNONYM).forEach(k=>s=s.split(k).join(SYNONYM[k]));return s;}
+function askKB(q){go("chat");setTimeout(()=>send(q),80);}
+const QUIPS=[
+ "药童碎碎念：是药三分毒，食补前拿不准就问问大夫哦〜",
+ "本童子掐指一算，你今晚适合早睡（认真的）。",
+ "这条干货，胜过背半本《汤头歌诀》，快收好！",
+ "转发给那个天天熬夜的朋友，功德+1〜",
+ "《本草纲目》看了都点头的知识点，建议背诵全文（开玩笑的）。",
+ "医圣张仲景：小朋友问得很好，下次继续。"
+];
+/* ===== 趣味问答 & 日常闲聊层 ===== */
+/* 不重复抽签：按数组内容特征为键维护洗牌袋，抽空一轮后再重洗——内联数组每次新建实例也能命中同一牌堆 */
+const _bags=new Map();
+function pick(a){
+  const key=a.length+'|'+String(a[0]).slice(0,12)+'|'+String(a[a.length-1]).slice(0,12);
+  let bag=_bags.get(key);
+  if(!bag||!bag.length){
+    bag=a.slice();
+    for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+    _bags.set(key,bag);
+  }
+  return bag.pop();
+}
+const SIGNS=[
+ ["上上签 · 元气满满","《内经》云：正气存内，邪不可干。今日宜晒背十分钟、早睡一刻钟，忌生冷忌内耗，你的气血今天由药童罩着〜","宜：早睡　忌：内耗"],
+ ["上签 · 顺时而上","今日宜喝温水八杯、饭后百步走；忌久坐不动。运势如春笋，节节向上，但要记得多喝水哦〜","宜：多动　忌：久坐"],
+ ["上签 · 肝气舒畅","今日宜开心、宜倾诉、宜玫瑰花茶一杯；忌憋气、忌纠结。心宽一寸，病退一丈〜","宜：舒展　忌：生闷气"],
+ ["中签 · 平安是福","今日运势平平稳稳——平稳，就是养生的最高境界！宜规律三餐，忌暴饮暴食，细水长流最养人〜","宜：规律　忌：折腾"],
+ ["中签 · 略感疲乏","本童子夜观天象（看了眼你的黑眼圈），今日宜午睡二十分钟、宜枸杞菊花茶；忌硬撑、忌咖啡续命〜","宜：小憩　忌：硬撑"],
+ ["吉签 · 食禄临门","今日宜好好吃饭，宜山药小米粥一碗；忌糊弄式饮食。胃是福气的仓库，喂好它，好运自己找上门〜","宜：好好吃饭　忌：糊弄"]
+];
+function dailySign(){
+  const s=pick(SIGNS);
+  return `<b>🎫 本草养生签 · ${s[0]}</b><div class="kv" style="margin-top:6px">${s[1]}</div><div class="kv"><span class="k">签辞</span>${s[2]}</div><div class="kv" style="color:var(--ink2)">（科学地讲：这是随机抽取的趣味签～但它说的养生建议，都是真材实料的哦）</div>`;
+}
+const FUN=[
+ {re:/谢谢|感谢|多谢/,a:()=>pick(["不客气！为你的健康打工，本童子荣幸之至〜 记得回来夸我。","小事一桩！下次有问题继续喊我，喊三声就到（大概）。","《大医精诚》说见彼苦恼若己有之——你开心，我也开心〜"])},
+ {re:/再见|拜拜|下次见|晚安|睡了/,a:()=>pick(["再见啦！记得今晚十一点半前躺下，子时一过，肝经加班你就亏大了〜","晚安！睡前放下手机，泡个脚，做个好梦。本童子不闭店，随时回来〜","拜拜〜今日养生作业：喝水、早睡、少生气。作业明天要检查的哦！"])},
+ {re:/早上好|早安|早呀/,a:()=>pick(["早安！一日之计在于晨，一杯温水润肠道，一顿好早餐养脾胃，今天也要元气满满哦〜","早呀！辰时（7-9点）胃经当令，是吃早餐的黄金时段，别糊弄自己哦〜"])},
+ {re:/中午好|午安|下午好/,a:()=>pick(["中午好！午时（11-13点）心经当令，吃完饭记得小憩 15-30 分钟，养心又提神〜（趴桌睡伤颈椎，能躺着最好）","下午好！未时小肠经当令，正主吸收——多喝水、少久坐，起来伸个懒腰接杯水吧〜","午安！这个点最忌冰奶茶+久坐二连击，起来走走，让气血转起来〜"])},
+ {re:/下线|下班|关门|打烊|休息吗|在吗|在不|在线吗|什么时候在|几点营业/,a:()=>pick(["本童子全年无休、24 小时在线——毕竟我是 AI，不用吃饭不用睡觉（ 李时珍爷爷都没这待遇）〜 你什么时候来，我什么时候在！","不下线不打烊！别人家药铺亥时就打烊了，本童子是子丑寅卯都陪着你。不过你可别学我，你该睡觉还得睡觉〜","在的在的，一直在！我是代码做的，没有下班一说。倒是屏幕前的你，坐了多久了？起来活动活动〜"])},
+ {re:/晚上好|晚好|夜深/,a:()=>"晚上好！亥时（21-23点）三焦经当令，正是泡脚、静心的好时候。再过一会儿就该熄灯睡了，本童子监督你〜"},
+ {re:/讲个笑话|说个笑话|来个笑话|逗我/,a:()=>pick(["从前有个书生背《本草纲目》，背到「当归」突然哭了——因为他想到了该回家的妈妈（药名梗，冷不冷？）〜","问：中药界谁最有钱？答：金银花，人家的名字就是存折〜","问：人参为什么自信？答：因为人家自带「参」考答案（生气请找谐音梗，不找药童）〜","甘草为什么人缘最好？因为它跟谁都「调和」得来，十二经络全给面子〜","陈皮去面试，HR问年龄。陈皮：「别看我老，我这行讲究越陈越香。」HR当场录用了隔壁的新会陈皮〜","茯苓为什么考试从不紧张？人家自带「宁心安神」被动技能，考场上稳如老药碾〜","枸杞问菊花：「你为什么总泡在水里？」菊花叹气：「菊势所迫啊。」〜","黄连为什么总不开心？人家的苦是写在名字里的，出厂设定没法改〜","大黄很委屈：明明是泻下界的实力派，为什么大家只记得大黄蜂？昆虫界的锅我不背〜","山楂对冰糖表白：「没有你，我就是个酸孤魂；有了你，我们就是整条街的童年。」〜","薄荷去相亲，对方问性格。薄荷：「平时挺清凉的，但认真起来……很上头。」〜","半夏为什么专挑夏天后半场出场？人家的艺名就写好了档期——夏天过半，闪亮登台〜","姜家开家族会议，主持人刚说「请各位前辈发言」，全场齐声：「姜还是老的辣！」〜","决明子为什么视力那么好？人家名字里就写着答案——「决明」，明察秋毫不是吹的〜","莲子上热搜了：#苦水里依然有心# 评论区一致好评：「有点苦，但芯是好的。」〜"])},
+ {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，再泡杯玫瑰花茶疏疏肝。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你开个方子：玫瑰花茶一杯（疏肝解郁）+ 八段锦一遍（拉伸解压）+ 早睡一晚（ recharge 元气）。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
+ {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
+ {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉等16个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>看图辨药</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时10秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——图书馆文化节读者专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>十二部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
+ {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
+ {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文与插画，问书名、问作者我都能答〜</div>`}},
+ {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
+ {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「看图辨药」页！每题限时 10 秒，10 题混合出卷：4 道看图辨药 + 4 道<b>经典著作考点</b>（十二部经典的作者、名句、成书之最都考）+ 2 道<b>辨药眼力</b>相似药材题。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
+ {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
+ {re:/什么节气|现在.{0,3}节气|节气养生|节气/,max:14,first:true,a:()=>{const t=window.CUR_TERM;return t?`<b>当前节气 · ${t[0]}</b><div class="kv"><span class="k">顺时养生</span>${t[3]}</div><div class="kv" style="color:var(--ink2)">首页「节气·养生」卡每日更新，岐黄名句也按日子轮换哦〜</div>`:"顺时而养是中医的浪漫！首页「节气·养生」卡会告诉你现在是什么节气、该怎么养〜"}},
+ {re:/(春|夏|秋|冬)(天|季|令)?[^。]{0,10}(养生|进补|调理|保健|注意|饮食|起居|吃什么|怎么过|防)/,max:26,a:s=>{const sea=(/[春夏秋冬]/.exec(s||"")||[])[0]||seasonOf(),c=SEASON_CARE[sea];return `<b>四季养生 · ${sea}季</b><div class="kv"><span class="k">总则</span>${c.pr}</div><div class="kv"><span class="k">饮食</span>${c.eat}</div><div class="kv"><span class="k">起居</span>${c.live}</div><div class="kv"><span class="k">药童叮咛</span>${c.tip}</div><div class="kv" style="color:var(--ink2)">想看别的季节？直接问「春/夏/秋/冬 + 养生」；当季该读什么书，问我「推荐读什么书」〜</div>`}},
+ {re:/测体质|体质测评|体质辨识|辨识体质|体质测试/,max:14,a:()=>"想测体质？来对地方了！点顶部「体质辨识」，赶时间就做 <b>9 题速测版</b>（一分钟搞定），想更准切 <b>27 题完整版</b>（改编自中华中医药学会标准），做完自动算转化分、标出偏颇体质，连兼夹体质都给你揪出来，还附调养锦囊和荐读书目——比算命靠谱，比挂号省事〜"},
+ {re:/真人|机器人|ai吗|人工智能|是不是人/,a:()=>"本童子是个 AI 小药童，精神本体是李时珍的书童（自称），物理本体是一段热心的代码。不过放心——肚子里装的都是《黄帝内经》《本草纲目》这类真材实料的经典，不是胡编的哦〜"},
+ {re:/几岁|多大|生日|哪里人/,a:()=>"论岁数——本童子的知识库最老可追溯到两千多年前《黄帝内经》；论心智——永远是个爱提问的小药童。生日嘛，就定在李时珍写成《本草纲目》那天好了〜"},
+ {re:/喜欢什么|爱好|兴趣/,a:()=>"爱好？读经典、晒药、给你答疑！还有一个隐藏爱好：看到有人把「熬夜冠军」的头衔摘掉，改当「早睡星人」，药童就特别有成就感〜"},
+ {re:/喝水|多喝水|多少水|水吗/,max:14,a:()=>"喝水这件小事，中医也讲究！①温水为宜，冰水伤脾胃阳气；②晨起空腹一杯温水，唤醒肠胃；③少量多次，别等渴了才灌；④饭后别猛灌水，稀释胃液影响消化。每日大约 1500-1700ml，参考就好，出汗多就多补点〜"},
+ {re:/咖啡/,max:10,a:()=>"中医看咖啡：性温味苦，苦能燥湿、提神醒脑，少量提神无妨。但有讲究——①下午三点后少喝，免得晚上睡不着（熬夜的锅咖啡不背）；②阴虚火旺、容易心慌手抖的人少碰；③别空腹猛灌，配点早餐护护胃。提神终归是「借来的精神」，好好睡觉才是自己的〜"},
+ {re:/喝茶/,max:10,a:()=>"茶是养生好物，但要喝对：①绿茶性凉，适合上火、湿热的人；②红茶性温，适合怕冷、胃寒的人；③空腹别喝浓茶，免得「茶醉」心慌；④睡前不喝，不然你会和我一样——哦不，我没觉睡，你有〜"},
+ {re:/泡脚/,max:12,a:()=>"泡脚是老祖宗的顶配养生法！讲究：①水温 40℃ 左右，泡到微微出汗即可，别大汗淋漓；②时长 15-20 分钟，睡前泡最助眠；③饭后一小时内不泡；④可以加点艾叶、生姜驱寒。注意：糖尿病、静脉曲张人群对温度不敏感，水温要格外小心，最好遵医嘱〜"},
+ {re:/午睡|午休|打盹/,max:12,a:()=>"午睡是「心经午时当令」的顺天而睡！正午 11-13 点心经当令，小憩 15-30 分钟能养心气。划重点：超过 1 小时反而越睡越困、扰乱晚觉；趴桌午睡伤颈椎压迫眼球，最好靠背或躺着；饭后缓 20 分钟再睡，不胀气〜"},
+ {re:/空调|吹空调/,max:12,a:()=>"空调房养生守则：①26-27℃ 为宜，别对着风口直吹——中医管这叫「虚邪贼风，避之有时」；②护住脖子、肚子、脚踝这三处「风口重灾区」；③久待干燥多喝水，放杯水或加湿器；④进出空调房温差大最伤人，给身体一点适应时间〜"},
+ {re:/运动|锻炼|健身|跑步/,max:12,a:()=>"中医讲运动讲究「形劳而不倦」：①微微出汗即可，大汗淋漓反而耗气伤津；②早晨是阳气升发之时，适合舒展型运动，八段锦、太极、慢跑都好；③晚上九点后别剧烈运动，扰动阳气影响睡眠；④久坐党的救星：每小时起来活动三分钟，比周末暴练两小时更养人〜"},
+ {re:/早饭|早餐/,max:10,a:()=>"早餐要吃好——辰时（7-9点）胃经当令，此时进食最养胃气！推荐搭配：主食（小米粥、全麦）+ 蛋白质（鸡蛋、豆浆）+ 一点果蔬。忌：只喝咖啡撑着、冰饮配油条、边走边吃。长期不吃早餐，胆囊和脾胃都会记仇的哦〜"},
+ {re:/吃辣|辣椒|麻辣/,max:12,a:()=>"辣这东西，中医讲「辛散」——适量能开胃、散寒、行气，川渝朋友湿气重，吃辣出汗反而是排湿！但过犹不及：过多辛辣易生胃火、加重痔疮痘痘、刺激肠胃。怎么判断自己适不适合？吃完第二天看「反应」：嗓子疼冒痘就是过量信号，脾胃虚弱的人尤其要悠着点〜"},
+ {re:/喝酒|饮酒|啤酒|白酒/,max:12,a:()=>"关于喝酒，本童子说句实在话：中医虽有用酒入药的记载（比如药酒需辨证泡制），但现代医学共识是——<b>酒精没有安全剂量，能不喝就不喝</b>。实在推不掉的场合：别空腹、别混饮、多喝水、量力而行。「喝酒养生」的传说，就当故事听听吧〜"},
+ {re:/抽烟|吸烟|戒烟/,max:12,a:()=>"烟草入肺，燥热伤阴——中医认为它灼肺津、生痰浊，是肺的慢性敌人。好消息：戒烟 24 小时心血管风险就开始下降，什么时候戒都不晚！可以试试：口香糖替代、多喝水促代谢、运动转移注意力。本童子给戒烟的你预定了「上上签」〜"},
+ {re:/久坐/,max:10,a:()=>"久坐党看过来！中医说「久坐伤肉」（脾主肌肉），气血也容易瘀滞。自救三招：①每 45-60 分钟起身接水、拉伸；②工位隐形运动：踮脚、缩肛（古法「撮谷道」，乾隆都在练）；③下班后快走半小时补回来。养生不一定是仪式感，也可以是工位上的小动静〜"},
+ {re:/玩手机|刷手机|屏幕|电子/,max:14,a:()=>"刷手机一时爽，眼睛颈椎两行泪〜 中医提醒：①「久视伤血」，肝开窍于目，过度用眼耗肝血；②晚上关灯玩手机最伤，屏幕蓝光还扰睡眠；③护眼小功法：每 20 分钟远眺 20 秒，热敷眼周，点按睛明穴。手机刷不完的，眼睛只有一个哦〜"},
+ {re:/颈椎|脖子疼|脖子酸|肩颈/,max:12,a:()=>"低头族肩颈急救包：① 「米字操」——用头缓慢写米字，每天两组；② 热敷+轻揉风池穴（后颈发际线两侧凹陷处）；③ 屏幕垫高到平视，别让脖子替你的懒买单。若出现手麻、持续放射痛，别揉了，去医院拍个片子更靠谱〜"},
+ {re:/牛奶|酸奶/,max:10,a:()=>"中医看牛奶：性平味甘，能补虚润燥，阴虚干燥的人很适合。小贴士：乳糖不耐受（喝完胀气拉肚子）的朋友可以换酸奶或温着少量喝；别当水猛灌，一天 300ml 左右足够；脾胃虚寒的人温热喝更舒服〜"},
+ {re:/水果/,max:10,a:()=>"水果也分寒热！性凉的：梨（润燥）、西瓜（暑天解渴，别贪多）；性温的：荔枝、龙眼（火气大的人少吃）；性平的：苹果（老少皆宜）。原则：①吃应季的；②脾胃虚寒的少碰冰镇；③别用水果代餐减肥——果糖吃多了一样胖，寒凉还伤脾胃〜"},
+ {re:/生气|发火|愤怒|脾气/,max:10,a:()=>"《内经》曰：「怒伤肝」「百病生于气」——大怒伤肝气，生闷气则气机郁结，乳腺、甲状腺、脾胃都是受害者。发火前的急救：深呼吸数到十，先离场冷静；常生气的人可以泡点玫瑰花、陈皮疏肝理气。记住药童的话：你每一次选择不生气，都是在给肝发年终奖〜"}
+];
+function send(q){
+  const inp=$("#chatInput");q=(q||inp.value).trim();if(!q)return;inp.value="";
+  bubble("我",q,true);
+  const nq=norm(q);let best=null,bs=0;
+  KB.forEach(e=>{let s=0;e.keys.forEach(k=>{if(nq.includes(k))s+=k.length;});if(s>bs){bs=s;best=e;}});
+  // 体质意图：别名命中即优先生成调养锦囊（比中药库更贴合问法）
+  let cons=null;
+  for(const[c,aliases]of CONSTITUTION_ALIASES){
+    if(aliases.some(a=>nq.includes(a))){cons=c;break;}
+  }
+  const t=typing();
+  const av=$("#botAvatar");if(av)av.classList.add("think");
+  // 趣味/日常意图：first 为强意图（优先于一切）；其余仅当 KB/体质都未命中时兜底
+  let fun=null,funStrong=null;
+  for(const f of FUN){
+    if(!f.re.test(nq)||(f.max&&nq.length>f.max))continue;
+    if(f.first)funStrong=f;else fun=fun||f;
+  }
+  setTimeout(()=>{
+    t.remove();
+    if(av){av.classList.remove("think");av.classList.add("happy");setTimeout(()=>av.classList.remove("happy"),600);}
+    const quip=pick(QUIPS);
+    if(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14){
+      bubble("本草智答","咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识绝活，9 题速测、27 题完整随你选，按国标算法锁定你的体质并开出调养锦囊。上知黄芪下知茯苓，中间还懂痛经和痘痘。有话直说，本药童最喜欢爱提问的人类了〜");
+    }
+    else if(funStrong){bubble("本草智答",(typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(cons){bubble("本草智答",constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);bubble("本草智答",best.ans+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(fun){bubble("本草智答",(typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else{
+      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${["气虚体质怎么调理","感冒了怎么办",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书"].map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
+    }
+  },600);
+}
+
+(function(){
+  const cats=["全部",...new Set(BOOKS.flatMap(b=>b.tg))];
+  $("#filter").innerHTML=cats.map(c=>`<button data-c="${c}" class="${c==="全部"?"sel":""}">${c}</button>`).join("");
+  document.querySelectorAll("#filter button").forEach(b=>b.onclick=()=>{
+    document.querySelectorAll("#filter button").forEach(x=>x.classList.toggle("sel",x===b));
+    renderBooks(b.dataset.c);
+  });
+})();
+function renderBooks(f){
+  const on=f||"全部";
+  const fitArr=lastQuiz?CONSTITUTIONS[lastQuiz].books:[];
+  const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+  const season=seasonOf(),sRec=SEASON_READS[season];
+  const today=sRec.list[doy%sRec.list.length];
+  const dcls={入门:"ez",进阶:"mid",硬核:"hard"};
+  $("#books").innerHTML=BOOKS.filter(b=>on==="全部"||b.tg.includes(on)).map(b=>{
+    const fit=fitArr.some(x=>b.t.includes(x)||x.includes(b.t.slice(0,2)));
+    return `<div class="book">${fit&&lastQuiz?'<span class="fit-badge">契合你的体质</span>':""}${b.t===today?`<span class="today-badge">今日荐读 · ${season}</span>`:""}
+      <h4>《${b.t}》<span class="diff ${dcls[b.diff]}">${b.diff}</span></h4><div class="au">${b.au}</div>
+      <div class="hl">\u201c${b.hl}\u201d<span>${b.hs}</span></div>
+      <p>${b.d}</p>
+      ${b.t===today?`<p class="why" style="color:var(--gold)">◈ 应时荐读（${season}季）：${sRec.why}</p>`:""}
+      <p class="why">◈ 药童导读：${b.why}</p>
+      <p class="fit">◈ 适合：${b.fit.join(" · ")}${fit?'　<b style="color:var(--red)">与你相契</b>':""}</p>
+      <div class="tags">${b.tg.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      <button class="read-btn" onclick="openRead('${b.t}')">📖 阅读选段 · 看插画 →</button></div>`;
+  }).join("");
+}
+/* 经典选读弹层：插画封面 + 原文选段 + 白话译文 + 药童领读 */
+function openRead(t){
+  const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;
+  $("#readMask").innerHTML=`
+   <div class="read-modal" onclick="event.stopPropagation()">
+     <button class="rm-close" onclick="closeRead()" title="合上">✕</button>
+     <div class="rm-cover"><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'">
+       <div class="rm-title"><h3>《${t}》</h3><span>${b.au} · ${b.diff}读物</span></div></div>
+     <div class="rm-body">
+       <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span></div>
+       ${r.ps.map(p=>`<div class="rm-passage"><div class="pt">\u201c${p.s}\u201d<span class="src">——${p.t}</span></div><div class="tr">${p.tr}</div></div>`).join("")}
+       <div class="rm-guide">◈ 药童领读：${r.g}</div>
+       <div class="rm-acts">
+         <button class="btn red" onclick="closeRead();askKB('${t}')">问药童这本书 →</button>
+         <button class="btn ghost" onclick="closeRead();go('game')">本书是竞赛考点 · 去过招 →</button>
+       </div>
+     </div>
+   </div>`;
+  $("#readMask").classList.add("on");
+}
+function closeRead(){$("#readMask").classList.remove("on");}
+renderBooks();
+</script>
+</body>
+</html>
