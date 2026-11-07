@@ -498,7 +498,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   <div class="card">
     <div class="orn">经 典 荐 读</div>
     <h2>读经典<span class="dot"> · </span>识本草</h2>
-    <p class="desc">精选十二部中医药经典，每部附名句金句、药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开 AI 水墨插画与<b>原文选读+白话译文</b>。完成体质辨识后，将为你点亮与你体质契合的书目。</p>
+    <p class="desc">精选十二部中医药经典，每部附名句金句、药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选读+白话译文</b>。完成体质辨识后，将为你点亮与你体质契合的书目。</p>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
     <div class="filter" id="filter"></div>
     <div class="books" id="books"></div>
@@ -1496,7 +1496,7 @@ const FUN=[
  {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉等16个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>看图辨药</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时10秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——图书馆文化节读者专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>十二部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
- {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文与插画，问书名、问作者我都能答〜</div>`}},
+ {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
  {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
  {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「看图辨药」页！每题限时 10 秒，10 题混合出卷：4 道看图辨药 + 4 道<b>经典著作考点</b>（十二部经典的作者、名句、成书之最都考）+ 2 道<b>辨药眼力</b>相似药材题。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
@@ -1584,7 +1584,7 @@ function renderBooks(f){
       <p class="why">◈ 药童导读：${b.why}</p>
       <p class="fit">◈ 适合：${b.fit.join(" · ")}${fit?'　<b style="color:var(--red)">与你相契</b>':""}</p>
       <div class="tags">${b.tg.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-      <button class="read-btn" onclick="openRead('${b.t}')">📖 阅读选段 · 看插画 →</button></div>`;
+      <button class="read-btn" onclick="openRead('${b.t}')">📖 阅读选段 →</button></div>`;
   }).join("");
 }
 /* 经典选读弹层：插画封面 + 原文选段 + 白话译文 + 药童领读 */
