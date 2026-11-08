@@ -158,6 +158,14 @@ h2 .dot{color:var(--red)}
 .bot-id img.think{animation:think .7s ease-in-out infinite}
 @keyframes think{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-9deg) translateY(-2px)}75%{transform:rotate(9deg) translateY(-2px)}}
 .bot-id img.happy{animation:happy .55s ease}
+/* 竞赛页药童裁判：气泡 + 对错表情 */
+.game-bot{padding:8px 4px 4px;align-items:flex-start}
+.game-bot img{width:48px;height:48px;cursor:default;flex:none}
+.game-bot img.sad{animation:sad .6s ease}
+@keyframes sad{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg) translateY(2px)}55%{transform:rotate(7deg) translateY(1px)}80%{transform:rotate(-4deg)}}
+.gbot-bubble{position:relative;flex:1;background:var(--green-l);border-radius:14px;border-top-left-radius:4px;padding:9px 13px;font-size:13.5px;color:var(--ink);line-height:1.65;min-height:20px}
+.gbot-bubble::before{content:"";position:absolute;left:-7px;top:16px;border:7px solid transparent;border-right-color:var(--green-l);border-left:0}
+.gbot-bubble.pop{animation:pop .35s cubic-bezier(.2,.7,.3,1)}
 @keyframes happy{0%{transform:scale(1)}35%{transform:scale(1.22) rotate(-8deg) translateY(-4px)}70%{transform:scale(.96) rotate(3deg)}100%{transform:scale(1)}}
 .bot-id b{font-size:15px;letter-spacing:2px;color:var(--green)}
 .bot-id span{display:block;font-size:12px;color:var(--ink3);letter-spacing:1px}
@@ -523,6 +531,10 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
       <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 答错有讲解</button>
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 10 秒</button>
+    </div>
+    <div class="bot-id game-bot" id="gameBot">
+      <img id="gameBotImg" src="assets/mascot-idle.png" alt="小药童裁判">
+      <div class="gbot-bubble" id="gameBotSay">本药童当裁判！选个模式开局，答对答错我都吭声〜</div>
     </div>
     <div id="gameArea"></div>
   </div>
@@ -921,6 +933,26 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
 const GAME_OK=["答对了！这味药跟你有缘〜","好眼力！药童考不倒你。","正是此药！看来你没白来药圃。","稳！这题闭着眼都该会〜"];
 const GAME_BAD=["哎呀不对，这味其实是","差一点点！正确答案是","药童急得直跺脚：人家叫","此药表示很委屈，明明叫"];
 const GAME_MCQ_BAD=["哎呀不对，正解是","差一点点！正确答案是","药童翻书给你看：答案是","这题的正确答案是"];
+/* 药童裁判：对错表情 + 台词 */
+const GBOT_READY=["第 {n} 题来喽，瞪大眼睛〜","下一味药，接住！","这题我盯着你呢，别偷懒〜","稳住，正常发挥就好〜","药圃里新到一味药，请辨认！"];
+const GBOT_CHEER=["中！好眼力，这题难不倒你〜","妙哉！连本药童都要给你竖大拇指！","稳稳命中！记你一功〜","答得又快又准，有当郎中的潜质！","哈哈，正是此药，一点不差！"];
+const GBOT_OOPS=["哎呀差一点〜记住它，下回准中！","别灰心，认药都是练出来的〜","嗐，这题有点刁，怪我出得太急〜","不亏不亏，又多认一味药！","没关系，药童陪你慢慢练〜"];
+const GBOT_TIMEOUT=["⏱ 超时啦！想好再出手嘛〜","⏱ 手慢了半拍，药都跑喽〜","⏱ 时间到！下一题手脚快些〜"];
+function gameReact(state,n){ // state: "ready"|"ok"|"bad"|"timeout"|"end-ok"|"end-mid"|"end-bad"
+  const img=$("#gameBotImg"),say=$("#gameBotSay");
+  if(!img||!say)return;
+  const cls={ok:"happy",bad:"sad",timeout:"sad"};
+  img.className="";if(cls[state]){void img.offsetWidth;img.classList.add(cls[state]);}
+  say.classList.remove("pop");void say.offsetWidth;say.classList.add("pop");
+  const txt=state==="ready"?pick(GBOT_READY).replace("{n}",n)
+    :state==="ok"?pick(GBOT_CHEER)
+    :state==="timeout"?pick(GBOT_TIMEOUT)
+    :state==="bad"?pick(GBOT_OOPS)
+    :state==="end-ok"?"十问十中！本药童心服口服，甘拜下风〜"
+    :state==="end-mid"?"这份成绩单已经很不错了，随时再来切磋〜"
+    :"咳咳……回去多翻翻「经典荐读」，本药童等你雪耻！";
+  say.textContent=txt;
+}
 function shuffleArr(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const CONTEST_LIMIT=10; // 竞赛模式每题限时（秒）
 /* 经典著作考点题库（全部取材于「经典荐读」十二部书目，在问答里问书名都能学到答案） */
@@ -997,6 +1029,7 @@ function renderGameQ(){
     ${body}
     <div class="game-opts">${q.opts.map(o=>`<button onclick="pickGame('${o}')">${o}</button>`).join("")}</div>
     <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":"药童搓搓手：这一题答错也不亏，我会科普一段小知识〜"}</div>`;
+  gameReact("ready",g.i+1);
   if(contest)startTimer();
 }
 function startTimer(){
@@ -1026,11 +1059,13 @@ function pickGame(name){
   if(contest){
     // 竞赛节奏：短反馈自动进入下一题，不打断比拼
     $("#gameFb").innerHTML=right?`<b class="good">✔ 中！</b>`:(name===null?`⏱ 超时！正解：<b>${ansN}</b>`:`✘ 差矣，正解：<b>${ansN}</b>`);
+    gameReact(right?"ok":(name===null?"timeout":"bad"));
     unlockHerb(q.kind==="img"&&right?q.h.n:null,true);
     setTimeout(nextGame,q.kind==="mcq"?1600:1200);
     return;
   }
   if(q.kind==="img"&&right)unlockHerb(q.h.n);
+  gameReact(right?"ok":"bad");
   $("#gameFb").innerHTML=(right?`<b class="good">✔ ${pick(GAME_OK)}</b>`:`✘ ${pick(q.kind==="mcq"?GAME_MCQ_BAD:GAME_BAD)}<b>${ansN}</b>`)
     +(q.kind==="mcq"?`<br>${q.fb}`:`<br><b>${q.h.n}</b> · ${q.h.f}<br>${q.h.e}`)
     +`<div style="margin-top:8px"><button class="btn ghost" onclick="nextGame()">${g.i>=g.qs.length-1?"看成绩 →":"下一题 →"}</button></div>`;
@@ -1050,6 +1085,7 @@ function endGame(){
     :s>=3?["抓药学徒","柜台后站稳了！常来药圃转转、翻翻「经典荐读」的阅读选段，眼力与学问都是养出来的〜"]
     :["药圃看门的","药童替你捏一把汗……不过没关系，荐读页每部书都能点开读选段，读完再来战！"];
   try{if(!contest){const b=JSON.parse(localStorage.getItem("bzGameBest")||"null");if(!b||s>b.s)localStorage.setItem("bzGameBest",JSON.stringify({s,t:r[0]}));}}catch(e){}
+  gameReact(s>=8?"end-ok":s>=5?"end-mid":"end-bad");
   $("#gameArea").innerHTML=`
     <div class="game-end">
       <div class="game-score"><div><b>${s}</b><span>答对</span></div><div><b>10</b><span>总题数</span></div></div>
@@ -1071,7 +1107,7 @@ function copyChallenge(s,title){
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(fallback);}else fallback();
 }
-startGame(); // 载入即备好第一题
+setTimeout(startGame,0); // 载入即备好第一题（异步：避开 _bags TDZ，等全部顶层初始化完成再出题）
 
 /* ===== 本草图鉴集章系统 ===== */
 /* 注意：_alStore 必须用 var——每日本草 IIFE 在脚本前部就会调用 unlockHerb，let 会落入 TDZ 直接崩页 */
