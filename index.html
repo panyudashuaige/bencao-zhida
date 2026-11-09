@@ -550,9 +550,9 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
     <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
-    <p class="desc">练习模式：药童随机捧出一味药的工笔画像，看看你能否喊出它的名字，答错也不亏——药童会科普一味药的小知识。知识竞赛：每题限时 8 秒，<b>十二题混合出卷</b>——4 道看图辨药 + 3 道<b>经典著作考点</b>（作者、名句、成书之最）+ 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题，答完领称号、发战帖。</p>
+    <p class="desc">练习模式：<b>与知识竞赛同一张十二题混合卷</b>——4 道看图辨药 + 3 道<b>经典著作考点</b>（作者、名句、成书之最）+ 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题。<b>不限时</b>作答，每题答完药童都奉上解析，没看懂还能一键去「本草问答」追问详解。知识竞赛：同一张卷、每题限时 8 秒，拼眼力更拼手速，答完领称号、发战帖。</p>
     <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
-      <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 答错有讲解</button>
+      <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 不限时 · 题题有解析</button>
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
     </div>
     <div class="bot-id game-bot" id="gameBot">
@@ -1090,25 +1090,22 @@ function pickText(pool,n){ // 分层抽题：难题优先保底，再补基础�
 }
 function startGame(mode){
   mode=mode||((window._game&&window._game.mode)||"practice");
-  let qs;
-  if(mode==="contest"){
-    /* 竞赛十二题混合出卷：4 图像 + 6 文字（后台在线取后台题库，离线取内置）+ 2 辨药眼力，难题保底打乱呈题 */
-    const imgs=shuffleArr(HERBS).slice(0,4).map(imgQuestion);
-    const toMcq=q=>({kind:"mcq",tag:q.tag||"后台题库",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb||""});
-    let texts;
-    if(REMOTE_QS&&REMOTE_QS.length>=6){texts=pickText(REMOTE_QS,6).map(toMcq);}
-    else{
-      const books=pickText(BOOK_QS,3).map(q=>({kind:"mcq",tag:"经典考点",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
-      const sites=pickText(SITE_QS,3).map(q=>({kind:"mcq",tag:"全站通",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
-      texts=books.concat(sites);
-    }
-    const pairs=shuffleArr(LOOKALIKES).slice(0,2).map(l=>pairQuestions(l)[Math.random()<.5?0:1]);
-    qs=shuffleArr([...imgs,...texts,...pairs]);
-  }else{
-    qs=shuffleArr(HERBS).slice(0,10).map(imgQuestion);
-  }
+  const qs=buildPaper(mode==="contest"); // 练习与竞赛同一张十二题混合卷，仅计规则不同
   window._game={qs,i:0,score:0,mode,timer:null};
   renderGameQ();
+}
+/* 十二题混合出卷：4 图像 + 3 经典考点 + 3 全站通 + 2 辨药眼力，难题保底打乱；竞赛可取后台题库，练习一律内置 */
+function buildPaper(remote){
+  const imgs=shuffleArr(HERBS).slice(0,4).map(imgQuestion);
+  let texts;
+  if(remote&&REMOTE_QS&&REMOTE_QS.length>=6){const toMcq=q=>({kind:"mcq",tag:q.tag||"后台题库",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb||""});texts=pickText(REMOTE_QS,6).map(toMcq);}
+  else{
+    const books=pickText(BOOK_QS,3).map(q=>({kind:"mcq",tag:"经典考点",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
+    const sites=pickText(SITE_QS,3).map(q=>({kind:"mcq",tag:"全站通",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
+    texts=books.concat(sites);
+  }
+  const pairs=shuffleArr(LOOKALIKES).slice(0,2).map(l=>pairQuestions(l)[Math.random()<.5?0:1]);
+  return shuffleArr([...imgs,...texts,...pairs]);
 }
 function renderGameQ(){
   const g=window._game;
@@ -1122,10 +1119,10 @@ function renderGameQ(){
   $("#gameArea").innerHTML=`
     ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">${CONTEST_LIMIT}s</span></div>`:""}
     <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / ${g.qs.length}</b><span>第几道题</span></div></div>
-    <div class="game-round">◈ 第 ${g.i+1} 题 · ${q.kind==="mcq"?q.tag:"请辨识"}${contest?" · 限时作答":""} ◈</div>
+    <div class="game-round">◈ 第 ${g.i+1} 题 · ${q.kind==="mcq"?q.tag:"请辨识"}${contest?" · 限时作答":" · 不限时"} ◈</div>
     ${body}
     <div class="game-opts">${q.opts.map(o=>`<button onclick="pickGame('${o}')">${o}</button>`).join("")}</div>
-    <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":"药童搓搓手：这一题答错也不亏，我会科普一段小知识〜"}</div>`;
+    <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":"十二题混合卷 · 不限时作答，答完即见药童解析"}</div>`;
   gameReact("ready",g.i+1);
   if(contest)startTimer();
 }
@@ -1163,9 +1160,10 @@ function pickGame(name){
   }
   if(q.kind==="img"&&right)unlockHerb(q.h.n);
   gameReact(right?"ok":"bad");
+  const askQ=q.kind==="img"?q.h.n:`详细讲讲：${q.q}`; // 没看懂？带着题目去问答页追问药童
   $("#gameFb").innerHTML=(right?`<b class="good">✔ ${pick(GAME_OK)}</b>`:`✘ ${pick(q.kind==="mcq"?GAME_MCQ_BAD:GAME_BAD)}<b>${ansN}</b>`)
     +(q.kind==="mcq"?`<br>${q.fb}`:`<br><b>${q.h.n}</b> · ${q.h.f}<br>${q.h.e}`)
-    +`<div style="margin-top:8px"><button class="btn ghost" onclick="nextGame()">${g.i>=g.qs.length-1?"看成绩 →":"下一题 →"}</button></div>`;
+    +`<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="nextGame()">${g.i>=g.qs.length-1?"看成绩 →":"下一题 →"}</button><button class="btn ghost" onclick="askKB('${askQ}')">没看懂？去问药童详解 →</button></div>`;
 }
 function nextGame(){window._game.i++;renderGameQ();}
 function endGame(){
