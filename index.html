@@ -853,7 +853,6 @@ function setSeason(s){
   if(typeof renderBooks==="function")renderBooks();
   if(typeof renderChips==="function")renderChips(); // 快捷问题随季更衣
   updateSeasonImg(); // 当季插画同步更换
-  if(typeof bubble==="function"){const g=SEASON_GREET[s];bubble("本草智答",`叮！已换上<b>${s}季皮肤</b>〜 ${s}季限定金句奉上：「${g.q}」${g.w}。`);} // 换季即换金句，别季金句不露面
 }
 document.documentElement.dataset.season=seasonOf(); // 四季换肤：主色随节气更衣
 buildSeasonFx(seasonOf());
