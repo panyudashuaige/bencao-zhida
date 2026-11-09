@@ -613,7 +613,7 @@ const TOPICS=[
  {n:"中医体质",d:"中医体质学说将人分为平和、气虚、阳虚、阴虚、痰湿、湿热、血瘀、气郁、特禀九种体质，其思想可上溯至《黄帝内经》\u201c阴阳二十五人\u201d篇。体质决定易感疾病与养生方向，辨清体质，方能因人施养。",b:"《黄帝内经》",k:["九种体质","体质是什么"]},
  {n:"药食同源",d:"\u201c药食同源\u201d指许多食物兼具药物之性：生姜、山药、莲子、山楂、枸杞、菊花皆在其列。《黄帝内经》云\u201c五谷为养，五果为助，五畜为益，五菜为充\u201d，饮食调养首重五谷与四时。",b:"《黄帝内经》《随息居饮食谱》",k:["食疗","食补"]},
  {n:"熬夜",d:"《黄帝内经》云：\u201c阳气尽则卧，阴气尽则寤。\u201d子时（23点—1点）胆经当令、丑时肝经当令，此时不眠则肝胆不得休养，易致阴虚火旺、面色晦暗。养生第一课，即在\u201c起居有常，不妄作劳\u201d。",b:"《黄帝内经》",k:["失眠","睡不好","晚睡","睡不着","入睡困难","多梦","睡眠"]},
- {n:"养生",d:"《黄帝内经》养生总纲十六字：\u201c法于阴阳，和于术数，食饮有节，起居有常。\u201d顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔，如是则形体不敝，精神不散。",b:"《黄帝内经》《千金方》",k:["保健","怎么养生"]},
+ {n:"养生",d:"说白了就四句话：<b>跟着季节过日子、吃饭七分饱、晚上别熬夜、心情别内耗</b>。《黄帝内经》十六字总纲「法于阴阳，和于术数，食饮有节，起居有常」，翻成大白话：顺应四季变化，找适合自己的锻炼方式，三餐规律别暴食，作息稳定少熬夜。做到这四条，比多数保健品都管用。想看某个季节具体怎么养？直接问「春天怎么养生」这类问题，药童给你按季拆解〜",b:"《黄帝内经》《千金方》",k:["保健","怎么养生"]},
  {n:"感冒",d:"感冒先别急着灌药！中医把感冒分成两路：风寒感冒——怕冷重、流清鼻涕，来碗生姜红糖水，捂被子发发汗，把寒气请出去；风热感冒——喉咙痛、流黄鼻涕，金银花、菊花茶安排上，清热又利咽。《伤寒论》里的桂枝汤就是治感冒的祖师爷方子。不过要是高烧不退，别跟本药童犟，赶紧去医院！",b:"《伤寒论》《温病条辨》",k:["风寒感冒","风热感冒","流鼻涕","着凉","伤风"]},
  {n:"咳嗽",d:"咳嗽也分性格：寒咳痰白稀，烤个橘子或炖点冰糖雪梨加片姜；热咳痰黄稠，雪梨炖冰糖，薄荷利咽也不错。老祖宗说\u201c五脏六腑皆令人咳\u201d——咳超过两周还没好，请放下手机直奔医院，这题药童不背锅〜",b:"《本草纲目》《伤寒论》",k:["止咳","痰多","嗓子痒","喉咙不舒服"]},
  {n:"便秘",d:"嗯…这个话题有味道但很重要！中医看便秘：肠燥型多吃润物——黑芝麻、核桃、蜂蜜水；气虚型推动无力——补气才管用，黄芪、山药安排上；上火型少吃辣多喝水。再送一招祖传秘方：早上空腹温水一杯 + 顺时针揉腹一百下 + 别带手机进厕所〜",b:"《本草纲目》《随息居饮食谱》",k:["排便","拉不出","大便干","消化不好"]},
@@ -640,7 +640,7 @@ const KB=[
  ...HERBS.map(h=>({keys:[h.n],herb:h.n,ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>`,cat:h.n})),
  ...FORMULAS.map(f=>({keys:[f.n,f.n.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n})),
  ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">定位功效</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
- ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],ans:`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
+ ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],topic:1,ans:`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
 ];
 const SYNONYM={"黄耆":"黄芪","杞子":"枸杞子","忍冬":"金银花","六味地黄":"六味地黄丸","三里":"足三里","人参须":"人参","菊花茶":"菊花","枸杞茶":"枸杞子","洋参":"人参","熟地":"六味地黄丸","按摩哪个穴位":"穴位","艾灸":"足三里"};
 const CONSTITUTION_ALIASES=[
@@ -1603,11 +1603,27 @@ const FUN=[
  {re:/水果/,max:10,a:()=>"水果也分寒热！性凉的：梨（润燥）、西瓜（暑天解渴，别贪多）；性温的：荔枝、龙眼（火气大的人少吃）；性平的：苹果（老少皆宜）。原则：①吃应季的；②脾胃虚寒的少碰冰镇；③别用水果代餐减肥——果糖吃多了一样胖，寒凉还伤脾胃〜"},
  {re:/生气|发火|愤怒|脾气/,max:10,a:()=>"《内经》曰：「怒伤肝」「百病生于气」——大怒伤肝气，生闷气则气机郁结，乳腺、甲状腺、脾胃都是受害者。发火前的急救：深呼吸数到十，先离场冷静；常生气的人可以泡点玫瑰花、陈皮疏肝理气。记住药童的话：你每一次选择不生气，都是在给肝发年终奖〜"}
 ];
+/* 体质荐读：测过体质的用户问养生类话题时，追加与其体质相契的书目 */
+function fitBookAns(){
+  if(!lastQuiz)return "";
+  const fav=CONSTITUTIONS[lastQuiz].books;
+  const rec=BOOKS.filter(b=>fav.some(x=>b.t.includes(x)||x.includes(b.t.slice(0,2))));
+  if(!rec.length)return "";
+  return `<div class="kv"><span class="k">为你荐读</span>你是<b>${lastQuiz}</b>——《${rec.map(b=>b.t).join("》《")}》与你的体质最相契，重点翻翻这几本〜</div>`;
+}
+/* 四季养生锦囊：问"春/夏/秋/冬 + 养生/进补"即按季作答 */
+function seasonCareAns(s){
+  const c=SEASON_CARE[s];
+  return `<b>${s}季养生锦囊</b><div class="kv"><span class="k">本季主旋律</span>${c.pr}</div><div class="kv"><span class="k">怎么吃</span>${c.eat}</div><div class="kv"><span class="k">起居要点</span>${c.live}</div><div class="kv"><span class="k">小贴士</span>${c.tip}</div>${fitBookAns()||`<div class="kv" style="color:var(--ink2)">想更对证？先去「体质辨识」测测体质，药童再按你的体质加码〜</div>`}`;
+}
 function send(q){
   const inp=$("#chatInput");q=(q||inp.value).trim();if(!q)return;inp.value="";
   bubble("我",q,true);
   const nq=norm(q);let best=null,bs=0;
   KB.forEach(e=>{let s=0;e.keys.forEach(k=>{if(nq.includes(k))s+=k.length;});if(s>bs){bs=s;best=e;}});
+  // 四季养生意图：问"春/夏/秋/冬+养生/进补"按季作答（比通用"养生"话题更具体，优先命中）
+  const sm=nq.match(/[春夏秋冬][^春夏秋冬]{0,6}(?:养生|保养|进补|调理|注意|怎么过|怎么养|怎么防)/);
+  const seasonQ=sm?sm[0][0]:null;
   // 体质意图：别名命中即优先生成调养锦囊（比中药库更贴合问法）
   let cons=null;
   for(const[c,aliases]of CONSTITUTION_ALIASES){
@@ -1630,7 +1646,8 @@ function send(q){
     }
     else if(funStrong){bubble("本草智答",(typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(cons){bubble("本草智答",constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);bubble("本草智答",best.ans+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(seasonQ){bubble("本草智答",seasonCareAns(seasonQ)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);bubble("本草智答",best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(fun){bubble("本草智答",(typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${["气虚体质怎么调理","感冒了怎么办",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书"].map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
