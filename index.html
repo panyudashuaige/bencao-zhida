@@ -1124,8 +1124,8 @@ function renderGameQ(){
     ? `<div class="game-qtext"><span class="qt-tag">◈ ${q.tag} ◈</span><br>${q.q}</div>`
     : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.jpg" alt="本草工笔插画"></div>`;
   $("#gameArea").innerHTML=`
-    ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">10s</span></div>`:""}
-    <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / 10</b><span>第几道题</span></div></div>
+    ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">${CONTEST_LIMIT}s</span></div>`:""}
+    <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / ${g.qs.length}</b><span>第几道题</span></div></div>
     <div class="game-round">◈ 第 ${g.i+1} 题 · ${q.kind==="mcq"?q.tag:"请辨识"}${contest?" · 限时作答":""} ◈</div>
     ${body}
     <div class="game-opts">${q.opts.map(o=>`<button onclick="pickGame('${o}')">${o}</button>`).join("")}</div>
@@ -1387,7 +1387,7 @@ function drawPoster(D,qrImg){
   }
   /* 辨药（练习最佳 + 竞赛最佳）+ 集章 + 打卡 */
   x.fillStyle="#2B2B26";x.font="20px "+SONG;
-  x.fillText(D.g?("辨药小试 · 最高 "+D.g.s+" / 10 · "+D.g.t):"药圃初来乍到 · 尚未留名",W/2,334);
+  x.fillText(D.g?("辨药小试 · 最佳 "+D.g.s+" 题 · "+D.g.t):"药圃初来乍到 · 尚未留名",W/2,334);
   if(D.cb)x.fillText("知识竞赛 · 最佳 "+D.cb.s+" / 12"+(D.cb.d?"（"+D.cb.d+"）":""),W/2,362);
   x.fillText("集章 "+D.n+" / 14 · "+D.t[1]+(D.ciTotal?" · 打卡累计 "+D.ciTotal+" 天":""),W/2,388);
   /* 十四枚小印阵 */
