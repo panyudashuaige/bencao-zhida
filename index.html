@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>本草智答 · AI中医药知识问答与经典荐读智能体</title>
-<meta name="description" content="本草智答——会对话的本草纲目：AI中医体质辨识（国标量表）、本草知识问答、十二部经典荐读、看图辨药知识竞赛、集章图鉴与阅读打卡。书香岐黄AI赋能——图书馆「AI+管理服务」大赛参赛作品。">
+<meta name="description" content="本草智答——会对话的本草纲目：AI中医体质辨识（国标量表）、本草知识问答、十二部经典荐读、百草试炼知识竞赛、集章图鉴与阅读打卡。书香岐黄AI赋能——图书馆「AI+管理服务」大赛参赛作品。">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="apple-touch-icon" href="assets/appicon-180.png">
 <meta name="theme-color" content="#2F5D50">
@@ -245,7 +245,7 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .read-path b{color:var(--red);font-family:"Ma Shan Zheng",serif;font-weight:400;margin-right:10px;font-size:14px}
 .read-path em{font-style:normal;color:var(--gold)}
 
-/* ===== 看图辨药 ===== */
+/* ===== 百草试炼（原看图辨药） ===== */
 .game-round{text-align:center;font-size:12px;color:var(--ink3);letter-spacing:3px;margin-bottom:14px}
 .game-pic{width:190px;height:190px;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);margin:0 auto 16px;position:relative;transition:box-shadow .3s,transform .3s}
 .game-pic:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
@@ -425,7 +425,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   <button data-p="chat">本草问答</button>
   <button data-p="read">经典荐读</button>
   <button data-p="album">本草图鉴</button>
-  <button data-p="game">看图辨药</button>
+  <button data-p="game">百草试炼</button>
   <button data-p="checkin">岐黄打卡</button>
 </nav>
 <div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
@@ -476,13 +476,13 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <span class="step" data-p="chat" onclick="go('chat')" title="进入本草问答"><b>二</b>问本草 · 解日常疑惑</span><span class="arr">→</span>
     <span class="step" data-p="read" onclick="go('read')" title="进入经典荐读"><b>三</b>读经典 · 悟养生之道</span><span class="arr">→</span>
     <span class="step" data-p="album" onclick="go('album')" title="进入本草图鉴"><b>四</b>集图鉴 · 藏百草画像</span><span class="arr">→</span>
-    <span class="step" data-p="game" onclick="go('game')" title="进入看图辨药"><b>五</b>战竞赛 · 过目识药名</span><span class="arr">→</span>
+    <span class="step" data-p="game" onclick="go('game')" title="进入百草试炼"><b>五</b>战竞赛 · 过目识药名</span><span class="arr">→</span>
     <span class="step" data-p="checkin" onclick="go('checkin')" title="进入岐黄打卡"><b>六</b>勤打卡 · 日日岐黄缘</span>
   </div>
   <div class="home-feats">
     <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><div class="gly">体</div><b>体质辨识</b><span>9 题速测 / 27 题国标<br>AI 判定九种体质与兼夹</span></div>
     <div class="feat" data-p="chat" onclick="go('chat')"><span class="more">→</span><div class="gly">问</div><b>本草问答</b><span>中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span></div>
-    <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><div class="gly">辨</div><b>看图辨药</b><span>练习+知识竞赛双模式<br>混合题库考眼力考学问</span></div>
+    <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><div class="gly">辨</div><b>百草试炼</b><span>练习+知识竞赛双模式<br>混合题库考眼力考学问</span></div>
     <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><div class="gly">鉴</div><b>本草图鉴</b><span>集章点亮工笔画像<br>集齐十四味做园主</span></div>
     <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><div class="gly">读</div><b>经典荐读</b><span>十二部岐黄经典<br>点开即读原文选段</span></div>
     <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><div class="gly">勤</div><b>岐黄打卡</b><span>图书馆文化节读者专区<br>每日一格集满本草</span></div>
@@ -549,7 +549,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 <section class="page" id="p-game">
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
-    <h2>药圃小试<span class="dot"> · </span>过目识本草</h2>
+    <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
     <p class="desc">练习模式：药童随机捧出一味药的工笔画像，看看你能否喊出它的名字，答错也不亏——药童会科普一味药的小知识。知识竞赛：每题限时 8 秒，<b>十二题混合出卷</b>——4 道看图辨药 + 3 道<b>经典著作考点</b>（作者、名句、成书之最）+ 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题，答完领称号、发战帖。</p>
     <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
       <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 答错有讲解</button>
@@ -888,7 +888,7 @@ const AUTHORS={
 const AUTHOR2BOOK={};Object.keys(AUTHORS).forEach(bt=>AUTHORS[bt].names.forEach(n=>AUTHOR2BOOK[n]=bt));
 function authorCard(bt){
   const a=AUTHORS[bt];
-  return `<b>作者 · ${a.n}</b><div class="kv"><span class="k">年代</span>${a.era}</div><div class="kv"><span class="k">其人其事</span>${a.bio}</div><div class="kv"><span class="k">药童八卦</span>${a.fun}</div><div style="margin-top:8px"><button class="btn ghost" onclick="openRead('${bt}')">📖 看看《${bt}》里的金句 →</button></div><div class="kv" style="color:var(--ink2)">竞赛「经典考点」也会考作者哦，去「看图辨药」页过过招〜</div>`;
+  return `<b>作者 · ${a.n}</b><div class="kv"><span class="k">年代</span>${a.era}</div><div class="kv"><span class="k">其人其事</span>${a.bio}</div><div class="kv"><span class="k">药童八卦</span>${a.fun}</div><div style="margin-top:8px"><button class="btn ghost" onclick="openRead('${bt}')">📖 看看《${bt}》里的金句 →</button></div><div class="kv" style="color:var(--ink2)">竞赛「经典考点」也会考作者哦，去「百草试炼」页过过招〜</div>`;
 }
 const STATES={"1":"没有","2":"偶尔","3":"有时","4":"经常","5":"总是"};
 let quizAns={},lastQuiz=null;
@@ -982,7 +982,7 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
   <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'"></div><span class="cap">本 草 对 照</span></div>`;
 })();
 
-/* ===== 看图辨药小游戏 ===== */
+/* ===== 百草试炼小游戏 ===== */
 const GAME_OK=["答对了！这味药跟你有缘〜","好眼力！药童考不倒你。","正是此药！看来你没白来药圃。","稳！这题闭着眼都该会〜"];
 const GAME_BAD=["哎呀不对，这味其实是","差一点点！正确答案是","药童急得直跺脚：人家叫","此药表示很委屈，明明叫"];
 const GAME_MCQ_BAD=["哎呀不对，正解是","差一点点！正确答案是","药童翻书给你看：答案是","这题的正确答案是"];
@@ -1332,7 +1332,7 @@ function renderAlbum(){
       return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
         :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="未解锁"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
     }).join("")}</div>
-    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 看图辨药答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
+    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 百草试炼答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
 }
 function physGet(){try{return JSON.parse(localStorage.getItem("bzPhysique")||"null");}catch(e){return null;}}
@@ -1637,12 +1637,12 @@ const FUN=[
  {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，再泡杯玫瑰花茶疏疏肝。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你开个方子：玫瑰花茶一杯（疏肝解郁）+ 八段锦一遍（拉伸解压）+ 早睡一晚（ recharge 元气）。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
  {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
  {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
- {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>看图辨药</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时10秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——图书馆文化节读者专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——图书馆文化节读者专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>十二部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
  {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
  {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
- {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「看图辨药」页！十二题混合出卷、每题限时 8 秒：4 道看图辨药 + 3 道<b>经典著作考点</b> + 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
+ {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「百草试炼」页！十二题混合出卷、每题限时 8 秒：4 道看图辨药 + 3 道<b>经典著作考点</b> + 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
  {re:/什么节气|现在.{0,3}节气|节气养生|节气/,max:14,first:true,a:()=>{const t=window.CUR_TERM;return t?`<b>当前节气 · ${t[0]}</b><div class="kv"><span class="k">顺时养生</span>${t[3]}</div><div class="kv" style="color:var(--ink2)">首页「节气·养生」卡每日更新，岐黄名句也按日子轮换哦〜</div>`:"顺时而养是中医的浪漫！首页「节气·养生」卡会告诉你现在是什么节气、该怎么养〜"}},
  {re:/(春|夏|秋|冬)(天|季|令)?[^。]{0,10}(养生|进补|调理|保健|注意|饮食|起居|吃什么|怎么过|防)/,max:26,a:s=>{const sea=(/[春夏秋冬]/.exec(s||"")||[])[0]||seasonOf(),c=SEASON_CARE[sea];return `<b>四季养生 · ${sea}季</b><div class="kv"><span class="k">总则</span>${c.pr}</div><div class="kv"><span class="k">饮食</span>${c.eat}</div><div class="kv"><span class="k">起居</span>${c.live}</div><div class="kv"><span class="k">药童叮咛</span>${c.tip}</div><div class="kv" style="color:var(--ink2)">想看别的季节？直接问「春/夏/秋/冬 + 养生」；当季该读什么书，问我「推荐读什么书」〜</div>`}},
