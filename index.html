@@ -210,6 +210,8 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .chips button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 16px;font-family:inherit;font-size:12.5px;color:var(--green);cursor:pointer;transition:all .2s}
 .chips button:hover{border-color:var(--green);background:var(--green-l);transform:translateY(-1px)}
+.chips .chip-rf{border-style:dashed;color:var(--ink3);background:transparent}
+.chips .chip-rf:hover{color:var(--green);border-color:var(--green)}
 .input-row{display:flex;gap:10px;margin-top:14px}
 .input-row input{flex:1;border:1px solid var(--line);border-radius:3px;padding:12px 16px;font-family:inherit;font-size:14px;background:#fff;transition:border .2s,box-shadow .2s}
 .input-row input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(47,93,80,.1)}
@@ -909,6 +911,7 @@ function go(p){
   $("#p-"+p).classList.add("on");
   if(p==="album")renderAlbum();
   if(p==="checkin")renderCheckin();
+  if(p==="chat")renderChips(); // 每次进问答页，推荐问题随机换一批
   if(p!=="game"&&window._game&&window._game.timer){clearInterval(window._game.timer);window._game.timer=null;} // 离开药圃自动停表
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1520,8 +1523,15 @@ function calcQuiz(){
 
 /* 快捷问题：末位随真实季节轮换（与四季换肤共用 seasonOf，预览切换时同步更衣） */
 const CHIP_SEASON={春:"春天怎么养生",夏:"夏天吃什么好",秋:"秋天怎么防燥",冬:"冬天进补吃什么"};
-function chipQ(){return["气虚体质怎么调理","感冒了怎么办","抽个养生签","黄芪和甘草怎么区分",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书","四君子汤"];}
-function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("");}
+/* 养生话题推荐池：每次进问答页随机换一批，25 个话题各配一句推荐问法 */
+const CHIP_POOL=["上火怎么办","湿气重怎么祛湿","经常熬夜怎么补救","感冒了怎么办","咳嗽有痰怎么办","便秘怎么调理","痛经怎么缓解","中医减肥怎么减","总长痘怎么办","口臭怎么破","贫血怎么补血","手脚冰凉怎么暖","总是疲劳怎么补","掉头发严重怎么办","脾胃不好怎么养","口腔溃疡老复发怎么办","焦虑压力大怎么调","免疫力差怎么提高","嗓子疼怎么办","八段锦怎么练","中暑了怎么急救","黄芪和甘草怎么区分"];
+function chipQ(){
+  const anchor=[lastQuiz?lastQuiz.replace("质","")+"体质怎么调理":"气虚体质怎么调理",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书","抽个养生签"];
+  const pool=CHIP_POOL.filter(q=>!anchor.includes(q));
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} // 洗牌
+  return anchor.slice(0,2).concat(pool.slice(0,4),anchor.slice(2)); // 体质+当季在前，随机4题居中，固定3题收尾
+}
+function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("")+`<button class="chip-rf" onclick="renderChips()" title="换一批推荐问题">⟳ 换一批</button>`;}
 renderChips();
 function bubble(who,html,me){
   const d=document.createElement("div");d.className="msg "+(me?"me":"bot");
@@ -1658,7 +1668,7 @@ function send(q){
     else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);bubble("本草智答",best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(fun){bubble("本草智答",(typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
-      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${["气虚体质怎么调理","感冒了怎么办",CHIP_SEASON[seasonOf()],"李时珍是谁","推荐读什么书"].map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
+      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
     }
   },600);
 }
