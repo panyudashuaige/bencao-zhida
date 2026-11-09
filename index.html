@@ -1034,15 +1034,13 @@ const BOOK_QS=[
  {q:"《黄帝内经》由哪两部分组成？",opts:["《素问》与《灵枢》","《伤寒》与《金匮》","《本经》与《别录》","《甲乙》与《脉经》"],a:"《素问》与《灵枢》",d:1,fb:"《素问》重医理、《灵枢》重经络针刺，二者合称《内经》，中医理论的源头活水。"},
  {q:"被后世誉为\u201c东方药物巨典\u201d的是？",opts:["本草纲目","千金方","温病条辨","神农本草经"],a:"本草纲目",d:1,fb:"《本草纲目》集明代以前药物学之大成，被译成多种文字远播海外。"}
 ];
-/* 全站通考点题库：体质辨识、经典荐读、四季主题、药童问答——逛完本站才能全答对 */
+/* 全站通考点题库：体质辨识、经典荐读——逛完本站才能全答对 */
 const SITE_QS=[
  {q:"本站「体质辨识」的速测版一共有几道题？",opts:["9 道","10 道","27 道","12 道"],a:"9 道",fb:"速测版 9 道大白话短题一分钟测完；27 题国标完整版判定更精确，两版任选。"},
  {q:"本站「经典荐读」共收录多少部岐黄经典？",opts:["八部","十部","十二部","二十部"],a:"十二部",fb:"从《黄帝内经》到《医学三字经》，十二部经典每部都能点开读原文选段。"},
  {q:"下列哪一项不是中医九种体质之一？",opts:["平和质","痰湿质","风寒质","血瘀质"],a:"风寒质",d:1,fb:"九种体质：平和、气虚、阳虚、阴虚、痰湿、湿热、血瘀、气郁、特禀——「风寒质」是冒牌货。"},
  {q:"国标《中医体质分类与判定》把判定结果分为哪两档？",opts:["是 / 倾向是","强 / 弱","阳性 / 阴性","主证 / 兼证"],a:"是 / 倾向是",d:1,fb:"本站体质测试的结果页正是按国标给出\u201c是\u201d与\u201c倾向是\u201d两档，并提示兼夹体质。"},
- {q:"本站会随四季切换主题皮肤，夏季的专属色是？",opts:["荷叶暖绿","青金石蓝","丹枫红","松柏青"],a:"荷叶暖绿",d:1,fb:"春樱粉、夏荷绿、秋枫金、冬松青——点首页右上角的季节就能现场换装。"},
  {q:"本站「体质辨识」的立意源自《黄帝内经》哪句话？",opts:["上工治未病，不治已病","冬病夏治","以毒攻毒","药食同源"],a:"上工治未病，不治已病",fb:"最高明的医术是让人不生病——体质辨识就是把\u201c治未病\u201d搬到你手边。"},
- {q:"「本草问答」的药童目前能接住多少个养生话题？",opts:["16 个","20 个","25 个","40 个"],a:"25 个",d:1,fb:"上火、湿气、熬夜、脱发、中暑……25 个话题对答如流，问它「你会什么」还能拿菜单。"},
  {q:"知识竞赛答对题目会获得什么荣誉身份？",opts:["百草园授予的称号","会员积分","优惠券","经络图"],a:"百草园授予的称号",fb:"从「药圃看门的」一路升到「坐堂神医」，称号由百草园亲自授予。"}
 ];
 /* 辨药眼力：由相似药材数据生成选择题（一对两题，各考一味） */
@@ -1682,6 +1680,10 @@ function seasonCareAns(s){
 function send(q){
   const inp=$("#chatInput");q=(q||inp.value).trim();if(!q)return;inp.value="";
   bubble("我",q,true);
+  // 百草试炼解析追问：「详细讲讲：题干」→ 药童直接给该题详解（题库未收录则按普通问题继续答）
+  let isDetail=false;
+  const dm=q.match(/^详细讲讲[：:]\s*(.+)$/);
+  if(dm){isDetail=true;q=dm[1].trim();}
   const nq=norm(q);let best=null,bs=0;
   KB.forEach(e=>{let s=0;e.keys.forEach(k=>{if(nq.includes(k))s+=k.length;});if(s>bs){bs=s;best=e;}});
   // 四季养生意图：问"春/夏/秋/冬+养生/进补"按季作答（比通用"养生"话题更具体，优先命中）
@@ -1706,6 +1708,22 @@ function send(q){
     const quip=pick(QUIPS);
     if(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14){
       bubble("本草智答","咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识绝活，9 题速测、27 题完整随你选，按国标算法锁定你的体质并开出调养锦囊。上知黄芪下知茯苓，中间还懂痛经和痘痘。有话直说，本药童最喜欢爱提问的人类了〜");
+    }
+    else if(isDetail){
+      // 带题干来追问的：题库/后台题库直接命中→出详解；辨药眼力题→出口诀；否则按知识库普通作答
+      const hit=BOOK_QS.concat(SITE_QS).concat(REMOTE_QS||[]).find(x=>x.q===q);
+      const lk=LOOKALIKES.find(l=>q.includes(l.sA)||q.includes(l.sB));
+      if(hit){
+        bubble("本草智答",`<b>药童详解 · 「${hit.q}」</b><div class="kv"><span class="k">正确答案</span>${hit.a}</div><div class="kv"><span class="k">考点解析</span>${hit.fb}</div><div class="kv"><span class="k">趁热打铁</span>这是「百草试炼」的常客考点，去练习模式不限时再刷两遍，保准记牢〜</div>`);
+      }else if(lk){
+        bubble("本草智答",`<b>药童详解 · 辨药眼力</b><div class="kv"><span class="k">分辨要点</span>${lk.tip}</div><div class="kv"><span class="k">药童口诀</span>「${lk.gj}」</div><div class="kv"><span class="k">趁热打铁</span>想知道更多门道？直接问我「${lk.a}和${lk.b}怎么区分」〜</div>`);
+      }else if(best&&bs>=2){
+        if(best.herb)unlockHerb(best.herb);
+        bubble("本草智答",best.ans+(best.topic?fitBookAns():""));
+      }else{
+        reportMiss(q);
+        bubble("本草智答",`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
+      }
     }
     else if(funStrong){bubble("本草智答",(typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(cons){bubble("本草智答",constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
