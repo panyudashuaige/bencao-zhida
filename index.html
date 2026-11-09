@@ -325,8 +325,9 @@ footer::before{content:"";display:block;width:200px;height:1px;margin:0 auto 18p
 footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);letter-spacing:6px;margin-bottom:6px}
 /* ===== 首页扩展 ===== */
 .home-steps{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.home-steps .step{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 18px 7px 9px;font-size:13px;color:var(--ink2);box-shadow:var(--shadow);letter-spacing:1px;transition:all .3s}
-.home-steps .step:hover{transform:translateY(-2px);border-color:#D8D2C0;box-shadow:var(--shadow-h)}
+.home-steps .step{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 18px 7px 9px;font-size:13px;color:var(--ink2);box-shadow:var(--shadow);letter-spacing:1px;transition:all .3s;cursor:pointer}
+.home-steps .step:hover,.home-steps .step.hl{transform:translateY(-2px);border-color:var(--gold);box-shadow:var(--shadow-h);color:var(--ink)}
+.home-steps .step.hl b{animation:pop .35s ease}
 .home-steps .step b{width:26px;height:26px;border-radius:50%;background:var(--red);color:#FBF3E4;display:grid;place-items:center;font-size:13px;font-family:"Ma Shan Zheng",serif}
 .home-steps .arr{color:var(--gold);font-size:15px}
 .home-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
@@ -339,6 +340,9 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .feat b{display:block;font-size:15.5px;letter-spacing:3px;color:var(--ink)}
 .feat span{display:block;font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.7}
 .feat .more{position:absolute;right:12px;top:8px;color:var(--line);font-size:20px;transition:all .3s}
+.feat.hl{border-color:var(--gold);box-shadow:var(--shadow-h);transform:translateY(-4px)}
+.feat.hl::after{opacity:1}
+.feat.hl .gly{background:var(--red-l);color:var(--red);transform:rotate(-5deg)}
 .feat:hover .more{color:var(--gold);transform:translateX(3px)}
 .grid2{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;margin-top:22px;align-items:stretch}
 .grid2>.card{padding:26px 30px}
@@ -466,20 +470,20 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     </div>
   </div>
   <div class="home-steps">
-    <span class="step"><b>一</b>识体质 · 知自身寒热</span><span class="arr">→</span>
-    <span class="step"><b>二</b>问本草 · 解日常疑惑</span><span class="arr">→</span>
-    <span class="step"><b>三</b>读经典 · 悟养生之道</span><span class="arr">→</span>
-    <span class="step"><b>四</b>集图鉴 · 藏百草画像</span><span class="arr">→</span>
-    <span class="step"><b>五</b>战竞赛 · 过目识药名</span><span class="arr">→</span>
-    <span class="step"><b>六</b>勤打卡 · 日日岐黄缘</span>
+    <span class="step" data-p="quiz" onclick="go('quiz')" title="进入体质辨识"><b>一</b>识体质 · 知自身寒热</span><span class="arr">→</span>
+    <span class="step" data-p="chat" onclick="go('chat')" title="进入本草问答"><b>二</b>问本草 · 解日常疑惑</span><span class="arr">→</span>
+    <span class="step" data-p="read" onclick="go('read')" title="进入经典荐读"><b>三</b>读经典 · 悟养生之道</span><span class="arr">→</span>
+    <span class="step" data-p="album" onclick="go('album')" title="进入本草图鉴"><b>四</b>集图鉴 · 藏百草画像</span><span class="arr">→</span>
+    <span class="step" data-p="game" onclick="go('game')" title="进入看图辨药"><b>五</b>战竞赛 · 过目识药名</span><span class="arr">→</span>
+    <span class="step" data-p="checkin" onclick="go('checkin')" title="进入岐黄打卡"><b>六</b>勤打卡 · 日日岐黄缘</span>
   </div>
   <div class="home-feats">
-    <div class="feat" onclick="go('quiz')"><span class="more">→</span><div class="gly">体</div><b>体质辨识</b><span>9 题速测 / 27 题国标<br>AI 判定九种体质与兼夹</span></div>
-    <div class="feat" onclick="go('chat')"><span class="more">→</span><div class="gly">问</div><b>本草问答</b><span>中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span></div>
-    <div class="feat" onclick="go('game')"><span class="more">→</span><div class="gly">辨</div><b>看图辨药</b><span>练习+知识竞赛双模式<br>混合题库考眼力考学问</span></div>
-    <div class="feat" onclick="go('album')"><span class="more">→</span><div class="gly">鉴</div><b>本草图鉴</b><span>集章点亮工笔画像<br>集齐十四味做园主</span></div>
-    <div class="feat" onclick="go('read')"><span class="more">→</span><div class="gly">读</div><b>经典荐读</b><span>十二部岐黄经典<br>点开即读原文选段</span></div>
-    <div class="feat" onclick="go('checkin')"><span class="more">→</span><div class="gly">勤</div><b>岐黄打卡</b><span>图书馆文化节读者专区<br>每日一格集满本草</span></div>
+    <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><div class="gly">体</div><b>体质辨识</b><span>9 题速测 / 27 题国标<br>AI 判定九种体质与兼夹</span></div>
+    <div class="feat" data-p="chat" onclick="go('chat')"><span class="more">→</span><div class="gly">问</div><b>本草问答</b><span>中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span></div>
+    <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><div class="gly">辨</div><b>看图辨药</b><span>练习+知识竞赛双模式<br>混合题库考眼力考学问</span></div>
+    <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><div class="gly">鉴</div><b>本草图鉴</b><span>集章点亮工笔画像<br>集齐十四味做园主</span></div>
+    <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><div class="gly">读</div><b>经典荐读</b><span>十二部岐黄经典<br>点开即读原文选段</span></div>
+    <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><div class="gly">勤</div><b>岐黄打卡</b><span>图书馆文化节读者专区<br>每日一格集满本草</span></div>
     <div class="feat" onclick="askKB('药食同源')"><span class="more">→</span><div class="gly">食</div><b>药食同源</b><span>厨房里的本草智慧<br>生姜山药皆是药</span></div>
   </div>
   <div class="grid2">
@@ -882,6 +886,16 @@ let quizAns={},lastQuiz=null;
 const $=s=>document.querySelector(s);
 
 document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.p));
+/* ===== 首页路线图 ↔ 功能卡双向联动：悬停任一方，另一方点亮呼应 ===== */
+document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
+  const card=document.querySelector(`.home-feats .feat[data-p="${st.dataset.p}"]`);
+  if(!card)return;
+  const on=()=>{st.classList.add("hl");card.classList.add("hl");};
+  const off=()=>{st.classList.remove("hl");card.classList.remove("hl");};
+  st.addEventListener("mouseenter",on);st.addEventListener("mouseleave",off);
+  card.addEventListener("mouseenter",on);card.addEventListener("mouseleave",off);
+});
+
 function go(p){
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
   document.querySelectorAll(".page").forEach(s=>s.classList.remove("on"));
