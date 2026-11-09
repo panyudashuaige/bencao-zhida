@@ -550,7 +550,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
     <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
-    <p class="desc">练习模式：<b>与知识竞赛同一张十二题混合卷</b>——4 道看图辨药 + 3 道<b>经典著作考点</b>（作者、名句、成书之最）+ 3 道<b>全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题。<b>不限时</b>作答，每题答完奉上解析（看图题附外观辨识），没看懂还能一键去「本草问答」追问根源详解。知识竞赛：同一张卷、每题限时 8 秒，小药童亲自当裁判，拼眼力更拼手速，答完领称号、发战帖。</p>
+    <p class="desc">练习模式：<b>2 道看图辨药 + 5 道经典著作考点</b>（作者、名句、成书之最）+ <b>5 道全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题，共 <b>14 题</b>。<b>不限时</b>作答，每题答完奉上解析（看图题附外观辨识），没看懂还能一键去「本草问答」追问根源详解。知识竞赛：加量不加时——<b>3 道看图辨药 + 8 道经典著作考点 + 8 道全站通考点 + 2 道辨药眼力</b>，共 <b>21 题</b>、每题限时 8 秒，小药童亲自当裁判，拼眼力更拼手速，答完领称号、发战帖。</p>
     <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
       <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 不限时 · 题题有解析</button>
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
@@ -1001,7 +1001,7 @@ function gameReact(state,n){ // state: "ready"|"ok"|"bad"|"timeout"|"end-ok"|"en
     :state==="ok"?pick(GBOT_CHEER)
     :state==="timeout"?pick(GBOT_TIMEOUT)
     :state==="bad"?pick(GBOT_OOPS)
-    :state==="end-ok"?"十二问全中！本药童心服口服，甘拜下风〜"
+    :state==="end-ok"?"满分通关！本药童心服口服，甘拜下风〜"
     :state==="end-mid"?"这份成绩单已经很不错了，随时再来切磋〜"
     :"咳咳……回去多翻翻「经典荐读」，本药童等你雪耻！";
   say.textContent=txt;
@@ -1042,6 +1042,8 @@ const SITE_QS=[
  {q:"中医情志学说里，「怒」最容易伤哪一脏？",opts:["肝","心","脾","肺"],a:"肝",fb:"怒伤肝、喜伤心、思伤脾、悲伤肺、恐伤肾——情志过度会伤及对应之脏，养生先养心性。",root:"五志配五脏是《黄帝内经》的藏象纲领：肝主疏泄、在志为怒，大怒则气上而肝失疏泄——历史上「周瑜被三气」的桥段正是这一理论的文学演绎。"},
  {q:"下列哪味既是家常食材，又是经典药材？",opts:["山药","人参","附子","大黄"],a:"山药",fb:"山药、生姜、枸杞、莲子皆入「药食同源」目录——厨房即药房。",root:"「空腹食之为食物，患者食之为药物」（唐·《黄帝内经太素》）正是药食同源的源头表述；国家卫健委专门发布药食同源目录，山药名列其中，而人参、附子、大黄药性峻烈不宜日常食用。"},
  {q:"八段锦这类功法，在中医治法中属于哪一类？",opts:["导引按跷","针刺","汤药","砭石"],a:"导引按跷",d:1,fb:"导引按跷与针、灸、砭、药并列为中医五大治法——八段锦即导引术的现代传承。",root:"《黄帝内经·异法方宜论》提出中央之民「治宜导引按跷」——靠肢体运动配合呼吸导气引体；八段锦宋代已有歌诀记载，正是这套治法的活化石。"},
+ {q:"中医九种体质中，被认为最理想、应努力保持的基准体质是？",opts:["平和质","气虚质","湿热质","特禀质"],a:"平和质",fb:"阴阳气血调和、面色红润精力足——平和质是「稳态天花板」，养生的目标就是朝它靠拢。",root:"王琦体质九分法以平和质为基准：其余八种皆为「偏颇体质」，调体养生即是「以平为期」——《内经》「谨察阴阳所在而调之，以平为期」正是理论源头。"},
+ {q:"气虚质的人常疲乏气短，下列哪种调养方式最合适？",opts:["黄芪山药炖汤","通宵熬夜","冷饮解暑","剧烈运动"],a:"黄芪山药炖汤",fb:"气虚质宜补气：山药、莲子、黄芪入膳，忌过度劳累，练八段锦正合适。",root:"「劳则气耗」出自《素问·举痛论》——气虚者再熬夜、剧烈运动只会雪上加霜；黄芪补脾肺之气、山药平补三焦，正是本站给气虚质开出的调养锦囊。"},
  {q:"本站「体质辨识」的立意源自《黄帝内经》哪句话？",opts:["上工治未病，不治已病","冬病夏治","以毒攻毒","药食同源"],a:"上工治未病，不治已病",fb:"最高明的医术是让人不生病——体质辨识就是把\u201c治未病\u201d搬到你手边。",root:"《素问·四气调神大论》原句「圣人不治已病治未病，不治已乱治未乱」，并打比方：病已成而后药之，譬犹渴而穿井、斗而铸锥——体质辨识就是这条思想的现代化落地。"}
 ];
 /* 根源探究：竞赛/练习题追问药童时从根源讲解——每题对应一条「为什么」的底层说明 */
@@ -1116,20 +1118,24 @@ function pickText(pool,n){ // 分层抽题：难题优先保底，再补基础�
 }
 function startGame(mode){
   mode=mode||((window._game&&window._game.mode)||"practice");
-  const qs=buildPaper(mode==="contest"); // 练习与竞赛同一张十二题混合卷，仅计规则不同
+  const qs=buildPaper(mode==="contest"); // 练习与竞赛共用同一套混合卷生成器（练习 14 题/竞赛 21 题），仅计规则不同
   const bot=$("#gameBot");if(bot)bot.style.display=mode==="contest"?"flex":"none"; // 练习不打扰：小药童只在竞赛登场当裁判
   window._game={qs,i:0,score:0,mode,timer:null};
   renderGameQ();
 }
-/* 十二题混合出卷：4 图像 + 3 经典考点 + 3 全站通 + 2 辨药眼力，难题保底打乱；竞赛可取后台题库，练习一律内置 */
-function buildPaper(remote){
-  const imgs=shuffleArr(HERBS).slice(0,4).map(imgQuestion);
+/* 混合出卷：练习 2 图像 + 5 经典 + 5 全站 + 2 辨药眼力 = 14 题；竞赛 3 + 8 + 8 + 2 = 21 题，难题保底打乱；竞赛后台题库最多热替换 8 道文字题，不足由内置补齐 */
+function buildPaper(contest){
+  const nImg=contest?3:2,nBook=contest?8:5,nSite=contest?8:5;
+  const imgs=shuffleArr(HERBS).slice(0,nImg).map(imgQuestion);
+  const local=(q,tag)=>({kind:"mcq",tag,q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb,root:q.root});
   let texts;
-  if(remote&&REMOTE_QS&&REMOTE_QS.length>=6){const toMcq=q=>({kind:"mcq",tag:q.tag||"后台题库",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb||""});texts=pickText(REMOTE_QS,6).map(toMcq);}
-  else{
-    const books=pickText(BOOK_QS,3).map(q=>({kind:"mcq",tag:"经典考点",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
-    const sites=pickText(SITE_QS,3).map(q=>({kind:"mcq",tag:"全站通",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb}));
-    texts=books.concat(sites);
+  if(contest&&REMOTE_QS&&REMOTE_QS.length>=4){
+    const toMcq=q=>({kind:"mcq",tag:q.tag||"后台题库",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb||""});
+    const rem=pickText(REMOTE_QS,8).map(toMcq);
+    const pool=shuffleArr(pickText(BOOK_QS,nBook).map(q=>local(q,"经典考点")).concat(pickText(SITE_QS,nSite).map(q=>local(q,"全站通"))));
+    texts=rem.concat(pool.slice(0,nBook+nSite-rem.length));
+  }else{
+    texts=pickText(BOOK_QS,nBook).map(q=>local(q,"经典考点")).concat(pickText(SITE_QS,nSite).map(q=>local(q,"全站通")));
   }
   const pairs=shuffleArr(LOOKALIKES).slice(0,2).map(l=>pairQuestions(l)[Math.random()<.5?0:1]);
   return shuffleArr([...imgs,...texts,...pairs]);
@@ -1149,7 +1155,7 @@ function renderGameQ(){
     <div class="game-round">◈ 第 ${g.i+1} 题 · ${q.kind==="mcq"?q.tag:"请辨识"}${contest?" · 限时作答":" · 不限时"} ◈</div>
     ${body}
     <div class="game-opts">${q.opts.map(o=>`<button onclick="pickGame('${o}')">${o}</button>`).join("")}</div>
-    <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":"十二题混合卷 · 不限时作答，答完即见药童解析"}</div>`;
+    <div class="game-fb" id="gameFb">${contest?"竞赛进行中 · 眼疾手快，超时算未中〜":`${g.qs.length} 题混合卷 · 不限时作答，答完即见药童解析`}</div>`;
   gameReact("ready",g.i+1);
   if(contest)startTimer();
 }
@@ -1196,36 +1202,37 @@ function nextGame(){window._game.i++;renderGameQ();}
 function endGame(){
   const g=window._game;
   if(g.timer){clearInterval(g.timer);g.timer=null;}
-  const s=g.score,contest=g.mode==="contest";
+  const s=g.score,contest=g.mode==="contest",full=g.qs.length; // 题量随模式：练习 14 / 竞赛 21
+  const hi=Math.ceil(full*.75),mid=Math.ceil(full*.5),lo=Math.ceil(full*.3); // 称号档位按题量等比换算（12 题时即 9/6/4）
   if(contest){
     let best=null;try{best=JSON.parse(localStorage.getItem("bzContestBest")||"null");}catch(e){}
-    if(!best||s>best.s){best={s,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日"};localStorage.setItem("bzContestBest",JSON.stringify(best));}
-    reportScore(s,12); // 成绩同步管理后台（离线静默）
+    if(!best||s>best.s){best={s,n:full,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日"};localStorage.setItem("bzContestBest",JSON.stringify(best));}
+    reportScore(s,full); // 成绩同步管理后台（离线静默）
   }
-  const r=s===12?["坐堂神医","十二问全中！混合题库都难不倒你，李时珍看了都想收你当徒弟，药童甘愿给您打下手〜"]
-    :s>=9?["游方郎中","走方行医的眼力已经有了！经典考点与全站通也难不住你，再翻翻荐读里的选段，便可出师。"]
-    :s>=6?["药童同门","基本功扎实！论辈分和药童算同门师兄弟——经典选段再补补课，下轮冲高分。"]
-    :s>=4?["抓药学徒","柜台后站稳了！常来药圃转转、翻翻「经典荐读」的阅读选段，眼力与学问都是养出来的〜"]
+  const r=s===full?["坐堂神医",`${full} 问全中！混合题库都难不倒你，李时珍看了都想收你当徒弟，药童甘愿给您打下手〜`]
+    :s>=hi?["游方郎中","走方行医的眼力已经有了！经典考点与全站通也难不住你，再翻翻荐读里的选段，便可出师。"]
+    :s>=mid?["药童同门","基本功扎实！论辈分和药童算同门师兄弟——经典选段再补补课，下轮冲高分。"]
+    :s>=lo?["抓药学徒","柜台后站稳了！常来药圃转转、翻翻「经典荐读」的阅读选段，眼力与学问都是养出来的〜"]
     :["药圃看门的","药童替你捏一把汗……不过没关系，荐读页每部书都能点开读选段，读完再来战！"];
   try{if(!contest){const b=JSON.parse(localStorage.getItem("bzGameBest")||"null");if(!b||s>b.s)localStorage.setItem("bzGameBest",JSON.stringify({s,t:r[0]}));}}catch(e){}
-  gameReact(s>=9?"end-ok":s>=6?"end-mid":"end-bad");
+  gameReact(s>=hi?"end-ok":s>=mid?"end-mid":"end-bad");
   $("#gameArea").innerHTML=`
     <div class="game-end">
-      <div class="game-score"><div><b>${s}</b><span>答对</span></div><div><b>12</b><span>总题数</span></div></div>
+      <div class="game-score"><div><b>${s}</b><span>答对</span></div><div><b>${full}</b><span>总题数</span></div></div>
       <div class="title">${r[0]}</div>
       <div class="seal">百草园 · 授</div>
       <p>${contest?"（知识竞赛 · 每题限时 "+CONTEST_LIMIT+" 秒）":""}${r[1]}</p>
-      ${contest?`<p style="font-size:12.5px;color:var(--ink3)">◈ 竞赛最佳成绩已记入名帖：${s} / 12</p>`:""}
+      ${contest?`<p style="font-size:12.5px;color:var(--ink3)">◈ 竞赛最佳成绩已记入名帖：${s} / ${full}</p>`:""}
       <button class="btn red" onclick="startGame()">${contest?"再战一轮":"再来一轮"}</button>
-      <button class="btn ghost" onclick="copyChallenge(${s},'${r[0]}')">📣 发起挑战 · 复制战帖</button>
+      <button class="btn ghost" onclick="copyChallenge(${s},'${r[0]}',${full})">📣 发起挑战 · 复制战帖</button>
       <button class="btn ghost" onclick="go('read')">读读经典 →</button>
       <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
       <button class="btn ghost" onclick="go('checkin')">去打卡 →</button>
     </div>`;
 }
 /* 挑战战帖：一键复制成绩+称号+链接，转发好友过招 */
-function copyChallenge(s,title){
-  const txt=`【本草战帖 · 书香岐黄】我在「本草智答」知识竞赛中答对 ${s}/12，荣获「${title}」称号！识体质、问本草、读经典、战竞赛——你也来过过招？药童在百草园等你想胜负〜 ${location.href.split("#")[0]}`;
+function copyChallenge(s,title,total){
+  const txt=`【本草战帖 · 书香岐黄】我在「本草智答」知识竞赛中答对 ${s}/${total||21}，荣获「${title}」称号！识体质、问本草、读经典、战竞赛——你也来过过招？药童在百草园等你想胜负〜 ${location.href.split("#")[0]}`;
   const done=()=>{const t=document.createElement("div");t.className="chal-toast";t.textContent="⚔ 战帖已复制！快去粘贴给你的好友吧";document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),400);},2400);};
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(fallback);}else fallback();
@@ -1324,7 +1331,7 @@ function renderCheckin(){
       <div><b>${streak}</b><span>连续打卡</span></div>
       <div><b>${total}</b><span>累计天数</span></div>
       <div><b>${n} / 14</b><span>本草集章</span></div>
-      <div><b>${g?g.s+" / 12":"—"}</b><span>竞赛最佳</span></div>
+      <div><b>${g?g.s+" / "+(g.n||12):"—"}</b><span>竞赛最佳</span></div>
       <div><b>${p?p.n.slice(0,2):"—"}</b><span>体质档案</span></div>
     </div>
     <div style="text-align:center;margin-bottom:20px">
@@ -1409,7 +1416,7 @@ function drawPoster(D,qrImg){
   /* 辨药（练习最佳 + 竞赛最佳）+ 集章 + 打卡 */
   x.fillStyle="#2B2B26";x.font="20px "+SONG;
   x.fillText(D.g?("辨药小试 · 最佳 "+D.g.s+" 题 · "+D.g.t):"药圃初来乍到 · 尚未留名",W/2,334);
-  if(D.cb)x.fillText("知识竞赛 · 最佳 "+D.cb.s+" / 12"+(D.cb.d?"（"+D.cb.d+"）":""),W/2,362);
+  if(D.cb)x.fillText("知识竞赛 · 最佳 "+D.cb.s+" / "+(D.cb.n||12)+(D.cb.d?"（"+D.cb.d+"）":""),W/2,362);
   x.fillText("集章 "+D.n+" / 14 · "+D.t[1]+(D.ciTotal?" · 打卡累计 "+D.ciTotal+" 天":""),W/2,388);
   /* 十四枚小印阵 */
   const cell=44,cols=7,gx=W/2-cols*cell/2,gy=412;
@@ -1667,7 +1674,7 @@ const FUN=[
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
  {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
  {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
- {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「百草试炼」页！十二题混合出卷、每题限时 8 秒：4 道看图辨药 + 3 道<b>经典著作考点</b> + 3 道<b>全站通考点</b>（体质辨识、经典荐读、四季主题、药童问答全考）+ 2 道<b>辨药眼力</b>相似药材题。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
+ {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「百草试炼」页！21 题混合出卷、每题限时 8 秒：3 道看图辨药 + 8 道<b>经典著作考点</b> + 8 道<b>全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题。嫌难？切练习模式，14 题不限时卷、题题有解析还能追问药童。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
  {re:/什么节气|现在.{0,3}节气|节气养生|节气/,max:14,first:true,a:()=>{const t=window.CUR_TERM;return t?`<b>当前节气 · ${t[0]}</b><div class="kv"><span class="k">顺时养生</span>${t[3]}</div><div class="kv" style="color:var(--ink2)">首页「节气·养生」卡每日更新，岐黄名句也按日子轮换哦〜</div>`:"顺时而养是中医的浪漫！首页「节气·养生」卡会告诉你现在是什么节气、该怎么养〜"}},
  {re:/(春|夏|秋|冬)(天|季|令)?[^。]{0,10}(养生|进补|调理|保健|注意|饮食|起居|吃什么|怎么过|防)/,max:26,a:s=>{const sea=(/[春夏秋冬]/.exec(s||"")||[])[0]||seasonOf(),c=SEASON_CARE[sea];return `<b>四季养生 · ${sea}季</b><div class="kv"><span class="k">总则</span>${c.pr}</div><div class="kv"><span class="k">饮食</span>${c.eat}</div><div class="kv"><span class="k">起居</span>${c.live}</div><div class="kv"><span class="k">药童叮咛</span>${c.tip}</div><div class="kv" style="color:var(--ink2)">想看别的季节？直接问「春/夏/秋/冬 + 养生」；当季该读什么书，问我「推荐读什么书」〜</div>`}},
