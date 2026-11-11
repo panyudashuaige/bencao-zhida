@@ -226,6 +226,19 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 #p-chat>.card{max-width:880px;margin:0 auto;width:100%}
 #p-quiz>.card{max-width:880px;margin:0 auto;width:100%}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+/* ===== AI 典籍详解（RAG：模型只依据检索出的经典原文作答） ===== */
+.ai-bar{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ai-state{font-size:11px;color:var(--ink3);border:1px solid var(--line);border-radius:20px;padding:3px 9px;white-space:nowrap}
+.ai-state.on{color:var(--green);border-color:rgba(47,93,80,.4);background:#EDF5F0}
+.ai-toggle{font-size:11px;padding:4px 10px;border:1px solid var(--line);border-radius:20px;background:#FCFBF6;color:var(--ink2);cursor:pointer;white-space:nowrap;font-family:inherit}
+.ai-toggle:hover{border-color:var(--gold);color:var(--red)}
+.ai-toggle.off{opacity:.55;text-decoration:line-through}
+.ai-card{border-left:3px solid var(--green);background:#F2F7F1;border-radius:0 4px 4px 0;padding:10px 14px;margin-top:6px;font-size:13px;line-height:1.85;color:var(--ink)}
+.ai-tag{display:inline-block;font-size:11px;letter-spacing:1px;color:#fff;background:var(--green);border-radius:3px;padding:2px 8px;margin-bottom:6px}
+.ai-src{font-size:11px;color:var(--ink3);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px;line-height:1.6}
+.ai-src b{color:var(--green);font-weight:400}
+.ai-loading{color:var(--ink3);font-size:12.5px}
+@media(max-width:560px){.ai-bar{flex-wrap:wrap;justify-content:flex-end}}
 .chips button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 16px;font-family:inherit;font-size:12.5px;color:var(--green);cursor:pointer;transition:all .2s}
 .chips button:hover{border-color:var(--green);background:var(--green-l);transform:translateY(-1px)}
 .chips .chip-rf{border-style:dashed;color:var(--ink3);background:transparent}
@@ -543,7 +556,10 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="bot-id">
       <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答">
       <div><b>本草智答</b><span>你的 AI 小药童 · 熟读经典 有问必答</span></div>
-      <span class="online">在线</span>
+      <div class="ai-bar">
+        <span class="ai-state" id="aiState">检测 AI 中…</span>
+        <button class="ai-toggle" id="aiToggle" onclick="toggleAI()" title="关闭后只用本地典籍答案，不调用模型">AI 典籍详解 · 开</button>
+      </div>
     </div>
     <div class="chat-box" id="chatBox"></div>
     <div class="input-row">
@@ -1139,6 +1155,98 @@ function reportMiss(q){ // 问答盲区上报：药童答不上来的问题进�
   try{fetch(ADMIN_API+"/kbmiss",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
     body:new URLSearchParams({q:q})}).catch(()=>{});}catch(e){}
 }
+/* ===== 经典文献 AI 问答（RAG）=========================================
+   流程：提问 → 本地检索本站经典原文 → POST /api/chat（API Key 只在服务端）
+        → 模型只依据这些原文生成白话详解并标注出处 → 追加到对话
+   后端离线 / 未配密钥 / 超时 / 检索为空 → 静默撤下占位，本地规则答案照常显示 */
+const AI_API=ADMIN_API+"/chat";
+let AI_READY=false,AI_ON=true,AI_CORPUS=null;
+try{AI_ON=localStorage.getItem("bzAiOn")!=="0";}catch(e){}
+const AI_STOP=new Set(["的","了","吗","呢","啊","吧","是","有","我","你","他","它","请","问","什","么","怎","样","何","哪","个","和","与","及","在","对","把","这","那","能","会","要","讲","说","下","上","中","为","以","之","乎","者","也","可","或","但","就","还","很","太","最","一","二","三"]);
+function aiTokens(s){ // 中文无分词库：单字 + 二元组近似语义召回，停用字过滤
+  s=norm(String(s||"").toLowerCase()).replace(/[^\u4e00-\u9fa5a-z0-9]/g,"");
+  const set=new Set();
+  for(let i=0;i<s.length;i++){
+    const c=s[i];if(!AI_STOP.has(c))set.add(c);
+    if(i+1<s.length){const b=s.slice(i,i+2);if(!AI_STOP.has(b))set.add(b);}
+  }
+  return [...set];
+}
+function buildCorpus(){ // 把全站结构化知识编成可检索的经典语料（懒加载，避开顶层 TDZ）
+  const out=[];
+  const add=(t,src,c)=>{if(!t||!c)return;const body=String(c).slice(0,700);
+    out.push({t:String(t),src:String(src||t),c:body,tg:new Set(aiTokens(t)),cg:new Set(aiTokens(body))});};
+  for(const k in BOOK_READS){ // 十二部经典原文选段（最高优先级语料）
+    const b=BOOK_READS[k];
+    (b.ps||[]).forEach(p=>add(`《${k}》· ${p.t}`,`《${k}》· ${p.t}`,`【原文】${p.s}\n【白话】${p.tr}`));
+    if(b.g)add(`《${k}》· 药童导读`,`《${k}》`,b.g);
+  }
+  BOOKS.forEach(b=>add(`《${b.t}》`,`《${b.t}》`,`${b.au}。${b.d} 名句：「${b.hl}」${b.hs}。药童看点：${b.why}`));
+  HERBS.forEach(h=>add(h.n,`药材 · ${h.n}`,`性味归经：${h.f}。外观辨识：${h.x}。功效主治：${h.e}。经典出处：${h.s}`));
+  FORMULAS.forEach(f=>add(f.n,`名方 · ${f.n}`,`方书源流：${f.s}。${f.d}`));
+  ACUP.forEach(a=>add(`穴位 · ${a.n}`,`穴位 · ${a.n}`,a.d));
+  TOPICS.forEach(t=>add(t.n,`养生话题 · ${t.n}`,`${t.d} 参考：${t.b||""}`));
+  LOOKALIKES.forEach(l=>add(`${l.a}与${l.b}的辨别`,`辨药 · ${l.a}/${l.b}`,`分辨要点：${l.tip} 口诀：${l.gj}`));
+  [...BOOK_QS,...SITE_QS].forEach(q=>add(q.q,`考点 · ${q.a}`,`答案：${q.a}。解析：${q.fb||""} 根源：${q.root||""}`));
+  return out;
+}
+function corpus(){if(!AI_CORPUS)AI_CORPUS=buildCorpus();return AI_CORPUS;}
+function retrieve(q,k){ // 标题命中加权 3 倍、二元组加权 2 倍；相关性不足则判定「典籍未收录」，不让模型硬答
+  const toks=aiTokens(q);
+  const pool=corpus().map(e=>{
+    let sc=0;
+    toks.forEach(t=>{const w=t.length>1?2:1;if(e.tg.has(t))sc+=w*3;if(e.cg.has(t))sc+=w;});
+    toks.filter(t=>t.length>1).forEach(t=>{if(e.t.indexOf(t)>=0)sc+=6;});
+    return {e,sc};
+  }).filter(x=>x.sc>=8).sort((a,b)=>b.sc-a.sc).slice(0,k||4);
+  if(!pool.length||pool[0].sc<12)return []; // 纯闲聊/无关问题：省下这次调用，也避免幻觉
+  return pool.map(x=>x.e);
+}
+function aiSan(s){ // 模型输出二次净化：只留白名单标签，防 XSS（后端已净化一次）
+  return String(s||"").replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"")
+    .replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,"").replace(/javascript\s*:/gi,"")
+    .replace(/<\s*(\/?)\s*([a-z]+)[^>]*>/gi,(m,cl,t)=>["b","br","i","em","p","div"].indexOf(t.toLowerCase())>=0?`<${cl}${t.toLowerCase()}>`:"");
+}
+function aiState(txt,on){const el=$("#aiState");if(el){el.textContent=txt;el.classList.toggle("on",!!on);}}
+function aiProbe(){ // 探测后端是否已配密钥，避免每次白等超时
+  try{
+    const ctl=new AbortController();setTimeout(()=>ctl.abort(),2500);
+    fetch(AI_API,{signal:ctl.signal}).then(r=>r.ok?r.json():null).then(d=>{
+      AI_READY=!!(d&&d.ok&&d.ready);
+      aiState(AI_READY?`AI 已连接 · ${d.model||"模型"}`:"未配置密钥 · 本地典籍模式",AI_READY);
+    }).catch(()=>{AI_READY=false;aiState("后端离线 · 本地典籍模式",false);});
+  }catch(e){AI_READY=false;aiState("后端离线 · 本地典籍模式",false);}
+}
+function toggleAI(){
+  AI_ON=!AI_ON;try{localStorage.setItem("bzAiOn",AI_ON?"1":"0");}catch(e){}
+  const b=$("#aiToggle");if(b){b.textContent="AI 典籍详解 · "+(AI_ON?"开":"关");b.classList.toggle("off",!AI_ON);}
+  if(AI_ON)aiProbe();
+}
+function aiDeepDive(q,tag){
+  if(!AI_ON||!AI_READY||tag==="intro"||tag==="fun"||tag==="detail")return;
+  try{
+    const hits=retrieve(q,4);
+    if(!hits.length)return; // 检索为空就不问模型，从源头避免凭空编造
+    const ctx=hits.map((h,i)=>`【${i+1}】来源：${h.src}\n${h.c}`).join("\n\n").slice(0,3500);
+    const sources=[...new Set(hits.map(h=>h.src))];
+    const box=bubble("本草智答 · AI 典籍详解",'<span class="ai-loading">药童正翻检典籍…</span>');
+    const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),15000);
+    fetch(AI_API,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:new URLSearchParams({q:q,ctx:ctx,src:sources.join(" | ")}),signal:ctl.signal})
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{
+        clearTimeout(timer);
+        if(!d||!d.ok||!d.answer){if(box&&box.parentNode)box.parentNode.removeChild(box);return;}
+        const tags=sources.slice(0,4).map(x=>`<b>◈ ${x}</b>`).join("　");
+        const html=`<div class="ai-card"><span class="ai-tag">AI 依据原文生成</span><br>${aiSan(d.answer)}<div class="ai-src">参考典籍：${tags}<br>由 ${aiSan(d.model||"大模型")} 生成 · 已限定只引用上述原文；具体用药请咨询执业中医师</div></div>`;
+        const bd=box&&box.querySelector?box.querySelector(".bd"):null;
+        if(bd)bd.innerHTML=html;else box.innerHTML=`<div class="who">本草智答 · AI 典籍详解</div><div class="bd">${html}</div>`;
+        const cb=$("#chatBox");if(cb)cb.scrollTop=cb.scrollHeight;
+      })
+      .catch(()=>{try{clearTimeout(timer);}catch(e){}if(box&&box.parentNode)box.parentNode.removeChild(box);});
+  }catch(e){}
+}
+aiProbe();
 function pickText(pool,n){ // 分层抽题：难题优先保底，再补基础题
   const hard=shuffleArr(pool.filter(q=>q.d)),easy=shuffleArr(pool.filter(q=>!q.d));
   return hard.concat(easy).slice(0,n);
@@ -1797,6 +1905,9 @@ function send(q){
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
       bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
     }
+    // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
+    const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
+    aiDeepDive(q,aiTag);
   },600);
 }
 
