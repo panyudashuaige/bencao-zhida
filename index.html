@@ -47,7 +47,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 *::-webkit-scrollbar-thumb{background:#D8D2C0;border-radius:4px}
 *::-webkit-scrollbar-thumb:hover{background:var(--gold)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
-.wrap{max-width:1000px;margin:0 auto;padding:0 24px 70px;position:relative;z-index:1}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px 70px;position:relative;z-index:1}
 
 /* ===== 头部 ===== */
 header{padding:44px 0 8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
@@ -105,7 +105,7 @@ h2 .dot{color:var(--red)}
 .btn:active,.opts button:active,.game-opts button:active,.chips button:active,.filter button:active,.season-bar button:active{transform:scale(.96)!important;transition:transform .1s}
 .btn.ghost{background:none;color:var(--green);border:1px solid var(--green);box-shadow:none}
 .btn.ghost:hover{background:var(--green-l);transform:translateY(-2px)}
-.seal-side{display:flex;align-items:center;justify-content:center;min-width:230px;position:relative;border-radius:4px;background:linear-gradient(160deg,#F3E6E0,#EDDCD3);border:1px solid #E0C9BE}
+.seal-side{display:flex;align-items:center;justify-content:center;min-width:262px;position:relative;border-radius:4px;background:linear-gradient(160deg,#F3E6E0,#EDDCD3);border:1px solid #E0C9BE}
 .seal-side .zi{font-family:"Ma Shan Zheng",serif;font-size:54px;letter-spacing:14px;color:var(--red);writing-mode:vertical-rl;text-shadow:0 2px 0 rgba(166,62,40,.15)}
 .seal-side .circle{position:absolute;width:150px;height:150px;border:1px solid rgba(166,62,40,.25);border-radius:50%}
 .seal-side .circle.c2{width:190px;height:190px;opacity:.5}
@@ -192,7 +192,7 @@ html[data-season="秋"] .mascot-badge::after{content:"秋"}
 html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .side-mascot.acting{animation:none}
 @keyframes breathe{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}50%{transform:translateX(-50%) scale(1.025) translateY(-4px)}}
-.mascot-bubble{position:absolute;bottom:172px;left:50%;transform:translateX(-50%) translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:9px 13px;font-size:12.5px;line-height:1.6;max-width:170px;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.5px}
+.mascot-bubble{position:absolute;bottom:172px;left:50%;transform:translateX(-50%) translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:11px 15px;font-size:13px;line-height:1.85;max-width:224px;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.4px}
 .mascot-bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #FBF3E4}
 .mascot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .mascot-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;color:rgba(166,62,40,.65);background:rgba(251,243,228,.85);border:1px solid rgba(166,62,40,.25);padding:3px 10px;border-radius:999px;z-index:3;pointer-events:none;transition:opacity .4s}
@@ -207,6 +207,10 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .kv{margin:5px 0}
 .kv .k{color:var(--gold);margin-right:8px}
 .kv .k::before{content:"◈ "}
+.chat-box{height:440px;overflow-y:auto;border:1px solid var(--line);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:16px;background-color:#FCFBF6;background-image:radial-gradient(rgba(154,123,63,.075) 1px,transparent 1.5px);background-size:26px 26px}
+/* 桌面加宽后单栏页限宽居中，避免一行过长 */
+#p-chat>.card{max-width:880px;margin:0 auto;width:100%}
+#p-quiz>.card{max-width:880px;margin:0 auto;width:100%}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 .chips button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 16px;font-family:inherit;font-size:12.5px;color:var(--green);cursor:pointer;transition:all .2s}
 .chips button:hover{border-color:var(--green);background:var(--green-l);transform:translateY(-1px)}
