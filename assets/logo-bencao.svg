@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="本草智答文字印：由本草二字与中药材名组成的朱红印章">
+<title>本草 · 文字印</title>
+<desc>以「本草」二字为字形骨架，笔画内由人参、黄芪、当归等药名文字织成；外圈环绕神农尝百草、君臣佐使、望闻问切、四气五味，饰以回纹、艾叶、药葫芦与朱砂，取中医药印章之意。</desc>
+<defs>
+  <linearGradient id="sealRed" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#C85533"/>
+    <stop offset=".46" stop-color="#A63E28"/>
+    <stop offset="1" stop-color="#762517"/>
+  </linearGradient>
+  <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F2DFA8"/>
+    <stop offset=".38" stop-color="#B98E4F"/>
+    <stop offset=".68" stop-color="#EBD295"/>
+    <stop offset="1" stop-color="#9A7B3F"/>
+  </linearGradient>
+  <radialGradient id="sheen" cx=".34" cy=".26" r=".82">
+    <stop offset="0" stop-color="#FFF3DC" stop-opacity=".22"/>
+    <stop offset=".6" stop-color="#FFF3DC" stop-opacity="0"/>
+  </radialGradient>
+  <!-- 「本草」字形：整枚印的主骨，同时用作药名文字的遮罩 -->
+  <text id="bcGlyph" x="100" y="128" text-anchor="middle"
+        font-family="'Microsoft YaHei','PingFang SC','Hiragino Sans GB','SimHei','Noto Sans CJK SC',sans-serif"
+        font-size="64" font-weight="900" letter-spacing="6">本草</text>
+  <mask id="bcMask" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+    <use href="#bcGlyph" fill="#ffffff"/>
+  </mask>
+  <!-- 一枚艾叶：三片小叶 + 主茎 -->
+  <g id="aiLeaf" fill="none" stroke="#F2DFA8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity=".82">
+    <path d="M0 12 C0 7 1 3 2 0"/>
+    <path d="M0 10 C-5 10 -8 7 -9 3 C-5 2 -2 5 0 10 Z" fill="#F2DFA8" fill-opacity=".28"/>
+    <path d="M1 7 C5 7 8 4 9 0 C5 -1 2 2 1 7 Z" fill="#F2DFA8" fill-opacity=".28"/>
+    <path d="M1 4 C-2 3 -3 1 -3 -2 C0 -2 2 0 1 4 Z" fill="#F2DFA8" fill-opacity=".22"/>
+  </g>
+  <!-- 四角回纹 -->
+  <g id="corner" fill="none" stroke="#E8CD8E" stroke-width="1.4" stroke-linecap="square" opacity=".62">
+    <path d="M17 38 L17 25 Q17 17 25 17 L38 17"/>
+    <path d="M23 32 L23 25 Q23 23 25 23 L32 23" opacity=".7"/>
+  </g>
+</defs>
+
+<!-- 印面：朱砂红 + 鎏金双框 + 内细线 -->
+<rect x="3" y="3" width="194" height="194" rx="27" fill="url(#sealRed)" stroke="url(#sealGold)" stroke-width="3.4"/>
+<rect x="3" y="3" width="194" height="194" rx="27" fill="url(#sheen)"/>
+<rect x="11" y="11" width="178" height="178" rx="20" fill="none" stroke="#FFF3DC" stroke-width="1.1" opacity=".46"/>
+<rect x="15" y="15" width="170" height="170" rx="17" fill="none" stroke="#E8CD8E" stroke-width=".8" stroke-dasharray="2 5" opacity=".35"/>
+
+<!-- 印泥不匀的斑驳质感 -->
+<g fill="#FFF3DC" opacity=".055">
+  <circle cx="34" cy="58" r="5"/><circle cx="163" cy="47" r="3.5"/><circle cx="52" cy="151" r="4"/>
+  <circle cx="146" cy="152" r="5.5"/><circle cx="99" cy="22" r="2.6"/><circle cx="178" cy="112" r="3"/>
+  <circle cx="24" cy="112" r="2.4"/><circle cx="112" cy="186" r="3.2"/>
+</g>
+
+<!-- 四角回纹（四向对称） -->
+<use href="#corner"/>
+<use href="#corner" transform="translate(200 0) scale(-1 1)"/>
+<use href="#corner" transform="translate(0 200) scale(1 -1)"/>
+<use href="#corner" transform="translate(200 200) scale(-1 -1)"/>
+
+<!-- 顶部：神农尝百草 + 一对艾叶 + 朱砂点 -->
+<text x="100" y="30" text-anchor="middle" font-family="'STKaiti','KaiTi','SimSun',serif" font-size="12.5" letter-spacing="4" fill="#F7E8C6" opacity=".94">神农尝百草</text>
+<use href="#aiLeaf" transform="translate(46 20) scale(.62) rotate(-18)"/>
+<use href="#aiLeaf" transform="translate(154 20) scale(.62) scale(-1 1) rotate(18)"/>
+<circle cx="63" cy="25" r="2.2" fill="#E8704B" stroke="#F2DFA8" stroke-width=".7"/>
+<circle cx="137" cy="25" r="2.2" fill="#E8704B" stroke="#F2DFA8" stroke-width=".7"/>
+
+<!-- 左右印边：四诊与药性，逐字竖排 -->
+<g font-family="'STKaiti','KaiTi','SimSun',serif" font-size="12" text-anchor="middle" fill="#F2DFA8" opacity=".9">
+  <text x="22" y="73">望</text><text x="22" y="91">闻</text><text x="22" y="109">问</text><text x="22" y="127">切</text>
+  <text x="178" y="73">四</text><text x="178" y="91">气</text><text x="178" y="109">五</text><text x="178" y="127">味</text>
+</g>
+
+<!-- 核心：本草二字的笔画由中药材名文字织成 -->
+<use href="#bcGlyph" fill="#FFF3DC" stroke="#FFF9EC" stroke-width="1"/>
+<g mask="url(#bcMask)" transform="rotate(-7 100 100)"
+   font-family="'STKaiti','KaiTi','SimSun',serif" font-size="10.6" letter-spacing=".6"
+   fill="#8E3420" opacity=".72">
+  <text x="2" y="56">人参 黄芪 当归 甘草 桂枝 茯苓 白术</text>
+  <text x="-6" y="69">芍药 生姜 大枣 陈皮 半夏 桔梗 杏仁</text>
+  <text x="2" y="82">川芎 地黄 麦冬 五味 连翘 金银花 薄荷</text>
+  <text x="-6" y="95">白芷 防风 柴胡 黄芩 黄连 知母 贝母</text>
+  <text x="2" y="108">山药 薏苡 莲子 芡实 枸杞 菊花 桑叶</text>
+  <text x="-6" y="121">丹参 红花 桃仁 牛膝 杜仲 续断 补骨脂</text>
+  <text x="2" y="134">砂仁 木香 厚朴 苍术 泽泻 猪苓 车前子</text>
+  <text x="-6" y="147">艾叶 炮姜 附子 肉桂 吴茱萸 丁香 花椒</text>
+</g>
+<use href="#bcGlyph" fill="none" stroke="#F6E4BC" stroke-width="1.5" opacity=".92"/>
+
+<!-- 底部：药葫芦与配伍术语 -->
+<g>
+  <rect x="98.2" y="149" width="3.6" height="4.4" rx="1.2" fill="#F7E8C6"/>
+  <path d="M96.5 148.2 L103.5 148.2 L103.5 146 L96.5 146 Z" fill="#D9B878"/>
+  <circle cx="100" cy="156" r="4.6" fill="#F7E8C6"/>
+  <circle cx="100" cy="164.4" r="7.2" fill="#F7E8C6"/>
+  <path d="M92.6 161.5 Q100 165.4 107.4 161.5" fill="none" stroke="#A63E28" stroke-width="1.5" opacity=".75"/>
+  <circle cx="100" cy="164.4" r="2.1" fill="#A63E28" opacity=".55"/>
+</g>
+<text x="100" y="184" text-anchor="middle" font-family="'STKaiti','KaiTi','SimSun',serif" font-size="11" letter-spacing="2.2" fill="#F7E8C6" opacity=".92">君臣佐使 · 岐黄智答</text>
+</svg>
