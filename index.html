@@ -506,7 +506,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <div class="circle"></div><div class="circle c2"></div>
       <span class="zi">岐黄薪火</span>
       <div class="mascot-bubble" id="mascotBubble"></div>
-      <img class="side-mascot" id="mascot" src="assets/mascot-idle.png" alt="本草智答 · AI小药童" title="点我互动">
+      <img class="side-mascot" id="mascot" src="assets/mascot-idle.png" alt="本草智答 · AI小药童" title="点我互动" fetchpriority="high" decoding="async">
       <span class="mascot-badge" title="小药童的时令腰牌"></span>
       <span class="mascot-hint" id="mascotHint">点我互动</span>
     </div>
@@ -534,7 +534,29 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   </div>
 </section>
 
-<section class="page" id="p-quiz">
+<section class="page" id="p-quiz"></section>
+
+<section class="page" id="p-chat"></section>
+
+<section class="page" id="p-read"></section>
+
+<section class="page" id="p-album"></section>
+
+<section class="page" id="p-game"></section>
+
+<section class="page" id="p-checkin"></section>
+
+<footer>
+  <div class="orn2">本草有灵 · 智答无界</div>
+  本草智答 · 书香岐黄AI赋能——图书馆"AI+管理服务"大赛参赛作品 · 知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议
+</footer>
+</div>
+<div class="read-mask" id="readMask" onclick="if(event.target===this)closeRead()"></div>
+
+<script>
+/* ===== 页面骨架模板：只存字符串，首次进入才注入 DOM，避免 7 个模块一次性渲染 ===== */
+const PAGE_HTML={
+ quiz:`
   <div class="card" id="quizBody">
     <div class="orn">体 质 辨 识</div>
     <h2>九种体质<span class="dot"> · </span>识己而后养生</h2>
@@ -547,14 +569,12 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div id="qList"></div>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="calcQuiz()">提交 · AI判定体质</button></div>
   </div>
-  <div class="card result" id="quizResult" style="display:none"></div>
-</section>
-
-<section class="page" id="p-chat">
+  <div class="card result" id="quizResult" style="display:none"></div>`,
+ chat:`
   <div class="chips" id="chips"></div>
   <div class="card" style="padding:18px 22px 22px">
     <div class="bot-id">
-      <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答">
+      <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答" loading="lazy" decoding="async">
       <div><b>本草智答</b><span>你的 AI 小药童 · 熟读经典 有问必答</span></div>
       <div class="ai-bar">
         <span class="ai-state" id="aiState">检测 AI 中…</span>
@@ -566,10 +586,8 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <input id="chatInput" placeholder="试着问：黄芪有什么功效？ / 上火了怎么办？ / 四君子汤…" onkeydown="if(event.key==='Enter')send()">
       <button class="btn" onclick="send()">提 问</button>
     </div>
-  </div>
-</section>
-
-<section class="page" id="p-read">
+  </div>`,
+ read:`
   <div class="card">
     <div class="orn">经 典 荐 读</div>
     <h2>读经典<span class="dot"> · </span>识本草</h2>
@@ -577,19 +595,15 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
     <div class="filter" id="filter"></div>
     <div class="books" id="books"></div>
-  </div>
-</section>
-
-<section class="page" id="p-album">
+  </div>`,
+ album:`
   <div class="card">
     <div class="orn">本 草 图 鉴</div>
     <h2>集章录<span class="dot"> · </span>百草园藏画</h2>
     <p class="desc">你与本草的每一次相遇都会被药童记在小本本上：<b>问答里问到</b>、<b>辨药答对</b>、<b>每日本草打卡</b>，都能点亮对应的工笔画像并盖上朱印。集齐十四味，便是百草园主。</p>
     <div id="albumArea"></div>
-  </div>
-</section>
-
-<section class="page" id="p-game">
+  </div>`,
+ game:`
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
     <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
@@ -599,30 +613,20 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
     </div>
     <div class="bot-id game-bot" id="gameBot">
-      <img id="gameBotImg" src="assets/mascot-idle.png" alt="小药童裁判">
+      <img id="gameBotImg" src="assets/mascot-idle.png" alt="小药童裁判" loading="lazy" decoding="async">
       <div class="gbot-bubble" id="gameBotSay">本药童当裁判！选个模式开局，答对答错我都吭声〜</div>
     </div>
     <div id="gameArea"></div>
-  </div>
-</section>
-
-<section class="page" id="p-checkin">
+  </div>`,
+ checkin:`
   <div class="card" id="checkinBody">
     <div class="orn">岐 黄 打 卡</div>
     <h2>每日一格<span class="dot"> · </span>集满本草</h2>
     <p class="desc">图书馆中医药文化节 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
     <div id="checkinArea"></div>
-  </div>
-</section>
+  </div>`
+};
 
-<footer>
-  <div class="orn2">本草有灵 · 智答无界</div>
-  本草智答 · 书香岐黄AI赋能——图书馆"AI+管理服务"大赛参赛作品 · 知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议
-</footer>
-</div>
-<div class="read-mask" id="readMask" onclick="if(event.target===this)closeRead()"></div>
-
-<script>
 const HERBS=[
  {n:"黄芪",f:"甘，微温 · 归脾、肺经",x:"圆柱形切片，外皮浅黄白，断面「金盏银盘」、皮部有菊花心状裂隙，味微甜带豆腥气。",e:"补气升阳、固表止汗、利水消肿，被誉为\u201c补气之长\u201d，是气虚体质的常用之品。",s:"《神农本草经》列为上品：\u201c主痈疽久败疮……补虚。\u201d李时珍《本草纲目》释其名曰：\u201c耆，长也。黄耆色黄，为补药之长。\u201d",b:"《神农本草经》《本草纲目》草部"},
  {n:"当归",f:"甘、辛，温 · 归肝、心、脾经",x:"表面黄棕色，断面黄白色、散布棕色油点（朱砂点），香气浓郁特异。",e:"补血活血、调经止痛、润肠通便，素有\u201c血中圣药\u201d之称。",s:"《本草纲目》：\u201c当归治头痛、心腹诸痛，润肠胃筋骨皮肤。\u201d古人取\u201c能使气血各有所归\u201d之义命名。",b:"《本草纲目》《千金方》"},
@@ -948,7 +952,28 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
   card.addEventListener("mouseenter",on);card.addEventListener("mouseleave",off);
 });
 
+/* ===== 惰性挂载：7 个页面初始只留空壳，首次进入才注入模板并生成数据视图 ===== */
+const PAGE_MOUNTED={home:true};
+const PAGE_INIT={
+  quiz:()=>{renderQuiz();restorePhys();},
+  chat:()=>{},                                  // 推荐问题由 go() 每次进页时刷新
+  read:()=>{renderFilter();renderBooks();},     // 筛选条 + 十二张书卡
+  album:()=>{},                                 // 集章墙由 go() 刷新
+  game:()=>{
+    const bot=$("#gameBot");if(bot&&window._game)bot.style.display=window._game.mode==="contest"?"flex":"none";
+    if(window._game)renderGameQ();else startGame();
+  },
+  checkin:()=>{}                                // 日历由 go() 刷新
+};
+function mountPage(p){
+  if(PAGE_MOUNTED[p])return;
+  PAGE_MOUNTED[p]=true;
+  const sec=$("#p-"+p);
+  if(sec&&PAGE_HTML[p])sec.innerHTML=PAGE_HTML[p];
+  const init=PAGE_INIT[p];if(init)init();
+}
 function go(p){
+  mountPage(p);
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
   document.querySelectorAll(".page").forEach(s=>s.classList.remove("on"));
   $("#p-"+p).classList.add("on");
@@ -976,7 +1001,7 @@ function go(p){
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   let acting=false,tipTimer,hintShown=false,tipSeason=null;
   // 预载动作 WebP，点击时零延迟
-  const pre=new Image();pre.src=ACT;
+  setTimeout(()=>{const pre=new Image();pre.src=ACT;},1800); // 首屏空闲后再预载动作图，别和首屏插画抢带宽
   function showTip(){
     const s=seasonOf();
     let t;
@@ -1022,7 +1047,7 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
   <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:14px">${h.e}</p>
   <div class="src">${h.s}</div>
   <div class="ask"><a href="#" onclick="askKB('${h.n}');return false">问一问「本草智答」：${h.n}怎么吃？ →</a></div></div>
-  <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'"></div><span class="cap">本 草 对 照</span></div>`;
+  <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'" loading="lazy" decoding="async"></div><span class="cap">本 草 对 照</span></div>`;
 })();
 
 /* ===== 百草试炼小游戏 ===== */
@@ -1267,6 +1292,7 @@ function startGame(mode){
   const qs=buildPaper(mode==="contest"); // 练习与竞赛共用同一套混合卷生成器（练习 14 题/竞赛 21 题），仅计规则不同
   const bot=$("#gameBot");if(bot)bot.style.display=mode==="contest"?"flex":"none"; // 练习不打扰：小药童只在竞赛登场当裁判
   window._game={qs,i:0,score:0,mode,timer:null};
+  if(!PAGE_MOUNTED.game)return; // 尚未进入试炼页：只备好卷子，不渲染题面、不加载题图
   renderGameQ();
 }
 /* 混合出卷：练习 2 图像 + 5 经典 + 5 全站 + 2 辨药眼力 = 14 题；竞赛 3 + 8 + 8 + 2 = 21 题，难题保底打乱；竞赛后台题库最多热替换 8 道文字题，不足由内置补齐 */
@@ -1294,7 +1320,7 @@ function renderGameQ(){
   const contest=g.mode==="contest";
   const body=q.kind==="mcq"
     ? `<div class="game-qtext"><span class="qt-tag">◈ ${q.tag} ◈</span><br>${q.q}</div>`
-    : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.jpg" alt="本草工笔插画"></div>`;
+    : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.jpg" alt="本草工笔插画" decoding="async" fetchpriority="high"></div>`;
   $("#gameArea").innerHTML=`
     ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">${CONTEST_LIMIT}s</span></div>`:""}
     <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / ${g.qs.length}</b><span>第几道题</span></div></div>
@@ -1494,7 +1520,6 @@ function renderCheckin(){
       <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
     </div>`;
 }
-renderCheckin(); // 载入即渲染（页面隐藏时无妨）
 function renderAlbum(){
   const d=alGet(),n=alCount();
   const t=AL_TITLES.find(x=>n>=x[0]);
@@ -1507,8 +1532,8 @@ function renderAlbum(){
     <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="makePoster()">◈ 生成我的名帖</button></div>
     <div class="album-grid">${HERBS.map(h=>{
       const got=d[h.n];
-      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
-        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="未解锁"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
+      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
+        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
     }).join("")}</div>
     <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 百草试炼答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
@@ -1521,9 +1546,12 @@ function physGet(){try{return JSON.parse(localStorage.getItem("bzPhysique")||"nu
   const p=physGet();if(!p)return;
   const badge=$("#physBadge");
   if(badge){badge.style.display="inline-flex";badge.innerHTML=`◈ 你的体质档案：<b>${p.n}</b>（${p.j}）· ${p.d}辨识 · 点击复查`;}
+})();
+function restorePhys(){
+  const p=physGet();if(!p)return;
   const lp=$("#lastPhys");
   if(lp){lp.style.display="block";lp.innerHTML=`◈ 上次辨识：<b>${p.n}</b>（${p.j}）· ${p.d} —— <a onclick="go('chat');setTimeout(()=>send('${p.n.replace("质","")}体质怎么调理'),80)">咨询药童调理</a> · 下方量表重新作答即可更新档案`;}
-})();
+}
 
 /* ===== 本草名帖 · 一键生成分享海报（纯前端 canvas，无服务器） ===== */
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
@@ -1660,7 +1688,7 @@ function makePoster(){
   window.CUR_TERM=t; // 供问答联动读取当前节气
   $("#termCard").innerHTML=`
     <div class="orn">节 气 · 养 生</div>
-    <img class="season-img" id="seasonImg" src="assets/${SEASON_IMG[seasonOf()]}" alt="当季插画 · ${seasonOf()}">
+    <img class="season-img" id="seasonImg" src="assets/${SEASON_IMG[seasonOf()]}" alt="当季插画 · ${seasonOf()}" loading="lazy" decoding="async">
     <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
       <span class="term-name">${t[0]}</span>
       <span style="font-size:12px;color:var(--ink3);letter-spacing:3px">当前节气 · 农历岁时</span>
@@ -1687,7 +1715,6 @@ function renderQuiz(){
     quizAns[g.dataset.i]=+b.dataset.v;
   }));
 }
-renderQuiz();
 function calcQuiz(){
   if(Object.keys(quizAns).length<QUIZ_ACT.length){alert("还有题目未作答哦");return;}
   // ===== 国标算法：原始分 → 转化分数 → 判定（速测版条目数=1，公式同样适用）=====
@@ -1757,12 +1784,11 @@ function chipQ(){
   return anchor.concat(shuffle(CHIP_POOL.slice()).slice(0,4),shuffle(CHIP_FUN.slice()).slice(0,3)); // 锚点2 + 随机养生4 + 随机趣味3
 }
 function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("")+`<button class="chip-rf" onclick="renderChips()" title="换一批推荐问题">⟳ 换一批</button>`;}
-renderChips();
 function bubble(who,html,me){
   const d=document.createElement("div");d.className="msg "+(me?"me":"bot");
   d.innerHTML=me?`<div class="who">${who}</div><div class="bd">${html}</div>`
-    :`<img class="bot-avatar" src="assets/mascot3d.png" alt="本草智答"><div><div class="who">${who}</div><div class="bd">${html}</div></div>`;
-  $("#chatBox").appendChild(d);$("#chatBox").scrollTop=$("#chatBox").scrollHeight;
+    :`<img class="bot-avatar" src="assets/mascot3d.png" alt="本草智答" loading="lazy" decoding="async"><div><div class="who">${who}</div><div class="bd">${html}</div></div>`;
+  const cb=$("#chatBox");if(cb){cb.appendChild(d);cb.scrollTop=cb.scrollHeight;}
   return d;
 }
 function typing(){
@@ -1922,14 +1948,15 @@ function send(q){
   },600);
 }
 
-(function(){
+function renderFilter(){
   const cats=["全部",...new Set(BOOKS.flatMap(b=>b.tg))];
-  $("#filter").innerHTML=cats.map(c=>`<button data-c="${c}" class="${c==="全部"?"sel":""}">${c}</button>`).join("");
-  document.querySelectorAll("#filter button").forEach(b=>b.onclick=()=>{
-    document.querySelectorAll("#filter button").forEach(x=>x.classList.toggle("sel",x===b));
+  const box=$("#filter");if(!box)return;
+  box.innerHTML=cats.map(c=>`<button data-c="${c}" class="${c==="全部"?"sel":""}">${c}</button>`).join("");
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    box.querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
     renderBooks(b.dataset.c);
   });
-})();
+}
 function renderBooks(f){
   const on=f||"全部";
   const fitArr=lastQuiz?CONSTITUTIONS[lastQuiz].books:[];
@@ -1956,14 +1983,14 @@ const HEAD_BOOKS=["伤寒论","黄帝内经","神农本草经","本草纲目","�
 function renderHeadBooks(){
   const el=$("#hdBooks");if(!el)return;
   const ribbon=el.querySelector(".hd-ribbon");
-  el.innerHTML=HEAD_BOOKS.map(t=>`<figure><figcaption>${t}</figcaption><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》" title="翻开《${t}》读选段" onclick="openRead('${t}')"></figure>`).join("")+(ribbon?ribbon.outerHTML:"");
+  el.innerHTML=HEAD_BOOKS.map(t=>`<figure><figcaption>${t}</figcaption><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》" title="翻开《${t}》读选段" onclick="openRead('${t}')" decoding="async" width="126" height="126"></figure>`).join("")+(ribbon?ribbon.outerHTML:"");
 }
 renderHeadBooks();
 function openRead(t){
   const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;  $("#readMask").innerHTML=`
    <div class="read-modal" onclick="event.stopPropagation()">
      <button class="rm-close" onclick="closeRead()" title="合上">✕</button>
-     <div class="rm-cover"><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'">
+     <div class="rm-cover"><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">
        <div class="rm-title"><h3>《${t}》</h3><span>${b.au} · ${b.diff}读物</span></div></div>
      <div class="rm-body">
        <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span></div>
@@ -1978,7 +2005,6 @@ function openRead(t){
   $("#readMask").classList.add("on");
 }
 function closeRead(){$("#readMask").classList.remove("on");}
-renderBooks();
 </script>
 </body>
 </html>
