@@ -57,24 +57,18 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 header.top-hero{width:100%;position:relative;background:linear-gradient(115deg,var(--hd-1),var(--hd-2) 52%,var(--hd-3));border-top:3px solid var(--gold);border-bottom:1px solid var(--line);box-shadow:0 6px 22px rgba(43,43,38,.1);overflow:hidden}
 header.top-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 88% 6%,var(--hd-glow),transparent 58%),radial-gradient(ellipse at 8% 130%,var(--hd-veil),transparent 52%);opacity:.9;pointer-events:none}
 header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 10%,var(--gold) 90%,transparent);opacity:.75;pointer-events:none}
-.hd-inner{max-width:1280px;margin:0 auto;padding:30px 20px 26px;display:flex;align-items:center;gap:26px;position:relative;z-index:1}
-.hd-inner::before{content:"";position:absolute;right:-20px;top:-60px;width:48%;height:160%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent);mask-image:radial-gradient(closest-side,#000 40%,transparent)}
-.hd-left{display:flex;align-items:center;gap:20px;flex:none;position:relative;z-index:1;padding-left:16px}
-.hd-left::before{content:"";position:absolute;left:0;top:-6px;bottom:-6px;width:3px;background:linear-gradient(var(--gold),rgba(154,123,63,.15));border-radius:2px}
-/* 水墨字标：浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆；留白为主，光晕随季呼应 */
-.seal-stamp{width:120px;height:120px;flex:none;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,rgba(255,252,244,.94),rgba(255,250,238,.6) 70%,transparent 79%)}
-.seal-stamp::before{content:"";position:absolute;inset:-8px;border-radius:50%;box-shadow:0 0 22px var(--hd-glow);pointer-events:none;z-index:0}
+.hd-inner{max-width:1600px;margin:0 auto;padding:34px 40px 30px;display:flex;align-items:center;gap:38px;position:relative;z-index:1}
+.hd-inner::before{content:"";position:absolute;right:-20px;top:-60px;width:52%;height:170%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.14;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent);mask-image:radial-gradient(closest-side,#000 40%,transparent)}
+.hd-left{display:flex;align-items:center;flex:none;position:relative;z-index:1}
+/* 水墨字标：放大为页眉主视觉；浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
+.seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,rgba(255,252,244,.72),rgba(255,250,238,.28) 68%,transparent 82%)}
+.seal-stamp::before{content:"";position:absolute;inset:-14px;border-radius:50%;box-shadow:0 0 46px var(--hd-glow);pointer-events:none;z-index:0}
 .seal-stamp img{width:100%;height:100%;display:block;position:relative;z-index:1}
-.logo-group{flex:none;min-width:0}
-.logo{font-size:44px;font-weight:900;letter-spacing:12px;color:var(--hd-ink);line-height:1.15;text-shadow:0 2px 0 rgba(255,255,255,.65),0 5px 14px rgba(43,43,38,.13)}
-.logo em{font-style:normal;color:var(--red);text-shadow:0 2px 0 rgba(255,255,255,.55),0 4px 12px rgba(166,62,40,.28)}
-.sub{color:var(--ink2);font-size:12.5px;letter-spacing:4px;margin-top:8px;white-space:nowrap;display:flex;align-items:center;gap:10px}
-.sub::before,.sub::after{content:"◆";color:var(--gold);font-size:7px;opacity:.85}
-.head-verse{font-family:"Ma Shan Zheng","Noto Serif SC",serif;color:var(--gold);font-size:14px;writing-mode:vertical-rl;letter-spacing:5px;border-left:1px solid rgba(154,123,63,.4);border-right:1px solid rgba(154,123,63,.25);padding:0 12px;height:130px;white-space:nowrap;flex:none;position:relative;z-index:1;background:linear-gradient(90deg,transparent,rgba(154,123,63,.07),transparent)}
-.hd-books{flex:1;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;gap:14px 16px;min-width:0;position:relative;z-index:1}
+.head-verse{font-family:"Ma Shan Zheng","Noto Serif SC",serif;color:var(--gold);font-size:13px;writing-mode:vertical-rl;letter-spacing:6px;border-left:1px solid rgba(154,123,63,.4);border-right:1px solid rgba(154,123,63,.25);padding:0 10px;height:190px;white-space:nowrap;flex:none;position:relative;z-index:1;background:linear-gradient(90deg,transparent,rgba(154,123,63,.07),transparent)}
+.hd-books{flex:1;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;gap:16px 20px;min-width:0;position:relative;z-index:1}
 .hd-books figure{margin:0;text-align:center;flex:none}
-.hd-books figcaption{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:9px;letter-spacing:2px;white-space:nowrap}
-.hb-3d{position:relative;width:108px;height:136px;margin:0 auto;transform:perspective(620px) rotateY(-14deg);filter:drop-shadow(0 12px 14px rgba(43,43,38,.3));transition:transform .35s,filter .35s}
+.hd-books figcaption{font-size:12px;color:var(--gold);font-weight:600;margin-bottom:10px;letter-spacing:2px;white-space:nowrap}
+.hb-3d{position:relative;width:128px;height:160px;margin:0 auto;transform:perspective(620px) rotateY(-14deg);filter:drop-shadow(0 12px 14px rgba(43,43,38,.3));transition:transform .35s,filter .35s}
 .hd-book:hover .hb-3d{transform:perspective(620px) rotateY(-6deg) translateY(-7px);filter:drop-shadow(0 18px 20px rgba(43,43,38,.34))}
 .hb-spine{position:absolute;left:0;top:0;width:19px;height:100%;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#5B2F1B,#9A5A32 42%,#43220F);border:1px solid rgba(255,235,200,.2);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:inset -3px 0 7px rgba(0,0,0,.4)}
 .hb-spine span{writing-mode:vertical-rl;color:#F3E2C0;font-size:10px;letter-spacing:2px}
@@ -82,10 +76,10 @@ header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;heig
 .hb-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .hb-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,.3),transparent 26%,transparent 72%,rgba(0,0,0,.16));pointer-events:none}
 .hb-label{position:absolute;right:6px;top:9px;writing-mode:vertical-rl;background:rgba(248,239,216,.94);color:#7A3A22;border:1px solid rgba(133,94,44,.55);padding:7px 3px;font-size:11px;letter-spacing:2px;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:1}
-.hd-ribbon{position:static;flex:0 0 100%;z-index:2;background:linear-gradient(90deg,#8E6A34,#B98E4F 18%,#E8CD8E 50%,#B98E4F 82%,#8E6A34);color:#FFFDF4;font-family:"Noto Serif SC",serif;font-size:12.5px;letter-spacing:6px;text-align:center;padding:8px 10px;white-space:nowrap;border-top:1px solid rgba(255,240,200,.55);border-bottom:1px solid rgba(90,60,20,.35);text-shadow:0 1px 2px rgba(80,50,10,.5);box-shadow:0 5px 16px rgba(133,94,44,.35);pointer-events:none}
-@media(max-width:1000px){.head-verse{display:none}.hb-3d{width:82px;height:104px}.hd-books figure:nth-child(n+5){display:none}.logo{font-size:38px;letter-spacing:9px}.seal-stamp{width:108px;height:108px}}
-@media(max-width:720px){.hd-inner{flex-wrap:wrap;padding:20px 18px 30px;gap:14px}.hd-books{flex:0 0 100%;width:100%;justify-content:center;gap:12px}.hb-3d{width:72px;height:92px}.hd-ribbon{font-size:11.5px;letter-spacing:3px}.logo{font-size:34px;letter-spacing:8px}.seal-stamp{width:96px;height:96px}}
-@media(max-width:560px){.hd-books figure:nth-child(n+4){display:none}.hb-3d{width:62px;height:80px}.seal-stamp{width:84px;height:84px}.logo{font-size:26px;letter-spacing:6px}.sub{font-size:11px;letter-spacing:1px}.hd-ribbon{letter-spacing:1px;font-size:10.5px}}
+.hd-ribbon{position:static;flex:0 0 100%;z-index:2;background:linear-gradient(90deg,#8E6A34,#B98E4F 18%,#E8CD8E 50%,#B98E4F 82%,#8E6A34);color:#FFFDF4;font-family:"Noto Serif SC",serif;font-size:14px;letter-spacing:7px;text-align:center;padding:10px 12px;white-space:nowrap;border-top:1px solid rgba(255,240,200,.55);border-bottom:1px solid rgba(90,60,20,.35);text-shadow:0 1px 2px rgba(80,50,10,.5);box-shadow:0 5px 16px rgba(133,94,44,.35);pointer-events:none}
+@media(max-width:1000px){.head-verse{display:none}.hb-3d{width:96px;height:122px}.hd-books figure:nth-child(n+5){display:none}.seal-stamp{width:180px;height:180px}}
+@media(max-width:720px){.hd-inner{flex-wrap:wrap;padding:24px 20px 30px;gap:18px}.hd-books{flex:0 0 100%;width:100%;justify-content:center;gap:12px}.hb-3d{width:72px;height:92px}.hd-ribbon{font-size:11.5px;letter-spacing:3px}.seal-stamp{width:150px;height:150px}}
+@media(max-width:560px){.hd-books figure:nth-child(n+4){display:none}.hb-3d{width:62px;height:80px}.seal-stamp{width:120px;height:120px}.hd-ribbon{letter-spacing:1px;font-size:10.5px}}
 
 /* ===== 导航 ===== */
 nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
@@ -471,11 +465,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 <header class="top-hero">
  <div class="hd-inner">
   <div class="hd-left">
-    <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草、朱红智答小印与一笔飞白水墨圆" width="120" height="120" decoding="async" fetchpriority="high"></div>
-    <div class="logo-group">
-      <div class="logo">本草<em>智答</em></div>
-      <div class="sub">AI中医药知识问答与经典荐读智能体</div>
-    </div>
+    <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草、朱红智答小印与一笔飞白水墨圆" width="220" height="220" decoding="async" fetchpriority="high"></div>
   </div>
   <div class="head-verse">传承岐黄薪火</div>
   <div class="hd-books" id="hdBooks">
