@@ -61,10 +61,10 @@ header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;heig
 .hd-inner::before{content:"";position:absolute;right:-20px;top:-60px;width:48%;height:160%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent);mask-image:radial-gradient(closest-side,#000 40%,transparent)}
 .hd-left{display:flex;align-items:center;gap:20px;flex:none;position:relative;z-index:1;padding-left:16px}
 .hd-left::before{content:"";position:absolute;left:0;top:-6px;bottom:-6px;width:3px;background:linear-gradient(var(--gold),rgba(154,123,63,.15));border-radius:2px}
-/* 本草文字印：字形由药材名织成，外圈中医术语作印边；朱砂鎏金不随季变，光晕随季呼应 */
-.seal-stamp{width:108px;height:108px;flex:none;position:relative;display:grid;place-items:center;filter:drop-shadow(0 10px 18px rgba(120,40,24,.3))}
-.seal-stamp::before{content:"";position:absolute;inset:6px;border-radius:26px;box-shadow:0 0 22px var(--hd-glow);pointer-events:none}
-.seal-stamp img{width:100%;height:100%;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
+/* 水墨字标：浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆；留白为主，光晕随季呼应 */
+.seal-stamp{width:120px;height:120px;flex:none;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,rgba(255,252,244,.94),rgba(255,250,238,.6) 70%,transparent 79%)}
+.seal-stamp::before{content:"";position:absolute;inset:-8px;border-radius:50%;box-shadow:0 0 22px var(--hd-glow);pointer-events:none;z-index:0}
+.seal-stamp img{width:100%;height:100%;display:block;position:relative;z-index:1}
 .logo-group{flex:none;min-width:0}
 .logo{font-size:44px;font-weight:900;letter-spacing:12px;color:var(--hd-ink);line-height:1.15;text-shadow:0 2px 0 rgba(255,255,255,.65),0 5px 14px rgba(43,43,38,.13)}
 .logo em{font-style:normal;color:var(--red);text-shadow:0 2px 0 rgba(255,255,255,.55),0 4px 12px rgba(166,62,40,.28)}
@@ -83,9 +83,9 @@ header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;heig
 .hb-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,.3),transparent 26%,transparent 72%,rgba(0,0,0,.16));pointer-events:none}
 .hb-label{position:absolute;right:6px;top:9px;writing-mode:vertical-rl;background:rgba(248,239,216,.94);color:#7A3A22;border:1px solid rgba(133,94,44,.55);padding:7px 3px;font-size:11px;letter-spacing:2px;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:1}
 .hd-ribbon{position:static;flex:0 0 100%;z-index:2;background:linear-gradient(90deg,#8E6A34,#B98E4F 18%,#E8CD8E 50%,#B98E4F 82%,#8E6A34);color:#FFFDF4;font-family:"Noto Serif SC",serif;font-size:12.5px;letter-spacing:6px;text-align:center;padding:8px 10px;white-space:nowrap;border-top:1px solid rgba(255,240,200,.55);border-bottom:1px solid rgba(90,60,20,.35);text-shadow:0 1px 2px rgba(80,50,10,.5);box-shadow:0 5px 16px rgba(133,94,44,.35);pointer-events:none}
-@media(max-width:1000px){.head-verse{display:none}.hb-3d{width:82px;height:104px}.hd-books figure:nth-child(n+5){display:none}.logo{font-size:38px;letter-spacing:9px}.seal-stamp{width:96px;height:96px}}
-@media(max-width:720px){.hd-inner{flex-wrap:wrap;padding:20px 18px 30px;gap:14px}.hd-books{flex:0 0 100%;width:100%;justify-content:center;gap:12px}.hb-3d{width:72px;height:92px}.hd-ribbon{font-size:11.5px;letter-spacing:3px}.logo{font-size:34px;letter-spacing:8px}.seal-stamp{width:88px;height:88px}}
-@media(max-width:560px){.hd-books figure:nth-child(n+4){display:none}.hb-3d{width:62px;height:80px}.seal-stamp{width:76px;height:76px}.logo{font-size:26px;letter-spacing:6px}.sub{font-size:11px;letter-spacing:1px}.hd-ribbon{letter-spacing:1px;font-size:10.5px}}
+@media(max-width:1000px){.head-verse{display:none}.hb-3d{width:82px;height:104px}.hd-books figure:nth-child(n+5){display:none}.logo{font-size:38px;letter-spacing:9px}.seal-stamp{width:108px;height:108px}}
+@media(max-width:720px){.hd-inner{flex-wrap:wrap;padding:20px 18px 30px;gap:14px}.hd-books{flex:0 0 100%;width:100%;justify-content:center;gap:12px}.hb-3d{width:72px;height:92px}.hd-ribbon{font-size:11.5px;letter-spacing:3px}.logo{font-size:34px;letter-spacing:8px}.seal-stamp{width:96px;height:96px}}
+@media(max-width:560px){.hd-books figure:nth-child(n+4){display:none}.hb-3d{width:62px;height:80px}.seal-stamp{width:84px;height:84px}.logo{font-size:26px;letter-spacing:6px}.sub{font-size:11px;letter-spacing:1px}.hd-ribbon{letter-spacing:1px;font-size:10.5px}}
 
 /* ===== 导航 ===== */
 nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
@@ -471,7 +471,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 <header class="top-hero">
  <div class="hd-inner">
   <div class="hd-left">
-    <div class="seal-stamp"><img src="assets/logo-kling.png" alt="本草智答 · 朱红鎏金本草印" width="108" height="108" decoding="async" fetchpriority="high"></div>
+    <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草、朱红智答小印与一笔飞白水墨圆" width="120" height="120" decoding="async" fetchpriority="high"></div>
     <div class="logo-group">
       <div class="logo">本草<em>智答</em></div>
       <div class="sub">AI中医药知识问答与经典荐读智能体</div>
