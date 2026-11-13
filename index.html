@@ -395,6 +395,23 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .game-timer .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px}
 .game-timer .sec{font-family:"Ma Shan Zheng",serif;font-size:18px;color:var(--red);min-width:44px;text-align:right}
 .game-timer .bar i.low{background:var(--red)}
+/* ===== 试炼待机屏 / 竞赛开卷预警 / 开卷倒数 ===== */
+.game-idle,.game-ready,.game-countdown{max-width:560px;margin:8px auto 0;text-align:center;background:var(--paper);border:1px dashed var(--gold);border-radius:8px;padding:26px 24px 22px;box-shadow:var(--shadow)}
+.game-idle .gi-seal{display:inline-grid;place-items:center;width:62px;height:62px;border:2px solid var(--red);border-radius:8px;color:var(--red);font-family:"Ma Shan Zheng",serif;font-size:32px;transform:rotate(-4deg);margin-bottom:12px}
+.game-idle h3,.game-ready h3{font-family:"Ma Shan Zheng",serif;font-weight:400;font-size:27px;color:var(--ink);margin:2px 0 10px;letter-spacing:2px}
+.game-idle p,.game-ready p{font-size:13.5px;line-height:2;color:var(--ink2);margin:0 auto 12px;max-width:460px}
+.game-idle .gi-note,.game-ready .gr-note{font-size:12px;color:var(--ink3);letter-spacing:.5px;margin-top:14px}
+.game-idle .gi-grid{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0 12px}
+.game-idle .gi-grid div{flex:1 1 210px;max-width:240px;border:1px solid var(--line);border-radius:6px;background:#FCFBF6;padding:12px 14px;text-align:left;font-size:12.5px;line-height:1.9;color:var(--ink2)}
+.game-idle .gi-grid b{display:block;color:var(--green);font-size:14px;letter-spacing:2px;margin-bottom:2px}
+.game-ready .gr-tag{display:inline-block;border:1px solid var(--red);color:var(--red);border-radius:999px;padding:3px 14px;font-size:11.5px;letter-spacing:3px;margin-bottom:10px;background:var(--red-l)}
+.game-ready .gr-list{list-style:none;padding:0;margin:14px auto 18px;max-width:430px;text-align:left}
+.game-ready .gr-list li{border-bottom:1px dashed var(--line);padding:9px 4px;font-size:13px;color:var(--ink2);line-height:1.8}
+.game-ready .gr-list li:last-child{border-bottom:none}
+.game-ready .gr-list b,.game-ready p b{color:var(--red)}
+.game-ready .gr-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.game-countdown .gc-num{font-family:"Ma Shan Zheng",serif;font-size:88px;line-height:1;color:var(--red);animation:zoomin .35s ease}
+.game-countdown p{font-size:14px;color:var(--ink2);letter-spacing:2px;margin-top:8px}
 
 /* ===== 岐黄打卡 ===== */
 .ci-banner{background:var(--paper);border:1px dashed var(--gold);border-radius:4px;padding:10px 16px;margin-bottom:18px;font-size:13px;color:var(--ink2);text-align:center;letter-spacing:1px}
@@ -756,7 +773,7 @@ const PAGE_HTML={
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
     <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
-    <p class="desc">练习模式：<b>2 道看图辨药 + 5 道经典著作考点</b>（作者、名句、成书之最）+ <b>5 道全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题，共 <b>14 题</b>。<b>不限时</b>作答，每题答完奉上解析（看图题附外观辨识），没看懂还能一键去「本草问答」追问根源详解。知识竞赛：加量不加时——<b>3 道看图辨药 + 8 道经典著作考点 + 8 道全站通考点 + 2 道辨药眼力</b>，共 <b>21 题</b>、每题限时 8 秒，小药童亲自当裁判，拼眼力更拼手速，答完领称号、发战帖。</p>
+    <p class="desc">练习模式：<b>2 道看图辨药 + 5 道经典著作考点</b>（作者、名句、成书之最）+ <b>5 道全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题，共 <b>14 题</b>。<b>不限时</b>作答，每题答完奉上解析（看图题附外观辨识），没看懂还能一键去「本草问答」追问根源详解。知识竞赛：加量不加时——<b>3 道看图辨药 + 8 道经典著作考点 + 8 道全站通考点 + 2 道辨药眼力</b>，共 <b>21 题</b>、每题限时 8 秒，小药童亲自当裁判，拼眼力更拼手速，答完领称号、发战帖。<b>本页先不显示题目</b>——点下方「练习模式」按钮才出练习题；选「知识竞赛」会先进入准备预警页，确认「开始答题」后才开卷读秒。</p>
     <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
       <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 不限时 · 题题有解析</button>
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
@@ -1109,8 +1126,12 @@ const PAGE_INIT={
   read:()=>{renderFilter();renderBooks();},     // 筛选条 + 十二张书卡
   album:()=>{},                                 // 集章墙由 go() 刷新
   game:()=>{
-    const bot=$("#gameBot");if(bot&&window._game)bot.style.display=window._game.mode==="contest"?"flex":"none";
-    if(window._game)renderGameQ();else startGame();
+    const g=window._game;
+    const bot=$("#gameBot");if(bot)bot.style.display=g&&g.mode==="contest"?"flex":"none";
+    if(g&&g.finished)return;                                        // 已结算：保留成绩页 DOM，不重开题面
+    if(g&&g.started)return renderGameQ();                           // 进行中：回到本页恢复题面
+    if(g&&g.mode==="contest"&&!g.started)return renderContestReady(); // 已选竞赛但未确认开卷
+    renderGameIdle();                                               // 待机：不出题、不计时
   },
   checkin:()=>{}                                // 日历由 go() 刷新
 };
@@ -1130,7 +1151,7 @@ function go(p){
   if(p==="checkin")renderCheckin();
   if(p==="chat")renderChips(); // 每次进问答页，推荐问题随机换一批
   if(p==="home")refreshFeatMeta(); // 返回首页时刷新功能卡上的真实进度
-  if(p!=="game"&&window._game&&window._game.timer){clearInterval(window._game.timer);window._game.timer=null;} // 离开药圃自动停表
+  if(p!=="game"&&window._game&&(window._game.timer||window._game.readyTimer)){clearInterval(window._game.timer);clearInterval(window._game.readyTimer);window._game.timer=null;window._game.readyTimer=null;} // 离开药圃自动停表、停开卷倒数
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1307,8 +1328,10 @@ function imgQuestion(h){
 function setGameMode(m){
   const g=window._game;
   if(g&&g.timer){clearInterval(g.timer);g.timer=null;} // 切模式先停表
-  $("#btnPractice").className=m==="practice"?"btn red":"btn ghost";
-  $("#btnContest").className=m==="contest"?"btn red":"btn ghost";
+  if(g&&g.readyTimer){clearInterval(g.readyTimer);g.readyTimer=null;} // 切模式也停开卷倒数
+  const bp=$("#btnPractice"),bc=$("#btnContest");
+  if(bp)bp.className=m==="practice"?"btn red":"btn ghost";
+  if(bc)bc.className=m==="contest"?"btn red":"btn ghost";
   startGame(m);
 }
 /* ===== 管理后台接入（bencao-admin）：题库热更新 + 成绩/问答盲区上报 =====
@@ -1441,9 +1464,63 @@ function startGame(mode){
   mode=mode||((window._game&&window._game.mode)||"practice");
   const qs=buildPaper(mode==="contest"); // 练习与竞赛共用同一套混合卷生成器（练习 14 题/竞赛 21 题），仅计规则不同
   const bot=$("#gameBot");if(bot)bot.style.display=mode==="contest"?"flex":"none"; // 练习不打扰：小药童只在竞赛登场当裁判
-  window._game={qs,i:0,score:0,mode,timer:null};
+  window._game={qs,i:0,score:0,mode,timer:null,readyTimer:null,started:false,finished:false};
   if(!PAGE_MOUNTED.game)return; // 尚未进入试炼页：只备好卷子，不渲染题面、不加载题图
-  renderGameQ();
+  // 练习：点「练习模式」按钮即出题；竞赛：先给准备预警页，确认「开始答题」后才开卷读秒
+  if(mode==="contest")renderContestReady();
+  else{window._game.started=true;renderGameQ();}
+}
+/* 待机屏：进入试炼页先不出题、不计时，等用户点模式按钮 */
+function renderGameIdle(){
+  const box=$("#gameArea");if(!box)return;
+  box.innerHTML=`
+    <div class="game-idle">
+      <div class="gi-seal">试</div>
+      <h3>请先选一种试炼方式</h3>
+      <p>题目不会自己蹦出来〜点上方按钮才开卷：<b>练习模式</b>点下即出题；<b>知识竞赛</b>会先给你一张准备预警页，确认「开始答题」后才开始 ${CONTEST_LIMIT} 秒读秒。</p>
+      <div class="gi-grid">
+        <div><b>🌿 练习模式</b>14 题混合卷 · 不限时<br>答完即见解析，还能追问药童</div>
+        <div><b>⏱ 知识竞赛</b>21 题 · 每题限时 ${CONTEST_LIMIT} 秒<br>先预警、再开卷，答完领称号</div>
+      </div>
+      <p class="gi-note">◈ 此刻既没有题面、也没有倒计时，可以先去翻翻经典，准备好了再点按钮。</p>
+    </div>`;
+}
+/* 竞赛开卷预警：确认前不出题、不计时，给用户一个准备缓冲 */
+function renderContestReady(){
+  const g=window._game,box=$("#gameArea");if(!g||!box)return;
+  const say=$("#gameBotSay");if(say)say.textContent="先别急着落笔！看清规矩，点「开始答题」我才开卷读秒〜";
+  box.innerHTML=`
+    <div class="game-ready">
+      <span class="gr-tag">⚠ 开 卷 预 警</span>
+      <h3>知识竞赛 · 请准备</h3>
+      <p>小药童提醒：点下方「开始答题」后，题面立刻出现并<b>马上开始读秒</b>，中途不能暂停。先确认下面几条：</p>
+      <ul class="gr-list">
+        <li>共 <b>${g.qs.length} 题</b>：看图辨药 + 经典考点 + 全站通 + 辨药眼力</li>
+        <li>每题限时 <b>${CONTEST_LIMIT} 秒</b>，超时判未中并自动进入下一题</li>
+        <li>答完自动结算、记录最佳成绩，可一键复制战帖</li>
+        <li>切到别的页面会停表，回来重新读秒；建议找个不被打扰的空档</li>
+      </ul>
+      <div class="gr-btns">
+        <button class="btn red" onclick="beginContest()">我准备好了 · 开始答题 →</button>
+        <button class="btn ghost" onclick="setGameMode('practice')">改去练习模式</button>
+      </div>
+      <p class="gr-note">◈ 还没点「开始答题」之前，不会有题目，也不会消耗时间。</p>
+    </div>`;
+}
+/* 开卷倒数：3 → 2 → 1，倒数归零才真正出题并启动每题计时 */
+function beginContest(){
+  const g=window._game,box=$("#gameArea");
+  if(!g||g.mode!=="contest"||!box)return;
+  if(g.readyTimer){clearInterval(g.readyTimer);g.readyTimer=null;}
+  const say=$("#gameBotSay");if(say)say.textContent="三、二、一——开卷！眼疾手快，别让药跑喽〜";
+  let n=3;
+  const paint=()=>{box.innerHTML=`<div class="game-countdown"><div class="gc-num">${n}</div><p>题面即将出现 · 准备接招</p></div>`;};
+  paint();
+  g.readyTimer=setInterval(()=>{
+    n--;
+    if(n<=0){clearInterval(g.readyTimer);g.readyTimer=null;g.started=true;renderGameQ();return;}
+    paint();
+  },800);
 }
 /* 混合出卷：练习 2 图像 + 5 经典 + 5 全站 + 2 辨药眼力 = 14 题；竞赛 3 + 8 + 8 + 2 = 21 题，难题保底打乱；竞赛后台题库最多热替换 8 道文字题，不足由内置补齐 */
 function buildPaper(contest){
@@ -1465,6 +1542,7 @@ function buildPaper(contest){
 function renderGameQ(){
   const g=window._game;
   if(g.timer){clearInterval(g.timer);g.timer=null;}
+  if(g.readyTimer){clearInterval(g.readyTimer);g.readyTimer=null;}
   if(g.i>=g.qs.length)return endGame();
   const q=g.qs[g.i];
   const contest=g.mode==="contest";
@@ -1523,7 +1601,9 @@ function pickGame(name){
 function nextGame(){window._game.i++;renderGameQ();}
 function endGame(){
   const g=window._game;
+  g.finished=true;
   if(g.timer){clearInterval(g.timer);g.timer=null;}
+  if(g.readyTimer){clearInterval(g.readyTimer);g.readyTimer=null;}
   const s=g.score,contest=g.mode==="contest",full=g.qs.length; // 题量随模式：练习 14 / 竞赛 21
   const hi=Math.ceil(full*.75),mid=Math.ceil(full*.5),lo=Math.ceil(full*.3); // 称号档位按题量等比换算（12 题时即 9/6/4）
   if(contest){
@@ -1559,7 +1639,7 @@ function copyChallenge(s,title,total){
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(fallback);}else fallback();
 }
-setTimeout(startGame,0); // 载入即备好第一题（异步：避开 _bags TDZ，等全部顶层初始化完成再出题）
+setTimeout(startGame,0); // 载入仅备卷（页面未挂载时不渲染）；真正出题由用户点模式按钮触发
 setTimeout(syncQuestions,0); // 顺路尝试从管理后台拉最新题库（后台不在线则用内置题库）
 
 /* ===== 本草图鉴集章系统 ===== */
