@@ -61,9 +61,15 @@ header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;heig
 .hd-inner::before{content:"";position:absolute;right:-20px;top:-60px;width:52%;height:170%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.14;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent);mask-image:radial-gradient(closest-side,#000 40%,transparent)}
 .hd-left{display:flex;align-items:center;flex:none;position:relative;z-index:1}
 /* 水墨字标：放大为页眉主视觉；浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
-.seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,rgba(255,252,244,.72),rgba(255,250,238,.28) 68%,transparent 82%)}
-.seal-stamp::before{content:"";position:absolute;inset:-14px;border-radius:50%;box-shadow:0 0 46px var(--hd-glow);pointer-events:none;z-index:0}
+.seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:transparent}
+/* 字标不设独立底色与柔光：透明区直接透出页眉渐变，四季换肤逐像素一致 */
 .seal-stamp img{width:100%;height:100%;display:block;position:relative;z-index:1}
+/* 左下盈亏色随季更衣：四张已染色的小透明图按季切换，纯 CSS、无额外整图请求、无闪烁 */
+.seal-stamp::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-position:center;background-size:contain;background-repeat:no-repeat}
+html[data-season="春"] .seal-stamp::after{background-image:url("assets/logo-accent-spring.png")}
+html[data-season="夏"] .seal-stamp::after{background-image:url("assets/logo-accent-summer.png")}
+html[data-season="秋"] .seal-stamp::after{background-image:url("assets/logo-accent-autumn.png")}
+html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-accent-winter.png")}
 .head-verse{font-family:"Ma Shan Zheng","Noto Serif SC",serif;color:var(--gold);font-size:13px;writing-mode:vertical-rl;letter-spacing:6px;border-left:1px solid rgba(154,123,63,.4);border-right:1px solid rgba(154,123,63,.25);padding:0 10px;height:190px;white-space:nowrap;flex:none;position:relative;z-index:1;background:linear-gradient(90deg,transparent,rgba(154,123,63,.07),transparent)}
 .hd-books{flex:1;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;gap:16px 20px;min-width:0;position:relative;z-index:1}
 .hd-books figure{margin:0;text-align:center;flex:none}
@@ -465,7 +471,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 <header class="top-hero">
  <div class="hd-inner">
   <div class="hd-left">
-    <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草、朱红智答小印与金色飞白圆相" width="220" height="220" decoding="async" fetchpriority="high"></div>
+    <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草错落排布、朱红智答小印与淡金螭龙衔尾飞白圆相" width="220" height="220" decoding="async" fetchpriority="high"></div>
   </div>
   <div class="head-verse">传承岐黄薪火</div>
   <div class="hd-books" id="hdBooks">
