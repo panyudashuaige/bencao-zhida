@@ -58,7 +58,7 @@ header.top-hero{width:100%;position:relative;background:linear-gradient(115deg,v
 header.top-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 88% 6%,var(--hd-glow),transparent 58%),radial-gradient(ellipse at 8% 130%,var(--hd-veil),transparent 52%);opacity:.9;pointer-events:none}
 header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 10%,var(--gold) 90%,transparent);opacity:.75;pointer-events:none}
 /* 页眉：水墨字标 + 典籍横排书脊；书脊整排高度与字标(220)相仿 */
-.hd-inner{max-width:1080px;margin:0 auto;padding:22px 16px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 30px;position:relative;z-index:1}
+.hd-inner{max-width:860px;margin:0 auto;padding:22px 16px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 30px;position:relative;z-index:1}
 .hd-left{display:flex;align-items:center;flex:none;position:relative;z-index:1}
 /* 水墨字标：浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
 .seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:transparent}
@@ -77,17 +77,17 @@ html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-acc
 /* 响应式 */
 .hd-bg{position:absolute;inset:0;z-index:0;background:url("assets/header-banner.png") center/cover no-repeat;opacity:.97;pointer-events:none}
 .hd-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,var(--hd-1),var(--hd-2) 52%,var(--hd-3));opacity:.5}
-/* 天头版式：左 logo 为视线起点，右侧标题区（slogan + 药童），两端对齐、中间留白、统一中线 */
-.hd-mid{flex:0 1 auto;min-width:0;text-align:right;z-index:1;padding:0 10px;margin-left:auto}
-.hd-slogan{font-family:"Ma Shan Zheng",cursive;font-size:30px;line-height:1.18;color:var(--red);letter-spacing:2px;text-shadow:0 1px 0 rgba(251,243,228,.55)}
+/* 三列居中版式：字标左 / 标题中 / 药童右，紧凑排布（v29 按用户要求回退天头版式） */
+.hd-mid{flex:1 1 240px;min-width:0;text-align:center;z-index:1;padding:0 10px}
+.hd-slogan{font-family:"Ma Shan Zheng",cursive;font-size:26px;line-height:1.18;color:var(--red);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 0 rgba(251,243,228,.55)}
 .hd-slogan b{color:var(--green)}
 .hd-slogan .hd-ai{font-family:"Ma Shan Zheng",cursive;font-weight:400;font-size:1.06em;letter-spacing:.02em;margin-right:.18em;text-shadow:0 1px 0 rgba(251,243,228,.55)}
 .hd-slogan-sub{margin-top:7px;font-family:"Noto Serif SC",serif;font-size:13px;letter-spacing:1px;color:var(--ink2)}
-.hd-right{flex:none;z-index:1;display:flex;align-items:center;justify-content:center;margin-left:8px}
-.hd-right img{height:165px;width:auto;display:block;filter:drop-shadow(0 10px 14px rgba(43,43,38,.22))}
-@media(max-width:1000px){.seal-stamp{width:180px;height:180px}.hd-right img{height:140px}.hd-slogan{font-size:26px}}
-@media(max-width:720px){.hd-inner{padding:18px 12px 16px}.seal-stamp{width:150px;height:150px}.hd-right img{height:118px}.hd-slogan{font-size:22px}.hd-slogan-sub{font-size:12px}}
-@media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right{order:2;margin-left:auto}.hd-right img{height:96px}.hd-slogan{font-size:19px}.hd-mid{order:3;flex-basis:100%;margin-left:0;text-align:center;margin-top:4px}}
+.hd-right{flex:none;z-index:1;display:flex;align-items:flex-end;justify-content:center;margin-left:8px}
+.hd-right img{height:165px;width:auto;display:block;margin-bottom:8px;filter:drop-shadow(0 10px 14px rgba(43,43,38,.22))}
+@media(max-width:1000px){.seal-stamp{width:180px;height:180px}.hd-right img{height:140px}.hd-slogan{font-size:23px}}
+@media(max-width:720px){.hd-inner{padding:18px 12px 16px}.seal-stamp{width:150px;height:150px}.hd-right img{height:118px}.hd-slogan{font-size:20px}.hd-slogan-sub{font-size:12px}}
+@media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right{order:2;margin-left:auto}.hd-right img{height:96px}.hd-slogan{font-size:18px}.hd-mid{order:3;flex-basis:100%;margin-left:0;text-align:center;margin-top:4px}}
 
 /* ===== 导航 ===== */
 nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
