@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>本草智答 · AI 小药童识体质，按体质荐经典</title>
-<meta name="description" content="本草智答——AI 小药童带你辨体质、按体质荐经典：拍照看面相、9 题速测、27 题国标三种方式识别九种体质，据此点亮十二部岐黄经典中的契合书目，并提供本草问答、经典原文选读、百草试炼、集章图鉴与阅读打卡。AI 阅读推广与中医药文化传播参赛作品。">
+<meta name="description" content="本草智答——AI 小药童带你辨体质、按体质荐经典：拍照看面相、9 题速测、27 题国标三种方式识别九种体质，据此点亮二十部岐黄经典中的契合书目，并提供本草问答、经典原文选读、百草试炼、集章图鉴与阅读打卡。AI 阅读推广与中医药文化传播参赛作品。">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="apple-touch-icon" href="assets/appicon-180.png">
 <meta name="theme-color" content="#2F5D50">
@@ -312,6 +312,23 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 #p-chat>.card{max-width:880px;margin:0 auto;width:100%}
 #p-quiz>.card{max-width:880px;margin:0 auto;width:100%}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+/* ===== 知识库速查：本草名录 + 典籍索引，点名字直接问药童 ===== */
+.kb-index{margin:0 0 4px}
+.kbi{background:var(--paper);border:1px dashed var(--gold);border-radius:8px;padding:10px 16px}
+.kbi summary{cursor:pointer;font-size:13.5px;color:var(--ink2);letter-spacing:.5px;list-style:none;line-height:1.8}
+.kbi summary::-webkit-details-marker{display:none}
+.kbi summary::before{content:"▸ ";color:var(--gold)}
+.kbi[open] summary::before{content:"▾ "}
+.kbi summary b{color:var(--red)}
+.kbi-body{padding-top:12px;border-top:1px dashed var(--line);margin-top:10px;max-height:560px;overflow:auto}
+.kbi-sec{margin-bottom:14px}
+.kbi-sec h4{font-size:13px;color:var(--green);letter-spacing:2px;margin:0 0 8px;font-weight:600}
+.kbi-cat{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-bottom:6px}
+.kbi-cat>b{flex:none;min-width:66px;font-size:12px;color:var(--gold);letter-spacing:1px}
+.kbi-btns{display:flex;flex-wrap:wrap;gap:6px}
+.kbi button{background:#FCFBF6;border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-family:inherit;font-size:12px;color:var(--ink2);cursor:pointer;transition:all .2s}
+.kbi button:hover{border-color:var(--green);color:var(--green);transform:translateY(-1px)}
+.kbi-note{font-size:11.5px;color:var(--ink3);margin:8px 0 2px;line-height:1.8}
 /* ===== AI 典籍详解（RAG：模型只依据检索出的经典原文作答） ===== */
 .ai-bar{display:flex;align-items:center;gap:8px;margin-left:auto}
 .ai-state{font-size:11px;color:var(--ink3);border:1px solid var(--line);border-radius:20px;padding:3px 9px;white-space:nowrap}
@@ -527,6 +544,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .read-modal{background:#F7F3E8;border-radius:8px;max-width:760px;width:100%;max-height:86vh;overflow-y:auto;position:relative;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.35);animation:zoomin .3s ease}
 .rm-cover{position:relative;height:230px;overflow:hidden}
 .rm-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.rm-cover-txt{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,#F7F3E8,#EDE3CD);font-family:"Ma Shan Zheng",serif;font-size:62px;letter-spacing:8px;color:var(--red);text-shadow:2px 2px 0 rgba(251,243,228,.85)}
 .rm-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,43,38,0) 40%,rgba(247,243,232,1) 100%)}
 .rm-title{position:absolute;left:26px;bottom:14px;z-index:2}
 .rm-title h3{font-size:26px;letter-spacing:4px;color:var(--ink)}
@@ -583,7 +601,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
  </div>
 </nav>
 <div class="wrap">
-<div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>AI 小药童带你识体质 → 按体质荐经典 · 问本草 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>AI 小药童带你识体质 → 按体质荐经典 · 问本草 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
+<div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>AI 小药童带你识体质 → 按体质荐经典 · 问本草 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>二十部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>AI 小药童带你识体质 → 按体质荐经典 · 问本草 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>二十部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
 
 <section class="page on" id="p-home">
   <div class="hero">
@@ -592,7 +610,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <svg class="hero-cloud" viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 6 0 11 4 13 9 6-1 11 3 12 8 1 6-4 13-12 13H14z" opacity=".85"/><path d="M30 44c2-4 6-6 10-5" opacity=".5"/><path d="M78 54c-4 0-7-3-7-6s3-6 6-6c1-4 4-7 9-7 4 0 7 2 8 5 4 0 7 3 7 6 1 4-3 8-8 8H78z" opacity=".6"/><path d="M92 54c1-2 3-4 5-3" opacity=".4"/></svg>
       <div class="h-sub">—— 一部会对话的本草纲目 ——</div>
       <h1>本草<em>智答</em></h1>
-      <p><b>AI 小药童先带你认清体质，再从十二部岐黄经典里挑出与你相契的那一部</b>——拍照看面相、9 题速测、27 题国标，三种方式都能让经典荐读「对证」。识体质 → 荐经典 → 读原文，这是本草智答的 AI 阅读推广新玩法。</p>
+      <p><b>AI 小药童先带你认清体质，再从二十部岐黄经典里挑出与你相契的那一部</b>——拍照看面相、9 题速测、27 题国标，三种方式都能让经典荐读「对证」。识体质 → 荐经典 → 读原文，这是本草智答的 AI 阅读推广新玩法。</p>
       <div class="hero-stats">
         <div><b>14</b><span>味本草</span></div>
         <div><b>6</b><span>首名方</span></div>
@@ -631,12 +649,12 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="ap-head">
       <span class="ap-tag">✦ 本站 AI 创新点</span>
       <h3>小药童先识体质，再替你挑一部「对证」的经典</h3>
-      <p>不是把十二部医书一股脑摆给你，而是让 <b>AI 小药童</b>先读懂你的体质，再<b>按体质点亮契合书目</b>、翻开对应的原文选段——把「读什么」这件事交给懂你的人。</p>
+      <p>不是把二十部医书一股脑摆给你，而是让 <b>AI 小药童</b>先读懂你的体质，再<b>按体质点亮契合书目</b>、翻开对应的原文选段——把「读什么」这件事交给懂你的人。</p>
     </div>
     <div class="ap-flow">
       <button class="ap-step" onclick="goQuiz('face')"><b>壹 · 拍照 / 答题</b><span>拍张正脸照让小药童看面相，也能选 9 题速测或 27 题国标量表</span><em>交给 AI 小药童 →</em></button>
       <button class="ap-step" onclick="goQuiz('quick')"><b>贰 · 辨九种体质</b><span>小药童按望诊线索与国标转化分，判定主导体质与兼夹倾向</span><em>生成体质档案 →</em></button>
-      <button class="ap-step" onclick="go('read')"><b>叁 · 按体质荐书</b><span>十二部经典中与你相契的书目自动点亮，并给出药童导读</span><em>只看契合的 →</em></button>
+      <button class="ap-step" onclick="go('read')"><b>叁 · 按体质荐书</b><span>二十部经典中与你相契的书目自动点亮，并给出药童导读</span><em>只看契合的 →</em></button>
       <button class="ap-step" onclick="go('read')"><b>肆 · 翻开原文</b><span>原文选段 + 白话译文 + 药童领读，读完还能去问答追问</span><em>把经典读进去 →</em></button>
     </div>
     <div class="ap-cta">
@@ -658,7 +676,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="feat" data-p="chat" onclick="go('chat')"><span class="more">→</span><span class="kicker">问 · 答疑</span><div class="gly">问</div><b>本草问答</b><span class="desc">中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span><span class="meta" data-meta="chat">中药 / 方剂 / 穴位 / 养生</span></div>
     <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><span class="kicker">辨 · 试炼</span><div class="gly">辨</div><b>百草试炼</b><span class="desc">练习 + 知识竞赛双模式<br>混合题库考眼力考学问</span><span class="meta" data-meta="game">练习 14 题 · 竞赛 21 题</span></div>
     <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><span class="kicker">鉴 · 集章</span><div class="gly">鉴</div><b>本草图鉴</b><span class="desc">集章点亮工笔画像<br>集齐十四味做园主</span><span class="meta" data-meta="album">14 味工笔画像待点亮</span></div>
-    <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><span class="kicker">读 · 按体质荐</span><div class="gly">读</div><b>经典荐读</b><span class="desc">十二部岐黄经典按体质点亮<br>契合书目优先，点开读原文</span><span class="meta" data-meta="read">12 部典籍 · 按体质荐读</span></div>
+    <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><span class="kicker">读 · 按体质荐</span><div class="gly">读</div><b>经典荐读</b><span class="desc">二十部岐黄经典按体质点亮<br>契合书目优先，点开读原文</span><span class="meta" data-meta="read">20 部典籍 · 按体质荐读</span></div>
     <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><span class="kicker">勤 · 打卡</span><div class="gly">勤</div><b>岐黄打卡</b><span class="desc">中医药文化 · 读者打卡专区<br>每日一格集满本草</span><span class="meta" data-meta="checkin">每日一格 · 集满本草</span></div>
     <div class="feat" onclick="askKB('药食同源')"><span class="more">→</span><span class="kicker">食 · 厨房</span><div class="gly">食</div><b>药食同源</b><span class="desc">厨房里的本草智慧<br>生姜山药莲子皆是药</span><span class="meta" data-meta="food">厨房即药房 · 生姜山药</span></div>
     <div class="feat" onclick="askKB('四君子汤')"><span class="more">→</span><span class="kicker">方 · 六首</span><div class="gly">方</div><b>名方六首</b><span class="desc">四君子汤 · 桂枝汤 · 玉屏风散<br>点开即查方书源流与方义</span><span class="meta" data-meta="formula">6 首名方 · 点名即查</span></div>
@@ -696,7 +714,7 @@ const PAGE_HTML={
   <div class="card" id="quizBody">
     <div class="orn">A I · 小 药 童 陪 你 识 体 质</div>
     <h2>识体质<span class="dot"> · </span>再让小药童为你荐经典</h2>
-    <p class="desc">本站的核心创新：<b>AI 小药童先读懂你的体质，再按体质推荐经典</b>。三种辨识方式任选——<b>拍照看面相</b>（望诊科普体验）、<b>9 题速测</b>、<b>27 题国标完整版</b>（依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，按转化分判定"是 / 倾向是 / 否"）。判完自动写入体质档案，并点亮十二部经典中与你相契的书目。（科普学习用途，不构成医疗诊断）</p>
+    <p class="desc">本站的核心创新：<b>AI 小药童先读懂你的体质，再按体质推荐经典</b>。三种辨识方式任选——<b>拍照看面相</b>（望诊科普体验）、<b>9 题速测</b>、<b>27 题国标完整版</b>（依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，按转化分判定"是 / 倾向是 / 否"）。判完自动写入体质档案，并点亮二十部经典中与你相契的书目。（科普学习用途，不构成医疗诊断）</p>
     <div class="face-top">
       <img src="assets/mascot3d.png" alt="AI 小药童" loading="lazy" decoding="async">
       <div><b>药童陪你辨 · 我是你的 AI 小药童</b><span id="faceSay">别怕选错～先让我瞧瞧你的面相，或者答几道小题；认出体质后，我替你把该读的那部经典挑出来。</span></div>
@@ -737,6 +755,7 @@ const PAGE_HTML={
   <div class="card result" id="quizResult" style="display:none"></div>`,
  chat:`
   <div class="chips" id="chips"></div>
+  <div class="kb-index" id="kbIndex"></div>
   <div class="card" style="padding:18px 22px 22px">
     <div class="bot-id">
       <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答" loading="lazy" decoding="async">
@@ -756,7 +775,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
-    <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从十二部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选读+白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
+    <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从二十部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选读+白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
     <div class="read-rec" id="readRec"></div>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
     <div class="filter" id="filter"></div>
@@ -809,6 +828,40 @@ const HERBS=[
  {n:"山药",f:"甘，平 · 归脾、肺、肾经",x:"圆柱形，表面黄白光滑、有纵沟，断面洁白、富粉性。",e:"补脾养胃、生津益肺、补肾涩精，平补三焦，老幼皆宜。",s:"《本草纲目》薯蓣条：\u201c益肾气，健脾胃……久服耳目聪明，轻身不饥延年。\u201d",b:"《本草纲目》《随息居饮食谱》"},
  {n:"薄荷",f:"辛，凉 · 归肺、肝经",x:"茎方柱形、对叶皱缩，全体被柔毛，搓揉有特异清凉香气。",e:"疏散风热、清利头目、利咽透疹，其气清凉，为辛凉解表之品。",s:"《本草纲目》：\u201c薄荷辛能发散，凉能清利，专于消风散热。\u201d",b:"《本草纲目》草部"}
 ];
+/* ===== 本草扩展名录：常用中药按功效分门别类 =====
+   前 14 味（HERBS）配有工笔插画，用于图鉴 / 看图辨药 / 每日本草；
+   本组只有文字条目，进入问答知识库、RAG 语料、竞赛题库与「本草名录」索引。
+   cat 用于分类浏览，也是「有无插画」的标记：有 cat = 无图、不参与集章。 */
+const MATERIA_EXTRA=[
+ {n:"桂枝",f:"辛、甘，温 · 归心、肺、膀胱经",x:"圆柱形小段，外皮红棕至棕色，有细纵纹与皮孔，切面皮部红棕、木部黄白，香气特异。",e:"发汗解肌、温通经脉、助阳化气、平冲降气，为《伤寒论》桂枝汤之君药。",s:"《神农本草经》列「牡桂」为上品：主上气咳逆、利关节、补中益气。《伤寒论》以桂枝汤为群方之冠。",b:"《神农本草经》《伤寒论》《汤头歌诀》",cat:"解表"},
+ {n:"防风",f:"辛、甘，微温 · 归膀胱、肝、脾经",x:"根呈长圆锥形，根头部有密集环纹（蚯蚓头），外皮灰棕色、粗糙，断面有裂隙，气微香。",e:"祛风解表、胜湿止痛、止痉，被誉为「风药中之润剂」，玉屏风散中用之固表。",s:"《神农本草经》列为上品：「主大风头眩痛，恶风，风邪目盲无所见。」",b:"《神农本草经》《本草纲目》",cat:"解表"},
+ {n:"葛根",f:"甘、辛，凉 · 归脾、胃、肺经",x:"纵切的长方形厚片或小方块，外皮淡棕色，切面黄白色、纹理不明显，质韧、富粉性。",e:"解肌退热、生津止渴、透疹、升阳止泻，张仲景葛根汤治项背强痛。",s:"《神农本草经》列葛为上品：「主消渴，身大热，呕吐，诸痹，起阴气，解诸毒。」",b:"《神农本草经》《伤寒论》",cat:"解表"},
+ {n:"石膏",f:"甘、辛，大寒 · 归肺、胃经",x:"纤维状集合体，呈长块状或不规则形，白色至灰白，纵断面具绢丝样光泽，质松易碎。",e:"清热泻火、除烦止渴，为清阳明气分实热之要药，白虎汤以此为主。",s:"《神农本草经》列为中品：「主中风寒热，心下逆气惊喘，口干舌焦不能息。」",b:"《神农本草经》《伤寒论》",cat:"清热"},
+ {n:"黄芩",f:"苦，寒 · 归肺、胆、脾、大肠、小肠经",x:"圆锥形根，表面棕黄或深黄、有扭曲纵皱，断面黄色、中心红棕，老根中空者称「枯芩」。",e:"清热燥湿、泻火解毒、止血、安胎，善清上焦肺热，小柴胡汤中用之。",s:"《神农本草经》列为中品：「主诸热黄疸，肠澼泄痢，逐水，下血闭。」",b:"《神农本草经》《伤寒论》",cat:"清热"},
+ {n:"黄连",f:"苦，寒 · 归心、脾、胃、肝、胆、大肠经",x:"根茎多分枝、形如鸡爪，表面灰黄或黄褐、粗糙，断面皮部橙红、木部鲜黄，味极苦。",e:"清热燥湿、泻火解毒，善清心胃之火，有「哑巴吃黄连，有苦说不出」之谚。",s:"《神农本草经》列为上品：「主热气目痛，眦伤泣出，明目，肠澼腹痛下痢。」",b:"《神农本草经》《本草纲目》",cat:"清热"},
+ {n:"生地黄",f:"甘，寒 · 归心、肝、肾经",x:"不规则团块或长圆形，表面棕黑或棕灰、极皱缩，断面棕黑或乌黑、有光泽，质柔润黏腻。",e:"清热凉血、养阴生津，与蒸制后的熟地黄功效有别：生用凉血、熟用补血。",s:"《神农本草经》列「干地黄」为上品：「主折跌绝筋，伤中，逐血痹，填骨髓，长肌肉。」",b:"《神农本草经》《本草纲目》",cat:"清热"},
+ {n:"苍术",f:"辛、苦，温 · 归脾、胃、肝经",x:"不规则连珠状或结节状圆柱形，表面灰棕色，断面黄白色、散有橙黄色油室，暴露日久可起白霜。",e:"燥湿健脾、祛风散寒、明目，与白术一燥一补，为治湿滞中焦之要药。",s:"《神农本草经》列「术」为上品：「主风寒湿痹，死肌，痉，疸，止汗，除热，消食。」",b:"《神农本草经》《本草纲目》",cat:"祛湿"},
+ {n:"薏苡仁",f:"甘、淡，凉 · 归脾、胃、肺经",x:"宽卵形或长椭圆形，表面乳白色、光滑，背面圆凸、腹面有较宽而深的纵沟，质坚实。",e:"利水渗湿、健脾止泻、除痹排脓、解毒散结，药食两宜，常入粥食。",s:"《神农本草经》列为上品：「主筋急拘挛不可屈伸，风湿痹，下气，久服轻身益气。」",b:"《神农本草经》《随息居饮食谱》",cat:"祛湿"},
+ {n:"泽泻",f:"甘、淡，寒 · 归肾、膀胱经",x:"类球形或椭圆形，表面黄白或淡黄棕、有不规则横向环状浅沟纹，断面黄白、粉性。",e:"利水渗湿、泄热，六味地黄丸「三泻」之一，与熟地黄相配利水而不伤阴。",s:"《神农本草经》列为上品：「主风寒湿痹，乳难，消水，养五脏，益气力，肥健。」",b:"《神农本草经》《小儿药证直诀》",cat:"祛湿"},
+ {n:"干姜",f:"辛，热 · 归脾、胃、肾、心、肺经",x:"扁平不规则块状，具指状分枝，表面灰黄或浅灰棕、粗糙，断面黄白或灰白、显粉性与纤维。",e:"温中散寒、回阳通脉、温肺化饮，与生姜同出一物：生姜走表，干姜守中。",s:"《神农本草经》列为中品：「主胸满咳逆上气，温中止血，出汗，逐风湿痹。」",b:"《神农本草经》《伤寒论》",cat:"温里"},
+ {n:"肉桂",f:"辛、甘，大热 · 归肾、脾、心、肝经",x:"槽状或卷筒状厚片，外表面灰棕色、有细皱纹，内表面红棕、油润，划之显油痕，气香浓烈。",e:"补火助阳、引火归元、散寒止痛、温通经脉，为温补肾阳之要药。",s:"《神农本草经》列「牡桂」「菌桂」为上品，主利关节、补中益气；《本草纲目》详辨桂之数种。",b:"《神农本草经》《本草纲目》",cat:"温里"},
+ {n:"白术",f:"苦、甘，温 · 归脾、胃经",x:"不规则肥厚团块，表面灰黄或灰棕、有瘤状突起，断面黄白、有棕黄色油室，烘干者色较深。",e:"健脾益气、燥湿利水、止汗、安胎，四君子汤中与人参、茯苓、甘草同用。",s:"《神农本草经》列「术」为上品；《本草纲目》谓其「健脾强胃，进食，和中，消痰」。",b:"《神农本草经》《汤头歌诀》",cat:"补益"},
+ {n:"党参",f:"甘，平 · 归脾、肺经",x:"长圆柱形、稍弯曲，表面灰黄至黄棕，根头有多数疣状突起（狮子盘头），断面有放射状纹理。",e:"健脾益肺、养血生津，常作人参之平补代用品，适合日常调养。",s:"《本草从新》《本草纲目拾遗》始载，谓其「补中益气，和脾胃，除烦渴」。",b:"《本草从新》《本草纲目拾遗》",cat:"补益"},
+ {n:"熟地黄",f:"甘，微温 · 归肝、肾经",x:"不规则团块，内外皆乌黑发亮、质柔润而黏，味甜，系生地黄经酒炖或蒸制而成。",e:"补血滋阴、益精填髓，六味地黄丸之君药，与生地黄凉血之功相对。",s:"《本草纲目》载地黄「生则大寒而凉血，熟则微温而补肾」，炮制改药性之典型。",b:"《本草纲目》《小儿药证直诀》",cat:"补益"},
+ {n:"麦冬",f:"甘、微苦，微寒 · 归心、肺、胃经",x:"纺锤形小块根，表面淡黄白、有细纵纹，质柔韧，断面黄白色、半透明，中柱细小，味甘微苦。",e:"养阴润肺、益胃生津、清心除烦，沙参麦冬汤、生脉饮皆用之。",s:"《神农本草经》列为上品：「主心腹结气，伤中伤饱，胃络脉绝，羸瘦短气。」",b:"《神农本草经》《温病条辨》",cat:"补益"},
+ {n:"香附",f:"辛、微苦、微甘，平 · 归肝、脾、三焦经",x:"纺锤形，表面棕褐或黑褐、有纵皱纹与环节，质硬，蒸煮后断面红棕、角质样，气香。",e:"疏肝解郁、理气宽中、调经止痛，被誉为「气病之总司、女科之主帅」。",s:"《本草纲目》谓其「利三焦，解六郁，消饮食积聚、痰饮痞满」，为理气第一品。",b:"《本草纲目》《汤头歌诀》",cat:"理气"},
+ {n:"木香",f:"辛、苦，温 · 归脾、胃、大肠、三焦、胆经",x:"圆柱形或半圆柱形，表面黄棕至灰褐、有明显纵沟与侧根痕，断面灰褐、有放射状纹理，气芳香浓烈。",e:"行气止痛、健脾消食，善行中下焦气滞，与黄连相配即香连丸。",s:"《神农本草经》列为上品：「主邪气，辟毒疫温鬼，强志，主淋露。」",b:"《神农本草经》《本草纲目》",cat:"理气"},
+ {n:"川芎",f:"辛，温 · 归肝、胆、心包经",x:"不规则结节状拳形团块，表面黄褐、粗糙皱缩，断面黄白、散有黄棕色小油点，香气浓郁。",e:"活血行气、祛风止痛，为「血中之气药」，四物汤中用之使补而不滞。",s:"《神农本草经》列「芎穷」为中品：「主中风入脑头痛，寒痹筋挛缓急，金创，妇人血闭无子。」",b:"《神农本草经》《太平惠民和剂局方》",cat:"活血"},
+ {n:"丹参",f:"苦，微寒 · 归心、肝经",x:"根茎短粗、顶端残留茎基，根数条呈长圆柱形，表面砖红或暗红棕、有纵皱，断面皮部棕红、木部灰黄。",e:"活血祛瘀、通经止痛、清心除烦、凉血消痈，有「一味丹参，功同四物」之说。",s:"《神农本草经》列为上品：「主心腹邪气，肠鸣幽幽如走水，寒热积聚，破癥除瘕。」",b:"《神农本草经》《本草纲目》",cat:"活血"},
+ {n:"三七",f:"甘、微苦，温 · 归肝、胃经",x:"类圆锥形或圆柱形，表面灰褐或灰黄、有断续纵皱与支根痕，顶端有茎痕，质坚实、击碎后皮木易分离。",e:"散瘀止血、消肿定痛，止血而不留瘀，云南白药之主药。",s:"《本草纲目》载「三七」：此药近时始出，南人军中用为金疮要药，云有奇功。",b:"《本草纲目》",cat:"活血"},
+ {n:"半夏",f:"辛，温；有毒 · 归脾、胃、肺经",x:"类球形，表面白色或浅黄、顶端有凹陷茎痕，周围密布麻点状根痕，质坚实，断面洁白、富粉性。",e:"燥湿化痰、降逆止呕、消痞散结；生品有毒，须经姜、矾等炮制后入药。",s:"《神农本草经》列「半夏」为下品：「主伤寒寒热，心下坚，下气，喉咽肿痛，头眩胸胀。」",b:"《神农本草经》《伤寒论》",cat:"化痰"},
+ {n:"桔梗",f:"苦、辛，平 · 归肺经",x:"圆柱形或略呈纺锤形，表面淡黄白至黄色、有扭转纵沟，质脆，断面皮部黄白、木部淡黄（金井玉栏）。",e:"宣肺、利咽、祛痰、排脓，为舟楫之剂，能载药上行入肺。",s:"《神农本草经》列为下品：「主胸胁痛如刀刺，腹满肠鸣幽幽，惊恐悸气。」",b:"《神农本草经》《伤寒论》",cat:"化痰"},
+ {n:"酸枣仁",f:"甘、酸，平 · 归肝、胆、心经",x:"扁圆形或扁椭圆形，表面紫红或紫褐、平滑有光泽，一面中央有微隆起的纵线纹，种皮较脆。",e:"养心补肝、宁心安神、敛汗、生津，为治虚烦不眠之要药。",s:"《神农本草经》列为上品：「主心腹寒热，邪结气聚，四肢酸疼湿痹，久服安五脏。」",b:"《神农本草经》《金匮要略》",cat:"安神"},
+ {n:"五味子",f:"酸、甘，温 · 归肺、心、肾经",x:"不规则球形或扁球形，表面红色、紫红或暗红、皱缩显油润，果肉柔软，种子肾形、有光泽。",e:"收敛固涩、益气生津、补肾宁心，五味俱全故名，生脉饮中与人参、麦冬同用。",s:"《神农本草经》列为上品：「主益气，咳逆上气，劳伤羸瘦，补不足，强阴，益男子精。」",b:"《神农本草经》《伤寒论》讲义",cat:"安神"},
+ {n:"大黄",f:"苦，寒 · 归脾、胃、大肠、肝、心包经",x:"类圆柱形、圆锥形或不规则块片，表面黄棕至红棕，断面淡红棕或黄棕、显颗粒性，髓部有星点环列。",e:"泻下攻积、清热泻火、凉血解毒、逐瘀通经，有「将军」之号，生用泻下力强。",s:"《神农本草经》列为下品：「主下瘀血，血闭寒热，破癥瘕积聚，留饮宿食，荡涤肠胃。」",b:"《神农本草经》《伤寒论》",cat:"泻下"}
+];
+const ALL_HERBS=HERBS.concat(MATERIA_EXTRA);           // 全站知识口径：40 味（14 味有插画 / 26 味文字条目）
+const HERB_CATS=["解表","清热","祛湿","温里","补益","理气","活血","化痰","安神","泻下"];
 const FORMULAS=[
  {n:"四君子汤",s:"《太平惠民和剂局方》",d:"人参（党参）、白术、茯苓、甘草四味。功效益气健脾，主治脾胃气虚证——面色萎白、语声低微、食少便溏。四味皆平和之品，如君子致中和，故名\u201c四君子\u201d，为补气剂的基础方。",b:"《汤头歌诀》《伤寒论》讲义"},
  {n:"六味地黄丸",s:"钱乙《小儿药证直诀》",d:"熟地黄、山萸肉、山药、泽泻、牡丹皮、茯苓，三补三泻、滋阴补肾。原为儿科\u201c地黄丸\u201d，后世广泛用于肾阴亏虚之证。",b:"《小儿药证直诀》《汤头歌诀》"},
@@ -860,7 +913,7 @@ const LOOKALIKES=[
 ];
 const KB=[
  ...LOOKALIKES.map(l=>({keys:[`${l.a}和${l.b}`,`${l.b}和${l.a}`,`${l.a}与${l.b}`,`${l.b}与${l.a}`,`区分${l.a}`,`区分${l.b}`,`分辨${l.a}`,`分辨${l.b}`,`辨别${l.a}`,`辨别${l.b}`,`${l.a}相似`,`${l.b}相似`],cat:`辨别 · ${l.a}/${l.b}`,ans:`<b>火眼金睛 · ${l.a} vs ${l.b}</b><div class="kv"><span class="k">分辨要点</span>${l.tip}</div><div class="kv"><span class="k">药童口诀</span>「${l.gj}」</div><div style="margin-top:8px"><button class="btn ghost" onclick="go('game')">去知识竞赛练练辨药眼力 →</button></div>`})),
- ...HERBS.map(h=>({keys:[h.n],herb:h.n,ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">外观辨识</span>${h.x}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>`,cat:h.n})),
+ ...ALL_HERBS.map(h=>({keys:[h.n],...(h.cat?{}:{herb:h.n}),ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">外观辨识</span>${h.x}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>${h.cat?`<div class="kv" style="color:var(--ink2)">◈ 归入「${h.cat}」类 · 见问答页「本草名录」</div>`:""}`,cat:h.n})),
  ...FORMULAS.map(f=>({keys:[f.n,f.n.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n})),
  ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">定位功效</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
  ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],topic:1,ans:`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
@@ -1082,6 +1135,62 @@ buildSeasonFx(seasonOf());
 document.querySelectorAll(".season-bar button").forEach(b=>b.classList.toggle("on",b.dataset.s===document.documentElement.dataset.season));
 /* 经典书目接入问答库：问书名（含别名）即答完整书卡，unshift 保证与同名话题打平时书卡优先 */
 const BOOK_ALIASES={"黄帝内经":["内经","素问","灵枢"],"神农本草经":["本草经"],"本草纲目":["纲目"],"千金方":["千金要方","备急千金要方"],"肘后备急方":["肘后方","肘后"],"随息居饮食谱":["随息居"],"医学三字经":["三字经"],"汤头歌诀":["汤头歌"]};
+/* ===== 典籍扩展：补入临床 / 脾胃 / 温疫 / 针灸 / 脉学 / 本草 / 食疗等门类 =====
+   push 进 BOOKS 后，荐读书卡、按体质荐读、KB 书卡、RAG 语料、竞赛题库全部自动覆盖 */
+BOOKS.push(
+ {t:"金匮要略",au:"· 张仲景 · 东汉",d:"《伤寒杂病论》的杂病部分，与《伤寒论》并称仲景双璧。以内科杂病为纲，辨脏腑经络论治，载方二百余首，是中医临床方书的源头。",hl:"见肝之病，知肝传脾，当先实脾。",hs:"——《金匮要略·脏腑经络先后病脉证》",diff:"硬核",why:"「治未病」不只是口号，这一句讲的是疾病传变的预判与截断，读它最能体会中医的整体观。",tg:["临床","方剂"],fit:["气郁质","痰湿质"]},
+ {t:"脾胃论",au:"· 李杲（号东垣） · 金元",d:"补土派代表作。李东垣身处战乱饥馑，见人多因脾胃内伤致病，遂立「内伤脾胃，百病由生」之说，创补中益气汤等名方。",hl:"脾胃之气既伤，而元气亦不能充，而诸病之所由生也。",hs:"——《脾胃论·脾胃虚实传变论》",diff:"进阶",why:"把「吃饭」提到元气本源的高度。久坐、节食、思虑过度的现代人，读来格外扎心。",tg:["理论","养生"],fit:["气虚质","阳虚质"]},
+ {t:"温疫论",au:"· 吴又可（名有性） · 明",d:"中国第一部传染病学专著。明末大疫，吴又可跳出「伤寒」框架，提出戾气自口鼻而入、各有专病之邪，为温病学先声。",hl:"温疫之为病，非风非寒非暑非湿，乃天地间别有一种异气所感。",hs:"——《温疫论·原病》",diff:"进阶",why:"在细菌病毒被发现前两百多年，已猜到「有一物专致一病」，是中医史上最漂亮的推理之一。",tg:["临床","理论"],fit:["湿热质"]},
+ {t:"医林改错",au:"· 王清任 · 清",d:"王清任亲赴义冢观察人体脏腑，纠正古书脏腑图之误，并创立以气血立论的逐瘀诸方，血府逐瘀汤至今常用。",hl:"治病之要诀，在明白气血。",hs:"——《医林改错·气血合脉说》",diff:"进阶",why:"一位敢说「古书写错了」的清代医家。读它不只为方，更为那份实证精神。",tg:["临床","文化"],fit:["血瘀质"]},
+ {t:"针灸大成",au:"· 杨继洲 · 明",d:"集明以前针灸学之大成，汇经络腧穴、刺法灸法与各家歌赋，《四总穴歌》即赖此书广传，是针灸入门与检索的枢纽。",hl:"肚腹三里留，腰背委中求，头项寻列缺，面口合谷收。",hs:"——《针灸大成·四总穴歌》",diff:"入门",why:"四句口诀把全身常见不适对应到四个要穴，背下来就是一张随身穴位地图。",tg:["针灸","启蒙"],fit:["平和质","血瘀质"]},
+ {t:"濒湖脉学",au:"· 李时珍 · 明",d:"李时珍以二十七脉为纲，用歌诀体写脉象、主病与相似脉辨别，把「只可意会」的脉学变成可诵可记的入门课本。",hl:"浮脉，举之有余，按之不足。",hs:"——《濒湖脉学·浮脉》",diff:"入门",why:"《本草纲目》作者的另一本小书，篇幅不大却是脉学第一启蒙书，读着读着就想给自己把把脉。",tg:["诊法","启蒙"],fit:["平和质"]},
+ {t:"本草经集注",au:"· 陶弘景 · 南朝梁",d:"陶弘景整理《神农本草经》并增补新药，首创按药物自然属性分玉石、草木、虫兽等部类，奠定后世本草分类学的基础。",hl:"诸药所生，皆有境界。",hs:"——《本草经集注·序录》",diff:"进阶",why:"最早认真讨论「道地药材」的书：同一味药，产地不同，药力确有分别。",tg:["本草","理论"],fit:["平和质"]},
+ {t:"食疗本草",au:"· 孟诜 · 唐（张鼎补）",d:"现存最早的食疗专著，逐味记载日常食物的性味、功效、食忌与四季宜忌，把「药食同源」落到一饭一蔬上。",hl:"药食同源，日用之品皆可入馔疗疾。",hs:"◈ 药童辑要（据《食疗本草》内容概括）",diff:"入门",why:"没有高深理论，全是厨房里的事：什么该多吃、什么要忌口，最贴日常。",tg:["食疗","养生"],fit:["痰湿质","气虚质"]}
+);
+Object.assign(BOOK_ALIASES,{"金匮要略":["金匮","要略"],"脾胃论":["东垣","补土派"],"温疫论":["瘟疫论","吴又可"],"医林改错":["逐瘀"],"针灸大成":["四总穴歌"],"濒湖脉学":["脉学"],"本草经集注":["集注"],"食疗本草":["孟诜"]});
+/* 新增典籍的原文选读：2 段原文 + 白话 + 药童领读；不确定原文的以「辑要」明确标注，不冒充古籍原句 */
+Object.assign(BOOK_READS,{
+ "金匮要略":{
+  ps:[
+   {t:"脏腑经络先后病脉证",s:"见肝之病，知肝传脾，当先实脾。",tr:"见到肝病，就要知道它容易传变到脾，所以应当先调补脾脏，让脾土健旺以阻断病势——这是「治未病」在临床上的具体用法。"},
+   {t:"脏腑经络先后病脉证",s:"若五脏元真通畅，人即安和。",tr:"只要五脏的真气运行通畅，人体就安宁和顺。把健康落在气机通畅上，而非单纯「补」。",}],
+  g:"先读第一篇《脏腑经络先后病脉证》，把「传变」与「元真通畅」两句想明白，后面各病篇都顺了。"},
+ "脾胃论":{
+  ps:[
+   {t:"脾胃虚实传变论",s:"脾胃之气既伤，而元气亦不能充，而诸病之所由生也。",tr:"脾胃之气一旦受损，元气也就得不到充养，各种疾病便由此发生。饮食失节、劳倦过度、思虑太甚，都算伤脾。"},
+   {t:"脾胃胜衰论 · 药童辑要",s:"（辑要）升发脾阳、甘温除热，是东垣补土一派的核心笔法。",tr:"李东垣治气虚发热不用苦寒泻火，而以黄芪、人参、白术等甘温之品升举脾阳，代表方即补中益气汤。此段为内容辑要，非原文。"}],
+  g:"抓住「元气靠脾胃养」一条主线，再看补中益气汤的组方，就能读懂金元四大家为何各立一派。"},
+ "温疫论":{
+  ps:[
+   {t:"原病",s:"温疫之为病，非风非寒非暑非湿，乃天地间别有一种异气所感。",tr:"瘟疫这类病，不是风、寒、暑、湿等常规外邪所致，而是天地间另有一种特殊的「异气」感染人体而成。"},
+   {t:"原病 · 药童辑要",s:"（辑要）邪自口鼻而入，各随其气而成各病。",tr:"吴又可认为戾气从口鼻侵入，且不同戾气引发不同病证，已隐约触及病原特异性与传染途径。此段为内容辑要，非原文。"}],
+  g:"先读《原病》一篇，看古人如何在没有显微镜的年代，靠观察与推理逼近传染病真相。"},
+ "医林改错":{
+  ps:[
+   {t:"气血合脉说",s:"治病之要诀，在明白气血。",tr:"治病最关键的诀窍，在于把气与血的关系、虚实、通滞弄明白。"},
+   {t:"医林改错 · 药童辑要",s:"（辑要）亲验脏腑以正古图之误，立逐瘀诸方以治瘀血诸证。",tr:"王清任依据实地观察订正前代脏腑图，并以活血化瘀立法创制血府逐瘀汤、膈下逐瘀汤等方。此段为内容辑要，非原文。"}],
+  g:"卷首的脏腑改正图与后半的逐瘀方要连着读：一位医家的实证勇气，最后落到了能救人的方子上。"},
+ "针灸大成":{
+  ps:[
+   {t:"四总穴歌",s:"肚腹三里留，腰背委中求，头项寻列缺，面口合谷收。",tr:"腹部不适取足三里，腰背酸痛取委中，头项之疾取列缺，面部口齿之病取合谷——四个要穴统摄全身常见部位。"},
+   {t:"针灸大成 · 药童辑要",s:"（辑要）循经取穴，辨虚实而行补泻，灸药各有所宜。",tr:"本书汇辑明以前经络、腧穴、刺灸法与医案，强调按经脉循行选穴并据虚实施以补泻。此段为内容辑要，非原文。"}],
+  g:"把《四总穴歌》抄在笔记本第一页，再回头翻经络图，穴位就不再是散点而成了路线。"},
+ "濒湖脉学":{
+  ps:[
+   {t:"浮脉",s:"浮脉，举之有余，按之不足。",tr:"浮脉的特点：轻按即得且有力，重按反而觉得不足。多主表证，是脉学入门的第一条。"},
+   {t:"濒湖脉学 · 药童辑要",s:"（辑要）二十七脉分纲别类，辨相似脉以免混淆。",tr:"全书以七言歌诀描述二十七种脉象及其主病，并专列「相类脉」辨别，便于记诵与临证对照。此段为内容辑要，非原文。"}],
+  g:"不必一次背完二十七脉，先辨「浮、沉、迟、数」四纲，再往外扩，脉学就不吓人了。"},
+ "本草经集注":{
+  ps:[
+   {t:"序录",s:"诸药所生，皆有境界。",tr:"各种药材的生长，各有其适宜的产地与环境——这正是后世「道地药材」观念最早的经典表述之一。"},
+   {t:"本草经集注 · 药童辑要",s:"（辑要）以朱墨分书《本经》与别录，按自然属性分部类。",tr:"陶弘景用朱、墨两色区分《神农本草经》原文与后世增补，并首创玉石、草木、虫兽、果菜、米食等分类法。此段为内容辑要，非原文。"}],
+  g:"读它像读一本「古籍整理说明书」：古人如何分类、如何标注出处，比单记药名更有意思。"},
+ "食疗本草":{
+  ps:[
+   {t:"食疗本草 · 药童辑要",s:"（辑要）日常食物各有性味，用之得宜可养可疗，失宜则反为害。",tr:"全书逐一记录食药的性味、功效、食忌与配伍宜忌，把调养落到三餐之中。此段为内容辑要，非原文。"},
+   {t:"食疗本草 · 药童辑要",s:"（辑要）因时、因人、因病而忌口，是食疗的第一要义。",tr:"同一味食物，四时不同、体质不同、病证不同，宜忌亦随之变化，与本站「先识体质再荐读」是同一思路。此段为内容辑要，非原文。"}],
+  g:"把它当一本「厨房版本草」翻，配着《随息居饮食谱》一起读，药食同源这条线就完整了。"}
+});
 KB.unshift(...BOOKS.map(b=>({keys:[b.t,...(BOOK_ALIASES[b.t]||[])],cat:b.t,ans:`<b>经典 · 《${b.t}》</b><div class="kv"><span class="k">作者年代</span>${b.au}</div><div class="kv"><span class="k">名句金句</span>\u201c${b.hl}\u201d${b.hs}</div><div class="kv"><span class="k">内容看点</span>${b.d}</div><div class="kv"><span class="k">药童导读</span>${b.why}</div><div class="kv"><span class="k">难度与适合</span>${b.diff} · 适合${b.fit.join("、")}</div><div style="margin-top:8px"><button class="btn ghost" onclick="openRead('${b.t}')">📖 翻开《${b.t}》读选段 →</button></div><div class="kv" style="color:var(--ink2)">完整金句卡与荐读路线，去「经典荐读」页面翻翻〜</div>`})));
 /* ===== 经典作者档案：问「李时珍是谁」「本草纲目的作者是谁」都能聊 ===== */
 const AUTHORS={
@@ -1098,6 +1207,16 @@ const AUTHORS={
  "医学三字经":{n:"陈修园（名念祖）",era:"清",names:["陈修园","陈念祖","修园"],bio:"福建长乐人，医学教育家。一生致力于中医普及、著作等身，《医学三字经》把中医源流、诊法方药编成三字韵语，是医史入门第一书。",fun:"清代中医界的\u201c教材编写组组长\u201d：他写的启蒙读物，至今仍是中医爱好者的开学第一课。"},
  "饮膳正要":{n:"忽思慧",era:"元",names:["忽思慧"],bio:"元代宫廷饮膳太医，兼通蒙汉医药与营养之学，主持编成中国第一部营养学专著《饮膳正要》，讲妊娠食忌、饮酒避忌、四时所宜。",fun:"身份相当于元代皇家「首席营养师」，给皇帝一家写膳食说明书，一写写成了传世经典。"}
 };
+Object.assign(AUTHORS,{
+ "金匮要略":{n:"张仲景（名机）",era:"东汉",names:["金匮","仲景杂病"],bio:"与《伤寒论》同出《伤寒杂病论》，后世将杂病部分整理为《金匮要略》。全书以脏腑经络为纲辨治内伤杂病，载方精审，被奉为中医临床方书之祖。",fun:"同一部书被后人拆成《伤寒论》与《金匮要略》两本流传——医圣大概没想到自己「一书两版」。"},
+ "脾胃论":{n:"李杲（号东垣老人）",era:"金元",names:["李东垣","李杲","东垣"],bio:"金元四大家之一、补土派宗师。师从张元素，值战乱饥馑见百姓多因劳倦伤脾致病，遂著《脾胃论》，创补中益气汤，人称「医之有李东垣，如儒家之有孟子」。",fun:"别人打仗抢地盘，他打仗抢「脾胃」——一句「内伤脾胃，百病由生」影响了此后八百年的养生观。"},
+ "温疫论":{n:"吴有性（字又可）",era:"明末",names:["吴又可","吴有性"],bio:"江苏吴县人。崇祯年间大疫流行，他发现套用伤寒法治之无效，遂深入疫区观察，著《温疫论》提出「戾气」致病，比病原微生物学说早了两个多世纪。",fun:"在没有显微镜的年代，他靠「这病会人传人、且一种气致一种病」的观察，把传染病学往前推了一大步。"},
+ "医林改错":{n:"王清任（字勋臣）",era:"清（1768-1831）",names:["王清任","勋臣"],bio:"河北玉田人。为订正古医书脏腑图，多次赴义冢、刑场实地观察人体，绘《亲见改正脏腑图》，并据气血理论创制逐瘀诸方，是清代最具实证精神的医家。",fun:"书名直译就是「我要给医林改错」——古人少有的、敢把质疑写进标题的狠人。"},
+ "针灸大成":{n:"杨继洲（名济时）",era:"明",names:["杨继洲","继洲"],bio:"浙江衢州人，世代业医、尤精针灸，曾任太医院医官。以家传《卫生针灸玄机秘要》为底，广辑明以前二十余家针灸文献，编成《针灸大成》十卷。",fun:"今天的「四总穴歌」能背得这么顺，全靠他把散落各家的歌诀收进了一本书。"},
+ "濒湖脉学":{n:"李时珍（号濒湖）",era:"明",names:["濒湖","李时珍"],bio:"《本草纲目》作者，亦精脉诊。因感前人脉学「文字深奥，学者难明」，遂以歌诀体重编二十七脉，成《濒湖脉学》，与《奇经八脉考》并行于世。",fun:"写得了 190 万字巨著，也肯为一本入门小册子押韵——大医家的科普自觉。"},
+ "本草经集注":{n:"陶弘景（号华阳隐居）",era:"南朝梁（456-536）",names:["陶弘景","弘景","华阳隐居"],bio:"丹阳秣陵人，道士、医药学家、博物学家。整理《神农本草经》并增补 365 味成《本草经集注》，首创药物自然属性分类法，兼注产地、采制与真伪。",fun:"梁武帝每有国家大事都写信问他，人称「山中宰相」——隐居茅山，却管着半个朝堂。"},
+ "食疗本草":{n:"孟诜（shēn）",era:"唐（621-713）",names:["孟诜"],bio:"汝州梁县人，孙思邈弟子，曾任同州刺史。所撰《补养方》后由张鼎增补为《食疗本草》，是我国现存最早的食疗专书，专记日常食物的性味与食忌。",fun:"当过刺史、写过食疗书：把「今天吃什么」这件小事，写成了传世经典。"}
+});
 const AUTHOR2BOOK={};Object.keys(AUTHORS).forEach(bt=>AUTHORS[bt].names.forEach(n=>AUTHOR2BOOK[n]=bt));
 function authorCard(bt){
   const a=AUTHORS[bt];
@@ -1122,8 +1241,8 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
 const PAGE_MOUNTED={home:true};
 const PAGE_INIT={
   quiz:()=>{renderQuiz();restorePhys();},
-  chat:()=>{},                                  // 推荐问题由 go() 每次进页时刷新
-  read:()=>{renderFilter();renderBooks();},     // 筛选条 + 十二张书卡
+  chat:()=>{renderKbIndex();},                    // 知识库速查 + 推荐问题由 go() 每次进页时刷新
+  read:()=>{renderFilter();renderBooks();},     // 筛选条 + 二十张书卡
   album:()=>{},                                 // 集章墙由 go() 刷新
   game:()=>{
     const g=window._game;
@@ -1135,6 +1254,20 @@ const PAGE_INIT={
   },
   checkin:()=>{}                                // 日历由 go() 刷新
 };
+/* 知识库速查：把全部本草（按功效分门）与典籍列出来，点名字即问药童 */
+function renderKbIndex(){
+  const box=$("#kbIndex");if(!box)return;
+  const btn=(n,label)=>`<button onclick="askKB('${n}')">${label||n}</button>`;
+  const cats=HERB_CATS.map(c=>`<div class="kbi-cat"><b>${c}</b>${ALL_HERBS.filter(h=>h.cat===c).map(h=>btn(h.n)).join("")}</div>`).join("");
+  const orig=`<div class="kbi-cat"><b>药食同源</b>${HERBS.map(h=>btn(h.n)).join("")}</div>`;
+  const books=`<div class="kbi-btns">${BOOKS.map(b=>btn(b.t,`《${b.t}》`)).join("")}</div>`;
+  box.innerHTML=`<details class="kbi"><summary>📚 知识库速查 · <b>${ALL_HERBS.length} 味本草</b> / <b>${BOOKS.length} 部典籍</b> —— 点名字直接问药童</summary>
+    <div class="kbi-body">
+      <div class="kbi-sec"><h4>◈ 典籍索引 · 书名 / 作者 / 金句 / 原文选段（${BOOKS.length} 部）</h4>${books}</div>
+      <div class="kbi-sec"><h4>◈ 本草名录 · 按功效分门（${ALL_HERBS.length} 味）</h4>${orig}${cats}</div>
+      <p class="kbi-note">以上条目全部进入本草问答与竞赛题库；带工笔插画的 14 味另见「本草图鉴」，典籍可在「经典荐读」点开原文选段。知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议。</p>
+    </div></details>`;
+}
 function mountPage(p){
   if(PAGE_MOUNTED[p])return;
   PAGE_MOUNTED[p]=true;
@@ -1247,7 +1380,7 @@ function gameReact(state,n){ // state: "ready"|"ok"|"bad"|"timeout"|"end-ok"|"en
 }
 function shuffleArr(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const CONTEST_LIMIT=8; // 竞赛模式每题限时（秒）——v6 提难度：10 秒降到 8 秒
-/* 经典著作考点题库（全部取材于「经典荐读」十二部书目，在问答里问书名都能学到答案） */
+/* 经典著作考点题库（全部取材于「经典荐读」二十部书目，在问答里问书名都能学到答案） */
 const BOOK_QS=[
  {q:"\u201c上工治未病，不治已病\u201d这句名言出自哪部经典？",opts:["黄帝内经","伤寒论","千金方","难经"],a:"黄帝内经",fb:"《黄帝内经》主张最高明的医生在疾病未发时就调治——本站「体质辨识」的立意正源于此。"},
  {q:"我国现存最早的药物学专著是？",opts:["神农本草经","本草纲目","千金方","温病条辨"],a:"神农本草经",fb:"汉代《神农本草经》载药365味、分上中下三品，比《本草纲目》早了一千多年。"},
@@ -1311,6 +1444,20 @@ const ROOTS={
  "由哪两部分组成":"《素问》以黄帝与岐伯问答论医理，「素问」即平素问答之书；《灵枢》详于经络针刺，又称《针经》——二者合璧方为完整《内经》。",
  "东方药物巨典":"以「纲目体」编纂：每药标正名、释名、集解、气味、主治、发明，纲举目张——它不只是药典，更是一部博物学百科全书。"
 };
+/* ===== 知识库 → 题库自动覆盖：新增本草 / 典籍都能被竞赛与练习考到 =====
+   用 push 动态生成（而非静态字面量），既不撑大既有题目计数口径，也保证以后再加条目就自动进题 */
+ALL_HERBS.filter(h=>h.cat).forEach((h,i)=>{
+  const others=ALL_HERBS.filter(x=>x.n!==h.n);
+  const wrong=others.slice((i*3)%20,(i*3)%20+3).map(x=>x.n);
+  SITE_QS.push({q:`「${h.e.split("、")[0]}」是哪味药的功效？`,opts:[h.n,...wrong],a:h.n,
+    fb:`${h.n}：${h.f}。${h.e}（归入「${h.cat}」类）`,root:`${h.n}载于${h.b}：${h.s}`});
+});
+BOOKS.slice(12).forEach((b,i)=>{
+  const others=BOOKS.filter(x=>x.t!==b.t);
+  const wrong=others.slice((i*2)%12,(i*2)%12+3).map(x=>x.t);
+  BOOK_QS.push({q:`「${b.hl}」出自哪部典籍？`,opts:[b.t,...wrong],a:b.t,
+    fb:`《${b.t}》${b.au}。${b.d}`,root:`《${b.t}》${b.hs}。药童领读：${b.why}`});
+});
 [...BOOK_QS,...SITE_QS].forEach(q=>{if(!q.root)for(const k in ROOTS){if(q.q.includes(k)){q.root=ROOTS[k];break;}}});
 /* 辨药眼力：由相似药材数据生成选择题（一对两题，各考一味） */
 function pairQuestions(l){
@@ -1374,13 +1521,13 @@ function buildCorpus(){ // 把全站结构化知识编成可检索的经典语�
   const out=[];
   const add=(t,src,c)=>{if(!t||!c)return;const body=String(c).slice(0,700);
     out.push({t:String(t),src:String(src||t),c:body,tg:new Set(aiTokens(t)),cg:new Set(aiTokens(body))});};
-  for(const k in BOOK_READS){ // 十二部经典原文选段（最高优先级语料）
+  for(const k in BOOK_READS){ // 二十部经典原文选段（最高优先级语料）
     const b=BOOK_READS[k];
     (b.ps||[]).forEach(p=>add(`《${k}》· ${p.t}`,`《${k}》· ${p.t}`,`【原文】${p.s}\n【白话】${p.tr}`));
     if(b.g)add(`《${k}》· 药童导读`,`《${k}》`,b.g);
   }
   BOOKS.forEach(b=>add(`《${b.t}》`,`《${b.t}》`,`${b.au}。${b.d} 名句：「${b.hl}」${b.hs}。药童看点：${b.why}`));
-  HERBS.forEach(h=>add(h.n,`药材 · ${h.n}`,`性味归经：${h.f}。外观辨识：${h.x}。功效主治：${h.e}。经典出处：${h.s}`));
+  ALL_HERBS.forEach(h=>add(h.n,`药材 · ${h.n}`,`性味归经：${h.f}。功效分类：${h.cat||"药食同源"}。外观辨识：${h.x}。功效主治：${h.e}。经典出处：${h.s}。延伸阅读：${h.b}`));
   FORMULAS.forEach(f=>add(f.n,`名方 · ${f.n}`,`方书源流：${f.s}。${f.d}`));
   ACUP.forEach(a=>add(`穴位 · ${a.n}`,`穴位 · ${a.n}`,a.d));
   TOPICS.forEach(t=>add(t.n,`养生话题 · ${t.n}`,`${t.d} 参考：${t.b||""}`));
@@ -2257,10 +2404,10 @@ const FUN=[
  {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，再泡杯玫瑰花茶疏疏肝。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你开个方子：玫瑰花茶一杯（疏肝解郁）+ 八段锦一遍（拉伸解压）+ 早睡一晚（ recharge 元气）。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
  {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
  {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
- {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
- {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>十二部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
- {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
- {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>二十部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
+ {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，二十位岐黄大家我都认识〜"}},
+ {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">二十部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
  {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
  {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「百草试炼」页！21 题混合出卷、每题限时 8 秒：3 道看图辨药 + 8 道<b>经典著作考点</b> + 8 道<b>全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题。嫌难？切练习模式，14 题不限时卷、题题有解析还能追问药童。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
@@ -2346,7 +2493,7 @@ function send(q){
         bubble("本草智答",best.ans+(best.topic?fitBookAns():""));
       }else{
         reportMiss(q);
-        bubble("本草智答",`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
+        bubble("本草智答",`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>40味本草、6首名方、3处穴位、20部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
       }
     }
     else if(funStrong){bubble("本草智答",(typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
@@ -2356,7 +2503,7 @@ function send(q){
     else if(fun){bubble("本草智答",(typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
-      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>14味中药、6首名方、3处穴位、12部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
+      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>40味本草、6首名方、3处穴位、20部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
     }
     // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
     const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
@@ -2369,12 +2516,12 @@ function renderRecBar(){
   const bar=$("#readRec");if(!bar)return;
   const p=physGet();
   if(window._readFit&&p){
-    bar.innerHTML=`<span>◈ 已按 <b>${p.n}</b> 收窄书单：只显示与你的体质相契的经典</span><button class="btn ghost" onclick="showAllBooks()">↩ 看全部十二部</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`;
+    bar.innerHTML=`<span>◈ 已按 <b>${p.n}</b> 收窄书单：只显示与你的体质相契的经典</span><button class="btn ghost" onclick="showAllBooks()">↩ 看全部二十部</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`;
     return;
   }
   bar.innerHTML=p
     ?`<span>◈ AI 小药童已认出你的体质：<b>${p.n}</b>（${p.j}）· ${p.way||"量表辨识"}</span><span>契合书目已点亮并排在最前</span><button class="btn red" onclick="fitBooks()">★ 只按我的体质荐读</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`
-    :`<span>◈ 还没有体质档案：先让 <b>AI 小药童</b>认一认你，再从十二部经典里挑出对证的那一部</span><button class="btn red" onclick="goQuiz('face')">📷 拍照识体质</button><button class="btn ghost" onclick="goQuiz('quick')">⚡ 9 题速测</button>`;
+    :`<span>◈ 还没有体质档案：先让 <b>AI 小药童</b>认一认你，再从二十部经典里挑出对证的那一部</span><button class="btn red" onclick="goQuiz('face')">📷 拍照识体质</button><button class="btn ghost" onclick="goQuiz('quick')">⚡ 9 题速测</button>`;
 }
 function fitBooks(){
   if(!physGet()&&!lastQuiz){goQuiz('face');return;}
@@ -2423,7 +2570,7 @@ function openRead(t){
   const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;  $("#readMask").innerHTML=`
    <div class="read-modal" onclick="event.stopPropagation()">
      <button class="rm-close" onclick="closeRead()" title="合上">✕</button>
-     <div class="rm-cover"><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">
+     <div class="rm-cover">${BOOK_IMG[t]?`<img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">`:`<div class="rm-cover-txt">${t}</div>`}
        <div class="rm-title"><h3>《${t}》</h3><span>${b.au} · ${b.diff}读物</span></div></div>
      <div class="rm-body">
        <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span></div>
