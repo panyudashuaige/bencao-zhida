@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>本草智答 · AI中医药知识问答与经典荐读智能体</title>
-<meta name="description" content="本草智答——会对话的本草纲目：AI中医体质辨识（国标量表）、本草知识问答、十二部经典荐读、百草试炼知识竞赛、集章图鉴与阅读打卡。书香岐黄AI赋能——图书馆「AI+管理服务」大赛参赛作品。">
+<meta name="description" content="本草智答——会对话的本草纲目：AI中医体质辨识（国标量表）、本草知识问答、十二部经典荐读、百草试炼知识竞赛、集章图鉴与阅读打卡。AI 阅读推广与中医药文化传播参赛作品。">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="apple-touch-icon" href="assets/appicon-180.png">
 <meta name="theme-color" content="#2F5D50">
@@ -57,12 +57,15 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 header.top-hero{width:100%;position:relative;background:linear-gradient(115deg,var(--hd-1),var(--hd-2) 52%,var(--hd-3));border-top:3px solid var(--gold);border-bottom:1px solid var(--line);box-shadow:0 6px 22px rgba(43,43,38,.1);overflow:hidden}
 header.top-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 88% 6%,var(--hd-glow),transparent 58%),radial-gradient(ellipse at 8% 130%,var(--hd-veil),transparent 52%);opacity:.9;pointer-events:none}
 header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 10%,var(--gold) 90%,transparent);opacity:.75;pointer-events:none}
-.hd-inner{max-width:1600px;margin:0 auto;padding:34px 40px 30px;display:flex;align-items:center;gap:38px;position:relative;z-index:1}
-.hd-inner::before{content:"";position:absolute;right:-20px;top:-60px;width:52%;height:170%;background:url("assets/ink-still.jpg") center/cover no-repeat;opacity:.14;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent);mask-image:radial-gradient(closest-side,#000 40%,transparent)}
+/* 页眉：水墨字标 + 典籍横排书脊；书脊整排高度与字标(220)相仿 */
+.hd-inner{max-width:860px;margin:0 auto;padding:22px 16px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 30px;position:relative;z-index:1}
 .hd-left{display:flex;align-items:center;flex:none;position:relative;z-index:1}
-/* 水墨字标：放大为页眉主视觉；浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
+/* 水墨字标：浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
 .seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:transparent}
-/* 字标不设独立底色与柔光：透明区直接透出页眉渐变，四季换肤逐像素一致 */
+/* 字标不设硬底色：透明区本应透出页眉渐变；但横幅左下墨块会压到 logo，故加一层羽化米白光晕
+   衬底（::before），其色与横幅浅色区几乎一致→在浅处隐形，只在墨块处提亮，让 logo 干净浮现，
+   非生硬白圆盘（区别于历史 v14 的实色柔光盘）。位于 logo 图之下、横幅之上。 */
+.seal-stamp::before{content:"";position:absolute;inset:-12% -16% -16% -22%;z-index:0;pointer-events:none;background:radial-gradient(56% 56% at 50% 50%,rgba(252,246,235,.94),rgba(252,246,235,.72) 52%,rgba(252,246,235,0) 82%);filter:blur(3px)}
 .seal-stamp img{width:100%;height:100%;display:block;position:relative;z-index:1}
 /* 左下盈亏色随季更衣：四张已染色的小透明图按季切换，纯 CSS、无额外整图请求、无闪烁 */
 .seal-stamp::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-position:center;background-size:contain;background-repeat:no-repeat}
@@ -70,22 +73,20 @@ html[data-season="春"] .seal-stamp::after{background-image:url("assets/logo-acc
 html[data-season="夏"] .seal-stamp::after{background-image:url("assets/logo-accent-summer.png")}
 html[data-season="秋"] .seal-stamp::after{background-image:url("assets/logo-accent-autumn.png")}
 html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-accent-winter.png")}
-.head-verse{font-family:"Ma Shan Zheng","Noto Serif SC",serif;color:var(--gold);font-size:13px;writing-mode:vertical-rl;letter-spacing:6px;border-left:1px solid rgba(154,123,63,.4);border-right:1px solid rgba(154,123,63,.25);padding:0 10px;height:190px;white-space:nowrap;flex:none;position:relative;z-index:1;background:linear-gradient(90deg,transparent,rgba(154,123,63,.07),transparent)}
-.hd-books{flex:1;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;gap:16px 20px;min-width:0;position:relative;z-index:1}
-.hd-books figure{margin:0;text-align:center;flex:none}
-.hd-books figcaption{font-size:12px;color:var(--gold);font-weight:600;margin-bottom:10px;letter-spacing:2px;white-space:nowrap}
-.hb-3d{position:relative;width:128px;height:160px;margin:0 auto;transform:perspective(620px) rotateY(-14deg);filter:drop-shadow(0 12px 14px rgba(43,43,38,.3));transition:transform .35s,filter .35s}
-.hd-book:hover .hb-3d{transform:perspective(620px) rotateY(-6deg) translateY(-7px);filter:drop-shadow(0 18px 20px rgba(43,43,38,.34))}
-.hb-spine{position:absolute;left:0;top:0;width:19px;height:100%;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#5B2F1B,#9A5A32 42%,#43220F);border:1px solid rgba(255,235,200,.2);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:inset -3px 0 7px rgba(0,0,0,.4)}
-.hb-spine span{writing-mode:vertical-rl;color:#F3E2C0;font-size:10px;letter-spacing:2px}
-.hb-cover{position:absolute;left:15px;top:0;right:0;bottom:0;border-radius:2px 4px 4px 2px;overflow:hidden;border:1px solid rgba(133,94,44,.55);box-shadow:inset 0 0 0 2px rgba(255,245,220,.4),2px 0 0 #E8DCC0,4px 0 0 #D4C4A4,6px 0 0 #EFE6D2,8px 0 0 #C9B894}
-.hb-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.hb-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,.3),transparent 26%,transparent 72%,rgba(0,0,0,.16));pointer-events:none}
-.hb-label{position:absolute;right:6px;top:9px;writing-mode:vertical-rl;background:rgba(248,239,216,.94);color:#7A3A22;border:1px solid rgba(133,94,44,.55);padding:7px 3px;font-size:11px;letter-spacing:2px;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:1}
-.hd-ribbon{position:static;flex:0 0 100%;z-index:2;background:linear-gradient(90deg,#8E6A34,#B98E4F 18%,#E8CD8E 50%,#B98E4F 82%,#8E6A34);color:#FFFDF4;font-family:"Noto Serif SC",serif;font-size:14px;letter-spacing:7px;text-align:center;padding:10px 12px;white-space:nowrap;border-top:1px solid rgba(255,240,200,.55);border-bottom:1px solid rgba(90,60,20,.35);text-shadow:0 1px 2px rgba(80,50,10,.5);box-shadow:0 5px 16px rgba(133,94,44,.35);pointer-events:none}
-@media(max-width:1000px){.head-verse{display:none}.hb-3d{width:96px;height:122px}.hd-books figure:nth-child(n+5){display:none}.seal-stamp{width:180px;height:180px}}
-@media(max-width:720px){.hd-inner{flex-wrap:wrap;padding:24px 20px 30px;gap:18px}.hd-books{flex:0 0 100%;width:100%;justify-content:center;gap:12px}.hb-3d{width:72px;height:92px}.hd-ribbon{font-size:11.5px;letter-spacing:3px}.seal-stamp{width:150px;height:150px}}
-@media(max-width:560px){.hd-books figure:nth-child(n+4){display:none}.hb-3d{width:62px;height:80px}.seal-stamp{width:120px;height:120px}.hd-ribbon{letter-spacing:1px;font-size:10.5px}}
+/* 页眉：字标 + 小药童（书籍与金匾已按竞赛改版移除） */
+/* 响应式 */
+.hd-bg{position:absolute;inset:0;z-index:0;background:url("assets/header-banner.png") center/cover no-repeat;opacity:.97;pointer-events:none}
+.hd-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,var(--hd-1),var(--hd-2) 52%,var(--hd-3));opacity:.5}
+.hd-mid{flex:1 1 240px;min-width:0;text-align:center;z-index:1;padding:0 10px}
+.hd-slogan{font-family:"Ma Shan Zheng",cursive;font-size:30px;line-height:1.18;color:var(--red);letter-spacing:2px;text-shadow:0 1px 0 rgba(251,243,228,.55)}
+.hd-slogan b{color:var(--green)}
+.hd-slogan .hd-ai{font-family:"Ma Shan Zheng",cursive;font-weight:400;font-size:1.06em;letter-spacing:.02em;margin-right:.18em;text-shadow:0 1px 0 rgba(251,243,228,.55)}
+.hd-slogan-sub{margin-top:7px;font-family:"Noto Serif SC",serif;font-size:13px;letter-spacing:1px;color:var(--ink2)}
+.hd-right{flex:none;z-index:1;display:flex;align-items:flex-end;justify-content:center;margin-left:8px}
+.hd-right img{height:150px;width:auto;display:block;margin-bottom:8px;filter:drop-shadow(0 10px 14px rgba(43,43,38,.22))}
+@media(max-width:1000px){.seal-stamp{width:180px;height:180px}.hd-right img{height:128px}.hd-slogan{font-size:26px}}
+@media(max-width:720px){.hd-inner{padding:18px 12px 16px}.seal-stamp{width:150px;height:150px}.hd-right img{height:108px}.hd-slogan{font-size:22px}.hd-slogan-sub{font-size:12px}}
+@media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right img{height:88px}.hd-slogan{font-size:19px}.hd-mid{flex-basis:100%;margin-top:4px}}
 
 /* ===== 导航 ===== */
 nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
@@ -221,12 +222,14 @@ html[data-season="秋"] .mascot-badge::after{content:"秋"}
 html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .side-mascot.acting{animation:none}
 @keyframes breathe{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}50%{transform:translateX(-50%) scale(1.025) translateY(-4px)}}
-.mascot-bubble{position:absolute;bottom:172px;left:50%;transform:translateX(-50%) translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:11px 15px;font-size:13px;line-height:1.85;max-width:224px;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.4px}
-.mascot-bubble::after{content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #FBF3E4}
-.mascot-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* 药童台词移到右上角：放宽不再挤成四行，尾巴回指头部 */
+.mascot-bubble{position:absolute;bottom:196px;left:calc(50% + 22px);width:max-content;max-width:min(280px,64vw);transform:translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:11px 17px;font-size:13px;line-height:1.7;text-align:left;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.4px}
+.mascot-bubble::after{content:"";position:absolute;bottom:-7px;left:20px;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #FBF3E4}
+.mascot-bubble.show{opacity:1;transform:translateY(0)}
+@media(max-width:720px){.mascot-bubble{left:auto;right:0;bottom:190px;max-width:min(238px,66vw);text-align:center;font-size:12.5px}.mascot-bubble::after{left:auto;right:30px}}
 .mascot-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;color:rgba(166,62,40,.65);background:rgba(251,243,228,.85);border:1px solid rgba(166,62,40,.25);padding:3px 10px;border-radius:999px;z-index:3;pointer-events:none;transition:opacity .4s}
 .mascot-hint.hide{opacity:0}
-.seal-side{overflow:hidden;min-height:440px}
+.seal-side{overflow:visible;min-height:440px}
 .seal-side .zi{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:30px;letter-spacing:8px;writing-mode:vertical-rl;background:var(--red);color:#FBF3E4;padding:16px 8px;border-radius:6px;box-shadow:0 4px 12px rgba(166,62,40,.28)}
 .typing{display:inline-flex;gap:5px;padding:6px 2px}
 .typing i{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.2s infinite}
@@ -463,19 +466,23 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 /* ===== 挑战战帖 toast ===== */
 .chal-toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(80px);background:var(--green);color:#F3EEDD;border-radius:999px;padding:10px 24px;font-size:13.5px;letter-spacing:1px;box-shadow:0 10px 26px rgba(47,93,80,.4);z-index:80;transition:transform .35s ease;pointer-events:none}
 .chal-toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:720px){.books,.grid2{grid-template-columns:1fr}.home-feats{grid-template-columns:1fr 1fr}.home-feats .feat:last-child{grid-column:1/-1}.feat{min-height:216px}.feat .meta{white-space:normal;font-size:11.5px}.head-verse{display:none}.daily{flex-direction:column}.daily-left{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;width:100%;display:flex;gap:14px;align-items:baseline;justify-content:center}.nav-inner{overflow-x:auto;justify-content:flex-start}nav button{flex:none;white-space:nowrap}}
+@media(max-width:720px){.books,.grid2{grid-template-columns:1fr}.home-feats{grid-template-columns:1fr 1fr}.home-feats .feat:last-child{grid-column:1/-1}.feat{min-height:216px}.feat .meta{white-space:normal;font-size:11.5px}.daily{flex-direction:column}.daily-left{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;width:100%;display:flex;gap:14px;align-items:baseline;justify-content:center}.nav-inner{overflow-x:auto;justify-content:flex-start}nav button{flex:none;white-space:nowrap}}
 @media(max-width:560px){.hero-stats{display:grid;grid-template-columns:repeat(4,1fr)}.hero-stats div{border-bottom:1px solid var(--line)}.hero-stats div:nth-child(4n){border-right:none}.hero-stats div:nth-child(n+5){border-bottom:none}}
 </style>
 </head>
 <body>
 <header class="top-hero">
+ <div class="hd-bg" aria-hidden="true"></div>
  <div class="hd-inner">
   <div class="hd-left">
     <div class="seal-stamp"><img src="assets/logo-ink.png" alt="本草智答 · 浓墨本草错落排布、朱红智答小印与淡金螭龙衔尾飞白圆相" width="220" height="220" decoding="async" fetchpriority="high"></div>
   </div>
-  <div class="head-verse">传承岐黄薪火</div>
-  <div class="hd-books" id="hdBooks">
-    <div class="hd-ribbon">◈ 岐黄十二部经典 · 典藏陈列 ◈</div>
+  <div class="hd-mid">
+    <div class="hd-slogan"><span class="hd-ai">AI</span> 小药童 · <b>陪你读经典</b></div>
+    <div class="hd-slogan-sub">AI 阅读推广 · 中医药文化年轻化传播</div>
+  </div>
+  <div class="hd-right">
+    <img src="assets/mascot3d.png" alt="本草智答 · AI 小药童" height="150" decoding="async">
   </div>
  </div>
 </header>
@@ -491,7 +498,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
  </div>
 </nav>
 <div class="wrap">
-<div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>书香岐黄 AI 赋能</b>——图书馆「AI+管理服务」大赛参赛作品<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
+<div class="promo-bar" aria-hidden="true"><div class="promo-inner"><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span><span>📜 <b>本草智答</b> · AI 阅读推广与中医药文化传播<span class="sep">✦</span>识体质 · 问本草 · 读经典 · 集图鉴 · 战竞赛 · 勤打卡<span class="sep">✦</span>十二部经典可点开阅读选段，知识竞赛混合出题考眼力更考学问<span class="sep">✦</span>答完竞赛领称号、发战帖，晒出你的岐黄战绩<span class="sep">✦</span>把千年岐黄读成日常</span></div></div>
 
 <section class="page on" id="p-home">
   <div class="hero">
@@ -548,7 +555,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><span class="kicker">辨 · 试炼</span><div class="gly">辨</div><b>百草试炼</b><span class="desc">练习 + 知识竞赛双模式<br>混合题库考眼力考学问</span><span class="meta" data-meta="game">练习 14 题 · 竞赛 21 题</span></div>
     <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><span class="kicker">鉴 · 集章</span><div class="gly">鉴</div><b>本草图鉴</b><span class="desc">集章点亮工笔画像<br>集齐十四味做园主</span><span class="meta" data-meta="album">14 味工笔画像待点亮</span></div>
     <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><span class="kicker">读 · 典籍</span><div class="gly">读</div><b>经典荐读</b><span class="desc">十二部岐黄经典<br>点开即读原文选段</span><span class="meta" data-meta="read">12 部典籍 · 原文选读</span></div>
-    <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><span class="kicker">勤 · 打卡</span><div class="gly">勤</div><b>岐黄打卡</b><span class="desc">图书馆文化节读者专区<br>每日一格集满本草</span><span class="meta" data-meta="checkin">每日一格 · 集满本草</span></div>
+    <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><span class="kicker">勤 · 打卡</span><div class="gly">勤</div><b>岐黄打卡</b><span class="desc">中医药文化 · 读者打卡专区<br>每日一格集满本草</span><span class="meta" data-meta="checkin">每日一格 · 集满本草</span></div>
     <div class="feat" onclick="askKB('药食同源')"><span class="more">→</span><span class="kicker">食 · 厨房</span><div class="gly">食</div><b>药食同源</b><span class="desc">厨房里的本草智慧<br>生姜山药莲子皆是药</span><span class="meta" data-meta="food">厨房即药房 · 生姜山药</span></div>
     <div class="feat" onclick="askKB('四君子汤')"><span class="more">→</span><span class="kicker">方 · 六首</span><div class="gly">方</div><b>名方六首</b><span class="desc">四君子汤 · 桂枝汤 · 玉屏风散<br>点开即查方书源流与方义</span><span class="meta" data-meta="formula">6 首名方 · 点名即查</span></div>
     <div class="feat" onclick="askKB('足三里')"><span class="more">→</span><span class="kicker">穴 · 三处</span><div class="gly">穴</div><b>穴位三处</b><span class="desc">足三里 · 合谷 · 涌泉<br>定位功效与典籍出处一问便知</span><span class="meta" data-meta="acup">3 处要穴 · 按揉有讲究</span></div>
@@ -573,7 +580,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 
 <footer>
   <div class="orn2">本草有灵 · 智答无界</div>
-  本草智答 · 书香岐黄AI赋能——图书馆"AI+管理服务"大赛参赛作品 · 知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议
+  本草智答 · AI 阅读推广与中医药文化传播参赛作品 · 知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议
 </footer>
 </div>
 <div class="read-mask" id="readMask" onclick="if(event.target===this)closeRead()"></div>
@@ -647,7 +654,7 @@ const PAGE_HTML={
   <div class="card" id="checkinBody">
     <div class="orn">岐 黄 打 卡</div>
     <h2>每日一格<span class="dot"> · </span>集满本草</h2>
-    <p class="desc">图书馆中医药文化节 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
+    <p class="desc">中医药文化 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
     <div id="checkinArea"></div>
   </div>`
 };
@@ -1430,7 +1437,7 @@ function endGame(){
 }
 /* 挑战战帖：一键复制成绩+称号+链接，转发好友过招 */
 function copyChallenge(s,title,total){
-  const txt=`【本草战帖 · 书香岐黄】我在「本草智答」知识竞赛中答对 ${s}/${total||21}，荣获「${title}」称号！识体质、问本草、读经典、战竞赛——你也来过过招？药童在百草园等你想胜负〜 ${location.href.split("#")[0]}`;
+  const txt=`【本草战帖 · 岐黄论剑】我在「本草智答」知识竞赛中答对 ${s}/${total||21}，荣获「${title}」称号！识体质、问本草、读经典、战竞赛——你也来过过招？药童在百草园等你想胜负〜 ${location.href.split("#")[0]}`;
   const done=()=>{const t=document.createElement("div");t.className="chal-toast";t.textContent="⚔ 战帖已复制！快去粘贴给你的好友吧";document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),400);},2400);};
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(fallback);}else fallback();
@@ -1524,7 +1531,7 @@ function renderCheckin(){
     cells+=`<div class="cell${hit?" hit":""}${today?" today":""}" title="${m+1}月${d}日${hit?" · 已打卡":""}">${d}</div>`;
   }
   $("#checkinArea").innerHTML=`
-    <div class="ci-banner">◈ 图书馆中医药文化节 · 读者阅读打卡专区 —— 每日一格，把岐黄之学读成习惯 ◈</div>
+    <div class="ci-banner">◈ 中医药文化 · 读者阅读打卡专区 —— 每日一格，把岐黄之学读成习惯 ◈</div>
     <div class="ci-stats">
       <div><b>${streak}</b><span>连续打卡</span></div>
       <div><b>${total}</b><span>累计天数</span></div>
@@ -1671,7 +1678,7 @@ function drawPoster(D,qrImg){
     x.fillStyle="#FDFBF4";rr(x,qx-8,qy-8,QS+16,QS+16,8);x.fill();
     x.strokeStyle="rgba(154,123,63,.4)";x.lineWidth=1;x.strokeRect(qx-8.5,qy-8.5,QS+17,QS+17);
     x.drawImage(qrImg,qx,qy,QS,QS);
-    x.fillStyle="#9A7B3F";x.font="14px "+SONG;x.fillText("◈ 扫码同游百草园 · 图书馆中医药文化节读者互动 ◈",W/2,qy+QS+28);
+    x.fillStyle="#9A7B3F";x.font="14px "+SONG;x.fillText("◈ 扫码同游百草园 · 中医药文化读者互动 ◈",W/2,qy+QS+28);
   }
   /* 落款 + 大朱印 */
   const now=new Date();
@@ -1894,7 +1901,7 @@ const FUN=[
  {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，再泡杯玫瑰花茶疏疏肝。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你开个方子：玫瑰花茶一杯（疏肝解郁）+ 八段锦一遍（拉伸解压）+ 早睡一晚（ recharge 元气）。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
  {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
  {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
- {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——图书馆文化节读者专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——14味中药、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——12部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——9题速测/27题完整版国标量表，测出你的体质并给出调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>十二部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，十二位岐黄大家我都认识〜"}},
  {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">十二部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
@@ -2031,15 +2038,6 @@ function renderBooks(f){
   }).join("");
 }
 /* 经典选读弹层：插画封面 + 原文选段 + 白话译文 + 药童领读 */
-/* 顶部主视觉：十二部经典的立体书模陈列（纯典藏展示，不点开即读；原文选段仍在「经典荐读」页） */
-const HEAD_BOOKS=["伤寒论","黄帝内经","神农本草经","本草纲目","千金方"];
-const HEAD_BOOK_NO=["壹","贰","叁","肆","伍"];
-function renderHeadBooks(){
-  const el=$("#hdBooks");if(!el)return;
-  const ribbon=el.querySelector(".hd-ribbon");
-  el.innerHTML=HEAD_BOOKS.map((t,i)=>`<figure class="hd-book"><figcaption>${t}</figcaption><div class="hb-3d"><div class="hb-spine"><span>${HEAD_BOOK_NO[i]}</span></div><div class="hb-cover"><img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》封面" decoding="async" width="126" height="126"><span class="hb-label">${t}</span></div></div></figure>`).join("")+(ribbon?ribbon.outerHTML:"");
-}
-renderHeadBooks();
 function openRead(t){
   const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;  $("#readMask").innerHTML=`
    <div class="read-modal" onclick="event.stopPropagation()">
