@@ -697,7 +697,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   if(!img)return;
   let acting=false,tipTimer,hintShown=false,tipSeason=null;
-  // 动作 WebP 约 370KB，首屏不预载；仅在用户即将互动或自动打招呼时才取
+  // 动作 WebP（60 帧 / 83ms 每帧 / 约 0.5MB）按需加载，首屏不下载；仅在用户即将互动或自动打招呼时才取
   let actLoaded=false;
   function preloadAct(){if(actLoaded)return;actLoaded=true;const pre=new Image();pre.src=ACT;}
   if(img){img.addEventListener("pointerenter",preloadAct,{once:true});img.addEventListener("touchstart",preloadAct,{once:true});}
