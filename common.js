@@ -1,4 +1,11 @@
 
+/* ===== 四线知识 × AI 小药童：本草 / 名方 / 穴位 / 体质 与经典荐读互通，各页都能一键追问 ===== */
+function knowBar(cur,q){
+  const it=[["materia","本草名方","🌿"],["acupoint","经络要穴","📜"],["constitution","九种体质","◈"],["read","经典荐读","📖"]];
+  return `<div class="know-bar"><b>◈ 四线知识 · 都能问 AI 小药童</b>`+
+    it.map(x=>`<a href="${x[0]}.html" class="${x[0]===cur?"on":""}">${x[2]} ${x[1]}</a>`).join("")+
+    `<button class="know-ask" onclick="askKB('${q}')">💬 问小药童 · 这一门</button></div>`;
+}
 /* ===== 页面骨架模板：只存字符串，首次进入才注入 DOM，避免 7 个模块一次性渲染 ===== */
 const PAGE_HTML={
  quiz:`
@@ -60,7 +67,7 @@ const PAGE_HTML={
   <div class="card" style="padding:18px 22px 22px">
     <div class="bot-id">
       <img id="botAvatar" src="assets/mascot3d.webp" alt="本草智答" loading="lazy" decoding="async">
-      <div><b>本草智答</b><span>你的 AI 小药童 · 识体质、荐经典、答本草</span></div>
+      <div><b>本草智答</b><span>你的 AI 小药童 · 识体质、荐经典、答本草、讲名方、说穴位</span></div>
       <div class="ai-bar">
         <span class="ai-state" id="aiState">检测 AI 中…</span>
         <button class="ai-toggle" id="aiToggle" onclick="toggleAI()" title="关闭后只用本地典籍答案，不调用模型">AI 典籍详解 · 开</button>
@@ -77,6 +84,7 @@ const PAGE_HTML={
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
     <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从二十部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选读+白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
+    ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
     <div class="filter" id="filter"></div>
@@ -116,6 +124,7 @@ const PAGE_HTML={
     <div class="orn">本 草 名 物 · 名 方 要 诀</div>
     <h2>本草名方<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典文献整理的本草原貌与名方要诀：性味归经、功效主治，以及组成、方义与源流，分栏一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问。内容仅供科普学习，不构成医疗建议；想查穴位定位与经络，请移步「经络要穴」页。</p>
+    ${knowBar('materia','黄芪')}
     <div class="mat-tabs" id="matTabs">
       <button class="mat-tab on" data-tab="herb" onclick="switchMat('herb')">🌿 本草名录（<span id="cntHerb">0</span> 味）</button>
       <button class="mat-tab" data-tab="formula" onclick="switchMat('formula')">📜 名方要诀（<span id="cntFormula">0</span> 首）</button>
@@ -128,6 +137,7 @@ const PAGE_HTML={
     <div class="orn">经 络 腧 穴 · 定 位 主 治</div>
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成与本草性味，请见「本草名方」页。</p>
+    ${knowBar('acupoint','足三里')}
     <div id="acupArea"></div>
   </div>`,
  seasons:`
@@ -135,6 +145,7 @@ const PAGE_HTML={
     <div class="orn">四 时 调 神 · 顺 岁 而 养</div>
     <h2>四时调神<span class="dot"> · </span>顺岁而养</h2>
     <p class="desc">春生、夏长、秋收、冬藏。本页据《素问·四气调神大论》与二十四节气整理四时原文要义、当季节气、当令本草与应时荐读。点季名可预览该季，页面主色、飘落物与当季插画随之更衣。知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议。</p>
+    ${knowBar('seasons','四时养生')}
     <div class="four-tabs" id="fourTabs">
       <button class="four-tab" data-s="春" onclick="fourSetSeason('春')">春 · 生</button>
       <button class="four-tab" data-s="夏" onclick="fourSetSeason('夏')">夏 · 长</button>
@@ -143,6 +154,21 @@ const PAGE_HTML={
       <button class="four-today" onclick="fourToday()">↺ 回到今日</button>
     </div>
     <div id="fourBody"></div>
+  </div>`,
+ constitution:`
+  <div class="card mat-card">
+    <div class="orn">九 种 体 质 · 因 人 施 养</div>
+    <h2>九种体质<span class="dot"> · </span>通鉴</h2>
+    <p class="desc">本页据《中医体质分类与判定》与《黄帝内经》「阴阳二十五人」整理<b>平和、气虚、阳虚、阴虚、痰湿、湿热、血瘀、气郁、特禀九种体质</b>：体质画像、常见表现、易感倾向、调养宜忌，并关联本站本草、名方与穴位。每张卡片都能<b>直接问 AI 小药童</b>追问调养细节；想知道自己是哪一种，点「体质辨识」让小药童四诊合参。体质会随年龄、起居与四时变化，内容仅供科普学习，不构成医疗建议。</p>
+    ${knowBar('constitution','九种体质')}
+    <div class="tz-lead">
+      <a class="btn red" style="text-decoration:none" href="quiz.html?m=quick">⚡ 让小药童辨一辨体质</a>
+      <a class="btn ghost" style="text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a>
+      <a class="btn ghost" style="text-decoration:none" href="read.html">按体质荐经典 →</a>
+    </div>
+    <div class="mat-note">◈ 九种体质分「一种平和 + 八种偏颇」。偏颇体质并非疾病，只提示易感倾向与调养方向；多数人兼夹两三种，须四诊合参，不宜自行对号入座。</div>
+    <div id="tzArea"></div>
+    <div class="tz-qa"><b>◈ 这些体质问题，交给 AI 小药童</b><div class="chips" id="tzChips"></div></div>
   </div>`
 };
 
@@ -297,6 +323,58 @@ const CONSTITUTIONS={
  "气郁质":{d:"气机郁滞，神情抑郁、多愁善感、胸胁胀满。",adv:"宜疏肝理气：陈皮、薄荷代茶；逍遥散为调肝名方，多交友多抒怀。",books:["黄帝内经","逍遥散"]},
  "特禀质":{d:"先天禀赋特殊，易过敏，对药物、食物、花粉敏感。",adv:"宜益气固表：取玉屏风散之意，避免接触致敏之物，饮食清淡。",books:["神农本草经","玉屏风散"]}
 };
+/* ===== 九种体质通鉴补充知识：画像 / 调养 / 荐书仍只取自 CONSTITUTIONS，此处只补通鉴所需字段 =====
+   分组依据《中医体质分类与判定》：一种平和 + 八种偏颇；关联本草、名方、穴位名均与站内名录同源。 */
+const TZ_GROUPS=[
+ {k:"balanced",t:"壹 · 平和 · 一种平和态",d:"阴阳气血调和，九种体质中唯一的平和态，调养重在守常"},
+ {k:"deficient",t:"贰 · 虚性偏颇 · 三种不足",d:"气、阳、阴各有亏虚，调养以补其不足、勿再耗伤为主"},
+ {k:"excess",t:"叁 · 实性偏颇 · 四种壅滞",d:"痰湿、湿热、血瘀、气郁，调养以通其壅滞、恢复条达为主"},
+ {k:"special",t:"肆 · 特禀 · 先天禀赋",d:"与先天禀赋相关，重在避开诱因、益气固表，不作自行对号入座"}
+];
+const TZ_EXTRA={
+ "平和质":{g:"balanced",tag:"平和",x:"体态适中、面色红润、精力充沛，睡眠与食欲良好，性格随和。",y:"对外界环境适应力强、较少生病；若起居失节，亦可转向偏颇。",yes:"顺应四时，食饮有节、起居有常，保持适度运动即可。",no:"不必刻意进补，忌长期大温大寒或过食肥甘。",herb:["山药","莲子"],acup:["足三里"],f:""},
+ "气虚质":{g:"deficient",tag:"气虚",x:"易疲乏、气短懒言、语声低微，稍动即自汗，舌淡苔白。",y:"易患感冒、病后恢复偏慢，劳倦后诸症加重。",yes:"补气健脾，缓步运动如八段锦，作息规律勿过劳。",no:"忌大汗耗气、生冷伤脾与长期熬夜。",herb:["黄芪","党参","白术"],acup:["气海","足三里"],f:"四君子汤"},
+ "阳虚质":{g:"deficient",tag:"阳虚",x:"畏寒怕冷、手足不温、喜热饮食、精神不振，舌淡胖。",y:"易见腹泻、腰膝冷痛与水肿，冬重夏轻。",yes:"温阳散寒，晒背、保暖、艾灸下焦，适当温补。",no:"忌生冷瓜果、久处阴冷与过用寒凉。",herb:["生姜","肉桂","干姜"],acup:["关元","气海"],f:"肾气丸（金匮肾气丸）"},
+ "阴虚质":{g:"deficient",tag:"阴虚",x:"手足心热、口干咽燥、潮热盗汗、易失眠，舌红少津。",y:"易见虚烦不眠、眼干便秘与虚火上炎。",yes:"滋阴润燥，子时前入睡，静养少熬，甘润为宜。",no:"忌熬夜、辛辣燥热与大汗伤津。",herb:["麦冬","枸杞子","熟地黄"],acup:["三阴交","涌泉"],f:"六味地黄丸"},
+ "痰湿质":{g:"excess",tag:"痰湿",x:"体形偏胖、腹部松软、身重不爽、口黏，舌苔白厚腻。",y:"易见困倦、体态偏胖与痰饮内生，梅雨长夏尤甚。",yes:"健脾祛湿，微汗运动，饮食清淡而有时。",no:"忌甜腻油荤、久坐少动与居处潮湿。",herb:["茯苓","陈皮","薏苡仁"],acup:["足三里","三阴交"],f:"二陈汤"},
+ "湿热质":{g:"excess",tag:"湿热",x:"面部油腻、口苦口臭、易生痤疮、身重困倦，大便黏滞不爽。",y:"易见痤疮口疮、下焦湿热，夏秋闷热时加重。",yes:"清热利湿，居处干爽，饮食清淡多蔬果。",no:"忌辛辣烧烤、酒酪甜腻与久处潮湿闷热。",herb:["金银花","黄芩","薏苡仁"],acup:["合谷","委中"],f:"龙胆泻肝汤"},
+ "血瘀质":{g:"excess",tag:"血瘀",x:"肤色晦暗、口唇偏暗、易生瘀斑，舌有瘀点，痛处固定如刺。",y:"易见诸般痛证与血行不畅，得温则舒、遇寒加重。",yes:"行气活血，多做舒展运动，注意保暖通络。",no:"忌久坐久卧、寒凝血涩与情志长期郁结。",herb:["山楂","丹参","川芎"],acup:["内关","太冲"],f:"血府逐瘀汤"},
+ "气郁质":{g:"excess",tag:"气郁",x:"神情抑郁、多愁善感、胸胁胀满、善太息，咽中如有物梗。",y:"易见郁证、不寐与情志相关的诸般不适。",yes:"疏肝理气，多交友抒怀，户外舒展与规律作息。",no:"忌独处闷坐、过度思虑与借酒消愁。",herb:["陈皮","薄荷","香附"],acup:["太冲","内关"],f:"逍遥散"},
+ "特禀质":{g:"special",tag:"特禀",x:"易过敏，对药物、食物、花粉、气味敏感，常见鼻塞喷嚏或皮疹。",y:"与先天禀赋相关，易见鼻鼽、瘾疹、咳喘等过敏反应。",yes:"益气固表，避开明确致敏原，饮食清淡并记录诱因。",no:"忌盲目进补、随意试用新药新食与接触已知过敏原。",herb:["黄芪","防风","五味子"],acup:["足三里","列缺"],f:"玉屏风散"}
+};
+const TZ_QUESTIONS=["九种体质是哪九种","气虚体质怎么调理","阳虚体质怎么调理","阴虚体质怎么调理","痰湿体质怎么调理","湿热体质怎么调理","血瘀体质怎么调理","气郁体质怎么调理","特禀体质怎么调理","体质会随四时变化吗","平和质还要调养吗"];
+/* 九种体质通鉴：按四组渲染九张卡，每张卡的画像 / 调养 / 荐书都取自 CONSTITUTIONS，不另存第二份文案 */
+function renderConstitution(){
+  const area=$("#tzArea");if(!area||area.dataset.done)return;
+  const chips=$("#tzChips");
+  if(chips)chips.innerHTML=TZ_QUESTIONS.map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("");
+  const links=(arr,label)=>arr&&arr.length
+    ?`<div class="kv"><span class="k">${label}</span>`+arr.map(n=>`<a class="tz-link" href="#" onclick="askKB('${n}');return false">${n}</a>`).join("")+`</div>`:"";
+  let html="";
+  TZ_GROUPS.forEach(g=>{
+    const names=Object.keys(CONSTITUTIONS).filter(n=>TZ_EXTRA[n]&&TZ_EXTRA[n].g===g.k);
+    if(!names.length)return;
+    html+=`<div class="tz-grp"><h3>${g.t}</h3><p>${g.d}</p></div><div class="mat-grid tz-grid">`;
+    names.forEach(n=>{
+      const c=CONSTITUTIONS[n],e=TZ_EXTRA[n];
+      html+=`<div class="mat-card tz-card">
+        <div class="mat-card-h"><b>${n}</b><span class="tz-tag">${e.tag}</span><span class="mat-cat">${g.k==="balanced"?"平和态":"偏颇质"}</span></div>
+        <div class="kv"><span class="k">体质画像</span>${c.d}</div>
+        <div class="kv"><span class="k">常见表现</span>${e.x}</div>
+        <div class="kv"><span class="k">易感倾向</span>${e.y}</div>
+        <div class="kv"><span class="k">调养宜</span>${e.yes}</div>
+        <div class="kv"><span class="k">调养忌</span>${e.no}</div>
+        <div class="kv"><span class="k">调养锦囊</span>${c.adv}</div>
+        ${links(e.herb,"关联本草")}${links(e.acup,"关联穴位")}
+        ${e.f?`<div class="kv"><span class="k">相关名方</span><a class="tz-link" href="#" onclick="askKB('${e.f.replace(/（[^）]*）/g,"")}');return false">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义见「本草名方」页</span></div>`:""}
+        <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>`<a class="tz-link" href="read.html">《${x}》</a>`).join("")}</div>
+        <button class="btn ghost mat-ask" onclick="askKB('${n.replace("质","")}体质怎么调理')">问小药童 · ${n}怎么调养</button>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  area.innerHTML=html;area.dataset.done="1";
+}
 const QUIZ=[
  {q:"你精力充沛，累了一天睡一觉就能缓过来吗？",c:"平和质"},
  {q:"你容易感到疲乏、气短、说话有气无力吗？",c:"气虚质"},
@@ -609,7 +687,8 @@ const PAGE_INIT={
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
   materia:()=>{renderMateria();},               // 本草名方：本草名录 + 名方要诀 两 tab
   acupoint:()=>{renderAcupoint();},             // 经络要穴：独立页，12 处要穴卡片
-  seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());} // 四时调神：支持 ?s=秋 直达某季
+  seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());}, // 四时调神：支持 ?s=秋 直达某季
+  constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
 /* ===== 本草名方：本草 + 名方两栏卡片，数据驱动，可一键问小药童 ===== */
 function renderMateria(){

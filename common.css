@@ -56,12 +56,8 @@ header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;heig
    非生硬白圆盘（区别于历史 v14 的实色柔光盘）。位于 logo 图之下、横幅之上。 */
 .seal-stamp::before{content:"";position:absolute;inset:-12% -16% -16% -22%;z-index:0;pointer-events:none;background:radial-gradient(56% 56% at 50% 50%,rgba(252,246,235,.94),rgba(252,246,235,.72) 52%,rgba(252,246,235,0) 82%);filter:blur(3px)}
 .seal-stamp img{width:100%;height:100%;display:block;position:relative;z-index:1}
-/* 左下盈亏色随季更衣：四张已染色的小透明图按季切换，纯 CSS、无额外整图请求、无闪烁 */
-.seal-stamp::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-position:center;background-size:contain;background-repeat:no-repeat}
-html[data-season="春"] .seal-stamp::after{background-image:url("assets/logo-accent-spring.webp")}
-html[data-season="夏"] .seal-stamp::after{background-image:url("assets/logo-accent-summer.webp")}
-html[data-season="秋"] .seal-stamp::after{background-image:url("assets/logo-accent-autumn.webp")}
-html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-accent-winter.webp")}
+/* 字标左下盈亏色固定春款：换季只更衣页面主色与飘落物，logo 恒为春天版、不再随季切换 */
+.seal-stamp::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-position:center;background-size:contain;background-repeat:no-repeat;background-image:url("assets/logo-accent-spring.webp")}
 /* 页眉：字标 + 小药童（书籍与金匾已按竞赛改版移除） */
 /* 响应式 */
 .hd-bg{position:absolute;inset:0;z-index:0;background:url("assets/header-banner.webp") center/cover no-repeat;opacity:.97;pointer-events:none}
@@ -650,3 +646,31 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .four-foot a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--gold);margin:0 4px}
 @media(max-width:720px){.four-terms,.four-books{grid-template-columns:1fr 1fr}.four-tab{flex:1 1 auto;text-align:center;padding:8px 4px;font-size:12.5px}.four-today{flex:1 1 100%;text-align:center}.season-bar .four-entry{margin-left:0}}
 @media(max-width:560px){.four-terms,.four-books{grid-template-columns:1fr}}
+/* ===== 四线知识联动条：本草 / 名方 / 穴位 / 体质 与经典荐读互通，皆可一键问 AI 小药童 ===== */
+.know-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0 18px;padding:11px 13px;border:1px solid rgba(47,93,80,.2);border-radius:10px;background:linear-gradient(100deg,rgba(154,123,63,.07),rgba(47,93,80,.05))}
+.know-bar>b{font-size:12.5px;color:var(--gold);letter-spacing:1px;margin-right:4px}
+.know-bar a,.know-bar button{font-family:inherit;font-size:12.5px;padding:6px 12px;border:1px solid rgba(47,93,80,.2);border-radius:20px;background:rgba(255,255,255,.6);color:var(--ink2);text-decoration:none;cursor:pointer;white-space:nowrap;transition:.2s}
+.know-bar a:hover,.know-bar button:hover{border-color:var(--green);color:var(--green)}
+.know-bar a.on{background:var(--green);border-color:var(--green);color:#fff}
+.know-bar .know-ask{background:var(--red);border-color:var(--red);color:#fff;margin-left:auto}
+.know-bar .know-ask:hover{color:#fff;opacity:.88}
+/* ===== 九种体质通鉴 ===== */
+.tz-lead{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 16px}
+.tz-grp{margin:20px 0 8px;border-left:3px solid var(--gold);padding-left:12px}
+.tz-grp h3{font-family:"Noto Serif SC",serif;font-size:17px;color:var(--green);margin:0 0 3px}
+.tz-grp p{margin:0;font-size:12.5px;color:var(--ink2)}
+.tz-card .mat-card-h b{font-size:17px}
+.tz-tag{display:inline-block;margin-left:7px;padding:1px 8px;border-radius:10px;background:rgba(47,93,80,.1);color:var(--green);font-size:11px;vertical-align:middle}
+.tz-link{display:inline-block;margin:2px 5px 0 0;font-size:12px;color:var(--red);cursor:pointer;border-bottom:1px dotted var(--red);text-decoration:none}
+.tz-qa{margin-top:22px;padding:14px;border:1px dashed rgba(154,123,63,.6);border-radius:10px}
+.tz-qa b{color:var(--gold);font-size:13px;letter-spacing:1px}
+.tz-qa .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.tz-qa .chips button{font-size:12px;padding:5px 11px}
+@media(max-width:560px){.tz-grp{margin-top:16px}.know-bar .know-ask{margin-left:0}.know-bar>b{flex:1 1 100%}}
+/* 11 项导航：不收缩、不换行；桌面居中，窄屏仍由 media 规则横滑 */
+nav a{flex:none;white-space:nowrap;padding-left:14px;padding-right:14px;letter-spacing:2px}
+@media(min-width:721px){.nav-inner{justify-content:center}}
+/* 体质卡改 flex：单卡 / 末行不足时自动撑满，避免 auto-fill 网格留下大片空白 */
+.tz-grid{display:flex;flex-wrap:wrap;gap:12px}
+.tz-grid>.tz-card{flex:1 1 240px;min-width:0}
+@media(max-width:560px){.tz-grid>.tz-card{flex:1 1 100%}}
