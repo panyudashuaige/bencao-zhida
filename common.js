@@ -574,9 +574,9 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
 const PAGE_MOUNTED={home:true};
 const PAGE_INIT={
   quiz:()=>{renderQuiz();restorePhys();},
-  chat:()=>{renderKbIndex();},                    // 知识库速查 + 推荐问题由 go() 每次进页时刷新
+  chat:()=>{renderKbIndex();renderChips();},    // MPA：推荐问题须本页渲染（SPA 时代靠 go() 刷新）
   read:()=>{renderFilter();renderBooks();},     // 筛选条 + 二十张书卡
-  album:()=>{},                                 // 集章墙由 go() 刷新
+  album:()=>{renderAlbum();},                   // MPA：集章墙须本页渲染（SPA 时代靠 go() 刷新）
   game:()=>{
     const g=window._game;
     const bot=$("#gameBot");if(bot)bot.style.display=g&&g.mode==="contest"?"flex":"none";
@@ -585,7 +585,7 @@ const PAGE_INIT={
     if(g&&g.mode==="contest"&&!g.started)return renderContestReady(); // 已选竞赛但未确认开卷
     renderGameIdle();                                               // 待机：不出题、不计时
   },
-  checkin:()=>{},                               // 日历由 go() 刷新
+  checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
   materia:()=>{renderMateria();}                // 本草名方穴位通鉴：三 tab 卡片
 };
 /* ===== 本草名方穴位通鉴：三栏卡片，数据驱动，可一键问小药童 ===== */
@@ -2018,6 +2018,8 @@ function openRead(t){
   if(!CP)return;
   const app=document.getElementById("app");
   if(CP!=="home"&&app&&typeof PAGE_HTML!=="undefined"&&PAGE_HTML[CP])app.innerHTML=PAGE_HTML[CP];
+  // SPA 由 mountPage() 置位；MPA 直接注入模板，必须补上，否则 startGame() 会认为试炼页未挂载而拒绝出题
+  if(typeof PAGE_MOUNTED!=="undefined")PAGE_MOUNTED[CP]=true;
   if(typeof PAGE_INIT!=="undefined"&&PAGE_INIT[CP])PAGE_INIT[CP]();
   if(CP==="chat"){try{greet();}catch(e){}const q=new URLSearchParams(location.search).get("q");if(q){try{send(q);}catch(e){}}}
   if(CP==="quiz"){const m=new URLSearchParams(location.search).get("m");if(m){try{setQuizMode(m);}catch(e){}}}
