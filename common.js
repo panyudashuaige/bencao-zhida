@@ -129,6 +129,20 @@ const PAGE_HTML={
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成与本草性味，请见「本草名方」页。</p>
     <div id="acupArea"></div>
+  </div>`,
+ seasons:`
+  <div class="card mat-card">
+    <div class="orn">四 时 调 神 · 顺 岁 而 养</div>
+    <h2>四时调神<span class="dot"> · </span>顺岁而养</h2>
+    <p class="desc">春生、夏长、秋收、冬藏。本页据《素问·四气调神大论》与二十四节气整理四时原文要义、当季节气、当令本草与应时荐读。点季名可预览该季，页面主色、飘落物与当季插画随之更衣。知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议。</p>
+    <div class="four-tabs" id="fourTabs">
+      <button class="four-tab" data-s="春" onclick="fourSetSeason('春')">春 · 生</button>
+      <button class="four-tab" data-s="夏" onclick="fourSetSeason('夏')">夏 · 长</button>
+      <button class="four-tab" data-s="秋" onclick="fourSetSeason('秋')">秋 · 收</button>
+      <button class="four-tab" data-s="冬" onclick="fourSetSeason('冬')">冬 · 藏</button>
+      <button class="four-today" onclick="fourToday()">↺ 回到今日</button>
+    </div>
+    <div id="fourBody"></div>
   </div>`
 };
 
@@ -592,7 +606,8 @@ const PAGE_INIT={
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
   materia:()=>{renderMateria();},               // 本草名方：本草名录 + 名方要诀 两 tab
-  acupoint:()=>{renderAcupoint();}              // 经络要穴：独立页，12 处要穴卡片
+  acupoint:()=>{renderAcupoint();},             // 经络要穴：独立页，12 处要穴卡片
+  seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());} // 四时调神：支持 ?s=秋 直达某季
 };
 /* ===== 本草名方：本草 + 名方两栏卡片，数据驱动，可一键问小药童 ===== */
 function renderMateria(){
@@ -624,6 +639,97 @@ function renderAcupoint(){
     ac.innerHTML=`<div class="mat-note">◈ 穴位：定位、所属经络、功效主治，按经典出处整理。点「问小药童」可追问取穴与手法。</div><div class="mat-grid">`+ACUP.map(acupCard).join("")+`</div>`;
     ac.dataset.done="1";
   }
+}
+
+/* ===== 四时调神：复用 SEASON_* / TERMS / ALL_HERBS / BOOKS，只渲染当前季 ===== */
+const FOUR_KEYS=["春","夏","秋","冬"];
+/* 《素问·四气调神大论》四时原文的白话意译；原文统一取自 SEASON_GREET，不另存第二份 */
+const FOUR_TRANSLATION={
+ 春:"春季的三个月是推陈出新的时节，天地阳气一同升发，草木万物随之繁茂。宜晚睡早起，在庭院中缓步散行，披散头发、松开衣带，让情志随生机自然舒展。",
+ 夏:"夏季的三个月是草木蕃茂、开花孕果的时节，天地阴阳之气相交，万物由生长走向结实。宜晚睡早起，不嫌日光、不轻易郁怒，使体内气机得以宣通。",
+ 秋:"秋季的三个月是万物形态安定、成熟平定的时节，天风劲急、地气清肃明朗。宜早睡早起，作息与鸡相近，收敛神气，不使情志过度外驰。",
+ 冬:"冬季的三个月是阳气封藏的时节，水面结冰、大地冻裂，此时不可扰动体内阳气。宜早睡晚起，等日出再活动，注意保暖，勿使汗出过多而令阳气外泄。"
+};
+/* 当令本草：只从全站 ALL_HERBS 按名取用，避免药材数据两处维护 */
+const FOUR_HERBS={
+ 春:["薄荷","菊花","枸杞子","黄芪","山药"],
+ 夏:["金银花","莲子","茯苓","薏苡仁","生姜"],
+ 秋:["麦冬","桔梗","五味子","陈皮","甘草"],
+ 冬:["当归","肉桂","干姜","人参","熟地黄"]
+};
+/* 与 seasonOf() 同一套节气边界：立春 2/4、立夏 5/6、立秋 8/8、立冬 11/7 */
+function termSeason(m,d){
+  return (m>11||(m===11&&d>=7)||m<2||(m===2&&d<4))?"冬":(m<5||(m===5&&d<6))?"春":(m<8||(m===8&&d<8))?"夏":"秋";
+}
+function currentTermName(){
+  const n=new Date(),m=n.getMonth()+1,d=n.getDate();
+  let cur=TERMS[TERMS.length-1];
+  for(const x of TERMS){if(m<x[1]||(m===x[1]&&d<x[2]))break;cur=x;}
+  return cur[0];
+}
+function renderFourSeasons(s){
+  s=FOUR_KEYS.indexOf(s)>=0?s:seasonOf();
+  const box=$("#fourBody");if(!box)return;
+  document.querySelectorAll(".four-tab").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+  const greet=SEASON_GREET[s],care=SEASON_CARE[s],rec=SEASON_READS[s];
+  const terms=TERMS.filter(t=>termSeason(t[1],t[2])===s);
+  const nowTerm=currentTermName();
+  const termHtml=terms.map(t=>`<div class="four-term${t[0]===nowTerm?" on":""}">${t[0]===nowTerm?'<span class="ft-now">当 前</span>':""}<b>${t[0]}</b><span class="ft-date">约 ${t[1]} 月 ${t[2]} 日</span><p>${t[3]}</p></div>`).join("");
+  const herbHtml=FOUR_HERBS[s].map(n=>ALL_HERBS.find(h=>h.n===n)).filter(Boolean).map(h=>herbCard(h,!h.cat)).join("");
+  const bookHtml=rec.list.map(n=>{
+    const b=BOOKS.find(x=>x.t===n)||{};
+    return `<div class="four-book"><b>${n}</b><p>${b.d||"当季应时荐读，可到经典荐读页翻开原文选段与白话译文。"}</p><button class="btn ghost" onclick="go('read')">去经典荐读 →</button></div>`;
+  }).join("");
+  box.innerHTML=`
+    <img class="season-img" src="assets/${SEASON_IMG[s]}" alt="${s}季水墨插画" loading="lazy" decoding="async">
+    <div class="four-sec">
+      <h3>壹 · 四时原文</h3>
+      <div class="four-hint">原文出自《素问·四气调神大论》，白话为意译</div>
+      <div class="four-classic">
+        <div class="fc-q">「${greet.q}」</div>
+        <div class="fc-src">—— 《素问 · 四气调神大论》</div>
+        <div class="fc-tr"><b>白话意译</b>：${FOUR_TRANSLATION[s]}</div>
+        <div class="fc-pr">◈ 顺时提要：${care.pr}</div>
+      </div>
+    </div>
+    <div class="four-sec">
+      <h3>贰 · ${s}季六节气</h3>
+      <div class="four-hint">按本站二十四节气表分组 · 公历日期每年略有浮动 · 当季节气以金色标出</div>
+      <div class="four-terms">${termHtml}</div>
+    </div>
+    <div class="four-sec">
+      <h3>叁 · 当令本草</h3>
+      <div class="four-hint">从全站本草名录中按季择取，性味功效与「本草名方」页同源</div>
+      <div class="mat-grid">${herbHtml}</div>
+    </div>
+    <div class="four-sec">
+      <h3>肆 · 应时荐读</h3>
+      <div class="four-hint">${rec.why}</div>
+      <div class="four-books">${bookHtml}</div>
+    </div>
+    <div class="four-foot">
+      <button class="btn red" onclick="askKB('${s}季养生')">问问小药童 · ${s}季怎么养 →</button>
+      <span style="margin-left:10px">顺时调养还可查阅<a href="materia.html">本草名方</a> · <a href="acupoint.html">经络要穴</a> · <a href="read.html">经典荐读</a></span><br>
+      节气与养生条目整理自中医药经典文献及传统岁时知识，仅供科普学习；食疗、进补与穴位按揉因人而异，不构成医疗诊断或治疗建议。
+    </div>`;
+}
+function fourSetSeason(s){
+  if(FOUR_KEYS.indexOf(s)<0)return;
+  window._seasonOv=s;
+  document.documentElement.dataset.season=s;
+  buildSeasonFx(s);
+  updateSeasonImg();
+  renderFourSeasons(s);
+  try{history.replaceState(null,"","seasons.html?s="+encodeURIComponent(s));}catch(e){}
+}
+function fourToday(){
+  window._seasonOv=null;
+  const s=seasonOf();
+  document.documentElement.dataset.season=s;
+  buildSeasonFx(s);
+  updateSeasonImg();
+  renderFourSeasons(s);
+  try{history.replaceState(null,"","seasons.html");}catch(e){}
 }
 function herbCard(h,illust){
   return `<div class="mat-card">
@@ -1467,8 +1573,8 @@ function makePoster(){
 }
 
 /* ===== 节气养生 + 岐黄名句 ===== */
-(function(){
-  const TERMS=[
+/* TERMS 提升为全站共享：四时调神页按季分组复用，避免节气表两处维护 */
+const TERMS=[
     ["小寒",1,5,"防寒保暖，护住阳气"],["大寒",1,20,"冬藏收尾，静待春归"],
     ["立春",2,4,"春捂秋冻，助阳生发"],["雨水",2,19,"健脾祛湿，少酸多甘"],
     ["惊蛰",3,6,"起居有常，舒展筋骨"],["春分",3,21,"阴阳各半，饮食求平"],
@@ -1481,7 +1587,8 @@ function makePoster(){
     ["寒露",10,8,"寒露脚不露，暖足安眠"],["霜降",10,23,"平补脾胃，萝卜山药"],
     ["立冬",11,7,"冬藏开始，早卧晚起"],["小雪",11,22,"温补驱寒，晒背取暖"],
     ["大雪",12,7,"进补正当时，锻炼勿过早"],["冬至",12,22,"一阳初生，静养守阳"]
-  ];
+];
+(function(){
   const now=new Date(),m=now.getMonth()+1,d=now.getDate();
   let t=TERMS[TERMS.length-1];
   for(const x of TERMS){if(m<x[1]||(m===x[1]&&d<x[2]))break;t=x;}
@@ -1508,7 +1615,7 @@ function makePoster(){
     </div>
     <p style="font-size:13.5px;color:var(--ink2);margin:10px 0 0">◈ ${t[3]}</p>
     <div class="quote">「${q[0]}」<span class="src">—— ${q[1]}</span></div>
-    <div style="margin-top:14px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="askKB('怎么养生')">问问小药童：顺时而养 →</button></div>`;
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="askKB('怎么养生')">问问小药童：顺时而养 →</button><a class="btn ghost" style="padding:8px 18px;font-size:13px;text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a></div>`;
 })();
 
 /* ===== AI 小药童 · 拍照看面相识体质（望诊科普体验） ===========================
