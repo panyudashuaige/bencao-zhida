@@ -586,6 +586,27 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .chal-toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:720px){.books,.grid2{grid-template-columns:1fr}.home-feats{grid-template-columns:1fr 1fr}.home-feats .feat:last-child{grid-column:1/-1}.feat{min-height:216px}.feat .meta{white-space:normal;font-size:11.5px}.daily{flex-direction:column}.daily-left{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;width:100%;display:flex;gap:14px;align-items:baseline;justify-content:center}.nav-inner{overflow-x:auto;justify-content:flex-start}nav button{flex:none;white-space:nowrap}}
 @media(max-width:560px){.hero-stats{display:grid;grid-template-columns:repeat(4,1fr)}.hero-stats div{border-bottom:1px solid var(--line)}.hero-stats div:nth-child(4n){border-right:none}.hero-stats div:nth-child(n+5){border-bottom:none}}
+/* ===== 本草名方穴位通鉴 ===== */
+.mat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.mat-tab{cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 16px;border-radius:20px;font-size:14px;letter-spacing:1px;font-family:inherit;transition:.2s}
+.mat-tab:hover{border-color:var(--red);color:var(--red)}
+.mat-tab.on{background:var(--red);color:#fff;border-color:var(--red)}
+.mat-pane{display:none;margin-top:16px}
+.mat-pane.on{display:block}
+.mat-note{font-size:13px;color:var(--ink2);background:var(--gold-l);border-left:3px solid var(--gold);padding:9px 14px;border-radius:0 8px 8px 0;margin-bottom:12px;line-height:1.7}
+.mat-grp{margin:20px 0 4px}
+.mat-h3{font-size:16px;color:var(--green);border-bottom:1px dashed var(--line);padding-bottom:6px;margin:0 0 14px;letter-spacing:1px}
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.mat-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:7px;box-shadow:0 2px 8px rgba(43,43,38,.05);transition:box-shadow .25s,transform .25s}
+.mat-card:hover{box-shadow:0 6px 18px rgba(43,43,38,.12);transform:translateY(-2px)}
+.mat-card-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+.mat-card-h b{font-size:17px;color:var(--red);letter-spacing:1px}
+.mat-badge{font-size:11px;background:var(--green-l);color:var(--green);padding:1px 8px;border-radius:10px}
+.mat-cat{font-size:11px;background:rgba(154,123,63,.15);color:var(--gold);padding:1px 8px;border-radius:10px;margin-left:auto}
+.mat-card .kv{font-size:13px}
+.mat-ask{margin-top:4px;align-self:flex-start;font-size:13px;padding:6px 14px;letter-spacing:1px}
+@media(max-width:720px){.mat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.mat-grid{grid-template-columns:1fr}.mat-tab{flex:1 1 auto;text-align:center;padding:8px 4px;font-size:12.5px}}
 </style>
 </head>
 <body>
@@ -613,6 +634,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
   <button data-p="album">本草图鉴</button>
   <button data-p="game">百草试炼</button>
   <button data-p="checkin">岐黄打卡</button>
+  <button data-p="materia">本草名方</button>
  </div>
 </nav>
 <div class="wrap">
@@ -627,12 +649,12 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <h1>本草<em>智答</em></h1>
       <p><b>AI 小药童先带你认清体质，再从二十部岐黄经典里挑出与你相契的那一部</b>——正规判定讲究<b>四诊合参</b>：拍照看面相当「望」诊参考，9 题速测 / 27 题国标量表当「问」诊主判，合参定案后经典荐读「对证」。识体质 → 荐经典 → 读原文，这是本草智答的 AI 阅读推广新玩法。</p>
       <div class="hero-stats">
-        <div><b>14</b><span>味本草</span></div>
-        <div><b>6</b><span>首名方</span></div>
-        <div><b>3</b><span>处穴位</span></div>
+        <div><b id="hbStat">0</b><span>味本草</span></div>
+        <div><b id="fmStat">0</b><span>首名方</span></div>
+        <div><b id="acStat">0</b><span>处穴位</span></div>
         <div><b>9</b><span>种体质</span></div>
         <div><b>9/27</b><span>题国标测评</span></div>
-        <div><b>12</b><span>部经典</span></div>
+        <div><b id="bkStat">0</b><span>部经典</span></div>
         <div><b id="alStat">0</b><span>已集图鉴</span></div>
         <div><b id="ciStat">0</b><span>连续打卡</span></div>
       </div>
@@ -694,8 +716,8 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <div class="feat" data-p="read" onclick="go('read')"><span class="more">→</span><span class="kicker">读 · 按体质荐</span><div class="gly">读</div><b>经典荐读</b><span class="desc">二十部岐黄经典按体质点亮<br>契合书目优先，点开读原文</span><span class="meta" data-meta="read">20 部典籍 · 按体质荐读</span></div>
     <div class="feat" data-p="checkin" onclick="go('checkin')"><span class="more">→</span><span class="kicker">勤 · 打卡</span><div class="gly">勤</div><b>岐黄打卡</b><span class="desc">中医药文化 · 读者打卡专区<br>每日一格集满本草</span><span class="meta" data-meta="checkin">每日一格 · 集满本草</span></div>
     <div class="feat" onclick="askKB('药食同源')"><span class="more">→</span><span class="kicker">食 · 厨房</span><div class="gly">食</div><b>药食同源</b><span class="desc">厨房里的本草智慧<br>生姜山药莲子皆是药</span><span class="meta" data-meta="food">厨房即药房 · 生姜山药</span></div>
-    <div class="feat" onclick="askKB('四君子汤')"><span class="more">→</span><span class="kicker">方 · 六首</span><div class="gly">方</div><b>名方六首</b><span class="desc">四君子汤 · 桂枝汤 · 玉屏风散<br>点开即查方书源流与方义</span><span class="meta" data-meta="formula">6 首名方 · 点名即查</span></div>
-    <div class="feat" onclick="askKB('足三里')"><span class="more">→</span><span class="kicker">穴 · 三处</span><div class="gly">穴</div><b>穴位三处</b><span class="desc">足三里 · 合谷 · 涌泉<br>定位功效与典籍出处一问便知</span><span class="meta" data-meta="acup">3 处要穴 · 按揉有讲究</span></div>
+    <div class="feat" onclick="go('materia')"><span class="more">→</span><span class="kicker">方 · 名方</span><div class="gly">方</div><b>名方通鉴</b><span class="desc">四君子汤 · 桂枝汤 · 六味地黄丸 · 血府逐瘀汤<br>组成·方义·源流一卡尽览</span><span class="meta" data-meta="formula">名方要诀 · 点开即查</span></div>
+    <div class="feat" onclick="go('materia')"><span class="more">→</span><span class="kicker">穴 · 要穴</span><div class="gly">穴</div><b>经络要穴</b><span class="desc">足三里 · 合谷 · 涌泉 · 三阴交 · 太冲<br>定位·经络·功效一查便知</span><span class="meta" data-meta="acup">经络要穴 · 点开即查</span></div>
   </div>
   <div class="grid2">
     <div class="card daily" id="daily"></div>
@@ -714,6 +736,8 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 <section class="page" id="p-game"></section>
 
 <section class="page" id="p-checkin"></section>
+
+<section class="page" id="p-materia"></section>
 
 <footer>
   <div class="orn2">本草有灵 · 智答无界</div>
@@ -834,6 +858,20 @@ const PAGE_HTML={
     <h2>每日一格<span class="dot"> · </span>集满本草</h2>
     <p class="desc">中医药文化 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
     <div id="checkinArea"></div>
+  </div>`,
+ materia:`
+  <div class="card mat-card">
+    <div class="orn">本 草 名 物 · 名 方 要 诀 · 经 络 要 穴</div>
+    <h2>本草 · 名方 · 穴位 通鉴</h2>
+    <p class="desc">本站据中医药经典文献整理的本草原貌、名方要诀与经络要穴。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问——组成、方义、定位、配伍、禁忌，想问就问。内容仅供科普学习，不构成医疗建议。</p>
+    <div class="mat-tabs" id="matTabs">
+      <button class="mat-tab on" data-tab="herb" onclick="switchMat('herb')">🌿 本草名录（<span id="cntHerb">0</span> 味）</button>
+      <button class="mat-tab" data-tab="formula" onclick="switchMat('formula')">📜 名方要诀（<span id="cntFormula">0</span> 首）</button>
+      <button class="mat-tab" data-tab="acup" onclick="switchMat('acup')">📍 经络要穴（<span id="cntAcup">0</span> 处）</button>
+    </div>
+    <div class="mat-pane on" id="matHerb"></div>
+    <div class="mat-pane" id="matFormula"></div>
+    <div class="mat-pane" id="matAcup"></div>
   </div>`
 };
 
@@ -888,17 +926,35 @@ const MATERIA_EXTRA=[
 const ALL_HERBS=HERBS.concat(MATERIA_EXTRA);           // 全站知识口径：40 味（14 味有插画 / 26 味文字条目）
 const HERB_CATS=["解表","清热","祛湿","温里","补益","理气","活血","化痰","安神","泻下"];
 const FORMULAS=[
- {n:"四君子汤",s:"《太平惠民和剂局方》",d:"人参（党参）、白术、茯苓、甘草四味。功效益气健脾，主治脾胃气虚证——面色萎白、语声低微、食少便溏。四味皆平和之品，如君子致中和，故名\u201c四君子\u201d，为补气剂的基础方。",b:"《汤头歌诀》《伤寒论》讲义"},
- {n:"六味地黄丸",s:"钱乙《小儿药证直诀》",d:"熟地黄、山萸肉、山药、泽泻、牡丹皮、茯苓，三补三泻、滋阴补肾。原为儿科\u201c地黄丸\u201d，后世广泛用于肾阴亏虚之证。",b:"《小儿药证直诀》《汤头歌诀》"},
- {n:"逍遥散",s:"《太平惠民和剂局方》",d:"柴胡、当归、白芍、白术、茯苓、甘草、薄荷、生姜。功效疏肝解郁、养血健脾，主治肝郁血虚脾弱证，为调和肝脾的名方。",b:"《汤头歌诀》《温病条辨》"},
- {n:"藿香正气散",s:"《太平惠民和剂局方》",d:"藿香、紫苏、白芷、大腹皮、茯苓、白术等。解表化湿、理气和中，为夏月感寒伤湿、脾胃不和之常用方。",b:"《汤头歌诀》《本草纲目》"},
- {n:"桂枝汤",s:"张仲景《伤寒论》",d:"桂枝、芍药、生姜、大枣、甘草五味。解肌发表、调和营卫，被誉为\u201c群方之冠\u201d。服药后啜热稀粥以助药力，体现仲景护胃气的巧思。",b:"《伤寒论》《汤头歌诀》"},
- {n:"玉屏风散",s:"《医方类聚》引《世医得效方》",d:"黄芪、白术、防风三味。益气固表止汗，如御风之屏障，故名\u201c玉屏风\u201d。表虚自汗、易感风邪者宜之。",b:"《汤头歌诀》《本草纲目》"}
+ {n:"四君子汤",s:"《太平惠民和剂局方》",comp:"人参（或党参）、白术、茯苓、炙甘草",d:"益气健脾。主治脾胃气虚证——面色萎白、语声低微、食少便溏、气短乏力。四味皆平和之品，取\u201c君子致中和\u201d之义，为补气剂的基础方，后世诸多补气健脾方多从此化裁。",b:"《太平惠民和剂局方》《汤头歌诀》"},
+ {n:"四物汤",s:"始载唐·蔺道人《仙授理伤续断秘方》，后广收《太平惠民和剂局方》",comp:"熟地黄、当归、白芍、川芎",d:"补血调血。主治营血虚滞证——心悸失眠、头晕目眩、面色无华、月经不调或经闭不行。四味补中有行、静中有动，为妇科调经与补血的第一基础方，与四君子汤并称气血双补之基。",b:"《太平惠民和剂局方》《汤头歌诀》"},
+ {n:"八珍汤",s:"明·薛己《正体类要》",comp:"人参、白术、茯苓、甘草、熟地黄、当归、白芍、川芎（四君子汤合四物汤）",d:"气血双补。主治气血两虚证——面色苍白或萎黄、气短乏力、头晕心悸、食少懒言。四君补气、四物补血，合而用之，气旺则生血、血足则载气。",b:"《正体类要》《汤头歌诀》"},
+ {n:"六味地黄丸",s:"宋·钱乙《小儿药证直诀》",comp:"熟地黄、山萸肉、山药、泽泻、牡丹皮、茯苓",d:"滋阴补肾。三补（熟地、山萸、山药）三泻（泽泻、丹皮、茯苓），补而不滞。原为儿科\u201c地黄丸\u201d，后世广泛用于肾阴亏虚之证，如腰膝酸软、头晕耳鸣、盗汗遗精。",b:"《小儿药证直诀》《汤头歌诀》"},
+ {n:"桂枝汤",s:"汉·张仲景《伤寒论》",comp:"桂枝、芍药、生姜、大枣、炙甘草",d:"解肌发表、调和营卫。被誉为\u201c群方之冠\u201d，主治太阳中风表虚证——发热恶风、汗出、脉浮缓。方后嘱\u201c啜热稀粥以助药力\u201d，体现仲景护胃气、助正气的巧思。",b:"《伤寒论》《汤头歌诀》"},
+ {n:"小柴胡汤",s:"汉·张仲景《伤寒论》",comp:"柴胡、黄芩、半夏、生姜、人参、大枣、炙甘草",d:"和解少阳。主治少阳病——往来寒热、胸胁苦满、默默不欲饮食、心烦喜呕。为和解剂之代表方，凡半表半里、枢机不利者多用之，亦是\u201c和法\u201d的典范。",b:"《伤寒论》《汤头歌诀》"},
+ {n:"逍遥散",s:"《太平惠民和剂局方》",comp:"柴胡、当归、白芍、白术、茯苓、炙甘草、薄荷、生姜",d:"疏肝解郁、养血健脾。主治肝郁血虚脾弱证——两胁作痛、头痛目眩、神疲食少、月经不调。方名\u201c逍遥\u201d，谓肝郁得疏、血虚得养则身心逍遥，为调和肝脾的名方。",b:"《太平惠民和剂局方》《汤头歌诀》"},
+ {n:"玉屏风散",s:"《医方类聚》引《世医得效方》",comp:"黄芪、白术、防风",d:"益气固表止汗。三味如御风之屏障，故名\u201c玉屏风\u201d。主治表虚不固、自汗恶风、易感风邪者，是体虚易感冒者的经典防护方。",b:"《世医得效方》《汤头歌诀》"},
+ {n:"藿香正气散",s:"《太平惠民和剂局方》",comp:"藿香、紫苏、白芷、大腹皮、茯苓、白术、陈皮、半夏曲、厚朴、桔梗、炙甘草（生姜、大枣为引）",d:"解表化湿、理气和中。主治外感风寒、内伤湿滞——恶寒发热、头痛、胸膈满闷、脘腹胀痛、呕吐泄泻，为夏月感寒伤湿、脾胃不和之常用方。",b:"《太平惠民和剂局方》《汤头歌诀》"},
+ {n:"补中益气汤",s:"金元·李东垣《脾胃论》",comp:"黄芪、白术、陈皮、升麻、柴胡、人参、炙甘草、当归",d:"补中益气、升阳举陷。主治脾虚气陷证——体倦乏力、食少腹胀、久泻久痢、脏器下垂（如胃下垂、脱肛）。东垣\u201c内伤脾胃，百病由生\u201d之说的代表方。",b:"《脾胃论》《汤头歌诀》"},
+ {n:"归脾汤",s:"宋·严用和《济生方》（明·薛己加味）",comp:"白术、茯神、黄芪、龙眼肉、酸枣仁、人参、木香、炙甘草、当归、远志、生姜、大枣",d:"益气补血、健脾养心。主治心脾两虚、气血不足——心悸怔忡、失眠健忘、食少体倦、面色萎黄、月经不调或崩漏。补血而不滞气，健脾而不碍运。",b:"《济生方》《汤头歌诀》"},
+ {n:"龙胆泻肝汤",s:"清·汪昂《医方集解》（同名方本于《太平惠民和剂局方》加味）",comp:"龙胆草、黄芩、栀子、泽泻、木通、车前子、当归、生地黄、柴胡、炙甘草",d:"清泻肝胆实火、清利肝胆湿热。主治肝胆火旺、湿热下注——胁痛口苦、耳聋耳肿、小便淋浊、阴痒带下、舌红苔黄。泻中有补、利中有滋，防苦寒伤阴。",b:"《医方集解》《汤头歌诀》"},
+ {n:"二陈汤",s:"《太平惠民和剂局方》",comp:"半夏、陈皮、茯苓、炙甘草（生姜、乌梅为引）",d:"燥湿化痰、理气和中。为化痰基础方——主治湿痰证，咳嗽痰多、色白易咯、恶心呕吐、胸膈痞闷、舌苔白腻。方中半夏、陈皮以陈久者良，故名\u201c二陈\u201d。",b:"《太平惠民和剂局方》《汤头歌诀》"},
+ {n:"血府逐瘀汤",s:"清·王清任《医林改错》",comp:"桃仁、红花、当归、生地黄、川芎、赤芍、牛膝、桔梗、柴胡、枳壳、炙甘草",d:"活血化瘀、行气止痛。主治胸中血瘀证——胸痛、头痛日久不愈、痛如针刺而有定处、心悸失眠、入暮潮热。王清任\u201c活血化瘀\u201d诸方之代表，尤擅胸胁血瘀。",b:"《医林改错》《汤头歌诀》"},
+ {n:"肾气丸（金匮肾气丸）",s:"汉·张仲景《金匮要略》",comp:"干地黄、山药、山萸肉、泽泻、茯苓、牡丹皮、桂枝、附子（后世又称\u201c桂附地黄丸\u201d）",d:"温补肾阳、化气行水。主治肾阳不足——腰痛脚软、畏寒肢冷、小便不利或反多、阳痿早泄、痰饮水肿。阴中求阳、少火生气，为温补肾阳的祖方。",b:"《金匮要略》《汤头歌诀》"}
 ];
 const ACUP=[
- {n:"足三里",d:"位于小腿外侧，犊鼻下3寸。为足阳明胃经合穴，\u201c肚腹三里留\u201d，常灸足三里可健脾和胃、扶正培元，民间有\u201c常灸足三里，胜吃老母鸡\u201d之谚。",b:"《针灸大成》"},
- {n:"涌泉",d:"位于足底前部凹陷处，为足少阴肾经井穴。肾经之气如源泉之水，涌出足下，故名。睡前按揉可引火归元、助眠安神。",b:"《针灸大成》《黄帝内经》"},
- {n:"合谷",d:"位于手背第一、二掌骨之间，\u201c面口合谷收\u201d，为手阳明大肠经原穴，头面部病症常用要穴。",b:"《针灸大成》"}
+ {n:"足三里",m:"足阳明胃经",loc:"小腿外侧，犊鼻（外膝眼）下3寸，胫骨前缘外一横指处",d:"胃经合穴，\u201c肚腹三里留\u201d。健脾和胃、扶正培元、通经活络，为最常用的保健要穴。民间有\u201c常灸足三里，胜吃老母鸡\u201d之谚，常灸可增强体质。",b:"《针灸大成》《黄帝内经》"},
+ {n:"涌泉",m:"足少阴肾经",loc:"足底前1/3凹陷处（屈足卷趾时足心最凹处），约当第2、3趾趾缝纹头端与足跟连线的前1/3与后2/3交点",d:"肾经井穴。肾经之气如源泉之水涌出足下，故名。引火归元、滋阴降火、宁神开窍，睡前按揉或艾灸可助眠安神、引虚火下行。",b:"《针灸大成》《黄帝内经》"},
+ {n:"合谷",m:"手阳明大肠经",loc:"手背第1、2掌骨之间，约平第2掌骨桡侧中点（拇、食指并拢时肌肉隆起最高处）",d:"大肠经原穴，\u201c面口合谷收\u201d。镇静止痛、通经活络、解表清热，头面部病症（牙痛、头痛、面瘫）与解表发汗常用要穴。孕妇慎用。",b:"《针灸大成》"},
+ {n:"百会",m:"督脉",loc:"头顶正中，两耳尖连线的中点处",d:"督脉要穴，居一身之巅，为诸阳之会。醒脑开窍、升阳举陷、安神定志，常用于头晕目眩、健忘、耳鸣及脏器下垂（如脱肛、子宫脱垂）。",b:"《针灸大成》《黄帝内经》"},
+ {n:"关元",m:"任脉",loc:"下腹部前正中线上，脐下3寸",d:"小肠之募穴，为元气之根、\u201c男子藏精、女子蓄血\u201d之处。培元固本、温肾壮阳、补益下焦，为保健灸常用穴，尤宜阳虚畏寒、元气不足者。",b:"《针灸大成》《黄帝内经》"},
+ {n:"气海",m:"任脉",loc:"下腹部前正中线上，脐下1.5寸",d:"补气要穴，被称为\u201c元气之海\u201d。益气助阳、调理气机，主治气虚乏力、腹痛虚劳，常与关元相配以补益下焦元气。",b:"《针灸大成》"},
+ {n:"内关",m:"手厥阴心包经",loc:"前臂掌侧，腕横纹上2寸，掌长肌腱与桡侧腕屈肌腱之间",d:"心包经络穴、八脉交会穴（通阴维脉）。宁心安神、理气止痛、和胃降逆，常用于心悸、胸闷、晕车呕吐、胃痛，亦是\u201c四关\u201d配穴之一。",b:"《针灸大成》"},
+ {n:"三阴交",m:"足太阴脾经",loc:"小腿内侧，内踝尖上3寸，胫骨内侧缘后方",d:"脾、肝、肾三条阴经的交会穴。健脾益血、调肝补肾、调经止带，为妇科第一要穴，月经不调、带下、失眠、脾胃虚弱多用。孕妇禁针。",b:"《针灸大成》《黄帝内经》"},
+ {n:"委中",m:"足太阳膀胱经",loc:"腘横纹中点（膝后窝中央）",d:"膀胱经合穴，\u201c腰背委中求\u201d。舒筋通络、凉血泄热，腰背疼痛、下肢痿痹及急性腰扭伤常用，刺络放血亦取其清热。",b:"《针灸大成》"},
+ {n:"列缺",m:"手太阴肺经",loc:"前臂桡侧缘，腕横纹上1.5寸，肱桡肌腱与拇长展肌腱之间",d:"肺经络穴、八脉交会穴（通任脉）。\u201c头项寻列缺\u201d，疏风解表、宣肺利咽、通调任脉，头痛项强、咳嗽咽喉肿痛常用。",b:"《针灸大成》"},
+ {n:"风池",m:"足少阳胆经",loc:"项后枕骨之下，胸锁乳突肌与斜方肌上端之间的凹陷处（平风府穴）",d:"祛风解表、清头明目、通利官窍。感冒头痛、眩晕、目赤肿痛、鼻塞多用，亦是治风之要穴，外感与内风皆宜。",b:"《针灸大成》"},
+ {n:"太冲",m:"足厥阴肝经",loc:"足背第1、2跖骨间，跖骨底结合部前方凹陷中（足背动脉搏动处）",d:"肝经原穴、输穴。平肝息风、疏肝理气、清肝明目，为调畅情志第一要穴，与合谷并称\u201c四关\u201d，头痛眩晕、月经不调、急躁易怒多用。",b:"《针灸大成》"}
 ];
 const TOPICS=[
  {n:"上火",d:"中医认为\u201c上火\u201d多因阴阳失衡、内火炽盛，可分为实火与虚火：实火者面红目赤、口舌生疮、小便短赤，宜清热泻火，可饮金银花、菊花茶；虚火者午后潮热、口干咽燥，宜滋阴降火，可酌用麦冬、石斛。《本草纲目》云\u201c去火除烦，莫过于水\u201d，调畅情志、忌辛辣烧烤亦是要诀。",b:"《本草纲目》《温病条辨》",k:["口舌生疮","实火","虚火","火气"]},
@@ -939,8 +995,8 @@ const LOOKALIKES=[
 const KB=[
  ...LOOKALIKES.map(l=>({keys:[`${l.a}和${l.b}`,`${l.b}和${l.a}`,`${l.a}与${l.b}`,`${l.b}与${l.a}`,`区分${l.a}`,`区分${l.b}`,`分辨${l.a}`,`分辨${l.b}`,`辨别${l.a}`,`辨别${l.b}`,`${l.a}相似`,`${l.b}相似`],cat:`辨别 · ${l.a}/${l.b}`,ans:`<b>火眼金睛 · ${l.a} vs ${l.b}</b><div class="kv"><span class="k">分辨要点</span>${l.tip}</div><div class="kv"><span class="k">药童口诀</span>「${l.gj}」</div><div style="margin-top:8px"><button class="btn ghost" onclick="go('game')">去知识竞赛练练辨药眼力 →</button></div>`})),
  ...ALL_HERBS.map(h=>({keys:[h.n],...(h.cat?{}:{herb:h.n}),ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">外观辨识</span>${h.x}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>${h.cat?`<div class="kv" style="color:var(--ink2)">◈ 归入「${h.cat}」类 · 见问答页「本草名录」</div>`:""}`,cat:h.n})),
- ...FORMULAS.map(f=>({keys:[f.n,f.n.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n})),
- ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">定位功效</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
+ ...FORMULAS.map(f=>{const base=f.n.replace(/（[^）]*）/g,"");return {keys:[f.n,base,base.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">组成</span>${f.comp}</div><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n};}),
+ ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">所属经络</span>${a.m}</div><div class="kv"><span class="k">定位</span>${a.loc}</div><div class="kv"><span class="k">功效主治</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
  ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],topic:1,ans:`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
 ];
 const SYNONYM={"黄耆":"黄芪","杞子":"枸杞子","忍冬":"金银花","六味地黄":"六味地黄丸","三里":"足三里","人参须":"人参","菊花茶":"菊花","枸杞茶":"枸杞子","洋参":"人参","熟地":"六味地黄丸","按摩哪个穴位":"穴位","艾灸":"足三里"};
@@ -1277,8 +1333,67 @@ const PAGE_INIT={
     if(g&&g.mode==="contest"&&!g.started)return renderContestReady(); // 已选竞赛但未确认开卷
     renderGameIdle();                                               // 待机：不出题、不计时
   },
-  checkin:()=>{}                                // 日历由 go() 刷新
+  checkin:()=>{},                               // 日历由 go() 刷新
+  materia:()=>{renderMateria();}                // 本草名方穴位通鉴：三 tab 卡片
 };
+/* ===== 本草名方穴位通鉴：三栏卡片，数据驱动，可一键问小药童 ===== */
+function renderMateria(){
+  const setCnt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setCnt("cntHerb",ALL_HERBS.length);setCnt("cntFormula",FORMULAS.length);setCnt("cntAcup",ACUP.length);
+  const hb=$("#matHerb");
+  if(hb && !hb.dataset.done){
+    let html=`<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。下列 <b>${ALL_HERBS.length}</b> 味按功效分门；带「🖌 工笔」者另有手绘画像，见「本草图鉴」。</div>`;
+    html+=`<div class="mat-grp"><h3 class="mat-h3">药食同源 · 工笔本草（${HERBS.length} 味）</h3><div class="mat-grid">`+HERBS.map(h=>herbCard(h,true)).join("")+`</div></div>`;
+    HERB_CATS.forEach(c=>{
+      const list=MATERIA_EXTRA.filter(h=>h.cat===c);
+      if(!list.length)return;
+      html+=`<div class="mat-grp"><h3 class="mat-h3">${c}（${list.length} 味）</h3><div class="mat-grid">`+list.map(h=>herbCard(h,false)).join("")+`</div></div>`;
+    });
+    hb.innerHTML=html; hb.dataset.done="1";
+  }
+  const fm=$("#matFormula");
+  if(fm && !fm.dataset.done){
+    fm.innerHTML=`<div class="mat-note">◈ 名方：组成、方义、源流，一卡尽览。点「问小药童」可追问配伍与禁忌。</div><div class="mat-grid">`+FORMULAS.map(formulaCard).join("")+`</div>`;
+    fm.dataset.done="1";
+  }
+  const ac=$("#matAcup");
+  if(ac && !ac.dataset.done){
+    ac.innerHTML=`<div class="mat-note">◈ 穴位：定位、所属经络、功效主治，按经典出处整理。点「问小药童」可追问取穴与手法。</div><div class="mat-grid">`+ACUP.map(acupCard).join("")+`</div>`;
+    ac.dataset.done="1";
+  }
+}
+function herbCard(h,illust){
+  return `<div class="mat-card">
+    <div class="mat-card-h"><b>${h.n}</b>${illust?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':h.cat}</span></div>
+    <div class="kv"><span class="k">性味归经</span>${h.f}</div>
+    <div class="kv"><span class="k">功效主治</span>${h.e}</div>
+    <div class="kv"><span class="k">经典出处</span>${h.s}</div>
+    <button class="btn ghost mat-ask" onclick="askKB('${h.n}')">问小药童 · ${h.n}</button>
+  </div>`;
+}
+function formulaCard(f){
+  return `<div class="mat-card">
+    <div class="mat-card-h"><b>${f.n}</b><span class="mat-cat">名方</span></div>
+    <div class="kv"><span class="k">组成</span>${f.comp}</div>
+    <div class="kv"><span class="k">方书源流</span>${f.s}</div>
+    <div class="kv"><span class="k">方义主治</span>${f.d}</div>
+    <div class="kv"><span class="k">深入阅读</span>${f.b}</div>
+    <button class="btn ghost mat-ask" onclick="askKB('${f.n.replace(/（[^）]*）/g,"")}')">问小药童 · ${f.n.replace(/（[^）]*）/g,"")}</button>
+  </div>`;
+}
+function acupCard(a){
+  return `<div class="mat-card">
+    <div class="mat-card-h"><b>${a.n}</b><span class="mat-cat">${a.m}</span></div>
+    <div class="kv"><span class="k">定位</span>${a.loc}</div>
+    <div class="kv"><span class="k">功效主治</span>${a.d}</div>
+    <div class="kv"><span class="k">经典出处</span>${a.b}</div>
+    <button class="btn ghost mat-ask" onclick="askKB('${a.n}')">问小药童 · ${a.n}</button>
+  </div>`;
+}
+function switchMat(tab){
+  document.querySelectorAll(".mat-tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  document.querySelectorAll(".mat-pane").forEach(p=>p.classList.toggle("on",p.id==="mat"+tab.charAt(0).toUpperCase()+tab.slice(1)));
+}
 /* 知识库速查：把全部本草（按功效分门）与典籍列出来，点名字即问药童 */
 function renderKbIndex(){
   const box=$("#kbIndex");if(!box)return;
@@ -1308,7 +1423,7 @@ function go(p){
   if(p==="album")renderAlbum();
   if(p==="checkin")renderCheckin();
   if(p==="chat")renderChips(); // 每次进问答页，推荐问题随机换一批
-  if(p==="home")refreshFeatMeta(); // 返回首页时刷新功能卡上的真实进度
+  if(p==="home"){refreshFeatMeta();syncStats();} // 返回首页时刷新功能卡与统计条的真实进度
   if(p!=="game"&&window._game&&(window._game.timer||window._game.readyTimer)){clearInterval(window._game.timer);clearInterval(window._game.readyTimer);window._game.timer=null;window._game.readyTimer=null;} // 离开药圃自动停表、停开卷倒数
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1976,6 +2091,16 @@ function refreshFeatMeta(){
   }catch(e){}
 }
 refreshFeatMeta();
+function syncStats(){
+  try{
+    const set=(id,txt)=>{const el=document.getElementById(id);if(el)el.textContent=txt;};
+    set("hbStat",ALL_HERBS.length);   // 本草：全站知识口径（14 味有图 + 26 味文字）
+    set("fmStat",FORMULAS.length);    // 名方：随 FORMULAS 数据动态
+    set("acStat",ACUP.length);        // 穴位：随 ACUP 数据动态
+    set("bkStat",BOOKS.length);       // 经典：随 BOOKS 数据动态（含 push 扩展）
+  }catch(e){}
+}
+syncStats();
 function restorePhys(){
   const p=physGet();if(!p)return;
   const lp=$("#lastPhys");
