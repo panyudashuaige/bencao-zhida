@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>本草智答 · AI 小药童识体质，按体质荐经典</title>
-<meta name="description" content="本草智答——AI 小药童带你辨体质、按体质荐经典：拍照看面相、9 题速测、27 题国标三种方式识别九种体质，据此点亮二十部岐黄经典中的契合书目，并提供本草问答、经典原文选读、百草试炼、集章图鉴与阅读打卡。AI 阅读推广与中医药文化传播参赛作品。">
+<meta name="description" content="本草智答——AI 小药童带你辨体质、按体质荐经典：拍照看面相当望诊参考，与 9 题速测 / 27 题国标量表问卷四诊合参识别九种体质，据此点亮二十部岐黄经典中的契合书目，并提供本草问答、经典原文选读、百草试炼、集章图鉴与阅读打卡。AI 阅读推广与中医药文化传播参赛作品。">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="apple-touch-icon" href="assets/appicon-180.png">
 <meta name="theme-color" content="#2F5D50">
@@ -58,7 +58,7 @@ header.top-hero{width:100%;position:relative;background:linear-gradient(115deg,v
 header.top-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 88% 6%,var(--hd-glow),transparent 58%),radial-gradient(ellipse at 8% 130%,var(--hd-veil),transparent 52%);opacity:.9;pointer-events:none}
 header.top-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 10%,var(--gold) 90%,transparent);opacity:.75;pointer-events:none}
 /* 页眉：水墨字标 + 典籍横排书脊；书脊整排高度与字标(220)相仿 */
-.hd-inner{max-width:860px;margin:0 auto;padding:22px 16px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 30px;position:relative;z-index:1}
+.hd-inner{max-width:1080px;margin:0 auto;padding:22px 16px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 30px;position:relative;z-index:1}
 .hd-left{display:flex;align-items:center;flex:none;position:relative;z-index:1}
 /* 水墨字标：浓墨「本草」+ 朱红白文「智答」小印 + 一笔飞白药草水墨圆 */
 .seal-stamp{width:220px;height:220px;flex:none;position:relative;display:grid;place-items:center;background:transparent}
@@ -77,17 +77,17 @@ html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-acc
 /* 响应式 */
 .hd-bg{position:absolute;inset:0;z-index:0;background:url("assets/header-banner.png") center/cover no-repeat;opacity:.97;pointer-events:none}
 .hd-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,var(--hd-1),var(--hd-2) 52%,var(--hd-3));opacity:.5}
-/* 三列居中版式：字标左 / 标题中 / 药童右，紧凑排布（v29 按用户要求回退天头版式） */
-.hd-mid{flex:1 1 240px;min-width:0;text-align:center;z-index:1;padding:0 10px}
-.hd-slogan{font-family:"Ma Shan Zheng",cursive;font-size:26px;line-height:1.18;color:var(--red);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 0 rgba(251,243,228,.55)}
+/* 天头版式：左 logo 为视线起点，右侧标题区（slogan + 药童），两端对齐、中间留白 */
+.hd-mid{flex:0 1 auto;min-width:0;text-align:right;z-index:1;padding:0 10px;margin-left:auto}
+.hd-slogan{font-family:"Ma Shan Zheng",cursive;font-size:30px;line-height:1.18;color:var(--red);letter-spacing:2px;text-shadow:0 1px 0 rgba(251,243,228,.55)}
 .hd-slogan b{color:var(--green)}
 .hd-slogan .hd-ai{font-family:"Ma Shan Zheng",cursive;font-weight:400;font-size:1.06em;letter-spacing:.02em;margin-right:.18em;text-shadow:0 1px 0 rgba(251,243,228,.55)}
 .hd-slogan-sub{margin-top:7px;font-family:"Noto Serif SC",serif;font-size:13px;letter-spacing:1px;color:var(--ink2)}
-.hd-right{flex:none;z-index:1;display:flex;align-items:flex-end;justify-content:center;margin-left:8px}
-.hd-right img{height:165px;width:auto;display:block;margin-bottom:8px;filter:drop-shadow(0 10px 14px rgba(43,43,38,.22))}
-@media(max-width:1000px){.seal-stamp{width:180px;height:180px}.hd-right img{height:140px}.hd-slogan{font-size:23px}}
-@media(max-width:720px){.hd-inner{padding:18px 12px 16px}.seal-stamp{width:150px;height:150px}.hd-right img{height:118px}.hd-slogan{font-size:20px}.hd-slogan-sub{font-size:12px}}
-@media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right{order:2;margin-left:auto}.hd-right img{height:96px}.hd-slogan{font-size:18px}.hd-mid{order:3;flex-basis:100%;margin-left:0;text-align:center;margin-top:4px}}
+.hd-right{flex:none;z-index:1;display:flex;align-items:center;justify-content:center}
+.hd-right img{height:165px;width:auto;display:block;filter:drop-shadow(0 10px 14px rgba(43,43,38,.22))}
+@media(max-width:1000px){.seal-stamp{width:180px;height:180px}.hd-right img{height:140px}.hd-slogan{font-size:26px}}
+@media(max-width:720px){.hd-inner{padding:18px 12px 16px}.seal-stamp{width:150px;height:150px}.hd-right img{height:118px}.hd-slogan{font-size:22px}.hd-slogan-sub{font-size:12px}}
+@media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right{order:2;margin-left:auto}.hd-right img{height:96px}.hd-slogan{font-size:19px}.hd-mid{order:3;flex-basis:100%;margin-left:0;text-align:center;margin-top:4px}}
 
 /* ===== 导航 ===== */
 nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
@@ -226,6 +226,21 @@ h2 .dot{color:var(--red)}
 .filter button.fit-only{border-color:var(--red);color:var(--red)}
 .filter button.fit-only.sel{background:var(--red);color:#fff;border-color:var(--red)}
 @media(max-width:720px){.face-grid{grid-template-columns:1fr}.face-frame{max-width:240px}}
+
+/* ===== 四诊合参说明条 ===== */
+.sizhen{margin:14px 0 4px;padding:13px 16px 12px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(135deg,rgba(247,233,228,.5),rgba(231,239,234,.4));text-align:left}
+.sizhen>b{font-size:13.5px;color:var(--red);letter-spacing:1px}
+.sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 8px}
+.sz{display:flex;flex-direction:column;gap:4px;padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:#FCFBF6}
+.sz i{font-style:normal;font-family:"Ma Shan Zheng",cursive;font-size:20px;color:var(--red);line-height:1}
+.sz b{font-weight:600;font-size:12px;color:var(--ink2)}
+.sz em{font-style:normal;font-size:11px;color:var(--ink3);line-height:1.5}
+.sz.ok{border-color:rgba(166,62,40,.4)}
+.sz.ok em{color:var(--green)}
+.sz.no{opacity:.68}
+.sizhen p{font-size:11.5px;color:var(--ink3);line-height:1.75;margin:0}
+.sizhen p b{color:var(--green)}
+@media(max-width:720px){.sz-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== 体质辨识 ===== */
 .q-item{margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--line)}
@@ -610,7 +625,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <svg class="hero-cloud" viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 6 0 11 4 13 9 6-1 11 3 12 8 1 6-4 13-12 13H14z" opacity=".85"/><path d="M30 44c2-4 6-6 10-5" opacity=".5"/><path d="M78 54c-4 0-7-3-7-6s3-6 6-6c1-4 4-7 9-7 4 0 7 2 8 5 4 0 7 3 7 6 1 4-3 8-8 8H78z" opacity=".6"/><path d="M92 54c1-2 3-4 5-3" opacity=".4"/></svg>
       <div class="h-sub">—— 一部会对话的本草纲目 ——</div>
       <h1>本草<em>智答</em></h1>
-      <p><b>AI 小药童先带你认清体质，再从二十部岐黄经典里挑出与你相契的那一部</b>——拍照看面相、9 题速测、27 题国标，三种方式都能让经典荐读「对证」。识体质 → 荐经典 → 读原文，这是本草智答的 AI 阅读推广新玩法。</p>
+      <p><b>AI 小药童先带你认清体质，再从二十部岐黄经典里挑出与你相契的那一部</b>——正规判定讲究<b>四诊合参</b>：拍照看面相当「望」诊参考，9 题速测 / 27 题国标量表当「问」诊主判，合参定案后经典荐读「对证」。识体质 → 荐经典 → 读原文，这是本草智答的 AI 阅读推广新玩法。</p>
       <div class="hero-stats">
         <div><b>14</b><span>味本草</span></div>
         <div><b>6</b><span>首名方</span></div>
@@ -622,7 +637,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
         <div><b id="ciStat">0</b><span>连续打卡</span></div>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <button class="btn red" onclick="goQuiz('face')">📷 让小药童看面相识体质</button>
+        <button class="btn red" onclick="goQuiz('face')">📷 拍照看面相（望诊参考）</button>
         <button class="btn ghost" onclick="goQuiz('quick')">⚡ 9 题速测</button>
         <button class="btn ghost" onclick="go('read')">按体质荐经典 →</button>
         <span class="phys-badge" id="physBadge" style="display:none" onclick="go('quiz')"></span>
@@ -652,15 +667,15 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
       <p>不是把二十部医书一股脑摆给你，而是让 <b>AI 小药童</b>先读懂你的体质，再<b>按体质点亮契合书目</b>、翻开对应的原文选段——把「读什么」这件事交给懂你的人。</p>
     </div>
     <div class="ap-flow">
-      <button class="ap-step" onclick="goQuiz('face')"><b>壹 · 拍照 / 答题</b><span>拍张正脸照让小药童看面相，也能选 9 题速测或 27 题国标量表</span><em>交给 AI 小药童 →</em></button>
-      <button class="ap-step" onclick="goQuiz('quick')"><b>贰 · 辨九种体质</b><span>小药童按望诊线索与国标转化分，判定主导体质与兼夹倾向</span><em>生成体质档案 →</em></button>
+      <button class="ap-step" onclick="goQuiz('face')"><b>壹 · 拍照 / 答题</b><span>拍张正脸照出「望诊参考」，再答 9 题速测或 27 题国标量表作「问诊」</span><em>交给 AI 小药童 →</em></button>
+      <button class="ap-step" onclick="goQuiz('quick')"><b>贰 · 辨九种体质</b><span>小药童以国标转化分为主判、面象望诊互证，四诊合参定案主导体质与兼夹</span><em>生成体质档案 →</em></button>
       <button class="ap-step" onclick="go('read')"><b>叁 · 按体质荐书</b><span>二十部经典中与你相契的书目自动点亮，并给出药童导读</span><em>只看契合的 →</em></button>
       <button class="ap-step" onclick="go('read')"><b>肆 · 翻开原文</b><span>原文选段 + 白话译文 + 药童领读，读完还能去问答追问</span><em>把经典读进去 →</em></button>
     </div>
     <div class="ap-cta">
       <button class="btn red" onclick="goQuiz('face')">📷 现在让小药童识体质</button>
       <button class="btn ghost" onclick="goQuiz('quick')">⚡ 或做 9 题速测</button>
-      <span class="ap-note">面相识体质为望诊科普体验：照片不上传、不保存，结果仅供阅读推荐参考，非医疗诊断</span>
+      <span class="ap-note">面象仅作望诊参考，正式判定以量表问卷合参为准（四诊合参，面相不一票定案）；照片不上传、不保存，非医疗诊断</span>
     </div>
   </div>
   <div class="home-steps">
@@ -672,7 +687,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
     <span class="step" data-p="checkin" onclick="go('checkin')" title="进入岐黄打卡"><b>六</b>勤打卡 · 日日岐黄缘</span>
   </div>
   <div class="home-feats">
-    <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><span class="kicker">识 · AI 辨识</span><div class="gly">体</div><b>小药童识体质</b><span class="desc">拍照看面相 / 9 题速测 / 27 题国标<br>辨完体质即点亮契合经典</span><span class="meta" data-meta="quiz">拍照识体质 · 9 题速测 / 27 题国标</span></div>
+    <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><span class="kicker">识 · AI 辨识</span><div class="gly">体</div><b>小药童识体质</b><span class="desc">拍照面象作望诊参考<br>量表合参定案后点亮经典</span><span class="meta" data-meta="quiz">四诊合参识体质 · 9 题速测 / 27 题国标</span></div>
     <div class="feat" data-p="chat" onclick="go('chat')"><span class="more">→</span><span class="kicker">问 · 答疑</span><div class="gly">问</div><b>本草问答</b><span class="desc">中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span><span class="meta" data-meta="chat">中药 / 方剂 / 穴位 / 养生</span></div>
     <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><span class="kicker">辨 · 试炼</span><div class="gly">辨</div><b>百草试炼</b><span class="desc">练习 + 知识竞赛双模式<br>混合题库考眼力考学问</span><span class="meta" data-meta="game">练习 14 题 · 竞赛 21 题</span></div>
     <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><span class="kicker">鉴 · 集章</span><div class="gly">鉴</div><b>本草图鉴</b><span class="desc">集章点亮工笔画像<br>集齐十四味做园主</span><span class="meta" data-meta="album">14 味工笔画像待点亮</span></div>
@@ -714,13 +729,23 @@ const PAGE_HTML={
   <div class="card" id="quizBody">
     <div class="orn">A I · 小 药 童 陪 你 识 体 质</div>
     <h2>识体质<span class="dot"> · </span>再让小药童为你荐经典</h2>
-    <p class="desc">本站的核心创新：<b>AI 小药童先读懂你的体质，再按体质推荐经典</b>。三种辨识方式任选——<b>拍照看面相</b>（望诊科普体验）、<b>9 题速测</b>、<b>27 题国标完整版</b>（依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，按转化分判定"是 / 倾向是 / 否"）。判完自动写入体质档案，并点亮二十部经典中与你相契的书目。（科普学习用途，不构成医疗诊断）</p>
+    <p class="desc">本站的核心创新：<b>AI 小药童先读懂你的体质，再按体质推荐经典</b>。正规的体质判定讲究<b>四诊合参</b>——望（面色、舌象）、闻（声息气味）、问（怕冷、出汗、二便、睡眠、过敏等大量症状）、切（脉象），还要结合量表问卷综合判断，<b>不是面相一票决定</b>。本站把问诊做成 <b>9 题速测 / 27 题国标量表</b>（依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，按转化分判定"是 / 倾向是 / 否"），<b>拍照看面相</b>则是望诊科普参考；面象与量表<b>合参</b>后写入体质档案，并点亮二十部经典中与你相契的书目。闻诊与切诊无法线上采集，须由医师当面完成。（科普学习用途，不构成医疗诊断）</p>
+    <div class="sizhen">
+      <b>◈ 正规体质判定 · 四诊合参，面相不一票定案</b>
+      <div class="sz-grid">
+        <span class="sz ok"><i>望</i><b>面色 · 舌象 · 神态</b><em>本站：拍照面象（参考）</em></span>
+        <span class="sz no"><i>闻</i><b>声音 · 呼吸 · 气味</b><em>线上采集不了，须医师面诊</em></span>
+        <span class="sz ok"><i>问</i><b>怕冷 · 汗 · 二便 · 睡眠 · 过敏</b><em>本站：国标量表问卷（主判）</em></span>
+        <span class="sz no"><i>切</i><b>脉象</b><em>线上采集不了，须医师面诊</em></span>
+      </div>
+      <p>合参定案＝以<b>量表问卷为主判</b>、<b>面象望诊互证</b>；望诊倾向仅作参考，待量表合参后生效。本站为文化科普，非医疗诊断。</p>
+    </div>
     <div class="face-top">
       <img src="assets/mascot3d.png" alt="AI 小药童" loading="lazy" decoding="async">
-      <div><b>药童陪你辨 · 我是你的 AI 小药童</b><span id="faceSay">别怕选错～先让我瞧瞧你的面相，或者答几道小题；认出体质后，我替你把该读的那部经典挑出来。</span></div>
+      <div><b>药童陪你辨 · 我是你的 AI 小药童</b><span id="faceSay">别怕选错～正规辨体质要<b>四诊合参</b>：我先瞧面相当「望诊参考」，再用问卷把「问诊」补上，合参定案后，我替你把该读的经典挑出来。</span></div>
     </div>
     <div style="display:flex;gap:10px;justify-content:center;margin:14px 0 4px;flex-wrap:wrap">
-      <button class="btn ghost" id="btnFace" onclick="setQuizMode('face')">📷 拍照看面相 · AI 识体质</button>
+      <button class="btn ghost" id="btnFace" onclick="setQuizMode('face')">📷 拍照看面相 · 望诊参考</button>
       <button class="btn red" id="btnQuick" onclick="setQuizMode('quick')">⚡ 9 题速测版</button>
       <button class="btn ghost" id="btnFull" onclick="setQuizMode('full')">📋 27 题国标完整版</button>
     </div>
@@ -741,10 +766,10 @@ const PAGE_HTML={
           <div class="face-tips"><b>◈ 药童拍照小贴士</b><ul><li>找一处自然光，正脸平视镜头</li><li>摘掉帽子口罩，别开美颜滤镜</li><li>拍完我先在本机数一数气色，再请你确认</li><li>认出体质后，我按体质替你点亮该读的经典</li></ul></div>
         </div>
         <div class="face-obs">
-          <h4>◈ 小药童的望诊小本本</h4>
-          <p class="face-note">对照照片，把看到的特征勾给小药童（每组可多选）。它依《中医体质分类与判定》的望诊科普线索推算体质倾向，<b>属于文化科普体验，不替代医生面诊</b>。</p>
+          <h4>◈ 小药童的望诊小本本（四诊之「望」）</h4>
+          <p class="face-note">对照照片，把看到的特征勾给小药童（每组可多选）。它依《中医体质分类与判定》的望诊科普线索推算<b>望诊倾向</b>——仅作参考，<b>不单独定案</b>；须再答量表问卷（问诊）完成合参，才写入体质档案并点亮荐读。<b>属于文化科普体验，不替代医生面诊</b>。</p>
           <div id="faceSigns"></div>
-          <div class="face-act"><button class="btn red" onclick="calcFace()">✨ 让小药童辨体质并荐经典 →</button></div>
+          <div class="face-act"><button class="btn red" onclick="calcFace()">✨ 出望诊参考 · 待量表合参定案 →</button></div>
           <div class="face-result" id="faceResult" style="display:none"></div>
         </div>
       </div>
@@ -932,7 +957,7 @@ const CONSTITUTION_ALIASES=[
 ];
 function constitutionAns(c){
   const o=CONSTITUTIONS[c];
-  return `<b>${c} · 药童调养锦囊</b><div class="kv"><span class="k">体质画像</span>${o.d}</div><div class="kv"><span class="k">调养锦囊</span>${o.adv}</div><div class="kv"><span class="k">荐读书目</span>${o.books.map(x=>"《"+x+"》").join("　")}</div><div class="kv" style="color:var(--ink2)">想知道自己是不是${c}？点顶部「体质辨识」，让小药童<b>拍照看面相</b>、或做 9 道速测小题（还有 27 题完整版），辨完体质我立刻按体质给你点亮该读的经典〜</div>`;
+  return `<b>${c} · 药童调养锦囊</b><div class="kv"><span class="k">体质画像</span>${o.d}</div><div class="kv"><span class="k">调养锦囊</span>${o.adv}</div><div class="kv"><span class="k">荐读书目</span>${o.books.map(x=>"《"+x+"》").join("　")}</div><div class="kv" style="color:var(--ink2)">想知道自己是不是${c}？点顶部「体质辨识」，让小药童<b>拍照看面象当望诊参考</b>、再答 9 道速测或 27 题国标量表（问诊）<b>合参定案</b>，我立刻按体质给你点亮该读的经典〜</div>`;
 }
 const CONSTITUTIONS={
  "平和质":{d:"阴阳气血调和，体态适中、面色红润、精力充沛。",adv:"顺应四时即可，坚持\u201c食饮有节，起居有常\u201d。",books:["黄帝内经"]},
@@ -1939,7 +1964,7 @@ function refreshFeatMeta(){
     const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
     const h=HERBS[doy%HERBS.length],stamps=alCount(),streak=ciStreak();
     const doneCi=ciGet().d.includes(ciKey());
-    put("quiz",p?`已测评 · ${p.n}（${p.j}）· 契合书目已点亮`:"未测评 · 📷 拍照识体质 / 9 题速测约 1 分钟",!!p);
+    put("quiz",p?`已合参 · ${p.n}（${p.j}）· 契合书目已点亮`:"未测评 · 📷 面象望诊参考 + 量表合参（约 1 分钟）",!!p);
     put("chat",`${corpus().length} 条典籍语料 · 可追问详解`,false);
     put("game",best?`竞赛最佳 ${best.s} 分 / ${best.n} 题`:"练习 14 题 · 竞赛 21 题",!!best);
     put("album",`已点亮 ${stamps} / ${HERBS.length} 味`,stamps>0);
@@ -2147,8 +2172,7 @@ function faceScore(ans){
     const picked=(ans&&ans[i])||[];
     picked.forEach(j=>{const o=g.o[j];if(!o)return;Object.keys(o.w||{}).forEach(k=>{if(sc[k]!==undefined)sc[k]+=o.w[k];});});
   });
-  const p=physGet();if(p&&p.n&&sc[p.n]!==undefined)sc[p.n]+=1.5; // 已有量表档案 → 互证加权
-  return Object.entries(sc).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  return Object.entries(sc).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])); // 纯望诊倾向，不掺量表结果，互证与否由 calcFace 显式比较
 }
 function facePicked(){
   const out=[];FACE_SIGNS.forEach((g,i)=>(faceAns[i]||[]).forEach(j=>{if(g.o[j])out.push(g.o[j].t);}));return out;
@@ -2200,7 +2224,7 @@ function faceAutoApply(st){
   Object.keys(sug).forEach(i=>{faceAns[i]=[sug[i]];});
   renderFaceSigns();
   const labels=Object.keys(sug).map(i=>FACE_SIGNS[i].o[sug[i]].t),say=$("#faceSay");
-  if(say)say.innerHTML=`……瞧见啦！本药童在你手机里数了数气色，初看像「${labels.join("、")}」，已替你勾好；对照照片改一改，我再按体质替你挑书〜`;
+  if(say)say.innerHTML=`……瞧见啦！本药童在你手机里数了数气色，初看像「${labels.join("、")}」，已替你勾好——这只是<b>望诊参考</b>，对照照片改一改，再答量表把「问诊」补上合参定案，我才替你定书单〜`;
   return true;
 }
 function faceUpload(ev){
@@ -2223,32 +2247,61 @@ function faceUpload(ev){
   }catch(e){}
 }
 function calcFace(){
+  /* 四诊合参口径：面象＝望诊参考，量表问卷＝问诊主判；
+     无量表档案 → 只出「望诊初判」参考，不写体质档案、不点亮荐读；
+     已有量表档案 → 合参定案（以量表为主、望诊互证）才写入档案并点亮书目。 */
   const picked=facePicked();
   if(!picked.length){alert("先勾一两个你观察到的面象特征，小药童才好辨呀（不方便拍照也没关系）");return;}
   const rank=faceScore(faceAns),top=rank[0];
-  const name=top[1]>0?top[0]:"平和质",judge=top[1]>=5?"是":"倾向是";
+  const leanName=top[1]>0?top[0]:"平和质";
+  const leanJudge=top[1]>=5?"是":"倾向是";
+  const p=physGet();
+  const box=$("#faceResult"),lp=$("#lastPhys");
+  if(!p||!p.n){ /* —— 仅望诊：出参考卡，待量表合参 —— */
+    const lc=CONSTITUTIONS[leanName];
+    const preview=lc.books.slice(0,3).map(x=>"《"+x+"》").join("　");
+    if(box){box.style.display="block";box.innerHTML=`
+    <h4>◈ 望诊初判（参考）：${leanName}（${leanJudge}）</h4>
+    <p style="font-size:13.5px;color:var(--red);margin:6px 0 0">这是「四诊」里的<b>望诊</b>一诊，不能一票定案——还差「问诊」量表来合参。</p>
+    <p style="font-size:13.5px;color:var(--ink2)">${lc.d}</p>
+    <div class="kv"><span class="k">面象依据</span>${picked.join(" · ")}</div>
+    <div class="kv"><span class="k">合参流程</span>望诊参考（本卡）→ 答量表问卷（问诊）→ 合参定案 → 写档案、点亮荐读</div>
+    <div class="fr-books"><b>◈ 若按此倾向预览荐读</b>：${preview}<br><span style="color:var(--ink2);font-size:12px">望诊倾向仅供参考；完成量表合参后，才会真正点亮契合书目。</span></div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn red" onclick="goQuiz('quick')">⚡ 补做 9 题量表 · 完成四诊合参 →</button>
+      <button class="btn ghost" onclick="goQuiz('full')">📋 或做 27 题国标完整版</button>
+    </div>
+    <p class="face-note">* 望诊科普体验：${facePhoto?"照片仅在本机预览、未参与任何图像识别":"本次未上传照片，依据为自述面象"}；面象倾向按科普权重推算，<b>不写入体质档案、不点亮荐读</b>，待量表合参后定案，非医疗诊断。</p>`;
+    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"nearest"});}
+    if(lp){lp.style.display="block";lp.innerHTML=`◈ 望诊初判（参考）：<b>${leanName}</b>（${leanJudge}）· <b>尚未合参</b>——答完量表问卷（问诊）才定案并点亮荐读`;}
+    if(typeof refreshFeatMeta==="function")refreshFeatMeta();
+    return;
+  }
+  /* —— 四诊合参：量表为主判，望诊互证 —— */
+  const name=p.n,judge=p.j;
   const c=CONSTITUTIONS[name];
+  const agree=leanName===name;
   lastQuiz=name;
-  try{localStorage.setItem("bzPhysique",JSON.stringify({n:name,j:judge,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日",way:"面相识体质"}));}catch(e){}
+  try{localStorage.setItem("bzPhysique",JSON.stringify({n:name,j:judge,d:p.d||new Date().getMonth()+1+"月"+new Date().getDate()+"日",way:"四诊合参（望+问）"}));}catch(e){}
   renderBooks();
   const rec=BOOKS.filter(b=>c.books.some(bk=>b.t.includes(bk)||bk.includes(b.t.slice(0,3)))||b.fit.includes(name));
   const others=rank.slice(1).filter(x=>x[1]>0).slice(0,2).map(x=>x[0]).join("、");
-  const box=$("#faceResult");
   if(box){box.style.display="block";box.innerHTML=`
-    <h4>◈ 药童望诊判词：${name}（${judge}）</h4>
+    <h4>◈ 四诊合参判词：${name}（${judge}）</h4>
     <p style="font-size:13.5px;color:var(--ink2)">${c.d}${others?`　兼夹倾向：${others}`:""}</p>
+    <div class="kv"><span class="k">问诊主判</span>量表问卷（${p.d||""}）判定 <b>${name}（${judge}）</b>——国标转化分为准</div>
+    <div class="kv"><span class="k">望诊互证</span>面象倾向 ${leanName}（${leanJudge}）${agree?"——与量表<b style=\"color:var(--green)\">互证一致</b>，结论更稳":"——与量表侧重不同，<b style=\"color:var(--red)\">以量表为准</b>，可复核面象或重答量表"}${facePhoto?" · 照片仅本机预览":""}</div>
     <div class="kv"><span class="k">面象依据</span>${picked.join(" · ")}</div>
     <div class="kv"><span class="k">调养锦囊</span>${c.adv}</div>
-    <div class="fr-books"><b>◈ 按体质为你荐读</b>：${rec.length?rec.map(b=>"《"+b.t+"》").join("　"):"《"+c.books[0]+"》"}<br><span style="color:var(--ink2);font-size:12px">这些书已在「经典荐读」中点亮，点开即可读原文选段与白话译文。</span></div>
+    <div class="fr-books"><b>◈ 按合参体质为你荐读</b>：${rec.length?rec.map(b=>"《"+b.t+"》").join("　"):"《"+c.books[0]+"》"}<br><span style="color:var(--ink2);font-size:12px">这些书已在「经典荐读」中点亮，点开即可读原文选段与白话译文。</span></div>
     <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn red" onclick="go('read')">看看为我点亮的经典 →</button>
       <button class="btn ghost" onclick="askKB('${name.replace("质","")}体质怎么调理')">问问小药童怎么调养</button>
-      <button class="btn ghost" onclick="goQuiz('quick')">再用 9 题量表核一核</button>
+      <button class="btn ghost" onclick="goQuiz('quick')">重新答量表（更新问诊）</button>
     </div>
-    <p class="face-note">* 望诊科普体验：${facePhoto?"照片仅在本机预览、未参与任何图像识别":"本次未上传照片，依据为自述面象"}；体质倾向按勾选特征的科普权重推算${physGet()?"，并与你已有的量表档案互证":""}，仅供阅读推荐参考，非医疗诊断。</p>`;
-    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"nearest"});
-  }
-  const lp=$("#lastPhys");if(lp){lp.style.display="block";lp.innerHTML=`◈ 你的体质档案：<b>${name}</b>（${judge}）· 小药童面相识体质 · 荐读书目已点亮`;}
+    <p class="face-note">* 四诊合参＝望（面象参考）＋问（量表主判）；闻、切两诊线上采集不了，须医师当面完成。结果仅供阅读推荐参考，非医疗诊断。</p>`;
+    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"nearest"});}
+  if(lp){lp.style.display="block";lp.innerHTML=`◈ 你的体质档案：<b>${name}</b>（${judge}）· 四诊合参（望+问）· 荐读书目已点亮`;}
   if(typeof refreshFeatMeta==="function")refreshFeatMeta();
 }
 
@@ -2314,6 +2367,7 @@ function calcQuiz(){
    <div class="const-name">${name.slice(0,3)}<span style="font-size:20px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
    <p style="color:var(--ink2);font-size:14px;max-width:520px;margin:0 auto">${c.d}<br><b style="color:var(--red)">小药童已按这个体质，为你点亮契合的经典书目 ↓</b></p>
    ${hit.length>1?`<p style="font-size:13px;color:var(--red);margin-top:8px">◈ 检出兼夹体质：${hit.slice(1).map(([k])=>k).join("、")}</p>`:""}
+   ${facePicked().length?(()=>{const fl=faceScore(faceAns)[0];const fn=fl[1]>0?fl[0]:"平和质";const ok=fn===name;return `<p style="font-size:13px;color:var(--gold);margin-top:8px">◈ 四诊合参互证：面象望诊倾向 <b>${fn}</b>${ok?"——与量表主判<b style=\"color:var(--green)\">互证一致</b>，结论更稳":"——与量表侧重不同，<b style=\"color:var(--red)\">以量表为准</b>，可去面象面板复核"}</p>`;})():""}
    <div style="max-width:460px;margin:20px auto 0">
      ${rows.map(([k,v])=>`<div class="bar-row ${k===name?"top":""}"><span class="nm">${k.slice(0,3)}</span><span class="bar"><i style="width:0" data-w="${v}"></i></span><span class="sc">${v}${badges[k]?`<em style="font-style:normal;color:${badges[k]==="是"?"var(--red)":"var(--gold)"};font-size:10px;margin-left:3px">${badges[k]}</em>`:""}</span></div>`).join("")}
      <p style="font-size:11px;color:var(--ink3);text-align:left;margin-top:8px;line-height:1.7">判定依据 · 中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）：偏颇体质转化分 ≥40 判"是"、30~39 判"倾向是"、＜30 判"否"；平和质需转化分 ≥60 且八种偏颇体质均＜30。</p>
@@ -2327,7 +2381,7 @@ function calcQuiz(){
    <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
      <button class="btn" onclick="askKB('${name.replace("质","")}体质')">向本草智答咨询${name.slice(0,2)}调养</button>
      <button class="btn ghost" onclick="go('read')">查看经典荐读 →</button>
-     <button class="btn ghost" onclick="goQuiz('face')">📷 用面相再核一核</button>
+     <button class="btn ghost" onclick="goQuiz('face')">📷 用面象望诊互证一下</button>
      <button class="btn ghost" onclick="go('game')">去药圃练辨药 →</button>
    </div>
    <p class="small-note" style="font-size:12px;color:var(--ink3);margin-top:14px">* 基于《中医体质分类与判定》简化量表的文化科普测试（速测版每体质 1 条目 · 完整版每体质 3 条目），结果仅用于按体质推荐经典读物，仅供参考，非医疗诊断</p>`;
@@ -2413,7 +2467,7 @@ const FUN=[
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
  {re:/什么节气|现在.{0,3}节气|节气养生|节气/,max:14,first:true,a:()=>{const t=window.CUR_TERM;return t?`<b>当前节气 · ${t[0]}</b><div class="kv"><span class="k">顺时养生</span>${t[3]}</div><div class="kv" style="color:var(--ink2)">首页「节气·养生」卡每日更新，岐黄名句也按日子轮换哦〜</div>`:"顺时而养是中医的浪漫！首页「节气·养生」卡会告诉你现在是什么节气、该怎么养〜"}},
  {re:/(春|夏|秋|冬)(天|季|令)?[^。]{0,10}(养生|进补|调理|保健|注意|饮食|起居|吃什么|怎么过|防)/,max:26,a:s=>{const sea=(/[春夏秋冬]/.exec(s||"")||[])[0]||seasonOf(),c=SEASON_CARE[sea];return `<b>四季养生 · ${sea}季</b><div class="kv"><span class="k">总则</span>${c.pr}</div><div class="kv"><span class="k">饮食</span>${c.eat}</div><div class="kv"><span class="k">起居</span>${c.live}</div><div class="kv"><span class="k">药童叮咛</span>${c.tip}</div><div class="kv" style="color:var(--ink2)">想看别的季节？直接问「春/夏/秋/冬 + 养生」；当季该读什么书，问我「推荐读什么书」〜</div>`}},
- {re:/测体质|体质测评|体质辨识|辨识体质|体质测试/,max:14,a:()=>"想测体质？本药童陪你辨～点顶部「体质辨识」：<b>📷 拍照看面相</b>（照片只在你手机里，不上传不保存）、<b>⚡ 9 题速测</b>（一分钟）、<b>📋 27 题国标完整版</b>（改编自中华中医药学会标准，自动算转化分、连兼夹体质都揪出来）。认出体质后，我立刻<b>按体质点亮该读的经典</b>——识体质、荐经典，这才是本站的拿手好戏〜"},
+ {re:/测体质|体质测评|体质辨识|辨识体质|体质测试/,max:14,a:()=>"想测体质？本药童陪你辨～正规判定讲究<b>四诊合参</b>（望闻问切＋量表问卷），不是看一眼面相就定案。点顶部「体质辨识」：<b>📷 拍照看面相</b>（望诊参考，照片只在你手机里，不上传不保存）、<b>⚡ 9 题速测</b>（一分钟）、<b>📋 27 题国标完整版</b>（改编自中华中医药学会标准，自动算转化分、连兼夹体质都揪出来）。面象与量表<b>合参定案</b>后，我立刻<b>按体质点亮该读的经典</b>——识体质、荐经典，这才是本站的拿手好戏〜"},
  {re:/真人|机器人|ai吗|人工智能|是不是人/,a:()=>"本童子是个 AI 小药童，精神本体是李时珍的书童（自称），物理本体是一段热心的代码。不过放心——肚子里装的都是《黄帝内经》《本草纲目》这类真材实料的经典，不是胡编的哦〜"},
  {re:/几岁|多大|生日|哪里人/,a:()=>"论岁数——本童子的知识库最老可追溯到两千多年前《黄帝内经》；论心智——永远是个爱提问的小药童。生日嘛，就定在李时珍写成《本草纲目》那天好了〜"},
  {re:/喜欢什么|爱好|兴趣/,a:()=>"爱好？读经典、晒药、给你答疑！还有一个隐藏爱好：看到有人把「熬夜冠军」的头衔摘掉，改当「早睡星人」，药童就特别有成就感〜"},
@@ -2521,7 +2575,7 @@ function renderRecBar(){
   }
   bar.innerHTML=p
     ?`<span>◈ AI 小药童已认出你的体质：<b>${p.n}</b>（${p.j}）· ${p.way||"量表辨识"}</span><span>契合书目已点亮并排在最前</span><button class="btn red" onclick="fitBooks()">★ 只按我的体质荐读</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`
-    :`<span>◈ 还没有体质档案：先让 <b>AI 小药童</b>认一认你，再从二十部经典里挑出对证的那一部</span><button class="btn red" onclick="goQuiz('face')">📷 拍照识体质</button><button class="btn ghost" onclick="goQuiz('quick')">⚡ 9 题速测</button>`;
+    :`<span>◈ 还没有体质档案：先让 <b>AI 小药童</b>认一认你（面象望诊参考＋量表合参），再从二十部经典里挑出对证的那一部</span><button class="btn red" onclick="goQuiz('face')">📷 拍照看面相（望诊参考）</button><button class="btn ghost" onclick="goQuiz('quick')">⚡ 9 题速测</button>`;
 }
 function fitBooks(){
   if(!physGet()&&!lastQuiz){goQuiz('face');return;}
