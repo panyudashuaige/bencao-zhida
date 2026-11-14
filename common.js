@@ -472,19 +472,21 @@ function buildSeasonFx(s){
   }
   fx.innerHTML=h;
 }
-/* 四季预览切换：更衣 + 换飘落物 + 今日荐读跟随当季重算 */
+/* 四季预览切换：更衣 + 换飘落物 + 药童同步换装 + 今日荐读跟随当季重算 */
+const SEASON_SKIN={春:"spring",夏:"summer",秋:"autumn",冬:"winter"};
 function setSeason(s){
   window._seasonOv=s;
   document.documentElement.dataset.season=s;
   buildSeasonFx(s);
-  document.querySelectorAll(".season-bar button").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+  document.querySelectorAll(".season-bar button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+  if(typeof setSkin==="function")setSkin(SEASON_SKIN[s]); // 点季名联动换上对应皮肤并即时演一次专属动作
   if(typeof renderBooks==="function")renderBooks();
   if(typeof renderChips==="function")renderChips(); // 快捷问题随季更衣
   updateSeasonImg(); // 当季插画同步更换
 }
 document.documentElement.dataset.season=seasonOf(); // 四季换肤：主色随节气更衣
 buildSeasonFx(seasonOf());
-document.querySelectorAll(".season-bar button").forEach(b=>b.classList.toggle("on",b.dataset.s===document.documentElement.dataset.season));
+document.querySelectorAll(".season-bar button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===document.documentElement.dataset.season));
 /* 经典书目接入问答库：问书名（含别名）即答完整书卡，unshift 保证与同名话题打平时书卡优先 */
 const BOOK_ALIASES={"黄帝内经":["内经","素问","灵枢"],"神农本草经":["本草经"],"本草纲目":["纲目"],"千金方":["千金要方","备急千金要方"],"肘后备急方":["肘后方","肘后"],"随息居饮食谱":["随息居"],"医学三字经":["三字经"],"汤头歌诀":["汤头歌"]};
 /* ===== 典籍扩展：补入临床 / 脾胃 / 温疫 / 针灸 / 脉学 / 本草 / 食疗等门类 =====
@@ -786,9 +788,17 @@ function mountPage(p){
 }
 function go(p){location.href=(p==="home"?"index":p)+".html";}
 
-/* ===== 小药童：待机 + 点击互动 ===== */
+/* ===== 小药童：春夏秋冬装束 + 每套专属待机 / 互动动作 + 点击互动 ===== */
 (function(){
-  const IDLE="assets/mascot-idle.webp", ACT="assets/mascot-anim.webp";
+  /* 五套装束：经典为初见默认，四季各有一张待机图与一段 60 帧专属动作。
+     四季图由 .ai-build/gen-mascot-skins.py 从经典原图程序化换装生成，角色完全一致。 */
+  const SKINS={
+    classic:{idle:"assets/mascot-idle.webp",   act:"assets/mascot-anim.webp",        name:"经典",      season:null},
+    spring: {idle:"assets/skin-spring-idle.webp",act:"assets/skin-spring-act.webp", name:"春 · 发陈", season:"春"},
+    summer: {idle:"assets/skin-summer-idle.webp",act:"assets/skin-summer-act.webp", name:"夏 · 蕃秀", season:"夏"},
+    autumn: {idle:"assets/skin-autumn-idle.webp",act:"assets/skin-autumn-act.webp", name:"秋 · 容平", season:"秋"},
+    winter: {idle:"assets/skin-winter-idle.webp",act:"assets/skin-winter-act.webp", name:"冬 · 闭藏", season:"冬"}
+  };
   const ACT_MS=5100; // 60帧×83ms≈5s，留一点余量
   const TIPS=[
     "上工治未病，不治已病。——《黄帝内经》",
@@ -800,24 +810,74 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
     "本草智答在线，有问必答，点上面按钮来聊聊？",
     "人参虽好，可不要贪服哦，辨证进补才有效。"
   ];
+  /* 每套皮肤有自己的台词池；首次互动额外出该季《四气调神大论》限定金句 */
+  const SKIN_TIPS={
+    classic:TIPS,
+    spring:["春宜披发缓行，广步于庭，让阳气顺着生发之势舒展开。","春捂秋冻，别急着减衣；风为春之主气，最易袭人。","春日肝气旺，少酸多甘，枸杞、山药、大枣都合时令。","夜卧早起，多到园中走走，比闷在屋里进补更养人。"],
+    summer:["夏宜夜卧早起，无厌于日，使志无怒，让气机得以疏泄。","暑多夹湿，荷叶、绿豆、薏苡仁清清爽爽最应季。","心火当令，午间小憩一刻，胜过猛灌凉茶。","汗为心之液，大汗之后别立刻冲凉，先擦干歇一歇。"],
+    autumn:["秋宜早卧早起，与鸡俱兴，使志安宁，以缓秋刑。","燥胜则干，梨、百合、银耳润肺，少食辛辣煎炸。","秋收冬藏，此时读书最易沉得住气，宜读一卷《随息居饮食谱》。","天气以急，地气以明；添衣别一次加太厚，让身体慢慢应上。"],
+    winter:["冬宜早卧晚起，必待日光，使志若伏若匿，勿扰乎阳。","冬主闭藏，围炉读《伤寒论》，最合「藏」字。","寒从脚下起，睡前温水泡脚，水温 40 度刚刚好。","进补须辨体质，阳虚宜温、阴虚宜润，一概峻补反而伤正。"]
+  };
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   if(!img)return;
-  let acting=false,tipTimer,hintShown=false,tipSeason=null;
-  // 动作 WebP（60 帧 / 83ms 每帧 / 约 0.5MB）按需加载，首屏不下载；仅在用户即将互动或自动打招呼时才取
-  let actLoaded=false;
-  function preloadAct(){if(actLoaded)return;actLoaded=true;const pre=new Image();pre.src=ACT;}
+  let acting=false,tipTimer,hintShown=false,tipSkin=null,curSkin="classic";
+  /* 动作 WebP（每套 60 帧 / 83ms / 约 0.5-0.7MB）各自按需加载：
+     首屏只请求经典待机图，换到哪一套才取哪一段动作，绝不一次性拉四套。 */
+  const actLoaded={};
+  function preloadSkinAct(key){
+    if(actLoaded[key])return;
+    actLoaded[key]=true;
+    const pre=new Image();pre.src=SKINS[key].act;
+  }
+  function preloadAct(){preloadSkinAct(curSkin);}
   if(img){img.addEventListener("pointerenter",preloadAct,{once:true});img.addEventListener("touchstart",preloadAct,{once:true});}
-  function showTip(){
+
+  /* 经典 = 一键复原：药童回经典装，页面主色 / 飘落物 / 插画 / 荐读回到当令真实节气 */
+  function restoreSeason(){
+    window._seasonOv=null;
     const s=seasonOf();
-    let t;
-    if(tipSeason!==s){
-      // 每季第一触：只出当前季节皮肤的限定金句，别季金句不露面
-      const g=SEASON_GREET[s];
-      t=`【${s}季限定】「${g.q}」${g.w}`;
-      tipSeason=s;
-    }else{
-      t=pick(TIPS);
+    document.documentElement.dataset.season=s;
+    buildSeasonFx(s);
+    document.querySelectorAll(".season-bar button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+    if(typeof renderBooks==="function")renderBooks();
+    if(typeof renderChips==="function")renderChips();
+    updateSeasonImg();
+  }
+  function syncButtons(){
+    document.querySelectorAll(".season-bar button[data-skin]").forEach(b=>b.classList.toggle("on",b.dataset.skin===curSkin));
+  }
+  function applySkin(key,quiet){
+    if(!SKINS[key])return;
+    curSkin=key;
+    try{sessionStorage.setItem("bcSkin",key);}catch(e){}
+    if(img){
+      img.dataset.skin=key;
+      if(!acting)img.src=SKINS[key].idle;
+      img.title="点我互动 · "+SKINS[key].name;
+      if(hint)hint.textContent="点我互动 · "+SKINS[key].name;
     }
+    syncButtons();
+    tipSkin=null;                        // 换装后首次互动必出该皮肤专属金句
+    if(!quiet&&img)act(false);           // 换肤即时演一次该皮肤专属互动动作
+  }
+  /* 新标签 / 新会话一律从经典皮肤开始；同一标签内跨页跳转沿用本次选择 */
+  try{const saved=sessionStorage.getItem("bcSkin");if(saved&&SKINS[saved])curSkin=saved;}catch(e){}
+  /* 仅「用户主动点经典」才复原页面主色；初始化与 setSeason 联动不触发，避免回环 */
+  window.setSkin=function(key,quiet){
+    if(key==="classic"&&!quiet)restoreSeason();
+    applySkin(key,!!quiet);
+  };
+
+  if(!img)return; // 其他页无侧栏药童，安全早退；setSkin 仍是全站可用的空操作 API
+
+  function showTip(){
+    const k=curSkin,sk=SKINS[k];
+    let t;
+    if(tipSkin!==k){
+      if(sk.season){const g=SEASON_GREET[sk.season];t=`【${sk.season}季装束 · ${sk.name}】「${g.q}」${g.w}`;}
+      else t=pick(TIPS);
+      tipSkin=k;
+    }else t=pick(SKIN_TIPS[k]);
     bubble.textContent=t;
     bubble.classList.add("show");
     clearTimeout(tipTimer);
@@ -825,14 +885,14 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   }
   function act(auto){
     if(acting)return;
-    preloadAct();
+    preloadSkinAct(curSkin);
     acting=true;
     img.classList.add("acting");
-    img.src=ACT;
+    img.src=SKINS[curSkin].act;
     showTip();
     if(!hintShown){hint.classList.add("hide");hintShown=true;}
     setTimeout(()=>{
-      img.src=IDLE;
+      img.src=SKINS[curSkin].idle;
       img.classList.remove("acting");
       acting=false;
     },ACT_MS);
@@ -840,6 +900,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   img.addEventListener("click",()=>act(false));
   // 进页面 3 秒后自动打个招呼
   setTimeout(()=>act(true),3000);
+  applySkin(curSkin,true); // 把初始皮肤落到 DOM（不额外播动作）
 })();
 
 /* 本草插画映射（每日本草卡 + 看图辨药共用） */

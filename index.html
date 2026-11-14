@@ -66,12 +66,13 @@
         <span class="phys-badge" id="physBadge" style="display:none" onclick="go('quiz')"></span>
       </div>
       <div class="season-bar">
-        <b style="color:var(--gold);letter-spacing:2px">◈ 四季更衣</b>
+        <b style="color:var(--gold);letter-spacing:2px">◈ 药童换肤 · 四季更衣</b>
+        <button class="skin-classic on" data-skin="classic" onclick="setSkin('classic')" title="回到经典药童，并恢复当令主色">经典</button>
         <button data-s="春" onclick="setSeason('春')">春</button>
         <button data-s="夏" onclick="setSeason('夏')">夏</button>
         <button data-s="秋" onclick="setSeason('秋')">秋</button>
         <button data-s="冬" onclick="setSeason('冬')">冬</button>
-        <span>页面主色与飘落物随二十四节气自动更衣 · 点字即刻预览四季</span>
+        <span>初见是经典药童 · 点季名同步更衣换装，各有专属动作 · 点「经典」复原</span>
         <a class="four-entry" href="seasons.html">◈ 四时调神 · 顺岁而养 →</a>
       </div>
     </div>
@@ -79,7 +80,7 @@
       <div class="circle"></div><div class="circle c2"></div>
       <span class="zi">岐黄薪火</span>
       <div class="mascot-bubble" id="mascotBubble"></div>
-      <img class="side-mascot" id="mascot" src="assets/mascot-idle.webp" alt="本草智答 · AI小药童" title="点我互动" fetchpriority="high" decoding="async">
+      <img class="side-mascot" id="mascot" data-skin="classic" src="assets/mascot-idle.webp" alt="本草智答 · AI小药童" title="点我互动" fetchpriority="high" decoding="async">
       <span class="mascot-badge" title="小药童的时令腰牌"></span>
       <span class="mascot-hint" id="mascotHint">点我互动</span>
     </div>
