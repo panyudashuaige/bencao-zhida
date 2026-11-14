@@ -113,17 +113,22 @@ const PAGE_HTML={
   </div>`,
  materia:`
   <div class="card mat-card">
-    <div class="orn">本 草 名 物 · 名 方 要 诀 · 经 络 要 穴</div>
-    <h2>本草 · 名方 · 穴位 通鉴</h2>
-    <p class="desc">本站据中医药经典文献整理的本草原貌、名方要诀与经络要穴。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问——组成、方义、定位、配伍、禁忌，想问就问。内容仅供科普学习，不构成医疗建议。</p>
+    <div class="orn">本 草 名 物 · 名 方 要 诀</div>
+    <h2>本草名方<span class="dot"> · </span>通鉴</h2>
+    <p class="desc">本站据中医药经典文献整理的本草原貌与名方要诀：性味归经、功效主治，以及组成、方义与源流，分栏一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问。内容仅供科普学习，不构成医疗建议；想查穴位定位与经络，请移步「经络要穴」页。</p>
     <div class="mat-tabs" id="matTabs">
       <button class="mat-tab on" data-tab="herb" onclick="switchMat('herb')">🌿 本草名录（<span id="cntHerb">0</span> 味）</button>
       <button class="mat-tab" data-tab="formula" onclick="switchMat('formula')">📜 名方要诀（<span id="cntFormula">0</span> 首）</button>
-      <button class="mat-tab" data-tab="acup" onclick="switchMat('acup')">📍 经络要穴（<span id="cntAcup">0</span> 处）</button>
     </div>
     <div class="mat-pane on" id="matHerb"></div>
     <div class="mat-pane" id="matFormula"></div>
-    <div class="mat-pane" id="matAcup"></div>
+  </div>`,
+ acupoint:`
+  <div class="card mat-card">
+    <div class="orn">经 络 腧 穴 · 定 位 主 治</div>
+    <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
+    <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成与本草性味，请见「本草名方」页。</p>
+    <div id="acupArea"></div>
   </div>`
 };
 
@@ -586,12 +591,13 @@ const PAGE_INIT={
     renderGameIdle();                                               // 待机：不出题、不计时
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
-  materia:()=>{renderMateria();}                // 本草名方穴位通鉴：三 tab 卡片
+  materia:()=>{renderMateria();},               // 本草名方：本草名录 + 名方要诀 两 tab
+  acupoint:()=>{renderAcupoint();}              // 经络要穴：独立页，12 处要穴卡片
 };
-/* ===== 本草名方穴位通鉴：三栏卡片，数据驱动，可一键问小药童 ===== */
+/* ===== 本草名方：本草 + 名方两栏卡片，数据驱动，可一键问小药童 ===== */
 function renderMateria(){
   const setCnt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  setCnt("cntHerb",ALL_HERBS.length);setCnt("cntFormula",FORMULAS.length);setCnt("cntAcup",ACUP.length);
+  setCnt("cntHerb",ALL_HERBS.length);setCnt("cntFormula",FORMULAS.length);
   const hb=$("#matHerb");
   if(hb && !hb.dataset.done){
     let html=`<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。下列 <b>${ALL_HERBS.length}</b> 味按功效分门；带「🖌 工笔」者另有手绘画像，见「本草图鉴」。</div>`;
@@ -608,7 +614,12 @@ function renderMateria(){
     fm.innerHTML=`<div class="mat-note">◈ 名方：组成、方义、源流，一卡尽览。点「问小药童」可追问配伍与禁忌。</div><div class="mat-grid">`+FORMULAS.map(formulaCard).join("")+`</div>`;
     fm.dataset.done="1";
   }
-  const ac=$("#matAcup");
+}
+
+/* ===== 经络要穴：独立页，ACUP 数据驱动的穴位卡片 ===== */
+function renderAcupoint(){
+  const cnt=document.getElementById("cntAcup");if(cnt)cnt.textContent=ACUP.length;
+  const ac=$("#acupArea");
   if(ac && !ac.dataset.done){
     ac.innerHTML=`<div class="mat-note">◈ 穴位：定位、所属经络、功效主治，按经典出处整理。点「问小药童」可追问取穴与手法。</div><div class="mat-grid">`+ACUP.map(acupCard).join("")+`</div>`;
     ac.dataset.done="1";
