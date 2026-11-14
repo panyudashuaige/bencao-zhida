@@ -28,7 +28,7 @@ html[data-season="秋"]{--green:#A8741F;--green-d:#835812;--green-l:#F5EBD2;--bg
 html[data-season="冬"]{--green:#46566B;--green-d:#33404F;--green-l:#E5EAF0;--bg:#EEF1F5;--fx:#9FB4CC;--mglow:#9FB4CC66;--hd-1:#E4EAF2;--hd-2:#F4F7FB;--hd-3:#D8E1EC;--hd-ink:#33404F;--hd-glow:rgba(70,86,107,.2);--hd-veil:rgba(70,86,107,.08)}
 /* 当季飘落物：春花瓣 · 夏流萤 · 秋红叶 · 冬初雪 */
 #seasonFx{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
-#seasonFx span{position:absolute;top:-7vh;color:var(--fx);animation:seasFall linear infinite;will-change:transform;text-shadow:0 0 6px rgba(255,255,255,.5)}
+#seasonFx span{position:absolute;top:-7vh;color:var(--fx);animation:seasFall linear infinite;text-shadow:0 0 6px rgba(255,255,255,.5)}
 @keyframes seasFall{0%{transform:translate3d(0,-8vh,0) rotate(0deg)}50%{transform:translate3d(2.5vw,50vh,0) rotate(190deg)}100%{transform:translate3d(-1vw,110vh,0) rotate(380deg)}}
 @media(prefers-reduced-motion:reduce){#seasonFx{display:none}}
 .season-bar{display:flex;gap:8px;align-items:center;margin-top:16px;font-size:12.5px;color:var(--ink3);letter-spacing:1px;flex-wrap:wrap}
@@ -90,7 +90,7 @@ html[data-season="冬"] .seal-stamp::after{background-image:url("assets/logo-acc
 @media(max-width:560px){.seal-stamp{width:120px;height:120px}.hd-right{order:2;margin-left:auto}.hd-right img{height:96px}.hd-slogan{font-size:19px}.hd-mid{order:3;flex-basis:100%;margin-left:0;text-align:center;margin-top:4px}}
 
 /* ===== 导航 ===== */
-nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:10;backdrop-filter:blur(4px)}
+nav{width:100%;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10;box-shadow:0 2px 10px rgba(43,43,38,.05)}
 .nav-inner{max-width:1280px;margin:0 auto;padding:8px 20px 0;display:flex;gap:6px}
 nav button{border:none;background:none;font-family:inherit;font-size:15px;letter-spacing:3px;padding:10px 20px 14px;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;transition:all .25s;position:relative}
 nav button::after{content:"";position:absolute;left:50%;bottom:-2px;width:0;height:2px;background:var(--gold);transform:translateX(-50%);transition:width .3s cubic-bezier(.2,.7,.3,1)}
