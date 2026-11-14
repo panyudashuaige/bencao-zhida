@@ -17,7 +17,7 @@ const PAGE_HTML={
       <p>合参定案＝以<b>量表问卷为主判</b>、<b>面象望诊互证</b>；望诊倾向仅作参考，待量表合参后生效。本站为文化科普，非医疗诊断。</p>
     </div>
     <div class="face-top">
-      <img src="assets/mascot3d.png" alt="AI 小药童" loading="lazy" decoding="async">
+      <img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async">
       <div><b>药童陪你辨 · 我是你的 AI 小药童</b><span id="faceSay">别怕选错～正规辨体质要<b>四诊合参</b>：我先瞧面相当「望诊参考」，再用问卷把「问诊」补上，合参定案后，我替你把该读的经典挑出来。</span></div>
     </div>
     <div style="display:flex;gap:10px;justify-content:center;margin:14px 0 4px;flex-wrap:wrap">
@@ -59,7 +59,7 @@ const PAGE_HTML={
   <div class="kb-index" id="kbIndex"></div>
   <div class="card" style="padding:18px 22px 22px">
     <div class="bot-id">
-      <img id="botAvatar" src="assets/mascot3d.png" alt="本草智答" loading="lazy" decoding="async">
+      <img id="botAvatar" src="assets/mascot3d.webp" alt="本草智答" loading="lazy" decoding="async">
       <div><b>本草智答</b><span>你的 AI 小药童 · 识体质、荐经典、答本草</span></div>
       <div class="ai-bar">
         <span class="ai-state" id="aiState">检测 AI 中…</span>
@@ -99,7 +99,7 @@ const PAGE_HTML={
       <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
     </div>
     <div class="bot-id game-bot" id="gameBot">
-      <img id="gameBotImg" src="assets/mascot-idle.png" alt="小药童裁判" loading="lazy" decoding="async">
+      <img id="gameBotImg" src="assets/mascot-idle.webp" alt="小药童裁判" loading="lazy" decoding="async">
       <div class="gbot-bubble" id="gameBotSay">本药童当裁判！选个模式开局，答对答错我都吭声〜</div>
     </div>
     <div id="gameArea"></div>
@@ -428,7 +428,7 @@ const SEASON_CARE={
      tip:"冬主封藏，睡好「子午觉」最攒本钱；晨练别起太早，等日出发完、热身充分再动"}
 };
 /* 四季标志插画：首页节气卡圆形印框挂画，随节气更衣（AI 水墨插画） */
-const SEASON_IMG={春:"season-spring.jpg",夏:"season-summer.jpg",秋:"season-autumn.jpg",冬:"season-winter.jpg"};
+const SEASON_IMG={春:"season-spring.webp",夏:"season-summer.webp",秋:"season-autumn.webp",冬:"season-winter.webp"};
 /* 当季限定金句：四季各藏一句《素问·四气调神大论》的应季原文——只有当前季节的金句会登场，别季不露面 */
 const SEASON_GREET={
  春:{q:"春三月，此谓发陈。天地俱生，万物以荣。",w:"万物生发的时节，正好翻开《黄帝内经》学养生，把阳气一起\u201c发\u201d起来"},
@@ -671,7 +671,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
 
 /* ===== 小药童：待机 + 点击互动 ===== */
 (function(){
-  const IDLE="assets/mascot-idle.png", ACT="assets/mascot-anim.webp";
+  const IDLE="assets/mascot-idle.webp", ACT="assets/mascot-anim.webp";
   const ACT_MS=5100; // 60帧×83ms≈5s，留一点余量
   const TIPS=[
     "上工治未病，不治已病。——《黄帝内经》",
@@ -686,8 +686,10 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   if(!img)return;
   let acting=false,tipTimer,hintShown=false,tipSeason=null;
-  // 预载动作 WebP，点击时零延迟
-  setTimeout(()=>{const pre=new Image();pre.src=ACT;},1800); // 首屏空闲后再预载动作图，别和首屏插画抢带宽
+  // 动作 WebP 约 370KB，首屏不预载；仅在用户即将互动或自动打招呼时才取
+  let actLoaded=false;
+  function preloadAct(){if(actLoaded)return;actLoaded=true;const pre=new Image();pre.src=ACT;}
+  if(img){img.addEventListener("pointerenter",preloadAct,{once:true});img.addEventListener("touchstart",preloadAct,{once:true});}
   function showTip(){
     const s=seasonOf();
     let t;
@@ -706,6 +708,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   }
   function act(auto){
     if(acting)return;
+    preloadAct();
     acting=true;
     img.classList.add("acting");
     img.src=ACT;
@@ -734,7 +737,7 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
   <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:14px">${h.e}</p>
   <div class="src">${h.s}</div>
   <div class="ask"><a href="#" onclick="askKB('${h.n}');return false">问一问「本草智答」：${h.n}怎么吃？ →</a></div></div>
-  <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'" loading="lazy" decoding="async"></div><span class="cap">本 草 对 照</span></div>`;
+  <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'" loading="lazy" decoding="async"></div><span class="cap">本 草 对 照</span></div>`;
 })();
 
 /* ===== 百草试炼小游戏 ===== */
@@ -1078,7 +1081,7 @@ function renderGameQ(){
   const contest=g.mode==="contest";
   const body=q.kind==="mcq"
     ? `<div class="game-qtext"><span class="qt-tag">◈ ${q.tag} ◈</span><br>${q.q}</div>`
-    : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.jpg" alt="本草工笔插画" decoding="async" fetchpriority="high"></div>`;
+    : `<div class="game-pic" id="gamePic"><img src="assets/herbs/${HERB_IMG[q.h.n]}.webp" alt="本草工笔插画" decoding="async" fetchpriority="high"></div>`;
   $("#gameArea").innerHTML=`
     ${contest?`<div class="game-timer"><div class="bar"><i id="tmBar" style="width:100%"></i></div><span class="sec" id="tmSec">${CONTEST_LIMIT}s</span></div>`:""}
     <div class="game-score"><div><b>${g.score}</b><span>当前得分</span></div><div><b>${g.i+1} / ${g.qs.length}</b><span>第几道题</span></div></div>
@@ -1292,8 +1295,8 @@ function renderAlbum(){
     <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="makePoster()">◈ 生成我的名帖</button></div>
     <div class="album-grid">${HERBS.map(h=>{
       const got=d[h.n];
-      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
-        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.jpg" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
+      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
+        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
     }).join("")}</div>
     <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 百草试炼答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
@@ -1774,7 +1777,7 @@ function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<but
 function bubble(who,html,me){
   const d=document.createElement("div");d.className="msg "+(me?"me":"bot");
   d.innerHTML=me?`<div class="who">${who}</div><div class="bd">${html}</div>`
-    :`<img class="bot-avatar" src="assets/mascot3d.png" alt="本草智答" loading="lazy" decoding="async"><div><div class="who">${who}</div><div class="bd">${html}</div></div>`;
+    :`<img class="bot-avatar" src="assets/mascot3d.webp" alt="本草智答" loading="lazy" decoding="async"><div><div class="who">${who}</div><div class="bd">${html}</div></div>`;
   const cb=$("#chatBox");if(cb){cb.appendChild(d);cb.scrollTop=cb.scrollHeight;}
   return d;
 }
@@ -1994,7 +1997,7 @@ function openRead(t){
   const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;  $("#readMask").innerHTML=`
    <div class="read-modal" onclick="event.stopPropagation()">
      <button class="rm-close" onclick="closeRead()" title="合上">✕</button>
-     <div class="rm-cover">${BOOK_IMG[t]?`<img src="assets/books/${BOOK_IMG[t]}.png" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">`:`<div class="rm-cover-txt">${t}</div>`}
+     <div class="rm-cover">${BOOK_IMG[t]?`<img src="assets/books/${BOOK_IMG[t]}.webp" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">`:`<div class="rm-cover-txt">${t}</div>`}
        <div class="rm-title"><h3>《${t}》</h3><span>${b.au} · ${b.diff}读物</span></div></div>
      <div class="rm-body">
        <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span></div>
