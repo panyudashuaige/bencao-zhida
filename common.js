@@ -34,7 +34,8 @@ const PAGE_HTML={
       <div class="qv-info" id="qvInfo"><p>◈ 当前：精简版 27 题 —— 从国标完整版 60 题中选出 27 条代表性条目，约 3 分钟。</p></div>
     </div>
 
-    <div class="quiz-companion">
+    <div class="qc-sentinel" id="qcSentinel" aria-hidden="true"></div>
+    <div class="quiz-companion" id="qcBox">
       <div class="qc-top">
         <img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async">
         <div class="qc-say"><b>药童陪你答 · 我是你的 AI 小药童</b><span id="faceSay">回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜</span></div>
@@ -733,7 +734,7 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
 /* ===== 惰性挂载：7 个页面初始只留空壳，首次进入才注入模板并生成数据视图 ===== */
 const PAGE_MOUNTED={home:true};
 const PAGE_INIT={
-  quiz:()=>{const v=/[?&]v=full(?:&|$)/.test(location.search||"")?"full":"brief";setQuizVersion(v);restorePhys();},
+  quiz:()=>{const v=/[?&]v=full(?:&|$)/.test(location.search||"")?"full":"brief";setQuizVersion(v);restorePhys();initQcSticky();},
   chat:()=>{renderKbIndex();renderChips();},    // MPA：推荐问题须本页渲染（SPA 时代靠 go() 刷新）
   read:()=>{renderFilter();renderBooks();},     // 筛选条 + 二十张书卡
   album:()=>{renderAlbum();},                   // MPA：集章墙须本页渲染（SPA 时代靠 go() 刷新）
@@ -1850,6 +1851,24 @@ function qToast(t){
   clearTimeout(qToastTimer);
   qToastTimer=setTimeout(()=>box.classList.remove("show"),3600);
 }
+/* ===== v50：陪答条吸顶。passive 滚动只做一次 rect 读取，状态翻转时才写 DOM ===== */
+function initQcSticky(){
+  const nav=document.getElementById("nav"),box=$("#qcBox"),sent=$("#qcSentinel");
+  if(!nav||!box||!sent)return;
+  let h=60;
+  const sync=()=>{
+    const stuck=sent.getBoundingClientRect().top<h;
+    if(box.classList.contains("stuck")!==stuck)box.classList.toggle("stuck",stuck);
+  };
+  const measure=()=>{
+    h=nav.offsetHeight||60;
+    document.documentElement.style.setProperty("--navH",h+"px");
+    sync();
+  };
+  measure();
+  window.addEventListener("scroll",sync,{passive:true});
+  window.addEventListener("resize",measure,{passive:true});
+}
 function updateQuizProgress(){
   const n=QUIZ_ACT.length||1,done=Object.keys(quizAns).length,ratio=done/n;
   const bar=$("#qProgBar"),num=$("#qProgTxt");
@@ -1995,12 +2014,14 @@ function calcQuiz(){
   const recBooks=BOOKS.filter(b=>c.books.some(bk=>b.t.includes(bk)||bk.includes(b.t.slice(0,3))));
   const recF=FORMULAS.filter(f=>c.books.includes(f.n));
   const tagColor=t=>t==="是"?"var(--red)":((t==="倾向"||t==="基本")?"var(--gold)":"var(--ink3)");
+  const qcResultSay=`我按你答的 ${QUIZ_ACT.length} 题算完九种转化分啦：${name} ${tf[name]} 分，判「${judge}」。下方「药童复盘」里，我把最影响这个结果的几题挑出来给你看〜`;
   const say=$("#faceSay");
-  if(say)say.textContent=`我按你答的 ${QUIZ_ACT.length} 题算完九种转化分啦：${name} ${tf[name]} 分，判「${judge}」。下方「药童复盘」里，我把最影响这个结果的几题挑出来给你看〜`;
+  if(say)say.textContent=qcResultSay;
   const toast=$("#qToast");if(toast)toast.classList.remove("show");
   $("#quizResult").style.display="block";
   $("#quizResult").innerHTML=`
    <div class="orn">A I · 小 药 童 判 定</div>
+   <div class="qr-say"><img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async"><span>${qcResultSay}</span></div>
    <div class="const-name">${name.slice(0,3)}<span style="font-size:20px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
    <p style="color:var(--ink2);font-size:14px;max-width:520px;margin:0 auto">${c.d}<br><b style="color:var(--red)">小药童已按这个体质，为你点亮契合的经典书目 ↓</b></p>
    ${j.note?`<p style="font-size:13px;color:var(--gold);margin-top:8px">◈ ${j.note}</p>`:""}
