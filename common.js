@@ -34,10 +34,14 @@ const PAGE_HTML={
       <div class="qv-info" id="qvInfo"><p>◈ 当前：精简版 27 题 —— 从国标完整版 60 题中选出 27 条代表性条目，约 3 分钟。</p></div>
     </div>
 
-    <div class="face-top">
-      <img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async">
-      <div><b>药童陪你答 · 我是你的 AI 小药童</b><span id="faceSay">回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜</span></div>
+    <div class="quiz-companion">
+      <div class="qc-top">
+        <img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async">
+        <div class="qc-say"><b>药童陪你答 · 我是你的 AI 小药童</b><span id="faceSay">回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜</span></div>
+      </div>
+      <div class="qc-prog"><div class="qc-bar"><i id="qProgBar"></i></div><span class="qc-num" id="qProgTxt">已答 0/27</span></div>
     </div>
+    <div class="q-toast" id="qToast"><b>药童</b><span id="qToastTxt"></span></div>
 
     <div class="quiz-head" id="quizHead"><b>◈ 精简版 · 27 题</b><span>计分与判定阈值依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009。</span></div>
     <div class="last-phys" id="lastPhys" style="display:none"></div>
@@ -1831,6 +1835,74 @@ const TERMS=[
 
 /* ===== v48：双版本问卷 + ZYYXH/T157-2009 国标判定标准 ===== */
 let QUIZ_ACT=QUIZ,quizVersion="brief";
+/* ===== v49 小药童陪答：进度 + 里程碑台词（只在解读层加戏，不碰计分与判定） ===== */
+const QUIZ_MILESTONE=[
+ {p:.25,t:"答到四分之一啦，回想的是近一年的总体感受，别只按今天的状态选〜"},
+ {p:.5, t:"过半咯！拿不准就选最接近的那一档，不必反复纠结。"},
+ {p:.75,t:"快到终点了，最后这几题我也一起算进九种转化分里〜"},
+ {p:1,  t:"全部答完！点「提交 · 判定体质并荐经典」，我就替你算分、列出主导体质与兼夹体质。"}
+];
+let quizMile={},qToastTimer=null;
+function qToast(t){
+  const box=$("#qToast"),txt=$("#qToastTxt");
+  if(!box||!txt)return;
+  txt.textContent=t;box.classList.add("show");
+  clearTimeout(qToastTimer);
+  qToastTimer=setTimeout(()=>box.classList.remove("show"),3600);
+}
+function updateQuizProgress(){
+  const n=QUIZ_ACT.length||1,done=Object.keys(quizAns).length,ratio=done/n;
+  const bar=$("#qProgBar"),num=$("#qProgTxt");
+  if(bar)bar.style.width=Math.min(100,Math.round(ratio*100))+"%";
+  if(num)num.textContent="已答 "+done+"/"+n;
+  for(let k=QUIZ_MILESTONE.length-1;k>=0;k--){
+    const m=QUIZ_MILESTONE[k];
+    if(ratio>=m.p&&!quizMile[m.p]){
+      quizMile[m.p]=true;
+      const say=$("#faceSay");if(say)say.textContent=m.t;
+      qToast(m.t);
+      break;
+    }
+  }
+}
+/* 单题归属：精简版一题一亚量表；完整版可跨组共用，反向题按 6-v 换算 */
+function quizItemScales(it,i){
+  const v=quizAns[i];
+  if(quizVersion==="full")return it.s.map(([k,rev])=>({k:k,s:rev?6-v:v,rev:!!rev}));
+  return [{k:it.c,s:v,rev:false}];
+}
+/* 药童复盘：把这份答卷里最影响主导体质分数的条目挑出来，并解释兼夹 / 未达标 */
+function quizReviewHtml(name,tf,j){
+  const picks=[];
+  QUIZ_ACT.forEach((it,i)=>{
+    quizItemScales(it,i).forEach(o=>{if(o.k===name)picks.push({i:i,q:it.q,v:quizAns[i],s:o.s,rev:o.rev});});
+  });
+  picks.sort((a,b)=>b.s-a.s||a.i-b.i);
+  const strong=picks.filter(x=>x.s>=4);
+  const list=(strong.length>=3?strong:picks).slice(0,4);
+  const hitOthers=j.hit.slice(1).map(([k,v])=>`${k} ${v} 分`);
+  const leanOthers=j.lean.map(([k,v])=>`${k} ${v} 分（倾向）`);
+  const hitTxt=hitOthers.length>3?hitOthers.slice(0,3).join("、")+` 等 ${hitOthers.length} 项`:hitOthers.join("、");
+  const leanTxt=leanOthers.length>3?leanOthers.slice(0,3).join("、")+` 等 ${leanOthers.length} 项`:leanOthers.join("、");
+  const ping=tf["平和质"]||0,topBias=j.biased[0]||["",0];
+  const revNote=(quizVersion==="full"&&list.some(x=>x.rev))
+    ?`<p class="qr-rev">◈ 带「反向计分」的条目，我按国标先把 1↔5、2↔4 换算过再计入，所以选「没有」也会记高分。</p>`:"";
+  let why;
+  if(j.judge==="未达阈值")why="九种转化分都没到国标阈值，我按接近平和呈现；若仍有明显不适，请以中医师四诊合参结论为准。";
+  else if(j.hit.length>1)why=`另外，${hitTxt}也过了判定线，所以结果里一并列出兼夹体质；分数相近时不必只认一个。${leanOthers.length?`另有 ${leanTxt}落在 30~39 的「倾向是」区间。`:""}`;
+  else if(j.lean.length)why=`另外，${leanTxt}落在 30~39 的「倾向是」区间，还没到判定成立的线，可以留意但不必当作结论。`;
+  else if(name==="平和质")why=`平和质 ${ping} 分，且八种偏颇体质都没越过阈值，按国标判「${j.judge}」。`;
+  else why=`平和质这次是 ${ping} 分；按国标要 ≥60 且八种偏颇质都 <30 才判「是」，其中 ${topBias[0]} ${topBias[1]} 分偏高，所以主导判为 ${name}。`;
+  return `<div class="quiz-review">
+    <b>◈ 药童复盘 · 我读到的这份答卷</b>
+    <p>我按你答的 ${QUIZ_ACT.length} 道题算了九种转化分：<b>${name}</b> ${tf[name]} 分，判「${j.judge}」${j.note?`（${j.note}）`:""}。下面这几题，是把这个分数推上去的主要条目 ↓</p>
+    <ol class="qr-list">${list.map(x=>`<li><span>第 ${x.i+1} 题</span>${x.q}<em>你选「${STATES[x.v]}」${x.rev?" · 这题反向计分":""}${x.s>=4?" · 计入高分":""}</em></li>`).join("")}</ol>
+    ${revNote}
+    <p class="qr-why">${why}</p>
+    <p class="qr-note">◈ 上面只是对这份答卷的量化说明，不是诊断结论；确切判定与调理以中医师四诊合参为准。</p>
+    ${quizVersion==="brief"?`<button class="btn ghost qr-more" onclick="setQuizVersion('full')">想更贴近标准判定 · 换完整版 60 题 →</button>`:""}
+  </div>`;
+}
 const JUDGE_RULE=`<div class="q-rule"><b>判定标准 · 两版一致，依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009</b>
 <span>转化分 = [(原始分 − 条目数) ÷ (条目数 × 4)] × 100，取值 0~100</span>
 <span>偏颇体质：≥40 判「是」 · 30~39 判「倾向是」 · ＜30 判「否」</span>
@@ -1846,7 +1918,7 @@ const QUIZ_SAY={
 function setQuizVersion(v){
   quizVersion=(v==="full")?"full":"brief";
   QUIZ_ACT=quizVersion==="full"?QUIZ_FULL:QUIZ;
-  quizAns={};
+  quizAns={};quizMile={};
   const show=(id,val)=>{const e=$("#"+id);if(e&&e.style)e.style.display=val;};
   show("qList","block");show("quizSubmit","block");show("quizResult","none");
   const b=$("#qvBrief"),f=$("#qvFull");
@@ -1858,6 +1930,7 @@ function setQuizVersion(v){
   const head=$("#quizHead");if(head)head.innerHTML=QUIZ_HEAD[quizVersion];
   const say=$("#faceSay");if(say)say.innerHTML=QUIZ_SAY[quizVersion];
   renderQuiz();
+  updateQuizProgress();
 }
 function setQuizMode(m){setQuizVersion("brief");} /* 兼容旧 ?m=face / ?m=quick 外链，一律回落精简版 */
 function goQuiz(m){location.href="quiz.html"+(m?("?m="+encodeURIComponent(m)):"");} /* 构建脚本会替换为带参跨页跳转 */
@@ -1873,6 +1946,7 @@ function renderQuiz(){
   document.querySelectorAll(".opts").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{
     g.querySelectorAll("button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
     quizAns[g.dataset.i]=+b.dataset.v;
+    updateQuizProgress();
   }));
 }
 /* 国标 4.2 判定标准：平和质 是 / 基本是 / 否，偏颇质 是 / 倾向是 / 否 */
@@ -1921,6 +1995,9 @@ function calcQuiz(){
   const recBooks=BOOKS.filter(b=>c.books.some(bk=>b.t.includes(bk)||bk.includes(b.t.slice(0,3))));
   const recF=FORMULAS.filter(f=>c.books.includes(f.n));
   const tagColor=t=>t==="是"?"var(--red)":((t==="倾向"||t==="基本")?"var(--gold)":"var(--ink3)");
+  const say=$("#faceSay");
+  if(say)say.textContent=`我按你答的 ${QUIZ_ACT.length} 题算完九种转化分啦：${name} ${tf[name]} 分，判「${judge}」。下方「药童复盘」里，我把最影响这个结果的几题挑出来给你看〜`;
+  const toast=$("#qToast");if(toast)toast.classList.remove("show");
   $("#quizResult").style.display="block";
   $("#quizResult").innerHTML=`
    <div class="orn">A I · 小 药 童 判 定</div>
@@ -1929,6 +2006,7 @@ function calcQuiz(){
    ${j.note?`<p style="font-size:13px;color:var(--gold);margin-top:8px">◈ ${j.note}</p>`:""}
    ${judge==="未达阈值"?`<p style="font-size:12.5px;color:var(--ink3);margin-top:8px">九种体质转化分均未达到判定阈值，此处按接近平和呈现；若仍有明显不适，请以中医师四诊合参结论为准。</p>`:""}
    ${hit.length>1?`<p style="font-size:13px;color:var(--red);margin-top:8px">◈ 检出兼夹体质：${hit.slice(1).map(([k])=>k).join("、")}</p>`:""}
+   ${quizReviewHtml(name,tf,j)}
    <div style="max-width:460px;margin:20px auto 0">
      ${rows.map(([k,v])=>`<div class="bar-row ${k===name?"top":""}"><span class="nm">${k.slice(0,3)}</span><span class="bar"><i style="width:0" data-w="${v}"></i></span><span class="sc">${v}<em style="font-style:normal;color:${tagColor(badges[k])};font-size:10px;margin-left:3px">${badges[k]}</em></span></div>`).join("")}
      <p style="font-size:11px;color:var(--ink3);text-align:left;margin-top:8px;line-height:1.7">判定依据 · 中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）：偏颇体质转化分 ≥40 判"是"、30~39 判"倾向是"、＜30 判"否"；平和质 ≥60 且八种偏颇体质均＜30 判"是"，≥60 且八种偏颇体质均＜40 判"基本是"。</p>
