@@ -72,7 +72,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
-    <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从二十部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读全文」</b>，即可进入<b>独立阅读页逐篇读原文与白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
+    <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从二十部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选段与白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
     ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
@@ -161,17 +161,6 @@ const PAGE_HTML={
     </div>
     <div id="fourBody"></div>
   </div>`,
- reader:`
-  <div class="card mat-card">
-    <div class="orn">岐 黄 经 典 · 原 文 阅 读</div>
-    <h2>经典<span class="dot"> · </span>全文阅读</h2>
-    <p class="desc">本页按书分篇收录经典原文、白话译文与药童领读，可逐篇翻阅；古籍卷帙浩繁，此处为<b>代表性篇章的扩充选读</b>而非整帙影印，篇名均标明出处，便于按图索骥继续读原书。原文为古籍公共领域文本，白话为意译，仅供科普学习。</p>
-    <div class="tz-lead">
-      <a class="btn ghost" style="text-decoration:none" href="read.html">← 返回经典荐读</a>
-      <a class="btn ghost" style="text-decoration:none" href="chat.html?q=经典怎么读">问小药童 · 这本书怎么读 →</a>
-    </div>
-    <div class="rd-wrap" id="readerArea"></div>
-  </div>`,
  constitution:`
   <div class="card mat-card">
     <div class="orn">九 种 体 质 · 因 人 施 养</div>
@@ -186,7 +175,6 @@ const PAGE_HTML={
     </div>
     <div class="mat-note">◈ 九种体质分「一种平和 + 八种偏颇」。偏颇体质并非疾病，只提示易感倾向与调养方向；多数人兼夹两三种，以医师四诊合参结论为准，不宜自行对号入座。</div>
     <div class="mat-note">◈ <b>判定标准</b>（ZYYXH/T157-2009）：九种体质各成亚量表，按「没有 / 偶尔 / 有时 / 经常 / 总是」五级计分，转化分 ＝ [(原始分 − 条目数) ÷ (条目数 × 4)] × 100。偏颇质 ≥40 判「是」、30~39 判「倾向是」、＜30 判「否」；平和质 ≥60 且八种偏颇质均 ＜30 判「是」，≥60 且八种偏颇质均 ＜40 判「基本是」。兼夹体质即同时有两个以上亚量表过线，本站问卷结果会一并列出。</div>
-    <div class="mat-note">◈ <b>本次更新</b>：本草名录、名方要诀、经络要穴三页均已按九种体质标记，可点每张卡的体质标签或本页链接直达筛选结果；四时调神的当令本草改为按季节与当节气推荐，并结合你的体质排序。</div>
     <div id="tzArea"></div>
     <div class="tz-qa"><b>◈ 这些体质问题，交给 AI 小药童</b><div class="chips" id="tzChips"></div></div>
   </div>`
@@ -400,12 +388,21 @@ const HERB_PHOTO={};
 const HERB_ILLUS={"桂枝": "assets/herbs/illus-015.webp", "防风": "assets/herbs/illus-016.webp", "葛根": "assets/herbs/illus-017.webp", "石膏": "assets/herbs/illus-018.webp", "黄芩": "assets/herbs/illus-019.webp", "黄连": "assets/herbs/illus-020.webp", "生地黄": "assets/herbs/illus-021.webp", "苍术": "assets/herbs/illus-022.webp", "薏苡仁": "assets/herbs/illus-023.webp", "泽泻": "assets/herbs/illus-024.webp", "干姜": "assets/herbs/illus-025.webp", "肉桂": "assets/herbs/illus-026.webp", "白术": "assets/herbs/illus-027.webp", "党参": "assets/herbs/illus-028.webp", "熟地黄": "assets/herbs/illus-029.webp", "麦冬": "assets/herbs/illus-030.webp", "香附": "assets/herbs/illus-031.webp", "木香": "assets/herbs/illus-032.webp", "川芎": "assets/herbs/illus-033.webp", "丹参": "assets/herbs/illus-034.webp", "三七": "assets/herbs/illus-035.webp", "半夏": "assets/herbs/illus-036.webp", "桔梗": "assets/herbs/illus-037.webp", "酸枣仁": "assets/herbs/illus-038.webp", "五味子": "assets/herbs/illus-039.webp", "大黄": "assets/herbs/illus-040.webp", "大枣": "assets/herbs/illus-041.webp", "黄精": "assets/herbs/illus-042.webp", "太子参": "assets/herbs/illus-043.webp", "白扁豆": "assets/herbs/illus-044.webp", "益智仁": "assets/herbs/illus-045.webp", "菟丝子": "assets/herbs/illus-046.webp", "艾叶": "assets/herbs/illus-047.webp", "肉苁蓉": "assets/herbs/illus-048.webp", "百合": "assets/herbs/illus-049.webp", "玉竹": "assets/herbs/illus-050.webp", "北沙参": "assets/herbs/illus-051.webp", "石斛": "assets/herbs/illus-052.webp", "女贞子": "assets/herbs/illus-053.webp", "桑椹": "assets/herbs/illus-054.webp", "荷叶": "assets/herbs/illus-055.webp", "冬瓜皮": "assets/herbs/illus-056.webp", "砂仁": "assets/herbs/illus-057.webp", "藿香": "assets/herbs/illus-058.webp", "茵陈": "assets/herbs/illus-059.webp", "栀子": "assets/herbs/illus-060.webp", "蒲公英": "assets/herbs/illus-061.webp", "车前子": "assets/herbs/illus-062.webp", "红花": "assets/herbs/illus-063.webp", "桃仁": "assets/herbs/illus-064.webp", "赤芍": "assets/herbs/illus-065.webp", "郁金": "assets/herbs/illus-066.webp", "益母草": "assets/herbs/illus-067.webp", "玫瑰花": "assets/herbs/illus-068.webp", "佛手": "assets/herbs/illus-069.webp", "合欢花": "assets/herbs/illus-070.webp", "柴胡": "assets/herbs/illus-071.webp", "乌梅": "assets/herbs/illus-072.webp", "蝉蜕": "assets/herbs/illus-073.webp", "白芷": "assets/herbs/illus-074.webp", "辛夷": "assets/herbs/illus-075.webp", "灵芝": "assets/herbs/illus-076.webp"};
 const ACUP_SVG={"足三里": "assets/acupoint/acup-001.svg", "涌泉": "assets/acupoint/acup-002.svg", "合谷": "assets/acupoint/acup-003.svg", "百会": "assets/acupoint/acup-004.svg", "关元": "assets/acupoint/acup-005.svg", "气海": "assets/acupoint/acup-006.svg", "内关": "assets/acupoint/acup-007.svg", "三阴交": "assets/acupoint/acup-008.svg", "委中": "assets/acupoint/acup-009.svg", "列缺": "assets/acupoint/acup-010.svg", "风池": "assets/acupoint/acup-011.svg", "太冲": "assets/acupoint/acup-012.svg", "脾俞": "assets/acupoint/acup-013.svg", "肺俞": "assets/acupoint/acup-014.svg", "膻中": "assets/acupoint/acup-015.svg", "中脘": "assets/acupoint/acup-016.svg", "命门": "assets/acupoint/acup-017.svg", "肾俞": "assets/acupoint/acup-018.svg", "大椎": "assets/acupoint/acup-019.svg", "神阙": "assets/acupoint/acup-020.svg", "太溪": "assets/acupoint/acup-021.svg", "复溜": "assets/acupoint/acup-022.svg", "照海": "assets/acupoint/acup-023.svg", "丰隆": "assets/acupoint/acup-024.svg", "阴陵泉": "assets/acupoint/acup-025.svg", "曲池": "assets/acupoint/acup-026.svg", "血海": "assets/acupoint/acup-027.svg", "膈俞": "assets/acupoint/acup-028.svg", "期门": "assets/acupoint/acup-029.svg", "神门": "assets/acupoint/acup-030.svg", "迎香": "assets/acupoint/acup-031.svg", "风门": "assets/acupoint/acup-032.svg"};
 
+/* v53：用户提供的实拍照片（放入 assets/herbs/real/、assets/acupoint/real/ 后重建即生效） */
+const USER_PHOTO={};
 /* 合并后的全站知识口径：76 味本草 / 30 首名方 / 32 处穴位 */
 const ALL_HERBS=HERBS.concat(MATERIA_EXTRA,HERB_ADD);
 /* 合并数组用惰性函数：FORMULAS / ACUP / BOOK_READS 在本行之后才声明，避免 const 暂时性死区 */
 const allFormulas=()=>FORMULAS.concat(FORMULA_ADD);
 const allAcups=()=>ACUP.concat(ACUP_ADD);
-const allReads=()=>{const o={};Object.keys(BOOK_READS).forEach(k=>{o[k]={g:BOOK_READS[k].g,ps:BOOK_READS[k].ps.concat(READ_ADD[k]||[])};});return o;};
+/* 站内扩充选读：原有选段 + v51 新增 38 篇，供荐读弹层一次展开 */
+const allReads=()=>{
+  const o={};
+  Object.keys(BOOK_READS).forEach(k=>{
+    o[k]={g:BOOK_READS[k].g,ps:BOOK_READS[k].ps.concat(READ_ADD[k]||[])};
+  });
+  return o;
+};
 /* v51：条目元数据查找（新增条目自带 fit/use，现有条目从 META 表补） */
 const herbMeta=h=>h.fit?h:(HERB_META[h.n]||{fit:[],use:"",dose:"",taboo:""});
 const formulaMeta=f=>f.fit?f:(FORMULA_META[f.n]||{fit:[],use:"",taboo:""});
@@ -560,7 +557,6 @@ function renderConstitution(){
         <div class="kv"><span class="k">调养锦囊</span>${c.adv}</div>
         ${links(e.herb,"关联本草","herb",n)}${links(e.acup,"关联穴位","acupoint",n)}
         ${e.f?`<div class="kv"><span class="k">相关名方</span><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义与服法见「名方要诀」页</span></div>`:""}
-        <div class="kv"><span class="k">当令调养</span><a class="tz-link" href="seasons.html">四时调神 · 按季择本草 →</a></div>
         <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>`<a class="tz-link" href="read.html">《${x}》</a>`).join("")}</div>
         <div class="kv"><span class="k">本站可查</span><a class="tz-link" href="herb.html?tz=${encodeURIComponent(n)}">本草名录</a><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}">名方要诀</a><a class="tz-link" href="acupoint.html?tz=${encodeURIComponent(n)}">经络要穴</a></div>
         <button class="btn ghost mat-ask" onclick="askKB('${n.replace("质","")}体质怎么调理')">问小药童 · ${n}怎么调养</button>
@@ -925,7 +921,6 @@ const PAGE_INIT={
   quiz:()=>{const v=/[?&]v=full(?:&|$)/.test(location.search||"")?"full":"brief";setQuizVersion(v);restorePhys();initQcSticky();},
   chat:()=>{renderKbIndex();renderChips();},    // MPA：推荐问题须本页渲染（SPA 时代靠 go() 刷新）
   read:()=>{renderFilter();renderBooks();},     // 筛选条 + 十二张书卡
-  reader:()=>{const q=new URLSearchParams(location.search);renderReader(q.get("book")||"",parseInt(q.get("p")||"0",10)||0);},
   album:()=>{renderAlbum();},                   // MPA：集章墙须本页渲染（SPA 时代靠 go() 刷新）
   game:()=>{
     const g=window._game;
@@ -1025,42 +1020,6 @@ function currentTermName(){
   for(const x of TERMS){if(m<x[1]||(m===x[1]&&d<x[2]))break;cur=x;}
   return cur[0];
 }
-/* ===== v51：独立经典阅读页（章节目录 + 逐篇原文/白话 + 上下篇 + 封面） ===== */
-function renderReader(book,idx){
-  const box=$("#readerArea");if(!box)return;
-  const titles=BOOKS.map(b=>b.t);
-  if(titles.indexOf(book)<0)book=titles[0];
-  const b=BOOKS.find(x=>x.t===book),r=allReads()[book];if(!b||!r)return;
-  const ps=r.ps||[],i=Math.max(0,Math.min(ps.length-1,idx|0)),p=ps[i];
-  const cover=BOOK_IMG[book]?`<img class="rd-cover" src="assets/books/${BOOK_IMG[book]}.webp" alt="《${book}》封面插画" loading="lazy" decoding="async" onerror="this.style.display='none'">`:"";
-  const toc=ps.map((x,k)=>`<button class="${k===i?"on":""}" onclick="readerGo(${k})">${k+1}. ${x.t}</button>`).join("");
-  box.innerHTML=`
-    <div class="rd-top">${cover}<div class="rd-meta"><h3>《${book}》</h3><div class="au">${b.au} · ${b.diff}读物 · 适合 ${b.fit.join("、")}</div>
-      <p style="font-size:13px;color:var(--ink2);line-height:1.85;margin:0">${b.d}</p>
-      <div class="rd-toc">${toc}</div></div></div>
-    <div class="rd-chapter">
-      <h4>◈ 第 ${i+1} / ${ps.length} 篇 · ${p.t}</h4>
-      <div class="rd-src">「${p.s}」<span>—— ${p.t}</span></div>
-      <p class="rd-tr"><b>白话意译</b>：${p.tr}</p>
-    </div>
-    <div class="rd-nav">
-      <button class="btn ghost" ${i<=0?"disabled":""} onclick="readerGo(${i-1})">← 上一篇</button>
-      <span style="font-size:12px;color:var(--ink3);align-self:center">${i+1} / ${ps.length}</span>
-      <button class="btn ghost" ${i>=ps.length-1?"disabled":""} onclick="readerGo(${i+1})">下一篇 →</button>
-    </div>
-    <div class="rd-guide">◈ 药童领读：${r.g}</div>
-    <div class="tz-lead" style="margin-top:16px">
-      <button class="btn red" onclick="askKB('${book}')">问小药童 · 《${book}》讲了什么 →</button>
-      <a class="btn ghost" style="text-decoration:none" href="read.html">回经典荐读</a>
-    </div>
-    <div class="rd-foot">原文出自古籍公共领域文本，白话为意译；篇名与出处仅供检索，个别条文历代注本存在异文，深入研读请参校权威点校本。<br>本站内容仅供科普学习，不构成医疗建议。</div>`;
-}
-function readerGo(i){
-  const b=new URLSearchParams(location.search).get("book")||"";
-  renderReader(b,i);
-  try{history.replaceState(null,"","reader.html?book="+encodeURIComponent(b)+"&p="+i);}catch(e){}
-  window.scrollTo({top:0,behavior:"instant"});
-}
 function renderFourSeasons(s){
   s=FOUR_KEYS.indexOf(s)>=0?s:seasonOf();
   const box=$("#fourBody");if(!box)return;
@@ -1068,16 +1027,16 @@ function renderFourSeasons(s){
   const greet=SEASON_GREET[s],care=SEASON_CARE[s],rec=SEASON_READS[s];
   const terms=TERMS.filter(t=>termSeason(t[1],t[2])===s);
   const nowTerm=currentTermName();
+  /* 预览非当季时用该季代表节气，避免「夏季 · 立冬」这类错配 */
+  const seasonTerm=(seasonOf()===s&&terms.some(t=>t[0]===nowTerm))?nowTerm:(terms.length?terms[0][0]:nowTerm);
   const termHtml=terms.map(t=>`<div class="four-term${t[0]===nowTerm?" on":""}">${t[0]===nowTerm?'<span class="ft-now">当 前</span>':""}<b>${t[0]}</b><span class="ft-date">约 ${t[1]} 月 ${t[2]} 日</span><p>${t[3]}</p></div>`).join("");
   /* v51：当令本草按季节推荐，并按当前体质把契合条目排在前面，附推荐理由 */
-  const myTz=(()=>{try{const p=physGet();return p&&p.n?p.n:(lastQuiz||"");}catch(e){return "";}})();
-  const recs=(SEASON_HERB_REC[s]||[]).slice().sort((a,b)=>
-    ((b.fit.indexOf(myTz)>=0)?1:0)-((a.fit.indexOf(myTz)>=0)?1:0));
+  /* v52：当令本草纯按节气推荐，不再与体质关联 */
+  const recs=(SEASON_HERB_REC[s]||[]);
   const herbHtml=recs.map(r=>{
     const h=ALL_HERBS.find(x=>x.n===r.n);if(!h)return "";
     return `<div class="four-herb"><div class="fh-why"><b>${r.n}</b> · ${r.why}`+
-      (r.fit.indexOf(myTz)>=0?`<span class="fh-hit">契合你的体质</span>`:"")+
-      `<span class="fh-fit">宜 ${r.fit.join("、")}</span></div>`+herbCard(h,!h.cat)+`</div>`;
+      `<span class="fh-fit">当令 · ${s}季 ${seasonTerm}</span></div>`+herbCard(h,!h.cat)+`</div>`;
   }).join("");
   const bookHtml=rec.list.map(n=>{
     const b=BOOKS.find(x=>x.t===n)||{};
@@ -1102,7 +1061,7 @@ function renderFourSeasons(s){
     </div>
     <div class="four-sec">
       <h3>叁 · ${s}季当令本草</h3>
-      <div class="four-hint">按「${s}季 · ${nowTerm}」从全站本草名录择取，每味附当令理由与适合体质；${myTz?`已按你当前的 <b>${myTz}</b> 把契合条目排在最前`:`答过体质问卷后，契合你体质的条目会自动排在最前`}。性味功效、用法用量与「本草名录」页同源</div>
+      <div class="four-hint">按「${s}季 · ${seasonTerm}」节气从全站本草名录择取当令本草，每味附当令理由。此处只按节气推荐，不按体质区分；若要看体质对应，请到「本草名录」页按体质筛选。性味功效、用法用量与「本草名录」页同源</div>
       <div class="four-herbs">${herbHtml}</div>
     </div>
     <div class="four-sec">
@@ -1151,6 +1110,7 @@ function fitTags(fit,tz){
   return `<div class="m-fits">`+fit.map(t=>`<span class="${tz===t?"hit":""}">${t}</span>`).join("")+`</div>`;
 }
 function herbPhoto(h){
+  if(USER_PHOTO[h.n])return {src:USER_PHOTO[h.n],cap:"实 拍 照 片 · 用户提供"};
   if(HERB_PHOTO[h.n])return {src:HERB_PHOTO[h.n],cap:"实 拍 照 片 · 本 草 药 材"};
   if(HERB_IMG[h.n])return {src:"assets/herbs/"+HERB_IMG[h.n]+".webp",cap:"工 笔 插 画 · 示 意 图"};
   if(HERB_ILLUS[h.n])return {src:HERB_ILLUS[h.n],cap:"示 意 图 · 非 实 拍"};
@@ -1191,9 +1151,10 @@ function formulaCard(f){
   </div>`;
 }
 function acupCard(a){
-  const m=acupMeta(a),tz=tzParam(),svg=ACUP_SVG[a.n];
+  const m=acupMeta(a),tz=tzParam(),svg=USER_PHOTO[a.n]||ACUP_SVG[a.n];
+  const cap=USER_PHOTO[a.n]?"实 拍 图 · 用户提供":"取 穴 定 位 示 意 图 · 非 实 拍";
   return `<div class="mat-card">
-    ${svg?`<img class="m-img" src="${svg}" alt="${a.n}取穴定位示意图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">取 穴 定 位 示 意 图 · 非 实 拍</div>`:""}
+    ${svg?`<img class="m-img" src="${svg}" alt="${a.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${cap}</div>`:""}
     <div class="mat-card-h"><b>${a.n}</b><span class="mat-cat">${a.m}</span></div>
     <div class="kv"><span class="k">定位</span>${a.loc}</div>
     <div class="kv"><span class="k">功效主治</span>${a.d}</div>
@@ -2409,7 +2370,7 @@ const FUN=[
  {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——讲清中医通常怎么辨识体质，再按 ZYYXH/T157-2009 提供完整版 60 题与精简版 27 题，给出体质判定与调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>二十部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，二十位岐黄大家我都认识〜"}},
- {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">二十部经典都在「经典荐读」页面，点「阅读全文」就能进入独立阅读页逐篇翻阅，问书名、问作者我都能答〜</div>`}},
+ {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">二十部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
  {re:/怎么区分|如何区分|怎么分辨|如何分辨|长得像|分不清|外观辨别/,max:40,a:()=>`问到点子上了！药童专门整理了 <b>${LOOKALIKES.length} 组</b>最容易认岔的药材，每组都有分辨要点和口诀：<div class="kv">${LOOKALIKES.map(l=>'<span class="k">'+l.a+" / "+l.b+"</span>"+l.gj).join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">直接问「黄芪和甘草怎么区分」就能收到图文详解；去知识竞赛还能遇到「辨药眼力」题型练眼力〜</div>`},
  {re:/知识竞赛|竞赛|答题比赛|挑战赛/,max:12,a:()=>"知识竞赛在「百草试炼」页！21 题混合出卷、每题限时 8 秒：3 道看图辨药 + 8 道<b>经典著作考点</b> + 8 道<b>全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题。嫌难？切练习模式，14 题不限时卷、题题有解析还能追问药童。答完领「百草园」称号，还能一键复制战帖把成绩甩给朋友——敢不敢来过过招？"},
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
@@ -2564,18 +2525,18 @@ function renderBooks(f){
       <p class="why">◈ 药童导读：${b.why}</p>
       <p class="fit">◈ 适合：${b.fit.join(" · ")}${fit?'　<b style="color:var(--red)">与你相契</b>':""}</p>
       <div class="tags">${b.tg.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-      <div class="book-acts"><button class="read-btn" onclick="location.href='reader.html?book='+encodeURIComponent('${b.t}')">📖 阅读全文 →</button><button class="read-btn ghost" onclick="openRead('${b.t}')">快速预览选段</button></div></div>`;
+      <button class="read-btn" onclick="openRead('${b.t}')">📖 阅读选段 →</button></div>`;
   }).join("");
 }
 /* 经典选读弹层：插画封面 + 原文选段 + 白话译文 + 药童领读 */
 function openRead(t){
-  const b=BOOKS.find(x=>x.t===t),r=BOOK_READS[t];if(!b||!r)return;  $("#readMask").innerHTML=`
+  const b=BOOKS.find(x=>x.t===t),r=allReads()[t];if(!b||!r)return;  $("#readMask").innerHTML=`
    <div class="read-modal" onclick="event.stopPropagation()">
      <button class="rm-close" onclick="closeRead()" title="合上">✕</button>
      <div class="rm-cover">${BOOK_IMG[t]?`<img src="assets/books/${BOOK_IMG[t]}.webp" alt="《${t}》水墨插画" onerror="this.parentNode.style.display='none'" loading="lazy" decoding="async">`:`<div class="rm-cover-txt">${t}</div>`}
        <div class="rm-title"><h3>《${t}》</h3><span>${b.au} · ${b.diff}读物</span></div></div>
      <div class="rm-body">
-       <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span></div>
+       <div class="rm-meta">${b.tg.map(x=>`<span class="tag">${x}</span>`).join("")}<span class="tag" style="background:#F5EBD4;color:#7A5B1E">适合${b.fit.join("、")}</span><span class="tag">精选 ${r.ps.length} 篇</span></div>
        ${r.ps.map(p=>`<div class="rm-passage"><div class="pt">\u201c${p.s}\u201d<span class="src">——${p.t}</span></div><div class="tr">${p.tr}</div></div>`).join("")}
        <div class="rm-guide">◈ 药童领读：${r.g}</div>
        <div class="rm-acts">
