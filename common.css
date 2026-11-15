@@ -166,66 +166,45 @@ h2 .dot{color:var(--red)}
 @media(max-width:900px){.ap-flow{grid-template-columns:repeat(2,1fr)}.ap-step::after{display:none}}
 @media(max-width:560px){.ai-path{padding:22px 18px}.ap-flow{grid-template-columns:1fr}.ap-step span{min-height:0}}
 
-/* ===== 拍照看面相识体质（望诊科普体验，照片只在本机） ===== */
-.face-panel{display:none}
+/* v46 标准问卷：体质辨识页 = 27 题国标问卷 + 线下看体质操作说明；首页 = 六线知识专区 ===== */
 .face-top{display:flex;gap:12px;align-items:center;background:var(--green-l);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:4px;padding:10px 14px;margin:14px 0}
 .face-top img{width:48px;height:48px;border-radius:50%;object-fit:contain;object-position:center bottom;background:#fff;border:1px solid var(--line);flex:none}
 .face-top b{display:block;font-size:13.5px;color:var(--green);letter-spacing:1px}
 .face-top span{font-size:12.5px;color:var(--ink2);line-height:1.7}
-.face-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;margin-top:18px}
-.face-frame{position:relative;aspect-ratio:3/4;max-width:280px;margin:0 auto;border:2px dashed var(--gold);border-radius:12px;background:#F3ECDC;overflow:hidden;display:grid;place-items:center}
-.face-frame::before,.face-frame::after{content:"";position:absolute;width:26px;height:26px;border:2px solid var(--red);pointer-events:none;z-index:2}
-.face-frame::before{top:8px;left:8px;border-right:0;border-bottom:0;border-top-left-radius:8px}
-.face-frame::after{bottom:8px;right:8px;border-left:0;border-top:0;border-bottom-right-radius:8px}
-.face-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.face-ph{text-align:center;color:var(--ink2);font-size:13px;line-height:2.1;padding:16px}
-.face-ph .cam-i{display:block;font-size:42px;color:var(--gold);line-height:1.3}
-.face-ph small{font-size:11px;color:var(--ink3)}
-.face-scan{display:none;position:absolute;left:0;right:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,var(--red),transparent);box-shadow:0 0 14px var(--red);animation:faceScan 2s ease-in-out infinite}
-.face-frame.scanning .face-scan{display:block}
-@keyframes faceScan{0%,100%{top:6%}50%{top:94%}}
-.face-upload{text-align:center;margin-top:12px}
-.face-upload .btn{font-size:13px;padding:9px 18px;letter-spacing:1px;cursor:pointer;display:inline-block}
-.face-tips{margin-top:14px;background:var(--gold-l);border:1px solid var(--line);border-radius:4px;padding:10px 14px}
-.face-tips b{display:block;font-size:12.5px;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
-.face-tips ul{margin:0;padding-left:18px;font-size:11.5px;color:var(--ink2);line-height:1.9}
-.face-note{font-size:11.5px;color:var(--ink3);line-height:1.75;margin-top:8px}
-.face-note b{color:var(--green)}
-.face-obs h4{font-size:14px;color:var(--gold);letter-spacing:2px;margin-bottom:6px}
-.face-sign{margin:14px 0;padding-bottom:12px;border-bottom:1px dashed var(--line)}
-.fs-t{font-size:13.5px;color:var(--ink);font-weight:600;margin-bottom:8px}
-.fs-t small{font-weight:400;color:var(--ink3);margin-left:8px;font-size:11.5px}
-.face-opts{display:flex;gap:8px;flex-wrap:wrap}
-.face-opts button{border:1px solid var(--line);background:#FCFBF6;border-radius:999px;padding:5px 13px;font-family:inherit;font-size:12px;color:var(--ink2);cursor:pointer;transition:all .2s}
-.face-opts button:hover{border-color:var(--green);color:var(--green)}
-.face-opts button.sel{background:var(--green);color:#fff;border-color:var(--green)}
-.face-act{text-align:center;margin-top:16px}
-.face-result{margin-top:18px;border-top:1px dashed var(--gold);padding-top:16px;text-align:left;animation:pop .4s ease}
-.face-result h4{color:var(--red);font-size:16px;letter-spacing:2px;margin-bottom:6px}
-.face-result .fr-books{background:var(--gold-l);border-radius:4px;padding:10px 14px;margin-top:10px;font-size:13px;line-height:1.9}
-.face-result .fr-books b{color:var(--red)}
+.offline-guide{margin:16px 0 6px;padding:16px 18px;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;background:linear-gradient(135deg,rgba(247,233,228,.55),rgba(231,239,234,.45))}
+.offline-guide>b{display:block;font-size:14px;color:var(--red);letter-spacing:1.5px;margin-bottom:10px}
+.og-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.og-step{background:#FCFBF6;border:1px solid var(--line);border-radius:6px;padding:11px 13px}
+.og-step b{display:block;font-size:13px;color:var(--green);margin-bottom:5px;letter-spacing:.5px}
+.og-step p{margin:0;font-size:12px;color:var(--ink2);line-height:1.85}
+.og-step p+p{margin-top:5px}
+.og-step a{color:var(--green);border-bottom:1px dashed var(--green)}
+.og-note{font-size:11.5px;color:var(--ink3);line-height:1.85;margin:10px 0 0}
+.og-note b{color:var(--red)}
+.quiz-head{margin:18px 0 14px;padding:12px 16px;border:1px dashed var(--gold);border-radius:6px;background:var(--gold-l)}
+.quiz-head b{display:block;font-size:14px;color:var(--red);letter-spacing:1.5px;margin-bottom:4px}
+.quiz-head span{font-size:12px;color:var(--ink2);line-height:1.8;display:block}
+@media(max-width:720px){.og-grid{grid-template-columns:1fr}}
+/* 首页六线知识入口 */
+.six-lane{margin:0 0 22px;padding:16px 18px 18px;border:1px solid var(--line);border-radius:4px;background:var(--paper);box-shadow:var(--shadow)}
+.six-lane .sl-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.six-lane .sl-head b{font-size:16px;color:var(--green);letter-spacing:2px}
+.six-lane .sl-head span{font-size:12.5px;color:var(--ink3)}
+.six-lane .sl-head .btn{margin-left:auto;padding:7px 14px;font-size:12px}
+.sl-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.sl-grid a{text-decoration:none;display:flex;flex-direction:column;gap:4px;padding:12px 10px;border:1px solid var(--line);border-radius:6px;background:#FCFBF6;transition:all .25s}
+.sl-grid a:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:var(--shadow-h)}
+.sl-grid a b{font-size:14px;color:var(--red);letter-spacing:1px}
+.sl-grid a span{font-size:11.5px;color:var(--ink2);line-height:1.6}
+.sl-grid a em{font-style:normal;font-size:11px;color:var(--gold);margin-top:2px}
+@media(max-width:1080px){.sl-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.six-lane .sl-head .btn{margin-left:0}}
 /* 荐读页：按体质荐读条 */
 .read-rec{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--green-l);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:4px;padding:10px 16px;margin:0 0 16px;font-size:13px;color:var(--ink2)}
 .read-rec b{color:var(--red);font-size:15px}
 .read-rec .btn{padding:7px 16px;font-size:12px;letter-spacing:1px}
 .filter button.fit-only{border-color:var(--red);color:var(--red)}
 .filter button.fit-only.sel{background:var(--red);color:#fff;border-color:var(--red)}
-@media(max-width:720px){.face-grid{grid-template-columns:1fr}.face-frame{max-width:240px}}
-
-/* ===== 四诊合参说明条 ===== */
-.sizhen{margin:14px 0 4px;padding:13px 16px 12px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(135deg,rgba(247,233,228,.5),rgba(231,239,234,.4));text-align:left}
-.sizhen>b{font-size:13.5px;color:var(--red);letter-spacing:1px}
-.sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 8px}
-.sz{display:flex;flex-direction:column;gap:4px;padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:#FCFBF6}
-.sz i{font-style:normal;font-family:"Ma Shan Zheng",cursive;font-size:20px;color:var(--red);line-height:1}
-.sz b{font-weight:600;font-size:12px;color:var(--ink2)}
-.sz em{font-style:normal;font-size:11px;color:var(--ink3);line-height:1.5}
-.sz.ok{border-color:rgba(166,62,40,.4)}
-.sz.ok em{color:var(--green)}
-.sz.no{opacity:.68}
-.sizhen p{font-size:11.5px;color:var(--ink3);line-height:1.75;margin:0}
-.sizhen p b{color:var(--green)}
-@media(max-width:720px){.sz-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== 体质辨识 ===== */
 .q-item{margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--line)}
@@ -591,7 +570,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .chal-toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(80px);background:var(--green);color:#F3EEDD;border-radius:999px;padding:10px 24px;font-size:13.5px;letter-spacing:1px;box-shadow:0 10px 26px rgba(47,93,80,.4);z-index:80;transition:transform .35s ease;pointer-events:none}
 .chal-toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:720px){.books,.grid2{grid-template-columns:1fr}.home-feats{grid-template-columns:1fr 1fr}.home-feats .feat:last-child{grid-column:1/-1}.feat{min-height:216px}.feat .meta{white-space:normal;font-size:11.5px}.daily{flex-direction:column}.daily-left{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;width:100%;display:flex;gap:14px;align-items:baseline;justify-content:center}.nav-inner{overflow-x:auto;justify-content:flex-start}nav a{flex:none;white-space:nowrap}}
-@media(max-width:560px){.hero-stats{display:grid;grid-template-columns:repeat(4,1fr)}.hero-stats div{border-bottom:1px solid var(--line)}.hero-stats div:nth-child(4n){border-right:none}.hero-stats div:nth-child(n+5){border-bottom:none}}
+@media(max-width:560px){.hero-stats{display:grid;grid-template-columns:repeat(3,1fr)}.hero-stats div{border-bottom:1px solid var(--line)}.hero-stats div:nth-child(3n){border-right:none}.hero-stats div:nth-child(n+7){border-bottom:none}}
 /* ===== 本草名录 / 名方要诀 / 经络要穴通鉴 ===== */
 .mat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
 .mat-tab{cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 16px;border-radius:20px;font-size:14px;letter-spacing:1px;font-family:inherit;transition:.2s}
