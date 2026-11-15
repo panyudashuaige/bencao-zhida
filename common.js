@@ -1,8 +1,8 @@
 
-/* ===== 四线知识 × AI 小药童：本草 / 名方 / 穴位 / 体质 与经典荐读互通，各页都能一键追问 ===== */
+/* ===== 六线知识 × AI 小药童：经典 / 本草 / 名方 / 穴位 / 四时 / 体质，各页都能一键追问 ===== */
 function knowBar(cur,q){
-  const it=[["materia","本草名方","🌿"],["acupoint","经络要穴","📜"],["constitution","九种体质","◈"],["read","经典荐读","📖"]];
-  return `<div class="know-bar"><b>◈ 四线知识 · 都能问 AI 小药童</b>`+
+  const it=[["read","经典荐读","📖"],["herb","本草名录","🌿"],["formula","名方要诀","📜"],["acupoint","经络要穴","◈"],["seasons","四时调神","✦"],["constitution","九种体质","◎"]];
+  return `<div class="know-bar"><b>◈ 六线知识 · 都能问 AI 小药童</b>`+
     it.map(x=>`<a href="${x[0]}.html" class="${x[0]===cur?"on":""}">${x[2]} ${x[1]}</a>`).join("")+
     `<button class="know-ask" onclick="askKB('${q}')">💬 问小药童 · 这一门</button></div>`;
 }
@@ -119,11 +119,28 @@ const PAGE_HTML={
     <p class="desc">中医药文化 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
     <div id="checkinArea"></div>
   </div>`,
+ herb:`
+  <div class="card mat-card">
+    <div class="orn">本 草 名 录 · 性 味 归 经</div>
+    <h2>本草名录<span class="dot"> · </span>性味归经</h2>
+    <p class="desc">本站据中医药经典文献整理的 <b><span id="herbCnt">0</span> 味本草</b>：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「🖌 工笔」者另有手绘画像，见「本草图鉴」。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问。内容仅供科普学习，不构成医疗建议；想查配伍方义，请移步「名方要诀」页。</p>
+    ${knowBar('herb','黄芪')}
+    <div id="herbArea"></div>
+  </div>`,
+ formula:`
+  <div class="card mat-card">
+    <div class="orn">名 方 要 诀 · 组 成 方 义</div>
+    <h2>名方要诀<span class="dot"> · </span>通鉴</h2>
+    <p class="desc">本站据中医药经典文献整理的 <b><span id="formulaCnt">0</span> 首名方</b>：组成配伍、方义主治、方书源流与深入阅读，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问配伍与禁忌。内容仅供科普学习，不构成医疗建议；想查单味药的性味归经，请移步「本草名录」页。</p>
+    ${knowBar('formula','四君子汤')}
+    <div id="formulaArea"></div>
+  </div>`,
  materia:`
   <div class="card mat-card">
     <div class="orn">本 草 名 物 · 名 方 要 诀</div>
     <h2>本草名方<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典文献整理的本草原貌与名方要诀：性味归经、功效主治，以及组成、方义与源流，分栏一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问。内容仅供科普学习，不构成医疗建议；想查穴位定位与经络，请移步「经络要穴」页。</p>
+    <div class="mat-note">◈ 本页为旧版合览。六线知识中的「本草」「名方」已各自独立成页：<a href="herb.html">本草名录</a> · <a href="formula.html">名方要诀</a>，可分别查阅；下方仍保留两栏合览与 tab 切换。</div>
     ${knowBar('materia','黄芪')}
     <div class="mat-tabs" id="matTabs">
       <button class="mat-tab on" data-tab="herb" onclick="switchMat('herb')">🌿 本草名录（<span id="cntHerb">0</span> 味）</button>
@@ -136,7 +153,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">经 络 腧 穴 · 定 位 主 治</div>
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成与本草性味，请见「本草名方」页。</p>
+    <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成请见「名方要诀」页，本草性味请见「本草名录」页。</p>
     ${knowBar('acupoint','足三里')}
     <div id="acupArea"></div>
   </div>`,
@@ -366,7 +383,7 @@ function renderConstitution(){
         <div class="kv"><span class="k">调养忌</span>${e.no}</div>
         <div class="kv"><span class="k">调养锦囊</span>${c.adv}</div>
         ${links(e.herb,"关联本草")}${links(e.acup,"关联穴位")}
-        ${e.f?`<div class="kv"><span class="k">相关名方</span><a class="tz-link" href="#" onclick="askKB('${e.f.replace(/（[^）]*）/g,"")}');return false">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义见「本草名方」页</span></div>`:""}
+        ${e.f?`<div class="kv"><span class="k">相关名方</span><a class="tz-link" href="#" onclick="askKB('${e.f.replace(/（[^）]*）/g,"")}');return false">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义见「名方要诀」页</span></div>`:""}
         <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>`<a class="tz-link" href="read.html">《${x}》</a>`).join("")}</div>
         <button class="btn ghost mat-ask" onclick="askKB('${n.replace("质","")}体质怎么调理')">问小药童 · ${n}怎么调养</button>
       </div>`;
@@ -685,31 +702,45 @@ const PAGE_INIT={
     renderGameIdle();                                               // 待机：不出题、不计时
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
-  materia:()=>{renderMateria();},               // 本草名方：本草名录 + 名方要诀 两 tab
+  herb:()=>{renderHerbPage();},                 // 本草名录：独立页，全部分门卡片
+  formula:()=>{renderFormulaPage();},           // 名方要诀：独立页，全首方卡
+  materia:()=>{renderMateria();},               // 旧版合览：本草名录 + 名方要诀 两 tab（保留兼容）
   acupoint:()=>{renderAcupoint();},             // 经络要穴：独立页，12 处要穴卡片
   seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());}, // 四时调神：支持 ?s=秋 直达某季
   constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
-/* ===== 本草名方：本草 + 名方两栏卡片，数据驱动，可一键问小药童 ===== */
-function renderMateria(){
+/* ===== 本草名录 / 名方要诀：共用列表渲染，合览页与两个独立页同源同貌 ===== */
+function herbListHtml(){
+  let html=`<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。下列 <b>${ALL_HERBS.length}</b> 味按功效分门；带「🖌 工笔」者另有手绘画像，见「本草图鉴」。</div>`;
+  html+=`<div class="mat-grp"><h3 class="mat-h3">药食同源 · 工笔本草（${HERBS.length} 味）</h3><div class="mat-grid">`+HERBS.map(h=>herbCard(h,true)).join("")+`</div></div>`;
+  HERB_CATS.forEach(c=>{
+    const list=MATERIA_EXTRA.filter(h=>h.cat===c);
+    if(!list.length)return;
+    html+=`<div class="mat-grp"><h3 class="mat-h3">${c}（${list.length} 味）</h3><div class="mat-grid">`+list.map(h=>herbCard(h,false)).join("")+`</div></div>`;
+  });
+  return html;
+}
+function formulaListHtml(){
+  return `<div class="mat-note">◈ 名方：组成、方义、源流，一卡尽览。点「问小药童」可追问配伍与禁忌。</div><div class="mat-grid">`+FORMULAS.map(formulaCard).join("")+`</div>`;
+}
+function renderMateria(){   // 旧版合览页 materia.html：两 tab 复用同一份列表
   const setCnt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   setCnt("cntHerb",ALL_HERBS.length);setCnt("cntFormula",FORMULAS.length);
   const hb=$("#matHerb");
-  if(hb && !hb.dataset.done){
-    let html=`<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。下列 <b>${ALL_HERBS.length}</b> 味按功效分门；带「🖌 工笔」者另有手绘画像，见「本草图鉴」。</div>`;
-    html+=`<div class="mat-grp"><h3 class="mat-h3">药食同源 · 工笔本草（${HERBS.length} 味）</h3><div class="mat-grid">`+HERBS.map(h=>herbCard(h,true)).join("")+`</div></div>`;
-    HERB_CATS.forEach(c=>{
-      const list=MATERIA_EXTRA.filter(h=>h.cat===c);
-      if(!list.length)return;
-      html+=`<div class="mat-grp"><h3 class="mat-h3">${c}（${list.length} 味）</h3><div class="mat-grid">`+list.map(h=>herbCard(h,false)).join("")+`</div></div>`;
-    });
-    hb.innerHTML=html; hb.dataset.done="1";
-  }
+  if(hb && !hb.dataset.done){hb.innerHTML=herbListHtml();hb.dataset.done="1";}
   const fm=$("#matFormula");
-  if(fm && !fm.dataset.done){
-    fm.innerHTML=`<div class="mat-note">◈ 名方：组成、方义、源流，一卡尽览。点「问小药童」可追问配伍与禁忌。</div><div class="mat-grid">`+FORMULAS.map(formulaCard).join("")+`</div>`;
-    fm.dataset.done="1";
-  }
+  if(fm && !fm.dataset.done){fm.innerHTML=formulaListHtml();fm.dataset.done="1";}
+}
+/* ===== 本草名录独立页 / 名方要诀独立页 ===== */
+function renderHerbPage(){
+  const c=document.getElementById("herbCnt");if(c)c.textContent=ALL_HERBS.length;
+  const box=$("#herbArea");
+  if(box && !box.dataset.done){box.innerHTML=herbListHtml();box.dataset.done="1";}
+}
+function renderFormulaPage(){
+  const c=document.getElementById("formulaCnt");if(c)c.textContent=FORMULAS.length;
+  const box=$("#formulaArea");
+  if(box && !box.dataset.done){box.innerHTML=formulaListHtml();box.dataset.done="1";}
 }
 
 /* ===== 经络要穴：独立页，ACUP 数据驱动的穴位卡片 ===== */
@@ -780,7 +811,7 @@ function renderFourSeasons(s){
     </div>
     <div class="four-sec">
       <h3>叁 · 当令本草</h3>
-      <div class="four-hint">从全站本草名录中按季择取，性味功效与「本草名方」页同源</div>
+      <div class="four-hint">从全站本草名录中按季择取，性味功效与「本草名录」页同源</div>
       <div class="mat-grid">${herbHtml}</div>
     </div>
     <div class="four-sec">
@@ -790,7 +821,7 @@ function renderFourSeasons(s){
     </div>
     <div class="four-foot">
       <button class="btn red" onclick="askKB('${s}季养生')">问问小药童 · ${s}季怎么养 →</button>
-      <span style="margin-left:10px">顺时调养还可查阅<a href="materia.html">本草名方</a> · <a href="acupoint.html">经络要穴</a> · <a href="read.html">经典荐读</a></span><br>
+      <span style="margin-left:10px">顺时调养还可查阅<a href="herb.html">本草名录</a> · <a href="formula.html">名方要诀</a> · <a href="acupoint.html">经络要穴</a> · <a href="read.html">经典荐读</a></span><br>
       节气与养生条目整理自中医药经典文献及传统岁时知识，仅供科普学习；食疗、进补与穴位按揉因人而异，不构成医疗诊断或治疗建议。
     </div>`;
 }
@@ -1588,7 +1619,7 @@ function refreshFeatMeta(){
     put("album",`已点亮 ${stamps} / ${HERBS.length} 味`,stamps>0);
     put("read",`${BOOKS.length} 部典籍`+(p?` · 契合${p.n}已点亮`:" · 让小药童识体质后点亮契合书目"),!!p);
     put("checkin",`连续 ${streak} 天 · 今日${doneCi?"已":"未"}打卡`,doneCi);
-    put("food",`今日一味 · ${h.n}（${h.f.split(" · ")[0]}）`,false);
+    put("herb",`${ALL_HERBS.length} 味本草 · 按功效分门`,false);
     put("formula",`${FORMULAS.length} 首名方 · ${FORMULAS[0].n}等`,false);
     put("acup",`${ACUP.length} 处要穴 · ${ACUP.map(a=>a.n).join(" / ")}`,false);
   }catch(e){}
