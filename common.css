@@ -95,6 +95,13 @@ nav a.on::after{width:100%;background:var(--red)}
 h2{font-size:21px;letter-spacing:4px;color:var(--green);margin-bottom:6px;font-weight:700}
 h2 .dot{color:var(--red)}
 .desc{color:var(--ink2);font-size:13.5px;margin-bottom:20px;max-width:640px}
+.tz-intro-list{margin:0 0 14px;padding-left:22px;color:var(--ink2);font-size:13px;line-height:1.9;max-width:640px}
+.tz-intro-list>li{margin-bottom:4px}
+.tz-intro-list ul{margin:3px 0 0;padding-left:22px;list-style:circle;color:var(--ink2)}
+.tz-intro-list ul li{margin-bottom:2px}
+.tz-intro-list b{color:var(--green);font-weight:700}
+.tz-safety{max-width:640px;box-sizing:border-box;font-size:12px;font-weight:700;line-height:1.75;color:#8a3a2e;background:#fff7f2;border:1px solid #f0c9b8;border-left:4px solid var(--red);border-radius:6px;padding:9px 13px;margin:0 0 10px;overflow-wrap:anywhere}
+.tz-scroll-hint{font-size:11.5px;color:var(--ink3);text-align:center;margin:2px 0 18px}
 .orn{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:var(--gold);font-size:12px;letter-spacing:4px}
 .orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold) 70%,transparent);opacity:.4}
 
