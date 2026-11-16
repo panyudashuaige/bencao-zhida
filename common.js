@@ -2386,7 +2386,7 @@ function answerBubble(html){ // 打字机：先建好完整气泡，再逐字揭
 function typing(){
   return bubble("本草智答",'<span class="think-line"><span class="typing"><i></i><i></i><i></i></span><span class="think-txt">正在思考：AI小药童正在检索本地典籍库...</span></span>');
 }
-function greet(){bubble("本草智答","你好呀！我是本草智答。我能为你解释中医概念、讲解古籍记载、科普本草和穴位。但我做不了疾病诊断，也不能给你开具处方或食疗方哦。");}greet();
+function greet(){bubble("本草智答","嗨呀～我是本草智答🍃，你的中医小伙伴！中医概念、古籍记载、本草穴位，尽管来问我，我都能给你讲得明明白白～不过得先约法三章：看病诊断、开药方、配食疗方这些我可做不了哦，得请正经中医师出马，我嘛，就专心帮你涨知识😉");}greet();
 function norm(s){Object.keys(SYNONYM).forEach(k=>s=s.split(k).join(SYNONYM[k]));return s;}
 function askKB(q){if(location.pathname.indexOf("chat.html")>=0){try{send(q);}catch(e){}}else{location.href="chat.html?q="+encodeURIComponent(q);}}
 const QUIPS=[
