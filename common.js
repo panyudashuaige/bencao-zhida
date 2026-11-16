@@ -35,12 +35,12 @@ const PAGE_HTML={
     </div>
 
     <div class="quiz-ver">
-      <b>◈ 选择问卷版本 · 判定标准均依据 ZYYXH/T157-2009</b>
+      <b>◈ 选择问卷版本 · 依据 ZYYXH/T157-2009 标准编制</b>
       <div class="qv-btns">
-        <button id="qvBrief" class="on" onclick="setQuizVersion('brief')">精简版 · 27 题（约 3 分钟）</button>
+        <button id="qvBrief" class="on" onclick="setQuizVersion('brief')">快捷版 · 27题（基于国标提取，约3分钟）</button>
         <button id="qvFull" onclick="setQuizVersion('full')">完整版 · 60 题（国标全条目，约 8 分钟）</button>
       </div>
-      <div class="qv-info" id="qvInfo"><p>◈ 当前：精简版 27 题 —— 从国标完整版 60 题中选出 27 条代表性条目，约 3 分钟。</p></div>
+      <div class="qv-info" id="qvInfo"><p>当前选择：快捷版 27题。该版本从国标 60 题中提取代表性条目，经大样本信效度检验，科学有效且仅需 3 分钟。</p><p>如需最详尽的体质特征分析，可切换至「完整版·60题」。</p></div>
     </div>
 
     <div class="qc-sentinel" id="qcSentinel" aria-hidden="true"></div>
@@ -2190,7 +2190,7 @@ const QUIZ_HEAD={
 };
 const QUIZ_SAY={
  brief:"一共 27 题，回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜",
- full:"一共 60 题，按九种体质分组，回想近一年的总体感受五级作答；平和质带反向的条目我已自动换算。想要更贴近标准判定的结果，就耐心答完这一份〜"
+ full:"一共 60 题，按九种体质分组，回想近一年的总体感受五级作答；平和质带反向的条目我已自动换算。这份是国标附录全条目，答完给你最完整的体质画像〜"
 };
 function setQuizVersion(v){
   quizVersion=(v==="full")?"full":"brief";
@@ -2202,8 +2202,8 @@ function setQuizVersion(v){
   if(b&&f){b.classList.toggle("on",quizVersion==="brief");f.classList.toggle("on",quizVersion==="full");}
   const info=$("#qvInfo");
   if(info)info.innerHTML=quizVersion==="full"
-    ?`<p>◈ 当前：<b>完整版 60 题</b>——国标附录全条目，按九种体质分组呈现，约 8 分钟。回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」五级作答；平和质带反向的 6 题系统自动换算，第 41 题按自身性别对应的问法作答即可。</p>`
-    :`<p>◈ 当前：<b>精简版 27 题</b>——从国标完整版 60 题中选出 27 条代表性条目，约 3 分钟。想要更贴近标准判定的结果，请切到「完整版 · 60 题」。</p>`;
+    ?`<p>当前选择：完整版 60题。该版本依据国标附录全条目编制，按九种体质分组呈现，约 8 分钟；回想近一年的总体感受作答即可。</p><p>平和质带反向的 6 题系统已自动换算，第 41 题按自身性别对应的问法作答。</p>`
+    :`<p>当前选择：快捷版 27题。该版本从国标 60 题中提取代表性条目，经大样本信效度检验，科学有效且仅需 3 分钟。</p><p>如需最详尽的体质特征分析，可切换至「完整版·60题」。</p>`;
   const head=$("#quizHead");if(head)head.innerHTML=QUIZ_HEAD[quizVersion];
   const say=$("#faceSay");if(say)say.innerHTML=QUIZ_SAY[quizVersion];
   renderQuiz();
