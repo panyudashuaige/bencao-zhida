@@ -83,6 +83,7 @@ const PAGE_HTML={
       </div>
     </div>
     <div class="chat-box" id="chatBox"></div>
+    <div class="input-note">* 本系统采用本地权威知识库检索，不包含通用大模型，以保证医疗信息的绝对安全无幻觉。</div>
     <div class="input-row">
       <input id="chatInput" placeholder="试着问：黄芪有什么功效？ / 上火了怎么办？ / 四君子汤…" onkeydown="if(event.key==='Enter')send()">
       <button class="btn" onclick="send()">提 问</button>
@@ -1559,7 +1560,9 @@ function localStyleSample(){ // 取上一条本地答案当语气锚点：模型
   try{
     const box=$("#chatBox"),bds=box?box.querySelectorAll(".bd"):[];
     for(let i=bds.length-1;i>=0;i--){
-      const t=String(bds[i].textContent||"").replace(/\s+/g," ").trim();
+      const host=bds[i].closest?bds[i].closest(".msg"):null;
+      const raw=(host&&host.getAttribute&&host.getAttribute("data-full-text"))||bds[i].textContent||"";
+      const t=String(raw).replace(/\s+/g," ").trim();
       if(t&&!/药童正翻检典籍|参考典籍：|药童引经详解/.test(t))return t.slice(0,260);
     }
   }catch(e){}
@@ -2338,8 +2341,39 @@ function bubble(who,html,me){
   const cb=$("#chatBox");if(cb){cb.appendChild(d);cb.scrollTop=cb.scrollHeight;}
   return d;
 }
+function answerBubble(html){ // 打字机：先建好完整气泡，再逐字揭示文本节点——保留标签/样式/onclick 不破损
+  const d=bubble("本草智答",html);
+  const bd=d&&d.querySelector?d.querySelector(".bd"):null;
+  if(!bd)return d;
+  let nodes=[],n;
+  try{
+    const w=document.createTreeWalker(bd,NodeFilter.SHOW_TEXT);
+    while((n=w.nextNode())){if(n.nodeValue&&n.nodeValue.length)nodes.push({node:n,full:n.nodeValue});}
+  }catch(e){return d;}
+  const total=nodes.reduce((a,x)=>a+x.full.length,0);
+  if(!total)return d;
+  d.setAttribute("data-full-text",nodes.map(x=>x.full).join("")); // 完整文本供风格采样
+  nodes.forEach(x=>x.node.nodeValue="");
+  const caret=document.createElement("span");caret.className="type-caret";bd.appendChild(caret);
+  let ni=0,ci=0;
+  const per=Math.max(1,Math.ceil(total/70)); // 约 70 帧，整体约 1.3 秒
+  const timer=setInterval(()=>{
+    if(ni>=nodes.length){
+      clearInterval(timer);
+      if(caret.parentNode)caret.parentNode.removeChild(caret);
+      const cb=$("#chatBox");if(cb)cb.scrollTop=cb.scrollHeight;
+      return;
+    }
+    const cur=nodes[ni];
+    ci+=per;if(ci>cur.full.length)ci=cur.full.length;
+    cur.node.nodeValue=cur.full.slice(0,ci);
+    if(ci>=cur.full.length){ni++;ci=0;}
+    const cb=$("#chatBox");if(cb)cb.scrollTop=cb.scrollHeight;
+  },18);
+  return d;
+}
 function typing(){
-  return bubble("本草智答",'<span class="typing"><i></i><i></i><i></i></span>');
+  return bubble("本草智答",'<span class="think-line"><span class="typing"><i></i><i></i><i></i></span><span class="think-txt">正在思考：AI小药童正在检索本地典籍库...</span></span>');
 }
 function greet(){bubble("本草智答","你好呀！我是<b>本草智答</b>，一只熟读经典的小药童〜 中药、方剂、穴位、九种体质调养，感冒、便秘、减肥、失眠这些生活小难题，尽管来问。答不上来的话……那一定是问题太偏了（叉腰）。");}greet();
 function norm(s){Object.keys(SYNONYM).forEach(k=>s=s.split(k).join(SYNONYM[k]));return s;}
@@ -2462,37 +2496,37 @@ function send(q){
     if(av){av.classList.remove("think");av.classList.add("happy");setTimeout(()=>av.classList.remove("happy"),600);}
     const quip=pick(QUIPS);
     if(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14){
-      bubble("本草智答","咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识，讲清中医辨识体质的通常方法，再依 ZYYXH/T157-2009 用 60 题完整版或 27 题精简版按转化分算出体质并开出调养锦囊。上知黄芪下知茯苓，中间还懂痛经和痘痘。有话直说，本药童最喜欢爱提问的人类了〜");
+      answerBubble("咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识，讲清中医辨识体质的通常方法，再依 ZYYXH/T157-2009 用 60 题完整版或 27 题精简版按转化分算出体质并开出调养锦囊。上知黄芪下知茯苓，中间还懂痛经和痘痘。有话直说，本药童最喜欢爱提问的人类了〜");
     }
     else if(isDetail){
       // 带题干来追问的：题库/后台题库直接命中→出详解；辨药眼力题→出口诀；否则按知识库普通作答
       const hit=BOOK_QS.concat(SITE_QS).concat(REMOTE_QS||[]).find(x=>x.q===q);
       const lk=LOOKALIKES.find(l=>q.includes(l.sA)||q.includes(l.sB));
       if(hit){
-        bubble("本草智答",`<b>药童详解 · 「${hit.q}」</b><div class="kv"><span class="k">正确答案</span>${hit.a}</div><div class="kv"><span class="k">考点解析</span>${hit.fb}</div><div class="kv"><span class="k">根源探究</span>${hit.root||"本考点源自经典原文与历代医家注疏，根源版讲解正在补录中〜"}</div><div class="kv"><span class="k">趁热打铁</span>这是「百草试炼」的常客考点，去练习模式不限时再刷两遍，保准记牢〜</div>`);
+        answerBubble(`<b>药童详解 · 「${hit.q}」</b><div class="kv"><span class="k">正确答案</span>${hit.a}</div><div class="kv"><span class="k">考点解析</span>${hit.fb}</div><div class="kv"><span class="k">根源探究</span>${hit.root||"本考点源自经典原文与历代医家注疏，根源版讲解正在补录中〜"}</div><div class="kv"><span class="k">趁热打铁</span>这是「百草试炼」的常客考点，去练习模式不限时再刷两遍，保准记牢〜</div>`);
       }else if(lk){
-        bubble("本草智答",`<b>药童详解 · 辨药眼力</b><div class="kv"><span class="k">分辨要点</span>${lk.tip}</div><div class="kv"><span class="k">药童口诀</span>「${lk.gj}」</div><div class="kv"><span class="k">趁热打铁</span>想知道更多门道？直接问我「${lk.a}和${lk.b}怎么区分」〜</div>`);
+        answerBubble(`<b>药童详解 · 辨药眼力</b><div class="kv"><span class="k">分辨要点</span>${lk.tip}</div><div class="kv"><span class="k">药童口诀</span>「${lk.gj}」</div><div class="kv"><span class="k">趁热打铁</span>想知道更多门道？直接问我「${lk.a}和${lk.b}怎么区分」〜</div>`);
       }else if(best&&bs>=2){
         if(best.herb)unlockHerb(best.herb);
-        bubble("本草智答",best.ans+(best.topic?fitBookAns():""));
+        answerBubble(best.ans+(best.topic?fitBookAns():""));
       }else{
         reportMiss(q);
-        bubble("本草智答",`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
+        answerBubble(`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
       }
     }
-    else if(funStrong){bubble("本草智答",(typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(cons){bubble("本草智答",constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(seasonQ){bubble("本草智答",seasonCareAns(seasonQ)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);bubble("本草智答",best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(fun){bubble("本草智答",(typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(funStrong){answerBubble((typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(cons){answerBubble(constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(seasonQ){answerBubble(seasonCareAns(seasonQ)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);answerBubble(best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(fun){answerBubble((typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
-      bubble("本草智答",`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
+      answerBubble(`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
     }
     // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
     const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
     aiDeepDive(q,aiTag);
-  },600);
+  },1000);
 }
 
 /* 荐读页顶栏：把「AI 小药童识体质 → 按体质荐经典」显式呈现出来 */
