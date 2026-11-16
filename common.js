@@ -15,14 +15,23 @@ const PAGE_HTML={
     <p class="desc">本页把两件事放在一起：<b>先讲清体质辨识通常怎么做</b>，再依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 提供<b>两份问卷</b>：<b>完整版 60 题</b>（国标附录全条目）与<b>精简版 27 题</b>（从完整版选出的代表性条目，默认展示）。两版都按五级评分、换算转化分，并严格执行国标的「是 / 基本是 / 倾向是 / 否」判定标准。结果用于按体质点亮该读的经典，属科普自测，<b>不构成医疗诊断</b>；确切判定与调理以中医师四诊合参结论为准。</p>
 
     <div class="method-guide" id="method">
-      <b>◈ 体质辨识 · 通常是怎么做的</b>
+      <b>◈ 自测前必读：体质辨识的能与不能</b>
+      <p class="mg-sub">真正的中医辨识靠四诊合参，量表只是量化工具。了解这些，能帮你更准确地看待自测结果。</p>
       <div class="mg-grid">
-        <div class="mg-step"><b>壹 · 四诊合参，看的是整体状态</b><p>中医辨识体质以望、闻、问、切四诊为基础：<b>望</b>神色形态与舌象，<b>闻</b>声音气息，<b>问</b>寒热汗出、睡眠饮食、二便、情志、过敏与既往状况，<b>切</b>脉象。</p><p>四方面信息要合起来看，凭单一症状或单张照片都不足以定论，这也是体质辨识通常由中医师当面完成的原因。</p></div>
-        <div class="mg-step"><b>贰 · 用体质量表把感受量化</b><p>《中医体质分类与判定》附录给了一份标准量表：共 <b>60 道作答题</b>，分属九种体质的亚量表（平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7 条）；回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」五级作答。</p><p>每种体质的条目单独累加为原始分，再用「[(原始分 − 条目数) ÷ (条目数 × 4)] × 100」换算成 0~100 的转化分，因此能同时看出主导体质与兼夹体质。</p></div>
-        <div class="mg-step"><b>叁 · 按阈值判定，再由医师复核</b><p>偏颇体质转化分 ≥40 判「是」、30~39 判「倾向是」、＜30 判「否」；平和质转化分 ≥60 且八种偏颇质均 ＜30 判「是」，≥60 且八种偏颇质均 ＜40 判「基本是」。</p><p>量表分数是辅助线索，医师还会结合舌脉、既往病史与当下状态复核，<b>结论以医师判断为准</b>。</p></div>
-        <div class="mg-step"><b>肆 · 体质会变，需要重新评估</b><p>体质受年龄、起居、饮食、情志与四时影响，可随时间转变，也常以「主导体质 + 兼夹体质」的形式出现，调理一段时间后一般要重新评估。</p><p>孕妇、婴幼儿、慢性病急性期、正在服药或有明确不适者，应先由医师判断；体质内容仅供科普学习，不构成医疗建议。</p></div>
+        <div class="mg-step"><b>中医面诊的核心</b><p>望闻问切，四诊合参，单凭问卷不足以定论。</p></div>
+        <div class="mg-step"><b>线上自测的局限</b><p>量表是对感受的量化，用来发现倾向，不能替代医生面诊。</p></div>
+        <div class="mg-step"><b>重要提醒</b><p>体质会变需定期重测；孕妇、急症期等请先就医；<b class="mg-warn">内容仅供科普，不构成医疗建议</b></p></div>
       </div>
-      <p class="mg-note">◈ 本站问卷对应上面第 ② 步的量表自测：完整版 60 题按国标附录全条目整理，精简版 27 题是从中选出代表性条目的快速版，<b>两版的计分方法与判定标准完全相同</b>。标准原表按亚量表列出 66 条目次，其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，去重后即 60 道作答题。它不能替代四诊合参，也不要据结果自行用药。想看九种体质各自的画像，可到<a href="constitution.html">九种体质通鉴</a>；有疑问随时<a href="chat.html?q=体质辨识是怎么做的">问 AI 小药童</a>。</p>
+      <details class="mg-fold">
+        <summary>点此查看国标量表的计分与判定原理</summary>
+        <div class="mg-fold-body">
+          <p>依据《中医体质分类与判定》ZYYXH/T157-2009：完整版 <b>60 道作答题</b>分属九种体质亚量表（平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7 条），按「没有 / 偶尔 / 有时 / 经常 / 总是」五级作答。标准原表按亚量表列出 66 条目次，其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，<b>去重后即 60 道作答题</b>。</p>
+          <p><b>分数换算</b>：某体质原始分按该亚量表条目累加（平和质 6 题反向计分，1↔5、2↔4、3 不变），再用转化分 ＝ [(原始分 − 条目数) ÷ (条目数 × 4)] × 100 换算成 0~100，因此能同时看出主导体质与兼夹体质。</p>
+          <p><b>阈值判定</b>：偏颇体质转化分 ≥40 判「是」、30~39 判「倾向是」、＜30 判「否」；平和质 ≥60 且八种偏颇质均 ＜30 判「是」，≥60 且八种偏颇质均 ＜40 判「基本是」。量表分数为辅助线索，结论以医师四诊合参为准。</p>
+          <p class="mg-note">本站完整版 60 题按国标附录全条目整理，精简版 27 题从中选出代表性条目，<b>两版的计分方法与判定标准完全相同</b>。它不能替代四诊合参，也不要据结果自行用药。想看九种体质各自的画像，可到<a href="constitution.html">九种体质通鉴</a>；有疑问随时<a href="chat.html?q=体质辨识是怎么做的">问 AI 小药童</a>。</p>
+        </div>
+      </details>
+      <div class="mg-cta"><button class="btn red" onclick="scrollToQuiz()">我已了解上述局限，开始体质倾向自测 ➔</button></div>
     </div>
 
     <div class="quiz-ver">
@@ -2201,6 +2210,7 @@ function setQuizVersion(v){
   updateQuizProgress();
 }
 function setQuizMode(m){setQuizVersion("brief");} /* 兼容旧 ?m=face / ?m=quick 外链，一律回落精简版 */
+function scrollToQuiz(){var t=document.querySelector(".quiz-ver")||document.querySelector(".quiz-companion")||document.querySelector(".quiz-head");if(!t)return;var nav=document.getElementById("nav"),off=(nav?nav.offsetHeight:60)+10,y=t.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:y,behavior:"smooth"});}
 function goQuiz(m){location.href="quiz.html"+(m?("?m="+encodeURIComponent(m)):"");} /* 构建脚本会替换为带参跨页跳转 */
 function goQuizFull(){location.href="quiz.html?v=full";}
 function renderQuiz(){

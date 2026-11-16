@@ -211,14 +211,28 @@ h2 .dot{color:var(--red)}
 .quiz-review .qr-note{font-size:11.5px;color:var(--ink3)}
 .qr-more{margin-top:8px;font-size:12.5px;padding:7px 16px}
 .method-guide{margin:16px 0 6px;padding:16px 18px;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;background:linear-gradient(135deg,rgba(247,233,228,.55),rgba(231,239,234,.45))}
-.method-guide>b{display:block;font-size:14px;color:var(--red);letter-spacing:1.5px;margin-bottom:10px}
-.mg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.method-guide>b{display:block;font-size:14px;color:var(--red);letter-spacing:1.5px;margin-bottom:5px}
+.mg-sub{font-size:11.5px;color:var(--ink3);line-height:1.75;margin:0 0 12px}
+.mg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .mg-step{background:#FCFBF6;border:1px solid var(--line);border-radius:6px;padding:11px 13px}
 .mg-step>b{display:block;font-size:13px;color:var(--green);margin-bottom:5px;letter-spacing:.5px}
 .mg-step p b{display:inline;color:var(--green);font-size:12px;letter-spacing:0}
 .mg-step p{margin:0;font-size:12px;color:var(--ink2);line-height:1.85}
 .mg-step p+p{margin-top:5px}
 .mg-step a{color:var(--green);border-bottom:1px dashed var(--green)}
+.mg-warn{color:var(--red)!important;font-weight:700}
+.mg-fold{margin-top:11px;border:1px dashed var(--gold);border-radius:6px;background:rgba(255,255,255,.5)}
+.mg-fold summary{cursor:pointer;list-style:none;padding:8px 13px;font-size:12px;color:var(--green);letter-spacing:.5px;line-height:1.7}
+.mg-fold summary::-webkit-details-marker{display:none}
+.mg-fold summary::before{content:"▸ ";color:var(--red)}
+.mg-fold[open] summary::before{content:"▾ "}
+.mg-fold-body{padding:0 14px 11px;border-top:1px dashed var(--line);margin-top:2px;padding-top:9px}
+.mg-fold-body p{margin:0 0 6px;font-size:11.5px;color:var(--ink2);line-height:1.8}
+.mg-fold-body p:last-child{margin-bottom:0}
+.mg-fold-body b{color:var(--green)}
+.mg-fold-body a{color:var(--green);border-bottom:1px dashed var(--green)}
+.mg-cta{margin-top:13px;text-align:center}
+.mg-cta button{letter-spacing:1px}
 .mg-note{font-size:11.5px;color:var(--ink3);line-height:1.85;margin:10px 0 0}
 .mg-note b{color:var(--red)}
 .quiz-ver{margin:16px 0 6px;padding:14px 16px;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
@@ -237,7 +251,7 @@ h2 .dot{color:var(--red)}
 .quiz-head{margin:18px 0 14px;padding:12px 16px;border:1px dashed var(--gold);border-radius:6px;background:var(--gold-l)}
 .quiz-head b{display:block;font-size:14px;color:var(--red);letter-spacing:1.5px;margin-bottom:4px}
 .quiz-head span{font-size:12px;color:var(--ink2);line-height:1.8;display:block}
-@media(max-width:720px){.mg-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.mg-grid{grid-template-columns:1fr}.mg-sub{font-size:11px}}
 /* 首页六线知识入口 */
 .six-lane{margin:0 0 22px;padding:16px 18px 18px;border:1px solid var(--line);border-radius:4px;background:var(--paper);box-shadow:var(--shadow)}
 .six-lane .sl-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
