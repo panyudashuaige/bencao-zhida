@@ -130,8 +130,8 @@ h2 .dot{color:var(--red)}
 .btn.ghost:hover{background:var(--green-l);transform:translateY(-2px)}
 .seal-side{display:flex;align-items:center;justify-content:center;min-width:262px;position:relative;border-radius:4px;background:linear-gradient(160deg,#F3E6E0,#EDDCD3);border:1px solid #E0C9BE}
 .seal-side .zi{font-family:"Ma Shan Zheng",serif;font-size:54px;letter-spacing:14px;color:var(--red);writing-mode:vertical-rl;text-shadow:0 2px 0 rgba(166,62,40,.15)}
-.seal-side .circle{position:absolute;width:150px;height:150px;border:1px solid rgba(166,62,40,.25);border-radius:50%}
-.seal-side .circle.c2{width:190px;height:190px;opacity:.5}
+.seal-side .circle{position:absolute;width:150px;height:150px;border:1px solid rgba(166,62,40,.25);border-radius:50%;margin-top:6px}
+.seal-side .circle.c2{width:190px;height:190px;opacity:.5;margin-top:6px}
 
 /* ===== 每日本草 ===== */
 .daily{margin-top:22px;display:flex;gap:26px;align-items:flex-start}
@@ -335,8 +335,8 @@ h2 .dot{color:var(--red)}
 .bot-id span{display:block;font-size:12px;color:var(--ink3);letter-spacing:1px}
 .bot-id .online{margin-left:auto;font-size:12px;color:var(--green);letter-spacing:1px}
 .bot-id .online::before{content:"●";margin-right:5px;animation:blink 1.6s infinite}
-.side-mascot{width:158px;height:auto;position:absolute;bottom:0;left:50%;transform:translateX(-50%);filter:drop-shadow(0 12px 16px rgba(43,43,38,.22)) drop-shadow(0 3px 6px rgba(43,43,38,.1)) drop-shadow(0 0 16px var(--mglow,transparent));z-index:1;cursor:pointer;animation:breathe 3.2s ease-in-out infinite;transform-origin:50% 100%}
-.mascot-badge{position:absolute;bottom:78px;left:calc(50% + 42px);width:30px;height:30px;border-radius:50%;background:var(--green);color:#FBF3E4;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:2;border:2px solid #FBF3E4;box-shadow:0 3px 8px rgba(43,43,38,.28);font-family:"Ma Shan Zheng",cursive;transition:background .6s ease;pointer-events:none}
+.side-mascot{width:158px;height:auto;position:absolute;bottom:10px;left:50%;transform:translateX(-50%);filter:drop-shadow(0 12px 16px rgba(43,43,38,.22)) drop-shadow(0 3px 6px rgba(43,43,38,.1)) drop-shadow(0 0 16px var(--mglow,transparent));z-index:1;cursor:pointer;animation:breathe 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.mascot-badge{position:absolute;bottom:88px;left:calc(50% + 42px);width:30px;height:30px;border-radius:50%;background:var(--green);color:#FBF3E4;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:2;border:2px solid #FBF3E4;box-shadow:0 3px 8px rgba(43,43,38,.28);font-family:"Ma Shan Zheng",cursive;transition:background .6s ease;pointer-events:none}
 .mascot-badge::after{content:"藥"}
 html[data-season="春"] .mascot-badge::after{content:"春"}
 html[data-season="夏"] .mascot-badge::after{content:"夏"}
@@ -366,14 +366,22 @@ html[data-season="冬"] .mascot-badge::after{content:"冬"}
 .season-bar .skin-classic{width:auto;height:34px;padding:0 13px;border-radius:999px;font-size:12.5px;letter-spacing:1px;white-space:nowrap}
 .season-bar .skin-classic.on{background:var(--red);border-color:var(--red);color:#FBF7EC;box-shadow:0 3px 10px rgba(166,62,40,.22)}
 /* 药童台词移到右上角：放宽不再挤成四行，尾巴回指头部 */
-.mascot-bubble{position:absolute;bottom:196px;left:calc(50% + 22px);width:max-content;max-width:min(280px,64vw);transform:translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:11px 17px;font-size:13px;line-height:1.7;text-align:left;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.4px}
+.mascot-bubble{position:absolute;bottom:206px;left:calc(50% + 22px);width:max-content;max-width:min(280px,64vw);transform:translateY(6px);background:#FBF3E4;color:var(--red);border:1.5px solid rgba(166,62,40,.35);border-radius:12px;padding:11px 17px;font-size:13px;line-height:1.7;text-align:left;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:3;box-shadow:0 6px 14px rgba(43,43,38,.18);font-family:"Noto Serif SC",serif;letter-spacing:.4px}
 .mascot-bubble::after{content:"";position:absolute;bottom:-7px;left:20px;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #FBF3E4}
 .mascot-bubble.show{opacity:1;transform:translateY(0)}
-@media(max-width:720px){.mascot-bubble{left:auto;right:0;bottom:190px;max-width:min(238px,66vw);text-align:center;font-size:12.5px}.mascot-bubble::after{left:auto;right:30px}}
-.mascot-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;color:rgba(166,62,40,.65);background:rgba(251,243,228,.85);border:1px solid rgba(166,62,40,.25);padding:3px 10px;border-radius:999px;z-index:3;pointer-events:none;transition:opacity .4s}
+@media(max-width:720px){.mascot-bubble{left:auto;right:0;bottom:200px;max-width:min(238px,66vw);text-align:center;font-size:12.5px}.mascot-bubble::after{left:auto;right:30px}}
+.mascot-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;color:rgba(166,62,40,.65);background:rgba(251,243,228,.85);border:1px solid rgba(166,62,40,.25);padding:3px 10px;border-radius:999px;z-index:3;pointer-events:none;transition:opacity .4s}
 .mascot-hint.hide{opacity:0}
-.seal-side{overflow:visible;min-height:440px}
-.seal-side .zi{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:30px;letter-spacing:8px;writing-mode:vertical-rl;background:var(--red);color:#FBF3E4;padding:16px 8px;border-radius:6px;box-shadow:0 4px 12px rgba(166,62,40,.28)}
+.seal-side{overflow:visible;height:600px;min-height:0;align-self:center}
+.seal-side .zi{position:absolute;top:26px;left:50%;transform:translateX(-50%);font-size:30px;letter-spacing:8px;writing-mode:vertical-rl;background:var(--red);color:#FBF3E4;padding:16px 8px;border-radius:6px;box-shadow:0 4px 12px rgba(166,62,40,.28)}
+/* v62：双圆环内太极暗纹（约 10% 透明度）+ 首屏核心视觉组靠拢 */
+.seal-side .ring-taiji{position:absolute;top:50%;left:50%;width:140px;height:140px;transform:translate(-50%,-50%) translateY(6px);border-radius:50%;overflow:hidden;opacity:.10;pointer-events:none;z-index:0;background:linear-gradient(180deg,var(--red) 0 50%,#FBF3E4 50% 100%)}
+.seal-side .ring-taiji::before,.seal-side .ring-taiji::after{content:"";position:absolute;left:25%;width:50%;height:50%;border-radius:50%}
+.seal-side .ring-taiji::before{top:0;background:#FBF3E4}
+.seal-side .ring-taiji::after{bottom:0;background:var(--red)}
+.seal-side .ring-taiji .eye{position:absolute;left:50%;width:12%;height:12%;border-radius:50%;transform:translateX(-50%)}
+.seal-side .ring-taiji .eye.up{top:19%;background:var(--red)}
+.seal-side .ring-taiji .eye.dn{bottom:19%;background:#FBF3E4}
 .typing{display:inline-flex;gap:5px;padding:6px 2px}
 .typing i{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.2s infinite}
 .typing i:nth-child(2){animation-delay:.2s}
