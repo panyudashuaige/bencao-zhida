@@ -518,9 +518,20 @@ const CONSTITUTION_ALIASES=[
  ["气郁质",["气郁体质","气郁质","气郁","肝郁"]],
  ["特禀质",["特禀体质","特禀质","过敏体质","特禀"]]
 ];
+const TZ_SAFE_LIFE={
+ "平和质":"顺应四时，起居有常；保持规律作息与适度运动即可。",
+ "气虚质":"注意避免过度劳累；平时可适当练习八段锦、太极拳等舒缓运动；注意保暖。",
+ "阳虚质":"注意保暖避寒，尤其腰背与足部；可适当晒太阳、适度活动；避免久处阴冷。",
+ "阴虚质":"规律作息，避免熬夜；保持情绪平和；环境干燥时留意补水。",
+ "痰湿质":"注意饮食清淡有节，少食甜腻；坚持规律运动，控制体重；避免久坐少动。",
+ "湿热质":"注意饮食清淡，少食辛辣油腻；保持居住环境干爽；规律作息，适度运动。",
+ "血瘀质":"注意保暖，避免受寒；坚持适度舒展运动，避免久坐；保持情绪舒畅。",
+ "气郁质":"注意调节情绪，多与人交流；适当户外活动与舒展运动；规律作息。",
+ "特禀质":"注意规避已知过敏原，饮食清淡；记录诱因；规律作息，避免熬夜。"
+};
 function constitutionAns(c){
   const o=CONSTITUTIONS[c];
-  return `<b>${c} · 药童调养锦囊</b><div class="kv"><span class="k">体质画像</span>${o.d}</div><div class="kv"><span class="k">调养锦囊</span>${o.adv}</div><div class="kv"><span class="k">荐读书目</span>${o.books.map(x=>"《"+x+"》").join("　")}</div><div class="kv" style="color:var(--ink2)">想知道自己是不是${c}？点顶部「体质辨识」选精简版 27 题或完整版 60 题自测，两版都按 ZYYXH/T157-2009 判定；我按体质替你点亮该读的经典〜</div>`;
+  return `<b>${c} · 体质科普</b><div class="kv"><span class="k">【体质画像】</span>${o.d}</div><div class="kv"><span class="k">【生活提示】</span>${TZ_SAFE_LIFE[c]||"顺应四时，起居有常，避免过度劳累。"}</div><div class="kv" style="color:var(--red);font-weight:700">⚠️【安全提示】：中医调理需辨证论治，常涉及专业药材配伍。本系统不提供任何药物及食疗处方，请勿自行盲目进补，建议前往正规医院由中医师面诊指导。</div>`;
 }
 const CONSTITUTIONS={
  "平和质":{d:"阴阳气血调和，体态适中、面色红润、精力充沛。",adv:"顺应四时即可，坚持\u201c食饮有节，起居有常\u201d。",books:["黄帝内经"]},
@@ -552,7 +563,7 @@ const TZ_EXTRA={
  "气郁质":{g:"excess",tag:"气郁",x:"神情抑郁、多愁善感、胸胁胀满、善太息，咽中如有物梗。",y:"易见郁证、不寐与情志相关的诸般不适。",yes:"疏肝理气，多交友抒怀，户外舒展与规律作息。",no:"忌独处闷坐、过度思虑与借酒消愁。",herb:["陈皮","薄荷","香附"],acup:["太冲","内关"],f:"逍遥散"},
  "特禀质":{g:"special",tag:"特禀",x:"易过敏，对药物、食物、花粉、气味敏感，常见鼻塞喷嚏或皮疹。",y:"与先天禀赋相关，易见鼻鼽、瘾疹、咳喘等过敏反应。",yes:"益气固表，避开明确致敏原，饮食清淡并记录诱因。",no:"忌盲目进补、随意试用新药新食与接触已知过敏原。",herb:["黄芪","防风","五味子"],acup:["足三里","列缺"],f:"玉屏风散"}
 };
-const TZ_QUESTIONS=["九种体质是哪九种","气虚体质怎么调理","阳虚体质怎么调理","阴虚体质怎么调理","痰湿体质怎么调理","湿热体质怎么调理","血瘀体质怎么调理","气郁体质怎么调理","特禀体质怎么调理","体质会随四时变化吗","平和质还要调养吗"];
+const TZ_QUESTIONS=["九种体质是哪九种","什么是气虚质？","什么是阳虚质？","什么是阴虚质？","什么是痰湿质？","什么是湿热质？","什么是血瘀质？","什么是气郁质？","什么是特禀质？","体质会随四时变化吗","平和质还要调养吗"];
 /* 九种体质通鉴：按四组渲染九张卡，每张卡的画像 / 调养 / 荐书都取自 CONSTITUTIONS，不另存第二份文案 */
 function renderConstitution(){
   const area=$("#tzArea");if(!area||area.dataset.done)return;
@@ -1547,9 +1558,9 @@ function aiProbe(){ // 探测后端是否已配密钥，避免每次白等超时
     const ctl=new AbortController();setTimeout(()=>ctl.abort(),2500);
     fetch(AI_API,{signal:ctl.signal}).then(r=>r.ok?r.json():null).then(d=>{
       AI_READY=!!(d&&d.ok&&d.ready);
-      aiState(AI_READY?`AI 已连接 · ${d.model||"模型"}`:"未配置密钥 · 本地典籍模式",AI_READY);
-    }).catch(()=>{AI_READY=false;aiState("后端离线 · 本地典籍模式",false);});
-  }catch(e){AI_READY=false;aiState("后端离线 · 本地典籍模式",false);}
+      aiState(AI_READY?"🛡️ 权威知识库防幻觉模式":"🛡️ 权威知识库防幻觉模式",AI_READY);
+    }).catch(()=>{AI_READY=false;aiState("🛡️ 权威知识库防幻觉模式",false);});
+  }catch(e){AI_READY=false;aiState("🛡️ 权威知识库防幻觉模式",false);}
 }
 function toggleAI(){
   AI_ON=!AI_ON;try{localStorage.setItem("bzAiOn",AI_ON?"1":"0");}catch(e){}
@@ -2323,14 +2334,14 @@ function calcQuiz(){
 }
 
 /* 快捷问题：末位随真实季节轮换（与四季换肤共用 seasonOf，预览切换时同步更衣） */
-const CHIP_SEASON={春:"春天怎么养生",夏:"夏天吃什么好",秋:"秋天怎么防燥",冬:"冬天进补吃什么"};
+const CHIP_SEASON={春:"春天怎么养生",夏:"夏天吃什么好",秋:"秋天怎么防燥",冬:"麻黄在古籍中怎么记载？"};
 /* 养生话题推荐池：每次进问答页随机换一批，25 个话题各配一句推荐问法 */
-const CHIP_POOL=["上火怎么办","湿气重怎么祛湿","经常熬夜怎么补救","感冒了怎么办","咳嗽有痰怎么办","便秘怎么调理","痛经怎么缓解","中医减肥怎么减","总长痘怎么办","口臭怎么破","贫血怎么补血","手脚冰凉怎么暖","总是疲劳怎么补","掉头发严重怎么办","脾胃不好怎么养","口腔溃疡老复发怎么办","焦虑压力大怎么调","免疫力差怎么提高","嗓子疼怎么办","八段锦怎么练","中暑了怎么急救"];
+const CHIP_POOL=["什么是气虚质？","足三里穴在哪里？","陈皮和青皮怎么区分？","四君子汤出自哪部典籍？","什么是望闻问切？","本草纲目是谁编撰的？","什么是经络？","麻黄在古籍中怎么记载？","什么是阴阳五行？","枸杞子产地在哪里？","《黄帝内经》成书于何时？","什么是道地药材？","足太阳膀胱经循行哪里？","什么是四气五味？","张仲景有哪些著作？","什么是君臣佐使？","金银花与菊花有何不同？","什么是药食同源？","孙思邈被称为什么？","什么是八段锦？","《伤寒论》讲什么？"];
 /* 趣味/经典/辨药池：娱乐互动、作者轶事、荐读、火眼金睛、名方穴位，也随批轮换 */
 const CHIP_FUN=["抽个养生签","李时珍是谁","推荐读什么书","孙思邈是谁","张仲景是谁","黄芪和甘草怎么区分","金银花和菊花怎么区分","当归和党参怎么区分","山药和天麻怎么区分","陈皮和青皮怎么区分","枸杞子和五味子怎么区分","四君子汤治什么","六味地黄丸治什么","足三里有什么用","涌泉穴在哪","合谷穴管什么"];
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function chipQ(){
-  const anchor=[lastQuiz?lastQuiz.replace("质","")+"体质怎么调理":"气虚体质怎么调理",CHIP_SEASON[seasonOf()]];
+  const anchor=[lastQuiz?"什么是"+lastQuiz.replace("质","")+"质？":"什么是气虚质？",CHIP_SEASON[seasonOf()]];
   return anchor.concat(shuffle(CHIP_POOL.slice()).slice(0,4),shuffle(CHIP_FUN.slice()).slice(0,3)); // 锚点2 + 随机养生4 + 随机趣味3
 }
 function renderChips(){const c=$("#chips");if(c)c.innerHTML=chipQ().map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("")+`<button class="chip-rf" onclick="renderChips()" title="换一批推荐问题">⟳ 换一批</button>`;}
@@ -2375,7 +2386,7 @@ function answerBubble(html){ // 打字机：先建好完整气泡，再逐字揭
 function typing(){
   return bubble("本草智答",'<span class="think-line"><span class="typing"><i></i><i></i><i></i></span><span class="think-txt">正在思考：AI小药童正在检索本地典籍库...</span></span>');
 }
-function greet(){bubble("本草智答","你好呀！我是<b>本草智答</b>，一只熟读经典的小药童〜 中药、方剂、穴位、九种体质调养，感冒、便秘、减肥、失眠这些生活小难题，尽管来问。答不上来的话……那一定是问题太偏了（叉腰）。");}greet();
+function greet(){bubble("本草智答","你好呀！我是本草智答。我能为你解释中医概念、讲解古籍记载、科普本草和穴位。但我做不了疾病诊断，也不能给你开具处方或食疗方哦。");}greet();
 function norm(s){Object.keys(SYNONYM).forEach(k=>s=s.split(k).join(SYNONYM[k]));return s;}
 function askKB(q){if(location.pathname.indexOf("chat.html")>=0){try{send(q);}catch(e){}}else{location.href="chat.html?q="+encodeURIComponent(q);}}
 const QUIPS=[
@@ -2511,7 +2522,7 @@ function send(q){
         answerBubble(best.ans+(best.topic?fitBookAns():""));
       }else{
         reportMiss(q);
-        answerBubble(`这题的详解本药童还在消化（挠头）〜 题干里的关键词倒是问对地方了：我最拿手 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题，换个关键词再问问看？`);
+        answerBubble("抱歉，我的本地知识库目前尚未收录该问题。为了您的安全，我无法提供未经考证的回答。建议您查阅专业文献或咨询执业医师。");
       }
     }
     else if(funStrong){answerBubble((typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
@@ -2521,7 +2532,7 @@ function send(q){
     else if(fun){answerBubble((typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
-      answerBubble(`哎呀，这题把本药童考住了（挠头）〜 我目前最拿手的是 <b>76味本草、30首名方、32处穴位、20部经典</b>，外加${TOPICS.length}个养生话题——感冒、便秘、痛经、减肥、痘痘、口臭、手脚冰凉……都是本童子的舒适区。换个问法试试？或者点下面几道拿手菜：<div class="chips" style="margin:8px 0 0">${chipQ().slice(0,5).map(x=>`<button onclick="askKB('${x}')">${x}</button>`).join("")}</div>`);
+      answerBubble("抱歉，我的本地知识库目前尚未收录该问题。为了您的安全，我无法提供未经考证的回答。建议您查阅专业文献或咨询执业医师。");
     }
     // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
     const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
