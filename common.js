@@ -2522,7 +2522,7 @@ function send(q){
         answerBubble(best.ans+(best.topic?fitBookAns():""));
       }else{
         reportMiss(q);
-        answerBubble("抱歉，我的本地知识库目前尚未收录该问题。为了您的安全，我无法提供未经考证的回答。建议您查阅专业文献或咨询执业医师。");
+        answerBubble("哎呀，这个问题可把小药童难住啦～我的本地书箱里暂时还没收录这个答案。为了你的安全，没考证过的内容我可不敢乱讲哦。建议翻翻专业文献，或者咨询执业医师吧😉");
       }
     }
     else if(funStrong){answerBubble((typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
@@ -2532,7 +2532,7 @@ function send(q){
     else if(fun){answerBubble((typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
-      answerBubble("抱歉，我的本地知识库目前尚未收录该问题。为了您的安全，我无法提供未经考证的回答。建议您查阅专业文献或咨询执业医师。");
+      answerBubble("哎呀，这个问题可把小药童难住啦～我的本地书箱里暂时还没收录这个答案。为了你的安全，没考证过的内容我可不敢乱讲哦。建议翻翻专业文献，或者咨询执业医师吧😉");
     }
     // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
     const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
