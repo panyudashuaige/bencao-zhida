@@ -719,6 +719,18 @@ const TZ_EXTRA={
  "气郁质":{g:"excess",tag:"气郁",x:"神情抑郁、多愁善感、胸胁胀满、善太息，咽中如有物梗。",y:"易见郁证、不寐与情志相关的诸般不适。",yes:"疏肝理气，多交友抒怀，户外舒展与规律作息。",no:"忌独处闷坐、过度思虑与借酒消愁。",herb:["陈皮","薄荷","香附"],acup:["太冲","内关"],f:"逍遥散"},
  "特禀质":{g:"special",tag:"特禀",x:"易过敏，对药物、食物、花粉、气味敏感，常见鼻塞喷嚏或皮疹。",y:"与先天禀赋相关，易见鼻鼽、瘾疹、咳喘等过敏反应。",yes:"益气固表，避开明确致敏原，饮食清淡并记录诱因。",no:"忌盲目进补、随意试用新药新食与接触已知过敏原。",herb:["黄芪","防风","五味子"],acup:["足三里","列缺"],f:"玉屏风散"}
 };
+/* v94 九种体质卡片三段式文案：画像=体质条目，表现=合并旧「常见表现+易感倾向」去重，原则=合并旧「调养宜+忌+锦囊」去重。仅此一份口径，问卷/问答仍用 CONSTITUTIONS、TZ_EXTRA。 */
+const TZ_CARD3={
+ "平和质":{pic:"阴阳气血调和，体态适中，面色红润，精力充沛。",perf:"睡眠与食欲良好，性格随和；对外界环境适应力强，较少生病。",care:"顺应四时，饮食有节，起居有常。保持适度运动，三餐规律；不必刻意进补，忌长期大温大寒或过食肥甘。"},
+ "气虚质":{pic:"元气不足，易疲乏、气短、自汗，语声低微。",perf:"稍动即自汗，舌淡苔白；易患感冒、病后恢复偏慢，劳倦后加重。",care:"补气健脾，可食山药、莲子、小米等平补食材，缓步运动如八段锦，作息规律勿过劳；如需用黄芪等药材请遵医嘱。忌大汗耗气、生冷伤脾与长期熬夜。"},
+ "阳虚质":{pic:"阳气不足，畏寒喜暖、手足不温、喜热饮食。",perf:"精神不振，舌淡胖；易见腹泻、腰膝冷痛与水肿，冬重夏轻。",care:"温阳散寒，注意保暖、晒背，可食生姜、羊肉等温性食物；如需用当归等药材请遵医嘱。忌生冷瓜果、久处阴冷与过用寒凉。"},
+ "阴虚质":{pic:"阴液亏少，手足心热、口干咽燥、易失眠。",perf:"潮热盗汗，舌红少津；易见虚烦不眠、眼干便秘与虚火上炎。",care:"滋阴润燥，饮食清淡，多食百合、银耳等润燥食物，子时前入睡、静养少熬；如需用麦冬等药材请遵医嘱。忌熬夜、辛辣燥热与大汗伤津。"},
+ "痰湿质":{pic:"痰湿凝聚，体形偏胖、腹部松软、身重不爽。",perf:"口黏，舌苔白厚腻；易见困倦、痰饮内生，梅雨长夏尤甚。",care:"健脾祛湿，饮食清淡有时，可选茯苓、薏苡仁等健脾食材，坚持微汗运动；如需用陈皮等药材请遵医嘱。忌甜腻油荤、久坐少动与居处潮湿。"},
+ "湿热质":{pic:"湿热内蕴，面部油腻、口苦口臭、易生痤疮。",perf:"身重困倦，大便黏滞不爽；易见口疮、下焦湿热，夏秋闷热时加重。",care:"清热利湿，居处干爽，饮食清淡多蔬果，可食金银花、绿豆等清利食材；如需用菊花等药材请遵医嘱。忌辛辣烧烤、酒酪甜腻与久处潮湿闷热。"},
+ "血瘀质":{pic:"血行不畅，肤色晦暗、易生瘀斑、口唇偏暗。",perf:"舌有瘀点，痛处固定如刺；易见诸般痛证，得温则舒、遇寒加重。",care:"行气活血，多舒展运动，注意保暖通络，可食山楂、黑木耳等活血食材；如需用玫瑰花等药材请遵医嘱。忌久坐久卧、寒凝血涩与情志长期郁结。"},
+ "气郁质":{pic:"气机郁滞，神情抑郁、多愁善感、胸胁胀满。",perf:"善太息，咽中如有物梗；易见郁证、不寐与情志相关诸般不适。",care:"疏肝理气，多交友抒怀、户外舒展，作息规律，可食陈皮、佛手等理气食材；如需用薄荷等药材请遵医嘱。忌独处闷坐、过度思虑与借酒消愁。"},
+ "特禀质":{pic:"先天禀赋特殊，易过敏，对药物、食物、花粉敏感。",perf:"常见鼻塞喷嚏或皮疹；易见鼻鼽、瘾疹、咳喘等过敏反应。",care:"益气固表，饮食清淡、规律作息并记录诱因，避开明确致敏原；如需用玉屏风类成药请遵医嘱。忌盲目进补、随意试用新药新食与接触已知过敏原。"}
+};
 const TZ_QUESTIONS=["九种体质是哪九种","什么是气虚质？","什么是阳虚质？","什么是阴虚质？","什么是痰湿质？","什么是湿热质？","什么是血瘀质？","什么是气郁质？","什么是特禀质？","体质会随四时变化吗","平和质还要调养吗"];
 /* v90：底部下拉框选择体质调理问题 → 交给 AI 小药童（三段式回复） */
 function askTzCare3(){
@@ -731,30 +743,27 @@ function renderConstitution(){
   const area=$("#tzArea");if(!area||area.dataset.done)return;
   const chips=$("#tzChips");
   if(chips)chips.innerHTML=TZ_QUESTIONS.map(q=>`<button onclick="askKB('${q}')">${q}</button>`).join("");
-  /* v51：关联条目改为跳到对应页面并带体质筛选参数，不再只弹问答 */
-  const links=(arr,label,page,tzName)=>arr&&arr.length
-    ?`<div class="kv"><span class="k">${label}</span>`+arr.map(n=>`<a class="tz-link" href="${page}.html?tz=${encodeURIComponent(tzName)}">${n}</a>`).join("")+`</div>`:"";
+  /* v95：关联条目精准定位到具体卡片（herb?h= / acupoint?a=），复用 focusCardByParam 高亮并滚动；不再只跳列表页筛选 */
+  const KEY={herb:"h",acupoint:"a"};
+  const links=(arr,label,page)=>arr&&arr.length
+    ?`<div class="kv"><span class="k">${label}</span>`+arr.map(n=>`<a class="tz-link" href="${page}.html?${KEY[page]}=${encodeURIComponent(n)}" title="查看${n}卡片">${n}</a>`).join("")+`</div>`:"";
   let html="";
   TZ_GROUPS.forEach(g=>{
     const names=Object.keys(CONSTITUTIONS).filter(n=>TZ_EXTRA[n]&&TZ_EXTRA[n].g===g.k);
     if(!names.length)return;
     html+=`<div class="tz-grp"><h3>${g.t}</h3><p>${g.d}</p></div><div class="mat-grid tz-grid">`;
     names.forEach(n=>{
-      const c=CONSTITUTIONS[n],e=TZ_EXTRA[n];
+      const c=CONSTITUTIONS[n],e=TZ_EXTRA[n],t=TZ_CARD3[n];
       html+=`<div class="mat-card tz-card">
         <div class="mat-card-h"><b>${n}</b><span class="tz-tag">${e.tag}</span><span class="mat-cat">${g.k==="balanced"?"平和态":"偏颇质"}</span></div>
-        <div class="kv"><span class="k">体质画像</span>${c.d}</div>
-        <div class="kv"><span class="k">常见表现</span>${e.x}</div>
-        <div class="kv"><span class="k">易感倾向</span>${e.y}</div>
-        <div class="kv"><span class="k">调养宜</span>${e.yes}</div>
-        <div class="kv"><span class="k">调养忌</span>${e.no}</div>
-        <div class="kv"><span class="k">调养锦囊</span>${c.adv}</div>
+        <div class="kv"><span class="k">体质画像</span>${t.pic}</div>
+        <div class="kv"><span class="k">常见表现</span>${t.perf}</div>
+        <div class="kv"><span class="k">调养原则</span>${t.care}</div>
         <div class="tz-adv-note">⚠️ 注：药膳需辨证，体质复杂者请咨询中医师，切勿盲目进补。</div>
-        ${links(e.herb,"关联本草","herb",n)}${links(e.acup,"关联穴位","acupoint",n)}
+        ${links(e.herb,"关联本草","herb")}${links(e.acup,"关联穴位","acupoint")}
         ${e.f?`<div class="kv"><span class="k">关联名方文献：</span><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}" onclick="event.preventDefault();guardFormulaDoc(this.href)">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义与服法见「名方要诀」页</span></div>`:""}
         <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>`<a class="tz-link" href="read.html">《${x}》</a>`).join("")}</div>
-        <div class="kv"><span class="k">本站可查</span><a class="tz-link" href="herb.html?tz=${encodeURIComponent(n)}">本草名录</a><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}">名方要诀</a><a class="tz-link" href="acupoint.html?tz=${encodeURIComponent(n)}">经络要穴</a></div>
-        <button class="btn ghost mat-ask" onclick="askKB('${n.replace("质","")}体质怎么调理')">问小药童 · ${n}怎么调养</button>
+        <button class="btn mat-ask-cta" onclick="askKB('${n.replace("质","")}体质怎么调理')">✦ 问小药童 · ${n}怎么调养</button>
       </div>`;
     });
     html+=`</div>`;
@@ -977,6 +986,12 @@ const SEASON_GREET={
 function updateSeasonImg(){const si=$("#seasonImg");if(si)si.src="assets/"+SEASON_IMG[seasonOf()];}
 function seasonOf(){
   if(window._seasonOv)return window._seasonOv; // 四季预览：人工切换优先于真实节气
+  /* v93: 人工换季跨页保持——从会话存储恢复本次选择（与 bcSkin 同语义：同标签沿用/新标签回当季） */
+  if(window._seasonOv===undefined||window._seasonOv===null){
+    try{const saved=sessionStorage.getItem("bcSeason");
+      if(saved&&["春","夏","秋","冬"].indexOf(saved)>=0){window._seasonOv=saved;return saved;}
+    }catch(e){}
+  }
   const n=new Date(),m=n.getMonth()+1,d=n.getDate();
   return (m>11||(m===11&&d>=7)||m<2||(m===2&&d<4))?"冬":(m<5||(m===5&&d<6))?"春":(m<8||(m===8&&d<8))?"夏":"秋";
 }
@@ -995,6 +1010,7 @@ function buildSeasonFx(s){
 const SEASON_SKIN={春:"spring",夏:"summer",秋:"autumn",冬:"winter"};
 function setSeason(s){
   window._seasonOv=s;
+  try{sessionStorage.setItem("bcSeason",s);}catch(e){}   // v93: 换季跨页保持
   document.documentElement.dataset.season=s;
   buildSeasonFx(s);
   document.querySelectorAll(".season-bar button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
@@ -1298,6 +1314,7 @@ function renderFourSeasons(s){
 function fourSetSeason(s){
   if(FOUR_KEYS.indexOf(s)<0)return;
   window._seasonOv=s;
+  try{sessionStorage.setItem("bcSeason",s);}catch(e){}   // v93: 换季跨页保持
   document.documentElement.dataset.season=s;
   buildSeasonFx(s);
   updateSeasonImg();
@@ -1306,6 +1323,7 @@ function fourSetSeason(s){
 }
 function fourToday(){
   window._seasonOv=null;
+  try{sessionStorage.removeItem("bcSeason");}catch(e){}   // v93: 回今日=取消人工选择
   const s=seasonOf();
   document.documentElement.dataset.season=s;
   buildSeasonFx(s);
@@ -1530,6 +1548,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   /* 经典 = 一键复原：药童回经典装，页面主色 / 飘落物 / 插画 / 荐读回到当令真实节气 */
   function restoreSeason(){
     window._seasonOv=null;
+    try{sessionStorage.removeItem("bcSeason");}catch(e){}   // v93: 经典复原=取消人工选择
     const s=seasonOf();
     document.documentElement.dataset.season=s;
     buildSeasonFx(s);
