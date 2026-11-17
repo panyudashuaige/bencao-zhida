@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>本草智答 · AI 小药童六线知识一问即答</title>
-<meta name="description" content="本草智答：AI 小药童陪你读经典、认本草、考名方、寻穴位、顺四时、辨体质，六线知识都能一键追问；体质辨识依据《中医体质分类与判定》ZYYXH/T157-2009 提供完整版 60 题与精简版 27 题，按国标判定体质并荐读。">
+<meta name="description" content="本草智答：AI 小药童陪你读经典、认本草、考名方、寻穴位、顺四时、辨体质，六线知识都能一键追问；体质辨识依据《中医体质分类与判定》ZYYXH/T157-2009 提供完整版 60 题与快捷版 27 题，按国标判定体质并荐读。">
 <link rel="stylesheet" href="common.css">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="apple-touch-icon" href="assets/appicon-180.png">
@@ -29,13 +29,13 @@
  <div class="nav-inner">
   <a href="index.html" data-p="home" class="on">首页</a>
   <a href="quiz.html" data-p="quiz">体质辨识</a>
+  <a href="constitution.html" data-p="constitution">九种体质</a>
   <a href="chat.html" data-p="chat">本草问答</a>
   <a href="read.html" data-p="read">经典荐读</a>
   <a href="herb.html" data-p="herb">本草名录</a>
   <a href="formula.html" data-p="formula">名方要诀</a>
   <a href="acupoint.html" data-p="acupoint">经络要穴</a>
   <a href="seasons.html" data-p="seasons">四时调神</a>
-  <a href="constitution.html" data-p="constitution">九种体质</a>
   <a href="album.html" data-p="album">本草图鉴</a>
   <a href="game.html" data-p="game">百草试炼</a>
   <a href="checkin.html" data-p="checkin">岐黄打卡</a>
@@ -50,7 +50,7 @@
       <svg class="hero-cloud" viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 6 0 11 4 13 9 6-1 11 3 12 8 1 6-4 13-12 13H14z" opacity=".85"/><path d="M30 44c2-4 6-6 10-5" opacity=".5"/><path d="M78 54c-4 0-7-3-7-6s3-6 6-6c1-4 4-7 9-7 4 0 7 2 8 5 4 0 7 3 7 6 1 4-3 8-8 8H78z" opacity=".6"/><path d="M92 54c1-2 3-4 5-3" opacity=".4"/></svg>
       <div class="h-sub">—— 一部会对话的本草纲目 ——</div>
       <h1>本草<em>智答</em></h1>
-      <p><b>六线知识，一问即答；识体质，按国标判定</b>——本站整理<b>经典、本草、名方、穴位、四时、体质</b>六线知识，每一条都能一键交给 AI 小药童追问。体质辨识依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，提供<b>完整版 60 题</b>与<b>精简版 27 题</b>两份问卷，两版同用国标的转化分与判定阈值；答完生成体质档案，经典荐读随即点亮契合书目，再翻开原文选段与白话译文。问卷为科普自测，非医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>
+      <p><b>六线知识，一问即答；识体质，按国标判定</b>——本站整理<b>经典、本草、名方、穴位、四时、体质</b>六线知识，每一条都能一键交给 AI 小药童追问。体质辨识依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009，提供<b>完整版 60 题</b>与<b>快捷版 27 题</b>两份问卷，两版同用国标的转化分与判定阈值；答完生成体质档案，经典荐读随即点亮契合书目，再翻开原文选段与白话译文。问卷为科普自测，非医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>
       <div class="hero-stats">
         <div><b id="hbStat">0</b><span>味本草</span></div>
         <div><b id="fmStat">0</b><span>首名方</span></div>
@@ -63,7 +63,7 @@
         <div><b>6</b><span>线知识</span></div>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <button class="btn red" onclick="goQuiz('full')">答 27 题精简版 · 开始识体质</button>
+        <button class="btn red" onclick="goQuiz('full')">答 27 题快捷版 · 开始识体质</button>
         <button class="btn ghost" onclick="goQuizFull()">完整版 60 题（国标全条目）→</button>
         <a class="btn ghost" style="text-decoration:none" href="quiz.html#method">体质辨识是怎么做的 →</a>
         <button class="btn ghost" onclick="go('read')">按体质荐经典 →</button>
@@ -95,16 +95,16 @@
     <div class="ap-head">
       <span class="ap-tag">✦ 使用流程</span>
       <h3>选问卷 → 识体质 → 荐经典 → 读原文</h3>
-      <p>体质辨识页先讲清中医辨识体质通常采用的方法，再按《中医体质分类与判定》提供完整版 60 题与精简版 27 题两份问卷，判定标准完全相同。答完生成体质档案，经典荐读按档案点亮契合书目，再翻开原文选段与白话译文；问卷为科普自测，确切判定与调理以中医师四诊合参结论为准。下面四步依次进行，随时可以从任意一步开始。</p>
+      <p>体质辨识页先讲清中医辨识体质通常采用的方法，再按《中医体质分类与判定》提供完整版 60 题与快捷版 27 题两份问卷，判定标准完全相同。答完生成体质档案，经典荐读按档案点亮契合书目，再翻开原文选段与白话译文；问卷为科普自测，确切判定与调理以中医师四诊合参结论为准。下面四步依次进行，随时可以从任意一步开始。</p>
     </div>
     <div class="ap-flow">
-      <button class="ap-step" onclick="goQuiz('full')"><b>壹 · 选问卷版本</b><span>精简版 27 题约 3 分钟，完整版 60 题约 8 分钟，均按国标判定</span><em>交给 AI 小药童 →</em></button>
+      <button class="ap-step" onclick="goQuiz('full')"><b>壹 · 选问卷版本</b><span>快捷版 27 题约 3 分钟，完整版 60 题约 8 分钟，均按国标判定</span><em>交给 AI 小药童 →</em></button>
       <button class="ap-step" onclick="goQuiz('full')"><b>贰 · 生成体质档案</b><span>自动算转化分，判「是 / 倾向是 / 否」，兼夹体质一并列出</span><em>写入体质档案 →</em></button>
       <button class="ap-step" onclick="go('read')"><b>叁 · 按体质荐书</b><span>二十部经典中与你相契的书目自动点亮，并给出药童导读</span><em>只看契合的 →</em></button>
       <button class="ap-step" onclick="go('read')"><b>肆 · 翻开原文</b><span>原文选段 + 白话译文 + 药童领读，读完还能去问答追问</span><em>把经典读进去 →</em></button>
     </div>
     <div class="ap-cta">
-      <button class="btn red" onclick="goQuiz('full')">开始 27 题精简版</button>
+      <button class="btn red" onclick="goQuiz('full')">开始 27 题快捷版</button>
       <button class="btn ghost" onclick="goQuizFull()">完整版 60 题 →</button>
       <a class="btn ghost" style="text-decoration:none" href="quiz.html#method">体质辨识是怎么做的 →</a>
       <span class="ap-note">两版问卷均依据 ZYYXH/T157-2009 判定，属科普自测、非医疗诊断；确切判定与调理以中医师四诊合参结论为准</span>
@@ -130,7 +130,7 @@
     <span class="step" data-p="checkin" onclick="go('checkin')" title="进入岐黄打卡"><b>六</b>勤打卡 · 日日岐黄缘</span>
   </div>
   <div class="home-feats">
-    <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><span class="kicker">识 · 国标判定</span><div class="gly">体</div><b>体质辨识</b><span class="desc">完整版 60 题 · 精简版 27 题<br>判定依据 ZYYXH/T157-2009</span><span class="meta" data-meta="quiz">双版本问卷 · 国标判定标准</span></div>
+    <div class="feat" data-p="quiz" onclick="go('quiz')"><span class="more">→</span><span class="kicker">识 · 国标判定</span><div class="gly">体</div><b>体质辨识</b><span class="desc">完整版 60 题 · 快捷版 27 题<br>判定依据 ZYYXH/T157-2009</span><span class="meta" data-meta="quiz">双版本问卷 · 国标判定标准</span></div>
     <div class="feat" data-p="chat" onclick="go('chat')"><span class="more">→</span><span class="kicker">问 · 答疑</span><div class="gly">问</div><b>本草问答</b><span class="desc">中药 · 方剂 · 穴位 · 养生<br>小药童有问必答</span><span class="meta" data-meta="chat">中药 / 方剂 / 穴位 / 养生</span></div>
     <div class="feat" data-p="game" onclick="go('game')"><span class="more">→</span><span class="kicker">辨 · 试炼</span><div class="gly">辨</div><b>百草试炼</b><span class="desc">练习 + 知识竞赛双模式<br>混合题库考眼力考学问</span><span class="meta" data-meta="game">练习 14 题 · 竞赛 21 题</span></div>
     <div class="feat" data-p="album" onclick="go('album')"><span class="more">→</span><span class="kicker">鉴 · 集章</span><div class="gly">鉴</div><b>本草图鉴</b><span class="desc">集章点亮工笔画像<br>集齐十四味做园主</span><span class="meta" data-meta="album">14 味工笔画像待点亮</span></div>

@@ -173,7 +173,7 @@ h2 .dot{color:var(--red)}
 @media(max-width:900px){.ap-flow{grid-template-columns:repeat(2,1fr)}.ap-step::after{display:none}}
 @media(max-width:560px){.ai-path{padding:22px 18px}.ap-flow{grid-template-columns:1fr}.ap-step span{min-height:0}}
 
-/* v48：体质辨识页 = 国标 60 题完整版 + 27 题精简版 + 方法科普；首页 = 六线知识专区 ===== */
+/* v48：体质辨识页 = 国标 60 题完整版 + 27 题快捷版 + 方法科普；首页 = 六线知识专区 ===== */
 .face-top{display:flex;gap:12px;align-items:center;background:var(--green-l);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:4px;padding:10px 14px;margin:14px 0}
 .face-top img{width:48px;height:48px;border-radius:50%;object-fit:contain;object-position:center bottom;background:#fff;border:1px solid var(--line);flex:none}
 .face-top b{display:block;font-size:13.5px;color:var(--green);letter-spacing:1px}

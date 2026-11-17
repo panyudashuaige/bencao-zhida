@@ -39,7 +39,7 @@ const PAGE_HTML={
           <p>依据《中医体质分类与判定》ZYYXH/T157-2009：完整版 <b>60 道作答题</b>分属九种体质亚量表（平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7 条），按「没有 / 偶尔 / 有时 / 经常 / 总是」五级作答。标准原表按亚量表列出 66 条目次，其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，<b>去重后即 60 道作答题</b>。</p>
           <p><b>分数换算</b>：某体质原始分按该亚量表条目累加（平和质 6 题反向计分，1↔5、2↔4、3 不变），再用转化分 ＝ [(原始分 − 条目数) ÷ (条目数 × 4)] × 100 换算成 0~100，因此能同时看出主导体质与兼夹体质。</p>
           <p><b>阈值判定</b>：偏颇体质转化分 ≥40 判「是」、30~39 判「倾向是」、＜30 判「否」；平和质 ≥60 且八种偏颇质均 ＜30 判「是」，≥60 且八种偏颇质均 ＜40 判「基本是」。量表分数为辅助线索，结论以医师四诊合参为准。</p>
-          <p class="mg-note">本站完整版 60 题按国标附录全条目整理，精简版 27 题从中选出代表性条目，<b>两版的计分方法与判定标准完全相同</b>。它不能替代四诊合参，也不要据结果自行用药。想看九种体质各自的画像，可到<a href="constitution.html">九种体质通鉴</a>；有疑问随时<a href="chat.html?q=体质辨识是怎么做的">问 AI 小药童</a>。</p>
+          <p class="mg-note">本站完整版 60 题按国标附录全条目整理，快捷版 27 题从中选出代表性条目，<b>两版的计分方法与判定标准完全相同</b>。它不能替代四诊合参，也不要据结果自行用药。想看九种体质各自的画像，可到<a href="constitution.html">九种体质通鉴</a>；有疑问随时<a href="chat.html?q=体质辨识是怎么做的">问 AI 小药童</a>。</p>
         </div>
       </details>
       <details class="mg-fold" id="compoundFold">
@@ -70,7 +70,7 @@ const PAGE_HTML={
     </div>
     <div class="q-toast" id="qToast"><b>药童</b><span id="qToastTxt"></span></div>
 
-    <div class="quiz-head" id="quizHead"><b>◈ 精简版 · 27 题</b><span>计分与判定阈值依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009。</span></div>
+    <div class="quiz-head" id="quizHead"><b>◈ 快捷版 · 27 题</b><span>计分与判定阈值依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009。</span></div>
     <div class="last-phys" id="lastPhys" style="display:none"></div>
     <div id="qList"></div>
     <div id="quizSubmit" style="text-align:center;margin-top:16px"><button class="btn red" onclick="calcQuiz()">提交 · 判定体质并荐经典</button></div>
@@ -197,7 +197,7 @@ const PAGE_HTML={
     <p class="desc">本页依据《中医体质分类与判定》整理平和、气虚、阳虚等九种体质的画像与调养宜忌，并精准关联对应的本草、名方与穴位。想知道自己属于哪一种？可前往「体质辨识」完成问卷自测，或直接点击卡片追问AI小药童。</p>
     ${knowBar('constitution','九种体质')}
     <div class="tz-lead">
-      <a class="btn red" style="text-decoration:none" href="quiz.html?m=full">答 27 题精简版辨体质</a>
+      <a class="btn red" style="text-decoration:none" href="quiz.html?m=full">答 27 题快捷版辨体质</a>
       <a class="btn ghost" style="text-decoration:none" href="quiz.html?v=full">完整版 60 题（国标全条目）→</a>
       <a class="btn ghost" style="text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a>
       <a class="btn ghost" style="text-decoration:none" href="read.html">按体质荐经典 →</a>
@@ -2200,7 +2200,7 @@ function refreshFeatMeta(){
     const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
     const h=HERBS[doy%HERBS.length],stamps=alCount(),streak=ciStreak();
     const doneCi=ciGet().d.includes(ciKey());
-    put("quiz",p?`已测 · ${p.n}（${p.j}）· 契合书目已点亮`:"未测评 · 精简版 27 题 / 完整版 60 题",!!p);
+    put("quiz",p?`已测 · ${p.n}（${p.j}）· 契合书目已点亮`:"未测评 · 快捷版 27 题 / 完整版 60 题",!!p);
     put("chat",`${corpus().length} 条典籍语料 · 可追问详解`,false);
     put("game",best?`竞赛最佳 ${best.s} 分 / ${best.n} 题`:"练习 14 题 · 竞赛 21 题",!!best);
     put("album",`已点亮 ${stamps} / ${HERBS.length} 味`,stamps>0);
@@ -2261,7 +2261,7 @@ function drawPoster(D,qrImg){
     x.fillStyle="#A63E28";x.font="44px "+ZH;x.fillText(D.p.n+"（"+D.p.j+"）",W/2,254);
     x.fillStyle="#98958A";x.font="13px "+SONG;x.fillText("辨识于 "+D.p.d+" · 中华中医药学会九种体质量表",W/2,284);
   }else{
-    x.fillStyle="#98958A";x.font="16px "+SONG;x.fillText("尚未辨识体质 · 精简版 27 题 / 完整版 60 题等你作答",W/2,260);
+    x.fillStyle="#98958A";x.font="16px "+SONG;x.fillText("尚未辨识体质 · 快捷版 27 题 / 完整版 60 题等你作答",W/2,260);
   }
   /* 辨药（练习最佳 + 竞赛最佳）+ 集章 + 打卡 */
   x.fillStyle="#2B2B26";x.font="20px "+SONG;
@@ -2465,7 +2465,7 @@ function updateQuizProgress(){
     }
   }
 }
-/* 单题归属：精简版一题一亚量表；完整版可跨组共用，反向题按 6-v 换算 */
+/* 单题归属：快捷版一题一亚量表；完整版可跨组共用，反向题按 6-v 换算 */
 function quizItemScales(it,i){
   const v=quizAns[i];
   if(quizVersion==="full")return it.s.map(([k,rev])=>({k:k,s:rev?6-v:v,rev:!!rev}));
@@ -2508,7 +2508,7 @@ const JUDGE_RULE=`<div class="q-rule"><b>判定标准 · 两版一致，依据�
 <span>偏颇体质：≥40 判「是」 · 30~39 判「倾向是」 · ＜30 判「否」</span>
 <span>平和体质：转化分 ≥60 且八种偏颇质均 ＜30 判「是」；≥60 且八种偏颇质均 ＜40 判「基本是」；其余判「否」</span></div>`;
 const QUIZ_HEAD={
- brief:`<b>◈ 精简版 · 27 题</b><span>从国标完整版 60 题中选出 27 条代表性条目（九种体质各 3 条），五级评分（1~5 分），约 3 分钟；适合快速自测。计分方法与判定阈值与完整版一致。</span>${JUDGE_RULE}`,
+ brief:`<b>◈ 快捷版 · 27 题</b><span>从国标完整版 60 题中选出 27 条代表性条目（九种体质各 3 条），五级评分（1~5 分），约 3 分钟；适合快速自测。计分方法与判定阈值与完整版一致。</span>${JUDGE_RULE}`,
  full:`<b>◈ 完整版 · 60 题</b><span>依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 附录《中医体质分类与判定表》整理。九种体质亚量表条目数：平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7；其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，去重后共 60 道作答题。平和质 6 道反向计分（1↔5、2↔4、3 不变），系统已自动换算。</span>${JUDGE_RULE}`
 };
 const QUIZ_SAY={
@@ -2532,7 +2532,7 @@ function setQuizVersion(v){
   renderQuiz();
   updateQuizProgress();
 }
-function setQuizMode(m){setQuizVersion("brief");} /* 兼容旧 ?m=face / ?m=quick 外链，一律回落精简版 */
+function setQuizMode(m){setQuizVersion("brief");} /* 兼容旧 ?m=face / ?m=quick 外链，一律回落快捷版 */
 function scrollToQuiz(){var t=document.querySelector(".quiz-ver")||document.querySelector(".quiz-companion")||document.querySelector(".quiz-head");if(!t)return;var nav=document.getElementById("nav"),off=(nav?nav.offsetHeight:60)+10,y=t.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:y,behavior:"smooth"});}
 function goQuiz(m){location.href="quiz.html"+(m?("?m="+encodeURIComponent(m)):"");} /* 构建脚本会替换为带参跨页跳转 */
 function goQuizFull(){location.href="quiz.html?v=full";}
@@ -2590,7 +2590,7 @@ function calcQuiz(){
   const j=judgePhysique(tf),name=j.name,judge=j.judge,hit=j.hit,lean=j.lean,rows=j.rows,badges=j.badges;
   lastQuiz=name;
   /* 体质档案持久化：刷新不丢，首页徽标与辨识页提示条回显 */
-  try{localStorage.setItem("bzPhysique",JSON.stringify({n:name,j:judge,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日",way:quizVersion==="full"?"完整版 60 题":"精简版 27 题"}));}catch(e){}
+  try{localStorage.setItem("bzPhysique",JSON.stringify({n:name,j:judge,d:new Date().getMonth()+1+"月"+new Date().getDate()+"日",way:quizVersion==="full"?"完整版 60 题":"快捷版 27 题"}));}catch(e){}
   renderBooks();
   const c=CONSTITUTIONS[name];
   const recBooks=BOOKS.filter(b=>c.books.some(bk=>b.t.includes(bk)||bk.includes(b.t.slice(0,3))));
@@ -2628,7 +2628,7 @@ function calcQuiz(){
      <button class="btn ghost" onclick="setQuizVersion(quizVersion)">重答当前问卷</button>
      <button class="btn ghost" onclick="go('game')">去药圃练辨药 →</button>
    </div>
-   <p class="small-note" style="font-size:12px;color:var(--ink3);margin-top:14px">* ${quizVersion==="full"?"完整版 60 题按 ZYYXH/T157-2009 附录整理，按九种体质亚量表真实条目数计分（8/8/7/8/8/6/7/7/7），平和质 6 题反向计分":"精简版 27 题从国标完整版 60 题中选出代表性条目，判定阈值与完整版一致"}；转化分与判定标准依据《中医体质分类与判定》ZYYXH/T157-2009。结果仅用于按体质推荐经典读物，属文化科普自测，不构成医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>`;
+   <p class="small-note" style="font-size:12px;color:var(--ink3);margin-top:14px">* ${quizVersion==="full"?"完整版 60 题按 ZYYXH/T157-2009 附录整理，按九种体质亚量表真实条目数计分（8/8/7/8/8/6/7/7/7），平和质 6 题反向计分":"快捷版 27 题从国标完整版 60 题中选出代表性条目，判定阈值与完整版一致"}；转化分与判定标准依据《中医体质分类与判定》ZYYXH/T157-2009。结果仅用于按体质推荐经典读物，属文化科普自测，不构成医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>`;
   $("#quizResult").scrollIntoView({behavior:"smooth"});
   setTimeout(()=>document.querySelectorAll("#quizResult .bar i").forEach(b=>b.style.width=b.dataset.w+"%"),60);
 }
@@ -2735,7 +2735,7 @@ const FUN=[
  {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，起来走动走动、晒晒太阳。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你支几招：起来走动走动、做做八段锦拉伸解压、今晚早点睡补元气。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
  {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
  {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
- {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——讲清中医通常怎么辨识体质，再按 ZYYXH/T157-2009 提供完整版 60 题与精简版 27 题，给出体质判定与调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——讲清中医通常怎么辨识体质，再按 ZYYXH/T157-2009 提供完整版 60 题与快捷版 27 题，给出体质判定与调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>二十部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，二十位岐黄大家我都认识〜"}},
  {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">二十部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
@@ -2744,7 +2744,7 @@ const FUN=[
  {re:/每日本草|今日本草|今天.{0,4}本草|今日.{0,4}本草/,max:16,first:true,a:()=>{const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5),h=HERBS[doy%HERBS.length];return `<b>每日本草 · ${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv" style="color:var(--ink2)">首页「每日本草」按日期轮换，14味本草天天不重样，插画也配好了〜</div>`}},
  {re:/什么节气|现在.{0,3}节气|节气养生|节气/,max:14,first:true,a:()=>{const t=window.CUR_TERM;return t?`<b>当前节气 · ${t[0]}</b><div class="kv"><span class="k">顺时养生</span>${t[3]}</div><div class="kv" style="color:var(--ink2)">首页「节气·养生」卡每日更新，岐黄名句也按日子轮换哦〜</div>`:"顺时而养是中医的浪漫！首页「节气·养生」卡会告诉你现在是什么节气、该怎么养〜"}},
  {re:/(春|夏|秋|冬)(天|季|令)?[^。]{0,10}(养生|进补|调理|保健|注意|饮食|起居|吃什么|怎么过|防)/,max:26,a:s=>{const sea=(/[春夏秋冬]/.exec(s||"")||[])[0]||seasonOf(),c=SEASON_CARE[sea];return `<b>四季养生 · ${sea}季</b><div class="kv"><span class="k">总则</span>${c.pr}</div><div class="kv"><span class="k">饮食</span>${c.eat}</div><div class="kv"><span class="k">起居</span>${c.live}</div><div class="kv"><span class="k">药童叮咛</span>${c.tip}</div><div class="kv" style="color:var(--ink2)">想看别的季节？直接问「春/夏/秋/冬 + 养生」；当季该读什么书，问我「推荐读什么书」〜</div>`}},
- {re:/测体质|体质测评|体质辨识|辨识体质|体质测试/,max:14,a:()=>"想测体质？体质辨识页先讲清通常做法（四诊合参、量表计分、阈值判定与医师复核），再按中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 给两份问卷：<b>完整版 60 题</b>是国标附录全条目，<b>精简版 27 题</b>是从中选出代表性条目的快速版。两版都是五级评分、按各亚量表条目数换算转化分，判「是 / 基本是 / 倾向是 / 否」，连兼夹体质一并列出，再按体质点亮该读的经典。问卷只是文化科普自测，<b>非医疗诊断</b>，确切结论以中医师四诊合参为准〜"},
+ {re:/测体质|体质测评|体质辨识|辨识体质|体质测试/,max:14,a:()=>"想测体质？体质辨识页先讲清通常做法（四诊合参、量表计分、阈值判定与医师复核），再按中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 给两份问卷：<b>完整版 60 题</b>是国标附录全条目，<b>快捷版 27 题</b>是从中选出代表性条目的快速版。两版都是五级评分、按各亚量表条目数换算转化分，判「是 / 基本是 / 倾向是 / 否」，连兼夹体质一并列出，再按体质点亮该读的经典。问卷只是文化科普自测，<b>非医疗诊断</b>，确切结论以中医师四诊合参为准〜"},
  {re:/真人|机器人|ai吗|人工智能|是不是人/,a:()=>"本童子是个 AI 小药童，精神本体是李时珍的书童（自称），物理本体是一段热心的代码。不过放心——肚子里装的都是《黄帝内经》《本草纲目》这类真材实料的经典，不是胡编的哦〜"},
  {re:/几岁|多大|生日|哪里人/,a:()=>"论岁数——本童子的知识库最老可追溯到两千多年前《黄帝内经》；论心智——永远是个爱提问的小药童。生日嘛，就定在李时珍写成《本草纲目》那天好了〜"},
  {re:/喜欢什么|爱好|兴趣/,a:()=>"爱好？读经典、晒药、给你答疑！还有一个隐藏爱好：看到有人把「熬夜冠军」的头衔摘掉，改当「早睡星人」，药童就特别有成就感〜"},
@@ -2809,7 +2809,7 @@ function send(q){
     if(av){av.classList.remove("think");av.classList.add("happy");setTimeout(()=>av.classList.remove("happy"),600);}
     const quip=pick(QUIPS);
     if(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14){
-      answerBubble("咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识，讲清中医辨识体质的通常方法，再依 ZYYXH/T157-2009 用 60 题完整版或 27 题精简版按转化分算出体质倾向并作科普。上知黄芪下知茯苓，中间还懂四时养生与经络穴位。有话直说，本药童最喜欢爱提问的人类了〜");
+      answerBubble("咳咳（清嗓子）～ 在下<b>本草智答</b>，身怀两样本事：一是一部装进肚子的经典书单——《黄帝内经》《本草纲目》《伤寒论》随问随引；二是一手体质辨识，讲清中医辨识体质的通常方法，再依 ZYYXH/T157-2009 用 60 题完整版或 27 题快捷版按转化分算出体质倾向并作科普。上知黄芪下知茯苓，中间还懂四时养生与经络穴位。有话直说，本药童最喜欢爱提问的人类了〜");
     }
     else if(isDetail){
       // 带题干来追问的：题库/后台题库直接命中→出详解；辨药眼力题→出口诀；否则按知识库普通作答
@@ -2848,7 +2848,7 @@ function send(q){
 /* 荐读页顶栏：把「AI 小药童识体质 → 按体质荐经典」显式呈现出来 */
 /* v80-read-cats：五大分类 + AI 状态栏体质筛选开关 */
 const READ_CATS=["全部","基础与理论","本草与方剂","临床与针灸","文化与养生"];
-function quizWayOf(w){return (w||"快捷版 27 题").replace("精简版 27 题","快捷版 27 题");} /* 与体质辨识页术语统一 */
+function quizWayOf(w){return (w||"快捷版 27 题").replace("\u7cbe\u7b80\u7248 27 题","快捷版 27 题");} /* 与体质辨识页术语统一 */
 function renderRecBar(){
   const bar=$("#readRec");if(!bar)return;
   const p=physGet();
