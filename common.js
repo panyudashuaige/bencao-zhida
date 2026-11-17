@@ -42,6 +42,12 @@ const PAGE_HTML={
           <p class="mg-note">本站完整版 60 题按国标附录全条目整理，精简版 27 题从中选出代表性条目，<b>两版的计分方法与判定标准完全相同</b>。它不能替代四诊合参，也不要据结果自行用药。想看九种体质各自的画像，可到<a href="constitution.html">九种体质通鉴</a>；有疑问随时<a href="chat.html?q=体质辨识是怎么做的">问 AI 小药童</a>。</p>
         </div>
       </details>
+      <details class="mg-fold" id="compoundFold">
+        <summary>💡 为什么你可能会测出多种体质？</summary>
+        <div class="mg-fold-body">
+          <p>中医临床发现，单一纯粹的体质较少，大多数人属于'兼夹体质'（复合体质）。因为气血阴阳会相互影响（如：脾气虚久了容易生痰湿，阳虚久了容易导致血瘀）。本测评会为你列出主导体质与兼夹体质，调养时需分清主次，切忌盲目用药。</p>
+        </div>
+      </details>
       <div class="mg-cta"><button class="btn red" onclick="scrollToQuiz()">我已了解上述局限，开始体质倾向自测 ➔</button></div>
     </div>
 
@@ -411,6 +417,7 @@ const HERB_ILLUS={"桂枝": "assets/herbs/illus-015.webp", "防风": "assets/her
 const ACUP_SVG={"足三里": "assets/acupoint/acup-001.svg", "涌泉": "assets/acupoint/acup-002.svg", "合谷": "assets/acupoint/acup-003.svg", "百会": "assets/acupoint/acup-004.svg", "关元": "assets/acupoint/acup-005.svg", "气海": "assets/acupoint/acup-006.svg", "内关": "assets/acupoint/acup-007.svg", "三阴交": "assets/acupoint/acup-008.svg", "委中": "assets/acupoint/acup-009.svg", "列缺": "assets/acupoint/acup-010.svg", "风池": "assets/acupoint/acup-011.svg", "太冲": "assets/acupoint/acup-012.svg", "脾俞": "assets/acupoint/acup-013.svg", "肺俞": "assets/acupoint/acup-014.svg", "膻中": "assets/acupoint/acup-015.svg", "中脘": "assets/acupoint/acup-016.svg", "命门": "assets/acupoint/acup-017.svg", "肾俞": "assets/acupoint/acup-018.svg", "大椎": "assets/acupoint/acup-019.svg", "神阙": "assets/acupoint/acup-020.svg", "太溪": "assets/acupoint/acup-021.svg", "复溜": "assets/acupoint/acup-022.svg", "照海": "assets/acupoint/acup-023.svg", "丰隆": "assets/acupoint/acup-024.svg", "阴陵泉": "assets/acupoint/acup-025.svg", "曲池": "assets/acupoint/acup-026.svg", "血海": "assets/acupoint/acup-027.svg", "膈俞": "assets/acupoint/acup-028.svg", "期门": "assets/acupoint/acup-029.svg", "神门": "assets/acupoint/acup-030.svg", "迎香": "assets/acupoint/acup-031.svg", "风门": "assets/acupoint/acup-032.svg"};
 
 /* v53：用户提供的实拍照片（放入 assets/herbs/real/、assets/acupoint/real/ 后重建即生效） */
+const HERB_GONGBI={"桂枝":"gb-001.webp","防风":"gb-002.webp","葛根":"gb-003.webp","石膏":"gb-004.webp","黄芩":"gb-005.webp","黄连":"gb-006.webp","生地黄":"gb-007.webp","苍术":"gb-008.webp","薏苡仁":"gb-009.webp","泽泻":"gb-010.webp","干姜":"gb-011.webp","肉桂":"gb-012.webp","白术":"gb-013.webp","党参":"gb-014.webp","熟地黄":"gb-015.webp","麦冬":"gb-016.webp","香附":"gb-017.webp","木香":"gb-018.webp","川芎":"gb-019.webp","丹参":"gb-020.webp","三七":"gb-021.webp","半夏":"gb-022.webp","桔梗":"gb-023.webp","酸枣仁":"gb-024.webp","五味子":"gb-025.webp","大黄":"gb-026.webp","大枣":"gb-027.webp","黄精":"gb-028.webp","太子参":"gb-029.webp","白扁豆":"gb-030.webp","益智仁":"gb-031.webp","菟丝子":"gb-032.webp","艾叶":"gb-033.webp","肉苁蓉":"gb-034.webp","百合":"gb-035.webp","玉竹":"gb-036.webp","北沙参":"gb-037.webp","石斛":"gb-038.webp","女贞子":"gb-039.webp","桑椹":"gb-040.webp","荷叶":"gb-041.webp","冬瓜皮":"gb-042.webp","砂仁":"gb-043.webp","藿香":"gb-044.webp","茵陈":"gb-045.webp","栀子":"gb-046.webp","蒲公英":"gb-047.webp","车前子":"gb-048.webp","红花":"gb-049.webp","桃仁":"gb-050.webp","赤芍":"gb-051.webp","郁金":"gb-052.webp","益母草":"gb-053.webp","玫瑰花":"gb-054.webp","佛手":"gb-055.webp","合欢花":"gb-056.webp","柴胡":"gb-057.webp","乌梅":"gb-058.webp","蝉蜕":"gb-059.webp","白芷":"gb-060.webp","辛夷":"gb-061.webp","灵芝":"gb-062.webp","麻黄":"gb-063.webp"};
 const USER_PHOTO={};
 /* 合并后的全站知识口径：77 味本草 / 30 首名方 / 32 处穴位 */
 const ALL_HERBS=HERBS.concat(MATERIA_EXTRA,HERB_ADD);
@@ -1241,7 +1248,7 @@ function tzParam(){try{const t=new URLSearchParams(location.search).get("tz");re
 function tzBar(page,tz){
   return `<div class="tz-filter"><b>◈ 按体质筛选</b>`+
     `<a href="${page}.html" class="${tz?"":"on"}">全部</a>`+
-    TZ_ALL.map(t=>`<a href="${page}.html?tz=${encodeURIComponent(t)}" class="${tz===t?"on":""}">${page==="herb"?t+"调养参考":t.replace("质","")}</a>`).join("")+
+    TZ_ALL.map(t=>`<a href="${page}.html?tz=${encodeURIComponent(t)}" class="${tz===t?"on":""}${t==="平和质"?" tz-ping":""}">${t}</a>`).join("")+
     (tz?`<a href="${page}.html" class="tz-clear">✕ 清除</a>`:"")+`</div>`;
 }
 function tzSum(list,tz,unit){
@@ -1261,6 +1268,7 @@ function herbPhoto(h){
   if(USER_PHOTO[h.n])return {src:USER_PHOTO[h.n],cap:"实 拍 照 片 · 用户提供"};
   if(HERB_PHOTO[h.n])return {src:HERB_PHOTO[h.n],cap:"实 拍 照 片 · 本 草 药 材"};
   if(HERB_IMG[h.n])return {src:"assets/herbs/"+HERB_IMG[h.n]+".webp",cap:"工 笔 插 画 · 示 意 图"};
+  if(HERB_GONGBI[h.n])return {src:"assets/herbs/"+HERB_GONGBI[h.n],cap:"工 笔 插 画 · 示 意 图"};
   if(HERB_ILLUS[h.n])return {src:HERB_ILLUS[h.n],cap:"示 意 图 · 非 实 拍"};
   return null;
 }
@@ -1274,6 +1282,7 @@ function warnBlock(t){
 }
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
+  const illustNow=illust||!!HERB_IMG[h.n]||!!HERB_GONGBI[h.n]; // 77 味均有工笔图
   const tox=HERB_TOX[h.n]||"无毒";
   const toxCls=tox==="药食同源"?"food":tox==="有小毒"?"small":tox==="需遵医嘱"?"care":"safe";
   const classic=h.s?h.s:`《神农本草经》将${h.n}列为上品，为常用之品。`;
@@ -1282,7 +1291,7 @@ function herbCard(h,illust){
   const dose=m.dose?`<span class="note-dose">常见量：${m.dose}（科普参考，遵医嘱）</span>`:"";
   return `<div class="mat-card">
     ${ph?`<img class="m-img" src="${ph.src}" alt="${h.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap}</div>`:""}
-    <div class="mat-card-h"><b>${h.n}</b><span class="tox-tag tox-${toxCls}">[${tox}]</span>${illust?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':(h.cat||'本草')}</span></div>
+    <div class="mat-card-h"><b>${h.n}</b><span class="tox-tag tox-${toxCls}">[${tox}]</span>${illustNow?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':(h.cat||'本草')}</span></div>
     <div class="kv"><span class="k">性味归经</span>${h.f}</div>
     <div class="kv"><span class="k">药材形貌</span>${h.x}</div>
     <div class="kv"><span class="k">功效主治</span>${h.e}</div>

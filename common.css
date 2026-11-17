@@ -710,9 +710,10 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .m-fits{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
 .m-fits span{font-size:10.5px;color:var(--green);background:var(--green-l);border:1px solid rgba(47,93,80,.18);border-radius:9px;padding:1px 7px}
 .m-fits span.hit{background:var(--green);color:#fff;border-color:var(--green)}
-.tz-filter{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0 16px;padding:10px 12px;border:1px solid rgba(47,93,80,.18);border-radius:10px;background:linear-gradient(100deg,rgba(154,123,63,.06),rgba(47,93,80,.05))}
-.tz-filter>b{font-size:12.5px;color:var(--gold);letter-spacing:1px;margin-right:4px}
-.tz-filter a{font-size:12px;padding:5px 11px;border:1px solid rgba(47,93,80,.2);border-radius:20px;background:rgba(255,255,255,.65);color:var(--ink2);text-decoration:none;white-space:nowrap;transition:.2s}
+.tz-filter{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));align-items:center;gap:7px;margin:12px 0 16px;padding:11px 12px;border:1px solid rgba(47,93,80,.18);border-radius:10px;background:linear-gradient(100deg,rgba(154,123,63,.06),rgba(47,93,80,.05))}
+.tz-filter>b{grid-column:1/-1;font-size:12.5px;color:var(--gold);letter-spacing:1px;margin:0 0 1px}
+.tz-filter a{font-size:12px;padding:6px 8px;text-align:center;border:1px solid rgba(47,93,80,.2);border-radius:20px;background:rgba(255,255,255,.65);color:var(--ink2);text-decoration:none;white-space:nowrap;transition:.2s}
+.tz-filter a.tz-ping{border-color:rgba(154,123,63,.5);color:var(--gold);background:rgba(154,123,63,.06)}
 .tz-filter a:hover{border-color:var(--green);color:var(--green)}
 .tz-filter a.on{background:var(--green);border-color:var(--green);color:#fff}
 .tz-filter .tz-clear{color:var(--ink3)}
