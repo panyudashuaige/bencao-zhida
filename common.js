@@ -99,7 +99,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
-    <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。</p>
+    <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。先看下方 AI 状态栏：未测体质可一键答题，已测体质可一键筛选契合书目。</p>
     ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
@@ -147,7 +147,8 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">名 方 要 诀 · 组 成 方 义</div>
     <h2>名方要诀<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。请特别注意：中药需辨证论治，本页仅作文献展示，严禁自行抓药。 点击任意条目可追问 AI 小药童。</p>
+    <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。点击任意条目可追问 AI 小药童。</p>
+    <div class="formula-health-banner"><span>⚠️ 中药需辨证论治，本页仅作文献展示，严禁自行抓药。</span></div>
     ${knowBar('formula','四君子汤')}
     <div id="formulaArea"></div>
   </div>`,
@@ -808,18 +809,18 @@ const QUIZ_FULL=[
 /* 各亚量表真实条目数由 s 映射自动统计：8/8/7/8/8/6/7/7/7，合计 66 条目次 */
 const FULL_SCALES=(()=>{const c={};Object.keys(CONSTITUTIONS).forEach(k=>c[k]=0);QUIZ_FULL.forEach(x=>x.s.forEach(y=>c[y[0]]++));return c;})();
 const BOOKS=[
- {t:"黄帝内经",au:"· 佚名 · 成书于战国至秦汉",d:"中医理论的奠基之作，讲阴阳五行、藏象经络与养生总纲。读它不是读医书，而是读一种\u201c顺应自然\u201d的宇宙观。",hl:"上工治未病，不治已病。",hs:"——《黄帝内经·素问》",diff:"硬核",why:"中医界的《论语》，字字是总纲。别硬啃，先读《上古天真论》，读顺了再往外延。",tg:["养生","理论"],fit:["阳虚质","气郁质","平和质"]},
- {t:"神农本草经",au:"· 佚名 · 汉代",d:"我国现存最早的药物学专著，载药365味，分上中下三品。人参、黄芪、甘草皆在其中，读来如见先民与草木的初识。",hl:"上药养命以应天，中药养性以应人。",hs:"——《神农本草经·序录》",diff:"进阶",why:"365味药像365张名片，翻到人参、黄芪那页，看看两千年前古人怎么夸它们。",tg:["本草","启蒙"],fit:["气虚质","特禀质"]},
- {t:"伤寒论",au:"· 张仲景 · 东汉",d:"辨证论治的开山之作。桂枝汤、小柴胡汤沿用至今，理法方药一线贯穿，被誉为\u201c方书之祖\u201d。",hl:"观其脉证，知犯何逆，随证治之。",hs:"——《伤寒论·太阳病篇》",diff:"硬核",why:"医圣心法，历代名医必修。初读别贪多，把桂枝汤那一条读懂，就是胜利。",tg:["临床","方剂"],fit:["阳虚质","血瘀质"]},
- {t:"本草纲目",au:"· 李时珍 · 明代",d:"159万字、载药1892种的博物学巨著，不止于药：谷菜果木、禽兽虫鱼皆有考据。达尔文亦称之为\u201c中国古代的百科全书\u201d。",hl:"脑为元神之府。",hs:"——《本草纲目·辛夷条》",diff:"进阶",why:"159万字的明代百科全书，当《辞海》翻最快乐，哪里好奇翻哪里，从头硬读会累趴。",tg:["本草","文化"],fit:["痰湿质","湿热质"]},
- {t:"千金方",au:"· 孙思邈 · 唐代",d:"\u201c人命至重，有贵千金\u201d，药王孙思邈以医德立书，集唐以前方剂之大成，\u201c大医精诚\u201d即出自其序。",hl:"人命至重，有贵千金，一方济之，德逾于此。",hs:"——《千金方·序》",diff:"进阶",why:"药王的行医心得加养生宝典，《大医精诚》必读，读完你对\u201c医者仁心\u201d四个字会有新理解。",tg:["临床","医德"],fit:["平和质"]},
- {t:"温病条辨",au:"· 吴鞠通 · 清代",d:"温病学派的集大成之作，银翘散、桑菊饮等名方出自此书，是读懂\u201c清热\u201d一脉的钥匙。",hl:"凡病温者，始于上焦，在手太阴。",hs:"——《温病条辨·上焦篇》",diff:"硬核",why:"与《伤寒论》寒温并峙，读完你就知道\u201c上火\u201d\u201c清热\u201d背后的门派之争。",tg:["临床","方剂"],fit:["湿热质"]},
- {t:"汤头歌诀",au:"· 汪昂 · 清代",d:"把方剂编成七言歌诀：\u201c四君子汤中和义，参术茯苓甘草比。\u201d朗朗上口，是学方的启蒙第一书。",hl:"四君子汤中和义，参术茯苓甘草比。",hs:"——《汤头歌诀》",diff:"入门",why:"把方剂编成了\u201c古代rap\u201d，背会三首歌诀，你已经超过一半中医爱好者了。",tg:["启蒙","方剂"],fit:["气虚质","阴虚质"]},
- {t:"随息居饮食谱",au:"· 王孟英 · 清代",d:"一部\u201c吃货友好\u201d的食疗经典，载食药330种，讲四时饮食宜忌，药食同源理念的通俗读本。",hl:"绿豆甘凉，煮食清胆养胃，解暑止渴。",hs:"——《随息居饮食谱》",diff:"入门",why:"让吃货心安理得读医书的经典，看完你会重新审视自家厨房。",tg:["食疗","养生"],fit:["痰湿质","气郁质"]},
- {t:"难经",au:"· 相传扁鹊 · 战国",d:"《黄帝内经》的\u201c课后习题集\u201d，专答疑难：论脉、论经络、论脏腑，独取寸口的诊脉之法由此发扬。",hl:"望而知之谓之神，闻而知之谓之圣。",hs:"——《难经·六十一难》",diff:"硬核",why:"摸脉的学问大半在这里，手感派必读。读完你对\u201c号脉\u201d这件事也能门儿清一点。",tg:["理论","临床"],fit:["平和质"]},
- {t:"肘后备急方",au:"· 葛洪 · 东晋",d:"中国第一部\u201c急救手册\u201d，专收简、便、验、廉的应急之法。屠呦呦由此悟出青蒿素提取之道，让古籍照进现实。",hl:"青蒿一握，以水二升渍，绞取汁，尽服之。",hs:"——《肘后备急方·治寒热诸疟》",diff:"进阶",why:"东晋版急救手册，屠呦呦奶奶凭\u201c青蒿一握\u201d拿了诺奖——古籍里真的藏着未来。",tg:["临床","文化"],fit:["湿热质","痰湿质"]},
- {t:"医学三字经",au:"· 陈修园 · 清代",d:"陈修园把整部中医源流编成三字韵语，医史源流、诊法方药一气呵成，是医史入门的最佳读物。",hl:"医之始，本岐黄；灵枢作，素问详。",hs:"——《医学三字经》开篇",diff:"入门",why:"把整部中医史编成三字经，背完等于把中医源流过了遍电影，学生党狂喜。",tg:["启蒙","文化"],fit:["平和质","气郁质"]},
- {t:"饮膳正要",au:"· 忽思慧 · 元代",d:"中国第一部营养学专著，元代饮膳太医忽思慧所作，讲妊娠食忌、饮酒避忌、四时所宜，堪称皇家\u201c食堂说明书\u201d。",hl:"养生避忌、食疗诸法条分缕析，七百年前的宫廷营养学全景图。",hs:"◈ 药童看点",diff:"入门",why:"元代皇家\u201c食堂说明书\u201d，看完你就知道宫廷里怎么吃饭养生，连孕妇忌口都列了清单。",tg:["食疗","养生"],fit:["痰湿质","气虚质"]}
+ {t:"黄帝内经",au:"· 佚名 · 成书于战国至秦汉",d:"中医理论的奠基之作，讲阴阳五行、藏象经络与养生总纲。读它不是读医书，而是读一种\u201c顺应自然\u201d的宇宙观。",hl:"上工治未病，不治已病。",hs:"——《黄帝内经·素问》",diff:"硬核",why:"中医界的《论语》，字字是总纲。别硬啃，先读《上古天真论》，读顺了再往外延。",tg:["文化与养生","基础与理论"],fit:["阳虚质","气郁质","平和质"]},
+ {t:"神农本草经",au:"· 佚名 · 汉代",d:"我国现存最早的药物学专著，载药365味，分上中下三品。人参、黄芪、甘草皆在其中，读来如见先民与草木的初识。",hl:"上药养命以应天，中药养性以应人。",hs:"——《神农本草经·序录》",diff:"进阶",why:"365味药像365张名片，翻到人参、黄芪那页，看看两千年前古人怎么夸它们。",tg:["本草与方剂","基础与理论"],fit:["气虚质","特禀质"]},
+ {t:"伤寒论",au:"· 张仲景 · 东汉",d:"辨证论治的开山之作。桂枝汤、小柴胡汤沿用至今，理法方药一线贯穿，被誉为\u201c方书之祖\u201d。",hl:"观其脉证，知犯何逆，随证治之。",hs:"——《伤寒论·太阳病篇》",diff:"硬核",why:"医圣心法，历代名医必修。初读别贪多，把桂枝汤那一条读懂，就是胜利。",tg:["临床与针灸","本草与方剂"],fit:["阳虚质","血瘀质"]},
+ {t:"本草纲目",au:"· 李时珍 · 明代",d:"159万字、载药1892种的博物学巨著，不止于药：谷菜果木、禽兽虫鱼皆有考据。达尔文亦称之为\u201c中国古代的百科全书\u201d。",hl:"脑为元神之府。",hs:"——《本草纲目·辛夷条》",diff:"进阶",why:"159万字的明代百科全书，当《辞海》翻最快乐，哪里好奇翻哪里，从头硬读会累趴。",tg:["本草与方剂","文化与养生"],fit:["痰湿质","湿热质"]},
+ {t:"千金方",au:"· 孙思邈 · 唐代",d:"\u201c人命至重，有贵千金\u201d，药王孙思邈以医德立书，集唐以前方剂之大成，\u201c大医精诚\u201d即出自其序。",hl:"人命至重，有贵千金，一方济之，德逾于此。",hs:"——《千金方·序》",diff:"进阶",why:"药王的行医心得加养生宝典，《大医精诚》必读，读完你对\u201c医者仁心\u201d四个字会有新理解。",tg:["临床与针灸","文化与养生"],fit:["平和质"]},
+ {t:"温病条辨",au:"· 吴鞠通 · 清代",d:"温病学派的集大成之作，银翘散、桑菊饮等名方出自此书，是读懂\u201c清热\u201d一脉的钥匙。",hl:"凡病温者，始于上焦，在手太阴。",hs:"——《温病条辨·上焦篇》",diff:"硬核",why:"与《伤寒论》寒温并峙，读完你就知道\u201c上火\u201d\u201c清热\u201d背后的门派之争。",tg:["临床与针灸","本草与方剂"],fit:["湿热质"]},
+ {t:"汤头歌诀",au:"· 汪昂 · 清代",d:"把方剂编成七言歌诀：\u201c四君子汤中和义，参术茯苓甘草比。\u201d朗朗上口，是学方的启蒙第一书。",hl:"四君子汤中和义，参术茯苓甘草比。",hs:"——《汤头歌诀》",diff:"入门",why:"把方剂编成了\u201c古代rap\u201d，背会三首歌诀，你已经超过一半中医爱好者了。",tg:["基础与理论","本草与方剂"],fit:["气虚质","阴虚质"]},
+ {t:"随息居饮食谱",au:"· 王孟英 · 清代",d:"一部\u201c吃货友好\u201d的食疗经典，载食药330种，讲四时饮食宜忌，药食同源理念的通俗读本。",hl:"绿豆甘凉，煮食清胆养胃，解暑止渴。",hs:"——《随息居饮食谱》",diff:"入门",why:"让吃货心安理得读医书的经典，看完你会重新审视自家厨房。",tg:["文化与养生"],fit:["痰湿质","气郁质"]},
+ {t:"难经",au:"· 相传扁鹊 · 战国",d:"《黄帝内经》的\u201c课后习题集\u201d，专答疑难：论脉、论经络、论脏腑，独取寸口的诊脉之法由此发扬。",hl:"望而知之谓之神，闻而知之谓之圣。",hs:"——《难经·六十一难》",diff:"硬核",why:"摸脉的学问大半在这里，手感派必读。读完你对\u201c号脉\u201d这件事也能门儿清一点。",tg:["基础与理论","临床与针灸"],fit:["平和质"]},
+ {t:"肘后备急方",au:"· 葛洪 · 东晋",d:"中国第一部\u201c急救手册\u201d，专收简、便、验、廉的应急之法。屠呦呦由此悟出青蒿素提取之道，让古籍照进现实。",hl:"青蒿一握，以水二升渍，绞取汁，尽服之。",hs:"——《肘后备急方·治寒热诸疟》",diff:"进阶",why:"东晋版急救手册，屠呦呦奶奶凭\u201c青蒿一握\u201d拿了诺奖——古籍里真的藏着未来。",tg:["临床与针灸","文化与养生"],fit:["湿热质","痰湿质"]},
+ {t:"医学三字经",au:"· 陈修园 · 清代",d:"陈修园把整部中医源流编成三字韵语，医史源流、诊法方药一气呵成，是医史入门的最佳读物。",hl:"医之始，本岐黄；灵枢作，素问详。",hs:"——《医学三字经》开篇",diff:"入门",why:"把整部中医史编成三字经，背完等于把中医源流过了遍电影，学生党狂喜。",tg:["基础与理论","文化与养生"],fit:["平和质","气郁质"]},
+ {t:"饮膳正要",au:"· 忽思慧 · 元代",d:"中国第一部营养学专著，元代饮膳太医忽思慧所作，讲妊娠食忌、饮酒避忌、四时所宜，堪称皇家\u201c食堂说明书\u201d。",hl:"养生避忌、食疗诸法条分缕析，七百年前的宫廷营养学全景图。",hs:"◈ 药童看点",diff:"入门",why:"元代皇家\u201c食堂说明书\u201d，看完你就知道宫廷里怎么吃饭养生，连孕妇忌口都列了清单。",tg:["文化与养生"],fit:["痰湿质","气虚质"]}
 ];
 /* 应时荐读：按四季节气划分书单（以立春2/4、立夏5/6、立秋8/8、立冬11/7为界），当季书单内按日期轮换 */
 const SEASON_READS={
@@ -961,14 +962,14 @@ const BOOK_ALIASES={"黄帝内经":["内经","素问","灵枢"],"神农本草经
 /* ===== 典籍扩展：补入临床 / 脾胃 / 温疫 / 针灸 / 脉学 / 本草 / 食疗等门类 =====
    push 进 BOOKS 后，荐读书卡、按体质荐读、KB 书卡、RAG 语料、竞赛题库全部自动覆盖 */
 BOOKS.push(
- {t:"金匮要略",au:"· 张仲景 · 东汉",d:"《伤寒杂病论》的杂病部分，与《伤寒论》并称仲景双璧。以内科杂病为纲，辨脏腑经络论治，载方二百余首，是中医临床方书的源头。",hl:"见肝之病，知肝传脾，当先实脾。",hs:"——《金匮要略·脏腑经络先后病脉证》",diff:"硬核",why:"「治未病」不只是口号，这一句讲的是疾病传变的预判与截断，读它最能体会中医的整体观。",tg:["临床","方剂"],fit:["气郁质","痰湿质"]},
- {t:"脾胃论",au:"· 李杲（号东垣） · 金元",d:"补土派代表作。李东垣身处战乱饥馑，见人多因脾胃内伤致病，遂立「内伤脾胃，百病由生」之说，创补中益气汤等名方。",hl:"脾胃之气既伤，而元气亦不能充，而诸病之所由生也。",hs:"——《脾胃论·脾胃虚实传变论》",diff:"进阶",why:"把「吃饭」提到元气本源的高度。久坐、节食、思虑过度的现代人，读来格外扎心。",tg:["理论","养生"],fit:["气虚质","阳虚质"]},
- {t:"温疫论",au:"· 吴又可（名有性） · 明",d:"中国第一部传染病学专著。明末大疫，吴又可跳出「伤寒」框架，提出戾气自口鼻而入、各有专病之邪，为温病学先声。",hl:"温疫之为病，非风非寒非暑非湿，乃天地间别有一种异气所感。",hs:"——《温疫论·原病》",diff:"进阶",why:"在细菌病毒被发现前两百多年，已猜到「有一物专致一病」，是中医史上最漂亮的推理之一。",tg:["临床","理论"],fit:["湿热质"]},
- {t:"医林改错",au:"· 王清任 · 清",d:"王清任亲赴义冢观察人体脏腑，纠正古书脏腑图之误，并创立以气血立论的逐瘀诸方，血府逐瘀汤至今常用。",hl:"治病之要诀，在明白气血。",hs:"——《医林改错·气血合脉说》",diff:"进阶",why:"一位敢说「古书写错了」的清代医家。读它不只为方，更为那份实证精神。",tg:["临床","文化"],fit:["血瘀质"]},
- {t:"针灸大成",au:"· 杨继洲 · 明",d:"集明以前针灸学之大成，汇经络腧穴、刺法灸法与各家歌赋，《四总穴歌》即赖此书广传，是针灸入门与检索的枢纽。",hl:"肚腹三里留，腰背委中求，头项寻列缺，面口合谷收。",hs:"——《针灸大成·四总穴歌》",diff:"入门",why:"四句口诀把全身常见不适对应到四个要穴，背下来就是一张随身穴位地图。",tg:["针灸","启蒙"],fit:["平和质","血瘀质"]},
- {t:"濒湖脉学",au:"· 李时珍 · 明",d:"李时珍以二十七脉为纲，用歌诀体写脉象、主病与相似脉辨别，把「只可意会」的脉学变成可诵可记的入门课本。",hl:"浮脉，举之有余，按之不足。",hs:"——《濒湖脉学·浮脉》",diff:"入门",why:"《本草纲目》作者的另一本小书，篇幅不大却是脉学第一启蒙书，读着读着就想给自己把把脉。",tg:["诊法","启蒙"],fit:["平和质"]},
- {t:"本草经集注",au:"· 陶弘景 · 南朝梁",d:"陶弘景整理《神农本草经》并增补新药，首创按药物自然属性分玉石、草木、虫兽等部类，奠定后世本草分类学的基础。",hl:"诸药所生，皆有境界。",hs:"——《本草经集注·序录》",diff:"进阶",why:"最早认真讨论「道地药材」的书：同一味药，产地不同，药力确有分别。",tg:["本草","理论"],fit:["平和质"]},
- {t:"食疗本草",au:"· 孟诜 · 唐（张鼎补）",d:"现存最早的食疗专著，逐味记载日常食物的性味、功效、食忌与四季宜忌，把「药食同源」落到一饭一蔬上。",hl:"药食同源，日用之品皆可入馔疗疾。",hs:"◈ 药童辑要（据《食疗本草》内容概括）",diff:"入门",why:"没有高深理论，全是厨房里的事：什么该多吃、什么要忌口，最贴日常。",tg:["食疗","养生"],fit:["痰湿质","气虚质"]}
+ {t:"金匮要略",au:"· 张仲景 · 东汉",d:"《伤寒杂病论》的杂病部分，与《伤寒论》并称仲景双璧。以内科杂病为纲，辨脏腑经络论治，载方二百余首，是中医临床方书的源头。",hl:"见肝之病，知肝传脾，当先实脾。",hs:"——《金匮要略·脏腑经络先后病脉证》",diff:"硬核",why:"「治未病」不只是口号，这一句讲的是疾病传变的预判与截断，读它最能体会中医的整体观。",tg:["临床与针灸","本草与方剂"],fit:["气郁质","痰湿质"]},
+ {t:"脾胃论",au:"· 李杲（号东垣） · 金元",d:"补土派代表作。李东垣身处战乱饥馑，见人多因脾胃内伤致病，遂立「内伤脾胃，百病由生」之说，创补中益气汤等名方。",hl:"脾胃之气既伤，而元气亦不能充，而诸病之所由生也。",hs:"——《脾胃论·脾胃虚实传变论》",diff:"进阶",why:"把「吃饭」提到元气本源的高度。久坐、节食、思虑过度的现代人，读来格外扎心。",tg:["基础与理论","文化与养生"],fit:["气虚质","阳虚质"]},
+ {t:"温疫论",au:"· 吴又可（名有性） · 明",d:"中国第一部传染病学专著。明末大疫，吴又可跳出「伤寒」框架，提出戾气自口鼻而入、各有专病之邪，为温病学先声。",hl:"温疫之为病，非风非寒非暑非湿，乃天地间别有一种异气所感。",hs:"——《温疫论·原病》",diff:"进阶",why:"在细菌病毒被发现前两百多年，已猜到「有一物专致一病」，是中医史上最漂亮的推理之一。",tg:["临床与针灸","基础与理论"],fit:["湿热质"]},
+ {t:"医林改错",au:"· 王清任 · 清",d:"王清任亲赴义冢观察人体脏腑，纠正古书脏腑图之误，并创立以气血立论的逐瘀诸方，血府逐瘀汤至今常用。",hl:"治病之要诀，在明白气血。",hs:"——《医林改错·气血合脉说》",diff:"进阶",why:"一位敢说「古书写错了」的清代医家。读它不只为方，更为那份实证精神。",tg:["临床与针灸","文化与养生"],fit:["血瘀质"]},
+ {t:"针灸大成",au:"· 杨继洲 · 明",d:"集明以前针灸学之大成，汇经络腧穴、刺法灸法与各家歌赋，《四总穴歌》即赖此书广传，是针灸入门与检索的枢纽。",hl:"肚腹三里留，腰背委中求，头项寻列缺，面口合谷收。",hs:"——《针灸大成·四总穴歌》",diff:"入门",why:"四句口诀把全身常见不适对应到四个要穴，背下来就是一张随身穴位地图。",tg:["临床与针灸","基础与理论"],fit:["平和质","血瘀质"]},
+ {t:"濒湖脉学",au:"· 李时珍 · 明",d:"李时珍以二十七脉为纲，用歌诀体写脉象、主病与相似脉辨别，把「只可意会」的脉学变成可诵可记的入门课本。",hl:"浮脉，举之有余，按之不足。",hs:"——《濒湖脉学·浮脉》",diff:"入门",why:"《本草纲目》作者的另一本小书，篇幅不大却是脉学第一启蒙书，读着读着就想给自己把把脉。",tg:["基础与理论"],fit:["平和质"]},
+ {t:"本草经集注",au:"· 陶弘景 · 南朝梁",d:"陶弘景整理《神农本草经》并增补新药，首创按药物自然属性分玉石、草木、虫兽等部类，奠定后世本草分类学的基础。",hl:"诸药所生，皆有境界。",hs:"——《本草经集注·序录》",diff:"进阶",why:"最早认真讨论「道地药材」的书：同一味药，产地不同，药力确有分别。",tg:["本草与方剂","基础与理论"],fit:["平和质"]},
+ {t:"食疗本草",au:"· 孟诜 · 唐（张鼎补）",d:"现存最早的食疗专著，逐味记载日常食物的性味、功效、食忌与四季宜忌，把「药食同源」落到一饭一蔬上。",hl:"药食同源，日用之品皆可入馔疗疾。",hs:"◈ 药童辑要（据《食疗本草》内容概括）",diff:"入门",why:"没有高深理论，全是厨房里的事：什么该多吃、什么要忌口，最贴日常。",tg:["文化与养生"],fit:["痰湿质","气虚质"]}
 );
 Object.assign(BOOK_ALIASES,{"金匮要略":["金匮","要略"],"脾胃论":["东垣","补土派"],"温疫论":["瘟疫论","吴又可"],"医林改错":["逐瘀"],"针灸大成":["四总穴歌"],"濒湖脉学":["脉学"],"本草经集注":["集注"],"食疗本草":["孟诜"]});
 /* 新增典籍的原文选读：2 段原文 + 白话 + 药童领读；不确定原文的以「辑要」明确标注，不冒充古籍原句 */
@@ -1096,18 +1097,18 @@ const PAGE_INIT={
   constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
 /* ===== 本草名录 / 名方要诀：共用列表渲染，合览页与两个独立页同源同貌 ===== */
+/* v81-herb-desc：说明区减负，核心提示并入顶部黄条 */
 function herbListHtml(tz){
   tz=tz||tzParam();
   const safe=safeParam();
   const hit=h=>(herbMeta(h).fit||[]).indexOf(tz)>=0;
   const safeHit=h=>!safe||herbSafe(h.n)===safe;
   const use=ALL_HERBS.filter(h=>(!tz||hit(h))&&safeHit(h));
-  let html=`<div class="herb-safety"><span class="hs-ico">⚠️</span><span>收录的内容仅供科普，不能替代医生面诊。</span></div>`+
+  let html=`<div class="herb-safety"><span class="hs-ico">⚠️</span><span>收录内容仅供科普，不能替代医生面诊。具体用法用量与配伍须由中医师辨证，请勿盲目照方自服。</span></div>`+
     safeBar(safe)+
     tzBar("herb",tz)+
-    (tz?`<div class="tz-warn-box"><span class="tw-ico">⚠️</span><span>中医调养需辨证。体质往往是复合的（如气阴两虚），以下展示的药材仅代表其常用于该方向的调养，不代表处方，切勿自行盲目抓药服用。</span></div>`:`<div class="tz-filter-note">注：按体质筛选仅为科普检索方向，不代表临床配伍处方。</div>`)+
     tzSum(use,tz,"味本草")+
-    `<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。默认按安全等级分三档展示；每味附配图、性味归经、药材形貌、典籍摘句、传统用法用量与慎用配伍。${MED_NOTE}</div>`;
+    (tz?`<div class="tz-warn-box"><span class="tw-ico">⚠️</span><span>中医调养需辨证。体质往往是复合的（如气阴两虚），以下展示的药材仅代表其常用于该方向的调养，不代表处方，切勿自行盲目抓药服用。</span></div>`:`<div class="tz-filter-note">注：按体质筛选仅为科普检索方向，不代表临床配伍处方。</div>`);
   const block=(key)=>{
     const list=ALL_HERBS.filter(h=>herbSafe(h.n)===key&&safeHit(h)&&(!tz||hit(h)));
     if(!list.length)return "";
@@ -1121,11 +1122,12 @@ function herbListHtml(tz){
   else{html+=block("food")+block("common")+block("special");}
   return html;
 }
+/* v82-formula-note：说明条与不提供剂量卡片口径统一 */
 function formulaListHtml(tz){
   tz=tz||tzParam();
   const use=tz?allFormulas().filter(f=>(formulaMeta(f).fit||[]).indexOf(tz)>=0):allFormulas();
   return tzBar("formula",tz)+tzSum(use,tz,"首名方")+
-    `<div class="mat-note">◈ 名方：组成、方义、源流、传统服法与慎用配伍，一卡尽览。${MED_NOTE}</div>`+
+    `<div class="mat-note">◇ 名方：组成、方义、源流与传统服法，一卡尽览。本系统刻意隐去具体剂量克数，仅供方剂文献科普；中医用药需辨证论治，请在执业中医师指导下配伍使用。</div>`+
     `<div class="mat-grid">`+use.map(formulaCard).join("")+`</div>`;
 }
 function renderMateria(){   // 旧版合览页 materia.html：两 tab 复用同一份列表
@@ -1196,7 +1198,7 @@ function renderFourSeasons(s){
   const nowTerm=currentTermName();
   /* 预览非当季时用该季代表节气，避免「夏季 · 立冬」这类错配 */
   const seasonTerm=(seasonOf()===s&&terms.some(t=>t[0]===nowTerm))?nowTerm:(terms.length?terms[0][0]:nowTerm);
-  const termHtml=terms.map(t=>`<div class="four-term${t[0]===nowTerm?" on":""}">${t[0]===nowTerm?'<span class="ft-now">当 前</span>':""}<b>${t[0]}</b><span class="ft-date">约 ${t[1]} 月 ${t[2]} 日</span><p>${t[3]}</p></div>`).join("");
+  const termHtml=terms.map(t=>`<div class="four-term${t[0]===nowTerm?" on":""}" data-term="${t[0]}" onclick="showTermMantra('${t[0]}',this)">${t[0]===nowTerm?'<span class="ft-now">当 前</span>':""}<b>${t[0]}</b><span class="ft-date">约 ${t[1]} 月 ${t[2]} 日</span><p>${t[3]}</p></div>`).join("");
   /* v51：当令本草按季节推荐，并按当前体质把契合条目排在前面，附推荐理由 */
   /* v52：当令本草纯按节气推荐，不再与体质关联 */
   const recs=(SEASON_HERB_REC[s]||[]);
@@ -1223,11 +1225,13 @@ function renderFourSeasons(s){
     </div>
     <div class="four-sec">
       <h3>贰 · ${s}季六节气</h3>
-      <div class="four-hint">按本站二十四节气表分组 · 公历日期每年略有浮动 · 当季节气以金色标出</div>
+      <div class="four-hint">按本站二十四节气表分组 · 公历日期每年略有浮动 · 当季节气以金色标出 · 点按节气查看核心养生口诀</div>
       <div class="four-terms">${termHtml}</div>
+      <div class="four-term-pop" id="termPop" style="display:none" role="status" aria-live="polite"><span class="ftp-ico">🌿</span><span class="ftp-txt" id="termPopTxt"></span></div>
     </div>
     <div class="four-sec">
       <h3>叁 · ${s}季当令本草</h3>
+      <div class="four-safety-banner"><span>⚠️ 冬季进补需辨证。温热补益之品（如肉桂、干姜、人参）并非人人皆宜，阴虚火旺、实热体质及感冒发热期间请务必慎用或停用。</span></div>
       <div class="four-hint">按「${s}季 · ${seasonTerm}」节气从全站本草名录择取当令本草，每味附当令理由。此处只按节气推荐，不按体质区分；若要看体质对应，请到「本草名录」页按体质筛选。性味功效、用法用量与「本草名录」页同源</div>
       <div class="four-herbs">${herbHtml}</div>
     </div>
@@ -1315,24 +1319,46 @@ function useBlock(m,kind){
 }
 function stripDose(s){return String(s||"").replace(/[0-9]+\s*(?:~|～|-|至)\s*[0-9]+\s*(?:g|G|克|毫升|ml|ML)/g,"").replace(/[0-9]+(?:\.[0-9]+)?\s*(?:g|G|克)(?![\u4e00-\u9fa5])/g,"").replace(/\s*，\s*/g,"、").replace(/\s*、\s*、/g,"、");}
 function warnBlock(t){return t?`<div class="m-warn">◈ 慎用与配伍：${t}</div>`:"";}
+/* v84-tonic-safety：温补药材反向禁忌 + 体质关联提示（本草名录/当令本草卡片共用） */
+const REVERSE_TONIC_TABOO="反向禁忌： 阴虚火旺、口干咽燥、大便干结者慎用。";
+const WARM_TONIC_HERBS=["肉桂","干姜","肉苁蓉","人参","熟地黄","当归","益智仁","菟丝子","黄精","党参","黄芪","桂枝"];
+const WARM_TONIC_FIT_NOTE={
+  "肉桂":"本品味辛大热，适合阳虚怕冷人群，阴虚/湿热体质请避开。",
+  "干姜":"本品味辛热，擅长温中散寒，适合脾胃虚寒、怕冷腹泻人群，阴虚内热/湿热体质请避开。",
+  "肉苁蓉":"本品温阳润肠，适合阳虚怕冷兼大便偏干人群，阴虚火旺/湿热体质请避开。",
+  "人参":"本品大补元气，适合气虚乏力、动则气短人群，实热/湿热体质及感冒发热期间请避开。",
+  "熟地黄":"本品滋腻补血，适合血虚面色萎黄人群，痰湿/湿热体质请避开。",
+  "当归":"本品补血活血，适合血虚怕冷、面色萎黄人群，湿热/阴虚火旺体质请避开。",
+  "益智仁":"本品温脾肾之阳，适合阳虚怕冷、夜尿偏多人群，阴虚火旺/湿热体质请避开。",
+  "菟丝子":"本品平补肝肾，适合肝肾不足、腰膝酸软人群，阴虚火旺/大便干结者请避开。",
+  "黄精":"本品气阴双补，适合气阴两虚、体倦口干人群，痰湿/湿热体质请避开。",
+  "党参":"本品平和补气，适合气虚乏力、食欲不振人群，实热/湿热体质请避开。",
+  "黄芪":"本品补气升阳，适合气虚自汗、容易疲劳人群，阴虚火旺/湿热体质请避开。",
+  "桂枝":"本品辛温通阳，适合阳虚怕冷、手足不温人群，阴虚火旺/实热体质请避开。"
+};
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
   const illustNow=illust||!!HERB_IMG[h.n]||!!HERB_GONGBI[h.n]; // 77 味均有工笔图
   const tox=HERB_TOX[h.n]||"无毒";
   const toxCls=tox==="药食同源"?"food":tox==="有小毒"?"small":tox==="需遵医嘱"?"care":"safe";
   const classic=h.s?h.s:`《神农本草经》将${h.n}列为上品，为常用之品。`;
-  const note=HERB_NOTE[h.n]||"日常请在医师指导下合理使用。";
-  const pharm=HERB_PHARM[h.n]||m.taboo||"常规用量安全，具体用量与禁忌请咨询执业中医师。";
-  const dose=m.dose?`<span class="note-dose">常见量：${m.dose}（科普参考，遵医嘱）</span>`:"";
+  let note=stripDose(HERB_NOTE[h.n]||"日常请在医师指导下合理使用。");
+  let pharm=HERB_PHARM[h.n]||m.taboo||"常规用量安全，具体用量与禁忌请咨询执业中医师。";
+  if(WARM_TONIC_HERBS.indexOf(h.n)>=0){
+    if(pharm.indexOf("反向禁忌")<0)pharm+=REVERSE_TONIC_TABOO;
+    const wtn=WARM_TONIC_FIT_NOTE[h.n];
+    if(wtn&&note.indexOf(wtn)<0)note+=" "+wtn;
+  }
+  const useTip=`<span class="note-dose">日常泡饮、入膳随口味取用即可，具体用量遵医嘱。</span>`;
   return `<div class="mat-card">
     ${ph?`<img class="m-img" src="${ph.src}" alt="${h.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap}</div>`:""}
-    <div class="mat-card-h"><b>${h.n}</b><span class="tox-tag tox-${toxCls}">[${tox}]</span><span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${illustNow?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':(h.cat||'本草')}</span></div>
+    <div class="mat-card-h"><b>${h.n}</b>${tox==="药食同源"?"":`<span class="tox-tag tox-${toxCls}">[${tox}]</span>`}<span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${illustNow?'<span class="mat-badge">🖌 工笔</span>':''}${illust?"":`<span class="mat-cat">${h.cat||'本草'}</span>`}</div>
     <div class="kv"><span class="k">性味归经</span>${h.f}</div>
     <div class="kv"><span class="k">药材形貌</span>${h.x}</div>
     <div class="kv"><span class="k">功效主治</span>${h.e}</div>
     <div class="kv"><span class="k">古籍名言</span>${classic}</div>
     <div class="kv"><span class="k">经典出处</span>${h.b}</div>
-    <div class="m-use"><b>◈ 药童笔记</b>：${note}${dose}</div>
+    <div class="m-use"><b>◈ 药童笔记</b>：${note}${useTip}</div>
     <div class="m-warn"><b>⚠️ 现代药理提示：</b>${pharm}</div>
     ${fitCareTags(m.fit)}
     ${fitTags(m.fit,tz)}
@@ -2271,6 +2297,45 @@ const TERMS=[
     ["立冬",11,7,"冬藏开始，早卧晚起"],["小雪",11,22,"温补驱寒，晒背取暖"],
     ["大雪",12,7,"进补正当时，锻炼勿过早"],["冬至",12,22,"一阳初生，静养守阳"]
 ];
+/* v85-term-mantra：24 节气核心养生口诀——每季六节气各一句，冬至用用户指定文案 */
+const TERM_MANTRA={
+  "立春":"立春阳气初生，宜防风保暖、舒展情志，忌过早减衣。",
+  "雨水":"雨水湿气渐重，宜健脾祛湿、少酸多甘，忌生冷伤脾。",
+  "惊蛰":"惊蛰春雷动、万物醒，宜早睡早起、舒展筋骨，忌闷居不动。",
+  "春分":"春分昼夜均、寒暑平，宜饮食求平、调和阴阳，忌偏寒偏热。",
+  "清明":"清明气清景明，宜踏青疏肝、清淡饮食，忌动怒伤肝。",
+  "谷雨":"谷雨雨生百谷，宜祛湿养肝、备迎立夏，忌久居潮湿。",
+  "立夏":"立夏暑气始、心火当令，宜养心午憩，忌贪凉饮冷。",
+  "小满":"小满物盈未熟，宜清利湿热、少食生冷，忌肥甘厚味。",
+  "芒种":"芒种农忙气湿热，宜防暑祛湿、勤换衣衫，忌汗后当风。",
+  "夏至":"夏至阳极阴生，宜护阳补阴、午间小憩，忌猛灌冰饮。",
+  "小暑":"小暑湿热蒸腾，宜静心防暑、绿豆解暑，忌暴晒耗气。",
+  "大暑":"大暑一年最热，宜冬病夏治、三伏温灸，忌过度贪凉。",
+  "立秋":"立秋凉风至，宜润燥安肺、少辛增酸，忌过食辛辣。",
+  "处暑":"处暑暑气渐止，宜早睡早起、缓添衣，忌秋乏贪睡。",
+  "白露":"白露昼夜温差大，宜身不露、防秋凉，忌赤膊贪凉。",
+  "秋分":"秋分阴阳相半，宜润燥养肺、平补为主，忌燥邪伤肺。",
+  "寒露":"寒露脚不露，宜暖足安眠、滋阴润燥，忌熬夜耗阴。",
+  "霜降":"霜降秋末，宜平补脾胃、萝卜山药，忌寒凉伤胃。",
+  "立冬":"立冬水始冰，宜早卧晚起、温补御寒，忌过汗耗阳。",
+  "小雪":"小雪天渐寒，宜温补驱寒、晒背取暖，忌情绪抑郁。",
+  "大雪":"大雪阴极藏，宜进补蓄力、保暖护阳，忌清晨冒寒锻炼。",
+  "冬至":"冬至一阳生，最宜养藏，忌熬夜耗神。",
+  "小寒":"小寒冷气积久，宜温肾暖身、早睡晚起，忌贪凉饮冷。",
+  "大寒":"大寒岁末冬藏收尾，宜平补固本、静待春归，忌大温大热。"
+};
+/* v85-term-mantra：点击节气卡展开/收起核心口诀，重复点击同一节气则收起 */
+function showTermMantra(name,el){
+  const pop=document.getElementById("termPop"),txt=document.getElementById("termPopTxt");
+  if(!pop||!txt)return;
+  if(pop.dataset.term===name&&pop.style.display!=="none"){pop.style.display="none";if(el)el.classList.remove("on-click");return;}
+  document.querySelectorAll(".four-term.on-click").forEach(x=>x.classList.remove("on-click"));
+  if(el)el.classList.add("on-click");
+  pop.dataset.term=name;
+  txt.textContent="【"+name+"】"+(TERM_MANTRA[name]||"顺应节气，起居有常，饮食有节，不妄作劳。");
+  pop.style.display="flex";
+}
+function closeTermMantra(){const pop=document.getElementById("termPop");if(pop)pop.style.display="none";document.querySelectorAll(".four-term.on-click").forEach(x=>x.classList.remove("on-click"));}
 (function(){
   const now=new Date(),m=now.getMonth()+1,d=now.getDate();
   let t=TERMS[TERMS.length-1];
@@ -2730,30 +2795,35 @@ function send(q){
 }
 
 /* 荐读页顶栏：把「AI 小药童识体质 → 按体质荐经典」显式呈现出来 */
+/* v80-read-cats：五大分类 + AI 状态栏体质筛选开关 */
+const READ_CATS=["全部","基础与理论","本草与方剂","临床与针灸","文化与养生"];
+function quizWayOf(w){return (w||"快捷版 27 题").replace("精简版 27 题","快捷版 27 题");} /* 与体质辨识页术语统一 */
 function renderRecBar(){
   const bar=$("#readRec");if(!bar)return;
   const p=physGet();
+  const toggle=`<button class="btn red fit-toggle${window._readFit?" on":""}" onclick="toggleFitBooks()">★ 筛选契合体质的书</button>`;
   if(window._readFit&&p){
-    bar.innerHTML=`<span>◈ 已按 <b>${p.n}</b> 收窄书单：只显示与你的体质相契的经典</span><button class="btn ghost" onclick="showAllBooks()">↩ 看全部二十部</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`;
+    bar.innerHTML=`<span>◈ 已按 <b>${p.n}</b> 收窄书单：只显示带「契合你的体质」红标的书，再点一次按钮即可取消筛选</span>${toggle}<button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`;
     return;
   }
   bar.innerHTML=p
-    ?`<span>◈ AI 小药童已认出你的体质：<b>${p.n}</b>（${p.j}）· ${p.way||"精简版 27 题"}</span><span>契合书目已点亮并排在最前</span><button class="btn red" onclick="fitBooks()">★ 只按我的体质荐读</button><button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`
-    :`<span>◈ 还没有体质档案：按 ZYYXH/T157-2009 答精简版 27 题或完整版 60 题生成档案，再按体质点亮该读的经典</span><button class="btn red" onclick="goQuiz('full')">答 27 题精简版</button><button class="btn ghost" onclick="goQuizFull()">完整版 60 题</button><a class="btn ghost" style="text-decoration:none" href="quiz.html#method">体质辨识是怎么做的 →</a>`;
+    ?`<span>◈ AI 小药童已认出你的体质：<b>${p.n}</b>（${p.j}）· ${quizWayOf(p.way)}</span><span>契合书目已点亮并排在最前</span>${toggle}<button class="btn ghost" onclick="go('quiz')">重测体质 →</button>`
+    :`<span>◈ 还没有体质档案：按 ZYYXH/T157-2009 答快捷版 27 题或完整版 60 题生成档案，再按体质点亮该读的经典</span>${toggle}<button class="btn ghost" onclick="goQuizFull()">完整版 60 题</button><a class="btn ghost" style="text-decoration:none" href="quiz.html#method">体质辨识是怎么做的 →</a>`;
 }
-function fitBooks(){
-  if(!physGet()&&!lastQuiz){goQuiz('full');return;}
-  window._readFit=true;renderFilter();renderBooks("__fit");
+function toggleFitBooks(){
+  if(!physGet()&&!lastQuiz){goQuiz('brief');return;}
+  window._readFit=!window._readFit;
+  renderFilter();
+  renderBooks(window._readFit?"__fit":"全部");
 }
-function showAllBooks(){window._readFit=false;renderFilter();renderBooks();}
 function renderFilter(){
-  const cats=["全部",...new Set(BOOKS.flatMap(b=>b.tg))];
   const box=$("#filter");if(!box)return;
-  box.innerHTML=`<button data-c="__fit" class="fit-only${window._readFit?" sel":""}">★ 只按我的体质荐读</button>`+cats.map(c=>`<button data-c="${c}" class="${c==="全部"&&!window._readFit?"sel":""}">${c}</button>`).join("");
+  box.innerHTML=READ_CATS.map(c=>`<button data-c="${c}" class="${c==="全部"&&!window._readFit?"sel":""}">${c}</button>`).join("");
   box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-    window._readFit=b.dataset.c==="__fit";
+    window._readFit=false;
     box.querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
     renderBooks(b.dataset.c);
+    renderRecBar();
   });
   renderRecBar();
 }
@@ -2766,10 +2836,10 @@ function renderBooks(f){
   const season=seasonOf(),sRec=SEASON_READS[season];
   const today=sRec.list[doy%sRec.list.length];
   const dcls={入门:"ez",进阶:"mid",硬核:"hard"};
-  let list=BOOKS.filter(b=>on==="全部"||(!fitOnly&&b.tg.includes(on))||(fitOnly&&fitOf(b)));
-  if(fitOnly&&!key)list=BOOKS;
+  let list=fitOnly?BOOKS.filter(b=>!!key&&fitOf(b)):BOOKS.filter(b=>on==="全部"||b.tg.includes(on));
   list=list.slice().sort((a,b)=>(fitOf(b)?1:0)-(fitOf(a)?1:0)); // 契合体质的书排在最前
   const box=$("#books");if(!box)return;
+  if(fitOnly&&!list.length){box.innerHTML=`<div class="fit-empty">还没有与你的体质相契的书目。可点上方分类「全部」浏览二十部经典，或重测体质后再来。</div>`;return;}
   box.innerHTML=list.map(b=>{
     const fit=fitOf(b)&&!!key;
     return `<div class="book">${fit?'<span class="fit-badge">契合你的体质</span>':""}${b.t===today?`<span class="today-badge">今日荐读 · ${season}</span>`:""}
