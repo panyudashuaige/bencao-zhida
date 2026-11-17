@@ -99,7 +99,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
-    <p class="desc"><b>AI 小药童</b>辨出你的体质后，会据此从二十部岐黄经典里点亮与你相契的书目并排在最前，还附上药童导读、阅读难度与适合人群。点击书卡下方的<b>「阅读选段」</b>，即可翻开<b>原文选段与白话译文</b>；未辨识体质也可按下方读阶自由翻阅。</p>
+    <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。</p>
     ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
     <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
@@ -139,7 +139,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">本 草 名 录 · 性 味 归 经</div>
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
-    <p class="desc">本站据中医药经典文献整理的 <b><span id="herbCnt">0</span> 味本草</b>：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「🖌 工笔」者另有手绘画像，见「本草图鉴」。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>深入追问。内容仅供科普学习，不构成医疗建议；想查配伍方义，请移步「名方要诀」页。</p>
+    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「✍️工笔」者另附手绘画像（见本草图鉴）。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
     ${knowBar('herb','黄芪')}
     <div id="herbArea"></div>
   </div>`,
@@ -147,8 +147,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">名 方 要 诀 · 组 成 方 义</div>
     <h2>名方要诀<span class="dot"> · </span>通鉴</h2>
-    <div class="formula-safety-banner"><span>⚠️ 本站收录方剂仅作中医药文化科普与文献展示。中药需辨证论治，严禁依据本页内容自行抓药或配药。</span></div>
-    <p class="desc">本站据中医药经典文献整理的 <b><span id="formulaCnt">0</span> 首名方</b>：组成配伍、方义主治、方书源流与深入阅读，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问配伍与禁忌。内容仅供科普学习，不构成医疗建议；想查单味药的性味归经，请移步「本草名录」页。</p>
+    <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。请特别注意：中药需辨证论治，本页仅作文献展示，严禁自行抓药。 点击任意条目可追问 AI 小药童。</p>
     ${knowBar('formula','四君子汤')}
     <div id="formulaArea"></div>
   </div>`,
@@ -170,7 +169,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">经 络 腧 穴 · 定 位 主 治</div>
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本站据中医药经典文献整理的 <b><span id="cntAcup">0</span> 处经络要穴</b>：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点开任意条目下方按钮，可<b>直接问 AI 小药童</b>追问取穴与手法。内容仅供科普学习，不构成医疗建议；名方组成请见「名方要诀」页，本草性味请见「本草名录」页。</p>
+    <p class="desc">本站据中医药经典文献整理 32 处经络要穴：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点击下方按钮可直达 AI 小药童，追问取穴手法与禁忌。</p>
     <div class="acup-health-banner"><span>⚠️ 穴位按摩仅作日常保健辅助，不具备治疗作用。若按压时出现剧烈疼痛，或本身患有严重心血管疾病、处于孕期，请立即停止并咨询医生。</span></div>
     ${knowBar('acupoint','足三里')}
     <div id="acupArea"></div>
@@ -179,7 +178,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">四 时 调 神 · 顺 岁 而 养</div>
     <h2>四时调神<span class="dot"> · </span>顺岁而养</h2>
-    <p class="desc">春生、夏长、秋收、冬藏。本页据《素问·四气调神大论》与二十四节气整理四时原文要义、当季节气、当令本草与应时荐读。点季名可预览该季，页面主色、飘落物与当季插画随之更衣。知识内容整理自中医药经典文献，仅供科普学习，不构成医疗建议。</p>
+    <p class="desc">春生、夏长、秋收、冬藏。本页依据《素问·四气调神大论》与二十四节气，整理四时原文要义、当季节气、当令本草与应时荐读。点击节气即可沉浸式预览当季风光。</p>
     ${knowBar('seasons','四时养生')}
     <div class="four-tabs" id="fourTabs">
       <button class="four-tab" data-s="春" onclick="fourSetSeason('春')">春 · 生</button>
@@ -194,7 +193,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">九 种 体 质 · 因 人 施 养</div>
     <h2>九种体质<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本页据《中医体质分类与判定》与《黄帝内经》「阴阳二十五人」整理<b>平和、气虚、阳虚、阴虚、痰湿、湿热、血瘀、气郁、特禀九种体质</b>：体质画像、常见表现、易感倾向、调养宜忌，并关联本站本草、名方与穴位。每张卡片都能<b>直接问 AI 小药童</b>追问调养细节；想知道自己是哪一种，可先答「体质辨识」页的问卷自测：完整版 60 题按 ZYYXH/T157-2009 附录全条目整理，精简版 27 题为快速版，两版判定标准相同；该页也讲清了四诊合参、量表计分与判定复核的通常做法。体质会随年龄、起居与四时变化，内容仅供科普学习，不构成医疗建议。</p>
+    <p class="desc">本页依据《中医体质分类与判定》整理平和、气虚、阳虚等九种体质的画像与调养宜忌，并精准关联对应的本草、名方与穴位。想知道自己属于哪一种？可前往「体质辨识」完成问卷自测，或直接点击卡片追问AI小药童。</p>
     ${knowBar('constitution','九种体质')}
     <div class="tz-lead">
       <a class="btn red" style="text-decoration:none" href="quiz.html?m=full">答 27 题精简版辨体质</a>
@@ -1299,18 +1298,22 @@ function herbPhoto(h){
   if(HERB_ILLUS[h.n])return {src:HERB_ILLUS[h.n],cap:"示 意 图 · 非 实 拍"};
   return null;
 }
+/* v77：把名方传统服法的长文案精简为剂型短词（水煎服/水丸/蜜丸/散剂/泡饮） */
+function briefFormulaUse(s){
+  s=String(s||"");
+  if(/水丸/.test(s))return "水丸";
+  if(/炼蜜为丸|为丸|蜜丸/.test(s))return "蜜丸";
+  if(/为散|研末|散剂/.test(s))return "散剂";
+  if(/水煎|煎服|煎温服|煎分/.test(s))return "水煎服";
+  if(/泡饮|泡茶/.test(s))return "泡饮";
+  return "遵医嘱服用";
+}
 function useBlock(m,kind){
   if(!m.use)return "";
   const dose=m.dose?`<b>常见量</b>：${m.dose}；`:"";
-  return `<div class="m-use"><b>${kind}</b>：${m.use}${dose?"<br>"+dose:""}</div>`;
+  return `<div class="m-use"><b>${kind}</b>：${briefFormulaUse(m.use)}${dose?"<br>"+dose:""}</div>`;
 }
 function stripDose(s){return String(s||"").replace(/[0-9]+\s*(?:~|～|-|至)\s*[0-9]+\s*(?:g|G|克|毫升|ml|ML)/g,"").replace(/[0-9]+(?:\.[0-9]+)?\s*(?:g|G|克)(?![\u4e00-\u9fa5])/g,"").replace(/\s*，\s*/g,"、").replace(/\s*、\s*、/g,"、");}
-function formulaClinicWarn(){return '<div class="m-warn m-clinic">⚠️ 临床安全提示： 中医方剂讲究君臣佐使与因人而异。本系统不提供剂量指导，如需使用，请务必前往正规医疗机构由中医师面诊开具，切勿盲目照方自服。</div>';}
-function formulaCare(f){
-  const fit=(formulaMeta(f).fit||[]);
-  const groups=fit.length?fit.join('、'):'气虚、阴虚等常见人群';
-  return `<div class="m-care">◈ 临床常辅助调理方向（如：部分${groups}的辅助调理）；仅供科普检索，非治疗承诺，具体须经中医师辨证。</div>`;
-}
 function warnBlock(t){return t?`<div class="m-warn">◈ 慎用与配伍：${t}</div>`:"";}
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
@@ -1344,7 +1347,7 @@ function formulaCard(f){
     <div class="kv"><span class="k">方书源流</span>${f.s}</div>
     <div class="kv"><span class="k">方义主治</span>${stripDose(f.d)}</div>
     <div class="kv"><span class="k">深入阅读</span>${f.b}</div>
-    ${useBlock(m,"传统服法")}${formulaCare(f)}${formulaClinicWarn()}${fitTags(m.fit,tz)}
+    ${useBlock(m,"传统服法")}${fitTags(m.fit,tz)}<div class="formula-mini-tip">方剂需辨证，请遵医嘱使用。</div>
     <button class="btn ghost mat-ask" onclick="askKB('${nm}')">问小药童 · ${nm}</button>
   </div>`;
 }

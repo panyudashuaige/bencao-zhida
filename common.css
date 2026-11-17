@@ -680,9 +680,7 @@ footer .orn2{font-family:"Ma Shan Zheng",serif;font-size:16px;color:var(--gold);
 .mat-note{font-size:13px;color:var(--ink2);background:var(--gold-l);border-left:3px solid var(--gold);padding:9px 14px;border-radius:0 8px 8px 0;margin-bottom:12px;line-height:1.7}
 .herb-safety{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.7;color:#8a6d1f;background:#FFF8E1;border:1px solid #F0DFA8;border-left:4px solid #D9A441;border-radius:8px;padding:10px 14px;margin:2px 0 12px}
 .herb-safety .hs-ico{font-size:14px;line-height:1.5;flex:none}
-.formula-safety-banner{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.75;color:#8f241b;background:#FDECEA;border:1px solid #E9B4AC;border-left:4px solid #b23c30;border-radius:8px;padding:11px 15px;margin:4px 0 14px;font-weight:600;box-shadow:0 2px 10px rgba(43,43,38,.05)}
-.formula-safety-banner .fsb-ico{font-size:15px;line-height:1.55;flex:none}
-.m-clinic{color:#8f241b!important;background:#FDECEA!important;border:1px solid #E9B4AC;border-left:4px solid #b23c30}
+.formula-mini-tip{font-size:11px;color:#a09a8f;line-height:1.5;margin:5px 0 2px}
 .m-care{font-size:12.5px;line-height:1.7;color:#3c5a4a;background:linear-gradient(100deg,rgba(63,122,72,.08),rgba(154,123,63,.05));border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:8px 12px;margin:6px 0}
 .m-imgwrap{position:relative;width:100%}
 .m-side-tag{position:absolute;transform:translate(-50%,7px);background:rgba(155,62,48,.93);color:#fff;font-size:10.5px;line-height:1;letter-spacing:.3px;padding:3px 7px;border-radius:9px;white-space:nowrap;box-shadow:0 1px 5px rgba(0,0,0,.18);pointer-events:none;font-weight:600;z-index:2}
