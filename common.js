@@ -58,7 +58,7 @@ const PAGE_HTML={
     <div class="quiz-companion" id="qcBox">
       <div class="qc-top">
         <img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async">
-        <div class="qc-say"><b>药童陪你答 · 我是你的 AI 小药童</b><span id="faceSay">回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜</span></div>
+        <div class="qc-say"><b>药童陪你答 · 我是你的 AI 小药童</b><span id="faceSay">一共 27 题，请回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选择最贴近的一项；请尽量凭第一直觉作答，不要只按当天的状态。答完后，我会为你分析主导体质与兼夹体质，并为你推荐契合的经典。</span></div>
       </div>
       <div class="qc-prog"><div class="qc-bar"><i id="qProgBar"></i></div><span class="qc-num" id="qProgTxt">已答 0/27</span></div>
     </div>
@@ -330,6 +330,7 @@ const HERB_ADD=[
   {n:"白芷",f:"辛，温 · 归胃、大肠、肺经",x:"长圆锥形根，表面灰棕至黄棕、有皮孔样横向突起（疙瘩丁），质坚实，断面白色粉性，气芳香",e:"解表散寒、祛风止痛、宣通鼻窍、燥湿止带、消肿排脓",s:"《神农本草经》列为中品：「主女人漏下赤白，血闭阴肿，寒热，风头侵目泪出。」",b:"《神农本草经》《本草纲目》",cat:"解表",fit:["特禀质", "痰湿质", "阳虚质"],use:"煎服或入丸散；外用研末调敷",dose:"3~10g",taboo:"阴虚血热者忌用；光敏性皮肤者外用后避免强光曝晒"},
   {n:"辛夷",f:"辛，温 · 归肺、胃经",x:"花蕾呈毛笔头状或长卵形，外被灰白或灰绿色密绒毛，质轻脆，气芳香",e:"散风寒、通鼻窍，为鼻鼽鼻塞之常用药",s:"《神农本草经》列为上品：「主五脏身体寒热，风头脑痛，面䵟。」",b:"《神农本草经》《本草纲目》",cat:"解表",fit:["特禀质", "阳虚质"],use:"煎服宜包煎（绒毛刺激咽喉），或研末外用",dose:"3~10g",taboo:"阴虚火旺、鼻病属热者慎用；须包煎"},
   {n:"灵芝",f:"甘，平 · 归心、肺、肝、肾经",x:"菌盖半圆形或肾形，表面红褐至紫褐、有漆样光泽与环状棱纹，菌肉淡棕，质硬木栓化",e:"补气安神、止咳平喘，为扶正固本之品，现代多作保健食材",s:"《神农本草经》列为上品（赤芝）：「主胸中结，益心气，补中，增智慧，不忘。」",b:"《神农本草经》《本草纲目》",cat:"安神",fit:["气虚质", "特禀质", "平和质"],use:"煎服或切片泡饮、入膳炖汤，宜久煎",dose:"6~12g",taboo:"外感初起、实证热证者不宜；手术前后或有出血倾向者须医师指导"},
+  {n:"麻黄",f:"辛、微苦，温 · 归肺、膀胱经",x:"草质茎细长圆柱形，表面淡黄绿至黄棕，节明显，断面髓部红棕色，气微香",e:"发汗解表、宣肺平喘、利水消肿，为风寒表实要药；属特殊管理药材，须凭医师处方使用",s:"《本草纲目》载其能发汗解表，为伤寒要药；历代医家强调其峻烈须辨证",b:"《神农本草经》《本草纲目》《伤寒论》",cat:"解表",use:"须凭执业医师处方，严禁自行煎服或代茶饮",dose:"遵医嘱（处方药，本站不提供用量建议）",taboo:"含麻黄碱，高血压、心脏病、失眠及孕妇慎用；运动员慎用；切勿自行配伍服用"},
 ];
 const FORMULA_META={
   "四君子汤":{fit:["气虚质", "痰湿质"],use:"原方四味等分为粗末，水煎去滓温服，日二次；现代多作汤剂随证加减",taboo:"阴虚火旺、实热壅滞者不宜；气滞胀满者可加陈皮（异功散）"},
@@ -411,7 +412,7 @@ const ACUP_SVG={"足三里": "assets/acupoint/acup-001.svg", "涌泉": "assets/a
 
 /* v53：用户提供的实拍照片（放入 assets/herbs/real/、assets/acupoint/real/ 后重建即生效） */
 const USER_PHOTO={};
-/* 合并后的全站知识口径：76 味本草 / 30 首名方 / 32 处穴位 */
+/* 合并后的全站知识口径：77 味本草 / 30 首名方 / 32 处穴位 */
 const ALL_HERBS=HERBS.concat(MATERIA_EXTRA,HERB_ADD);
 /* 合并数组用惰性函数：FORMULAS / ACUP / BOOK_READS 在本行之后才声明，避免 const 暂时性死区 */
 const allFormulas=()=>FORMULAS.concat(FORMULA_ADD);
@@ -425,6 +426,10 @@ const allReads=()=>{
   return o;
 };
 /* v51：条目元数据查找（新增条目自带 fit/use，现有条目从 META 表补） */
+/* ===== v67：全站本草卡片统一结构 —— 毒性分级 / 生活化笔记 / 现代药理提示 ===== */
+const HERB_TOX={"黄芪": "药食同源", "枸杞子": "药食同源", "金银花": "药食同源", "陈皮": "药食同源", "茯苓": "药食同源", "甘草": "药食同源", "菊花": "药食同源", "山楂": "药食同源", "生姜": "药食同源", "莲子": "药食同源", "山药": "药食同源", "薄荷": "药食同源", "大枣": "药食同源", "薏苡仁": "药食同源", "百合": "药食同源", "桑椹": "药食同源", "荷叶": "药食同源", "砂仁": "药食同源", "藿香": "药食同源", "蒲公英": "药食同源", "栀子": "药食同源", "乌梅": "药食同源", "玫瑰花": "药食同源", "佛手": "药食同源", "合欢花": "药食同源", "益智仁": "药食同源", "肉苁蓉": "药食同源", "菟丝子": "药食同源", "女贞子": "药食同源", "石斛": "药食同源", "灵芝": "药食同源", "肉桂": "药食同源", "干姜": "药食同源", "白芷": "药食同源", "桔梗": "药食同源", "酸枣仁": "药食同源", "五味子": "药食同源", "白扁豆": "药食同源", "黄精": "药食同源", "太子参": "药食同源", "冬瓜皮": "药食同源", "玉竹": "药食同源", "车前子": "药食同源", "茵陈": "药食同源", "葛根": "药食同源", "人参": "药食同源", "桃仁": "有小毒", "麻黄": "需遵医嘱", "半夏": "需遵医嘱", "大黄": "需遵医嘱", "当归": "无毒", "桂枝": "无毒", "防风": "无毒", "石膏": "无毒", "黄芩": "无毒", "黄连": "无毒", "生地黄": "无毒", "苍术": "无毒", "泽泻": "无毒", "白术": "无毒", "党参": "无毒", "熟地黄": "无毒", "麦冬": "无毒", "香附": "无毒", "木香": "无毒", "川芎": "无毒", "丹参": "无毒", "三七": "无毒", "赤芍": "无毒", "郁金": "无毒", "益母草": "无毒", "柴胡": "无毒", "蝉蜕": "无毒", "辛夷": "无毒", "北沙参": "无毒", "艾叶": "无毒", "红花": "无毒"};
+const HERB_NOTE={"黄芪": "晨起或午后取2~3片温水泡代茶，久坐办公室、说话多、容易乏的时候来一杯最相宜。", "当归": "秋冬干燥时炖鸡汤、排骨汤放两三片，汤色微黄、香气特殊；民间也常用于女性经后调养入膳。", "枸杞子": "泡水、煮粥、拌酸奶都能放一小把，久盯屏幕后抓几粒嚼着吃，方便又日常。", "金银花": "夏天取少许沸水冲泡代茶，清香解腻；也可煎水放凉后湿敷，作日常清爽饮品。", "陈皮": "泡水时撕一小瓣，或炖肉、煮粥时放一点去腥增香；陈久的闻起来香气更柔和。", "茯苓": "煮粥、煲汤时放几块，或做成茯苓饼当点心，口感清淡，四季都适合入膳。", "甘草": "泡水时放1~2片调和味道，或煲汤作调味；因其味甜，很多家家常汤方里都有它。", "菊花": "电脑前放一杯杭白菊或胎菊，清香解腻；与枸杞同泡，是常见的日常护眼茶。", "山楂": "饭后用几片干山楂泡水，或做山楂糕、糖葫芦；炖肉时放几颗解油腻。", "生姜": "受凉后切几片煮水温服，或炒菜、炖鱼时放姜片去腥；早上一片姜是常见的日常习惯。", "人参": "体力消耗大或调养时切薄片含服、炖汤（如人参鸡汤），宜文火久煎，少量频用。", "莲子": "煮粥、炖银耳羹时抓一把，去芯者味更甘；睡前一小碗莲子羹是常见的安神甜品。", "山药": "蒸食、煮粥、炖排骨都相宜，削皮时戴手套防手痒；日常平补，老幼皆宜。", "薄荷": "沸水冲泡代茶，清凉提神；夏天煮一大壶放凉饮用，或煎水擦洗祛痱止痒。", "桂枝": "多在汤方中作引子，日常可入卤料、炖肉增香；民间桂枝汤须辨证，不宜自行照方。", "防风": "常用于易感风邪人群的食疗汤包（如玉屏风类），日常较少单独泡饮。", "葛根": "切块炖汤或煮水代茶，微甜；葛根粉冲糊是常见的早餐，解肌生津。", "石膏": "不作日常茶饮或食疗，主要入汤方清高热（如白虎汤），须医师辨证使用。", "黄芩": "多入复方清热，日常少作茶饮；有些地方少量煎水代茶，味苦，宜短用。", "黄连": "极苦，少作日常饮品；民间『哑巴吃黄连』即言其苦，多入丸散或汤方。", "生地黄": "鲜品可榨汁或煮水，口干舌燥时少量饮用；生用偏清润，与熟地黄吃法不同。", "苍术": "多入汤方配伍，日常更常见的是做香囊挂在车里或室内；民间端午熏香也常用苍术，气味清烈。", "薏苡仁": "煮粥、煲汤或做红豆薏米水，是最常见的祛湿食疗；提前泡软更易煮烂。", "泽泻": "多出现在六味地黄丸这类中成药里，日常极少单独煮水喝；抓药时常见它与滋补药材配在一起。", "干姜": "炖汤、做卤味时放几片温中，或研末调蜂蜜；与生姜不同，干姜偏温里守中。", "肉桂": "炖肉、煮咖啡、做甜点时放一小段或少许粉，香气浓郁；日常入膳量宜小。", "白术": "常与茯苓、甘草同入四君子汤类食疗汤包，健脾益气；日常单用较少。", "党参": "炖鸡汤、排骨汤时放几根代人参，平和补气，是常见的家常药膳。", "熟地黄": "煲汤、熬膏或做地黄丸类，味甜质滋腻；常配陈皮、砂仁以防腻膈。", "麦冬": "沸水泡饮或煮粥，润润的口感；与沙参、玉竹同煮是常见的养阴润燥茶。", "香附": "多入调经疏肝方，日常少单独泡饮；气滞不舒时常见于女性调养方中。", "木香": "入汤方行气，或炖肉时作香料；煎时宜后下以保留香气。", "川芎": "常见于四物汤等调经方和炖肉调料，香气浓；阴虚火旺、月经过多者不宜自行入膳。", "丹参": "切片泡水代茶或炖汤，汤色红亮；民间『一味丹参，功同四物』，日常活血调养常用。", "三七": "研末温水送服或炖汤（如三七炖鸡），止血散瘀；外伤瘀肿也常用，孕妇忌。", "半夏": "生品有毒，绝不可自行食用；临床用的是姜半夏、法半夏等炮制品，须凭处方。", "桔梗": "泡水或煮汤，宣肺利咽；其断面『金井玉栏』是鉴别特征，有些地方也入咸菜。", "酸枣仁": "睡前用炒酸枣仁煮水或泡茶，是常见的助眠食疗；宜打碎更好出味。", "五味子": "泡水代茶，五味俱全、酸甘口；常与人参、麦冬同泡即『生脉饮』思路，日常少量。", "大黄": "泻下力强，不作日常茶饮或食疗；民间『大黄泻火』须中病即止，切不可长期自行服用。", "大枣": "煲汤、煮粥、蒸糕都放几颗，是药食同源的日常甜品；掰开去核更易出味。", "黄精": "蒸熟后切片泡水、煮粥或炖肉，黏糯微甜；古称『仙人余粮』，适合长期平补。", "太子参": "炖汤或泡水，清补不燥，适合小儿及夏季调养；常与山药、石斛同用。", "白扁豆": "煮粥、炖汤或做扁豆糕，绵软清香；一定要煮熟煮透，长夏祛湿常食。", "益智仁": "盐水炒后入汤方或炖汤，温温的；民间用于脾肾阳虚、口中多唾、夜尿多。", "菟丝子": "煎服或泡酒、煮粥，细小如沙；平补阴阳而不燥，常见于补肾方。", "艾叶": "煎水泡脚、艾草包热敷，或做青团、艾糕；端午挂艾是传统习俗，灸用须专业操作。", "肉苁蓉": "切片泡水、泡酒或炖羊肉汤，温润不燥，号称『沙漠人参』；常与当归同用。", "百合": "鲜百合蒸食、煮粥或炒西芹，清甜；干燥季节做百合银耳羹，润肺安神。", "玉竹": "泡水、煮汤或炖肉，微甜带黏；与沙参、麦冬同煮是常见的秋日润燥茶。", "北沙参": "炖汤、煮粥或泡水，养阴清肺；秋燥咳嗽时常见，宜另煎。", "石斛": "鲜品榨汁或煎水久煮，胶质多；熬夜、用嗓多的人常泡石斛麦冬茶。", "女贞子": "泡酒、煮水或熬膏，补肝肾、乌须发；常与旱莲草同用（二至丸）。", "桑椹": "鲜食、熬膏、泡酒或煮粥，酸甜多汁；未熟的青桑椹不宜多吃。", "荷叶": "干荷叶泡水代茶，清香解腻；夏天做荷叶饭、荷叶鸡，或煮粥，清暑化湿。", "冬瓜皮": "冬瓜连皮煮汤或煮水，清润；消皮肤水肿时保留冬瓜皮一起煲汤。", "砂仁": "炖肉、卤味时拍碎后下，芳香去腥醒脾；煮粥快好时放几粒，香气温和。", "藿香": "鲜品或干品泡水代茶，解暑化浊；夏天藿香正气类是常备，但成药须按说明。", "茵陈": "『三月茵陈四月蒿』，春季嫩茵陈可蒸食、煮水；民间做茵陈蒿团子，清利湿热。", "栀子": "泡水色黄、微苦，夏季少量代茶；也可捣碎外敷（须遵医嘱），或作天然染料。", "蒲公英": "鲜品洗净凉拌、做汤，或干品泡水，微苦回甘；春天采嫩叶是常见野菜。", "车前子": "煮水代茶或煮粥，利水；冲泡时会析出黏液，宜包煎，常见于清热利湿方。", "红花": "少量泡水代茶，汤色橙红；女性血瘀调养常用，但孕妇绝对禁用。", "桃仁": "多入汤方或炖汤，活血润肠；必须打碎、去皮尖使用，孕妇及便溏者不宜自行食用。", "赤芍": "入汤方清热凉血、散瘀，日常少单独泡饮；常与丹皮同用，汤色偏红。", "郁金": "切片泡水或入汤方，行气解郁、利胆；情绪不舒时常见于疏肝方，孕妇慎用。", "益母草": "女性调经常用，煮水或熬膏（益母草膏），产后调理须遵医嘱；孕妇忌用。", "玫瑰花": "干花泡水代茶，香气怡人；女性经前心情不舒时爱泡一杯，颜色好看又解闷，不宜久煎。", "佛手": "切片泡水或泡酒、蜜渍，清香；疏肝理气、和胃，胸胁胀闷时常见于调养茶。", "合欢花": "睡前泡一杯，气味清甜，解郁安神；情志不舒、夜眠不安时常见的花草茶。", "柴胡": "多在汤方里出现，比如小柴胡汤、逍遥散；日常很少单独泡饮，抓药时须经医师辨证。", "乌梅": "泡水做酸梅汤，生津止渴；去核煮水，夏天解暑，酸甘化阴。", "蝉蜕": "多入汤方或煎水外洗，利咽止痒；皮肤瘙痒、声音嘶哑时常见，孕妇慎用。", "白芷": "入汤方或作卤料、香料，祛风止痛、通鼻窍；民间白芷鱼汤、卤味常用，光敏者注意。", "辛夷": "治鼻塞的常用药，煎服须包煎（绒毛刺激咽喉）；也有辛夷花茶，孕妇慎用。", "灵芝": "切片泡水、炖汤或泡酒，扶正固本、增益智安神，久煎出味，日常保健常见。", "麻黄": "特殊管理药材，绝不可自行煎服或代茶饮；须凭执业医师处方使用。"};
+const HERB_PHARM={"黄芪": "常规食用量安全，但感冒发热、阴虚阳亢者长期大量服用可能加重烦躁、失眠；高血压及正服抗凝药者宜先咨询医生。", "当归": "常规用量安全，但湿盛中满、大便溏泄者大量服用可能加重腹泻；月经过多者及孕妇须在医师指导下使用。", "枸杞子": "常规食用量安全，但外邪实热、脾虚湿滞便溏者长期大量服用可能加重不适；建议每日不超过一小把。", "金银花": "常规泡饮量安全，但脾胃虚寒、容易腹泻者长期大量饮用可能加重寒证；婴幼儿不宜盲目大量饮用。", "陈皮": "常规食用量安全，但气虚、阴虚燥咳及吐血者长期大量服用可能耗气伤阴；不宜与其他药材随意配伍。", "茯苓": "常规食用量安全，但虚寒精滑、气虚下陷者大量服用可能加重症状；食疗宜少量长期，不必猛加。", "甘草": "常规食用量安全，但长期大剂量服用可能引起水钠潴留、血压升高（假性醛固酮增多症）；高血压、水肿者慎用，反甘遂、大戟、海藻、芫花。", "菊花": "常规泡饮量安全，但气虚胃寒、食少便溏者大量饮用可能加重不适；低血压人群不宜长期大量饮用。", "山楂": "常规食用量安全，但空腹或胃酸过多者大量食用可能刺激胃黏膜、引起反酸；孕妇不宜大量食用，脾胃虚弱无积滞者慎用。", "生姜": "常规食用量安全，但阴虚内热、热盛疮疡者长期大量服用可能助热；夜间不宜多食，腐烂生姜不可食用（含黄樟素）。", "人参": "常规用量安全，但实证、热证而正气不虚者服用可能『闭门留寇』、加重不适；反藜芦、畏五灵脂，不宜与萝卜、浓茶同服，高血压未控者慎用。", "莲子": "常规食用量安全，但中满痞胀、大便燥结者大量食用可能加重腹胀便秘。", "山药": "常规食用量安全，但湿盛中满、有实邪者大量食用可能碍胃助湿；糖尿病人以其入膳应计入主食总量。", "薄荷": "常规泡饮量安全，但芳香辛散、久煎失效；阴虚血燥、表虚汗多者大量服用可能加重，哺乳期妇女不宜大量饮用（可能影响乳汁分泌）。", "桂枝": "常规用量安全，但温热病、阴虚火旺、血热妄行者服用可能助热动血；孕妇慎用，须经医师辨证。", "防风": "常规用量安全，但血虚痉急、阴虚火旺而无风邪者服用可能耗散正气；不宜长期大量自用。", "葛根": "常规食用量安全，但胃寒呕吐、表虚多汗者大量服用可能加重；女性经期及低血压人群不宜大量长期食用。", "石膏": "属矿物药，非实热大热证不宜使用；脾胃虚寒、阴虚内热者服用可能损伤胃气、引起腹泻，切勿自行大量服用。", "黄芩": "常规用量安全，但苦寒伤胃，脾胃虚寒者长期大量服用可能引起胃部不适、腹泻；不宜久服。", "黄连": "常规用量安全，但大苦大寒，脾胃虚寒、阴虚津伤者长期大量服用可能伤胃伤阴；须辨证使用，不宜久服。", "生地黄": "常规用量安全，但性寒滋腻，脾虚湿滞、腹满便溏者大量服用可能加重腹泻；与熟地黄不可混用。", "苍术": "常规用量安全，但辛温燥烈，阴虚内热、气虚多汗者长期大量服用可能耗气伤阴；不宜久服。", "薏苡仁": "常规食用量安全，但性偏凉，津液不足、大便燥结者大量食用可能加重；孕妇慎用，传统认为孕期忌食。", "泽泻": "常规用量安全，但肾虚精滑、无湿热者长期大量服用可能加重滑泄；不宜长期大量服用。", "干姜": "常规用量安全，但辛热，阴虚内热、血热妄行者长期大量服用可能助热动血；孕妇慎用。", "肉桂": "常规食用量安全，但辛大热，阴虚火旺、里有实热、血热妄行者大量服用可能助火伤阴；孕妇慎用，畏赤石脂。", "白术": "常规用量安全，但苦温燥湿，阴虚燥渴、气滞胀闷者大量服用可能加重；须辨证使用。", "党参": "常规食用量安全，但实证、热证而正气不虚者服用可能助火；不宜与藜芦同用，气滞者不宜大量。", "熟地黄": "常规用量安全，但滋腻碍胃，脾胃虚弱、气滞痰多、腹满便溏者大量服用可能加重；消化不良者慎用。", "麦冬": "常规泡饮量安全，但性寒润，脾胃虚寒泄泻、外感风寒咳嗽者大量服用可能加重；不宜长期大量。", "香附": "常规用量安全，但辛散苦燥，气虚无滞、阴虚血热者长期大量服用可能耗气伤阴；不宜长期自用。", "木香": "常规用量安全，但辛温香燥，阴虚火旺、津液不足者长期大量服用可能伤津；不宜久煎、不宜长期大量。", "川芎": "常规用量安全，但辛温行散，阴虚火旺、月经过多、有出血倾向者服用可能增加出血风险；孕妇慎用。", "丹参": "常规用量安全，但反藜芦；无瘀滞者慎用，与抗凝药（如华法林）同用可能增加出血风险，须医师指导。", "三七": "常规用量安全，但孕妇忌用；血虚无瘀者不宜，与抗凝药同用须医师指导，经期量多者慎用。", "半夏": "生品有毒，误食可致口舌麻木、喉头水肿甚至窒息；须经姜、矾等炮制并遵医嘱使用，反乌头，阴虚燥咳、血证者慎用。", "桔梗": "常规用量安全，但用量过大易致恶心呕吐；阴虚久咳、咳血者慎用，胃溃疡者不宜大量。", "酸枣仁": "常规用量安全，但有实邪郁火者慎用；与镇静催眠药同用可能增强作用，服药期间避免驾驶或操作机械。", "五味子": "常规泡饮量安全，但外有表邪、内有实热、咳嗽初起者服用可能留邪；胃酸过多者大量饮用可能不适。", "大黄": "含蒽醌类成分，长期大量服用可能导致电解质紊乱、结肠黑变病及药物依赖；脾胃虚弱、气血亏虚、孕妇及哺乳期忌用，不宜久服。", "大枣": "常规食用量安全，但含糖量高，糖尿病人应控制；湿盛中满、食积、齿病、虫病者大量食用可能加重，不宜过量。", "黄精": "常规食用量安全，但滋腻，脾虚湿滞、咳嗽痰多、中寒泄泻者大量服用可能加重；生品刺激咽喉，须蒸制后食用。", "太子参": "常规食用量安全，但补气力和缓，表实邪盛、内有实滞者服用可能留邪；不宜与藜芦同用。", "白扁豆": "生品含凝集素，未煮熟可能引起恶心、呕吐、腹痛；须彻底加热煮熟，寒热病邪未尽者慎用。", "益智仁": "常规用量安全，但辛温燥烈，阴虚火旺、因热而致遗精尿频者服用可能加重；不宜长期大量自用。", "菟丝子": "常规用量安全，但偏补肾阳，阴虚火旺、大便燥结、小便短赤者大量服用可能加重；不宜长期大量。", "艾叶": "常规外用或泡脚安全，但阴虚血热者内服慎用；艾叶含挥发油，过量内服可能刺激胃肠，艾条灸须防烫伤、注意通风。", "肉苁蓉": "常规食用量安全，但温阳润肠，阴虚火旺、大便溏泄、胃肠实热者大量服用可能加重腹泻；不宜长期大量。", "百合": "常规食用量安全，但性寒润，风寒咳嗽、中寒便溏者大量食用可能加重；不宜生食过多。", "玉竹": "常规食用量安全，但滋腻，痰湿气滞、脾虚便溏者大量服用可能加重；不宜长期大量。", "北沙参": "常规用量安全，但反藜芦；风寒咳嗽、脾胃虚寒者忌用，不宜与藜芦同用。", "石斛": "常规用量安全，但滋腻敛邪，温热病早期阴未伤者、湿温未化燥者忌用；脾胃虚寒者慎用，宜久煎。", "女贞子": "常规用量安全，但性凉，脾胃虚寒泄泻、阳虚者大量服用可能加重；不宜长期大量。", "桑椹": "常规食用量安全，但性寒，脾胃虚寒便溏者大量食用可能加重腹泻；未成熟果实不宜多食，含糖高者控制量。", "荷叶": "常规泡饮量安全，但性偏凉，脾胃虚寒、气血亏虚者长期大量饮用可能加重；低血压、体弱者不宜长期大量。", "冬瓜皮": "常规食用量安全，但利水偏凉，脾胃虚寒、营养不良性虚肿者大量食用可能加重；不宜长期大量单用。", "砂仁": "常规用量安全，但辛温香燥，阴虚血燥、火热内炽者大量服用可能伤阴；不宜久煎，后下为宜。", "藿香": "常规泡饮量安全，但芳香辛散，阴虚火旺、胃热作呕者服用可能加重；不宜久煎。", "茵陈": "常规用量安全，但苦寒，脾虚血亏所致萎黄、非湿热黄疸者忌用；黄疸须就医明确病因，勿自行长期服用。", "栀子": "常规用量安全，但苦寒，脾虚便溏、胃寒作痛者大量服用可能加重；不宜长期大量。", "蒲公英": "常规食用量安全，但性寒，脾胃虚寒、便溏者大量食用可能引起腹泻；用量过大可致缓泻，过敏者禁用。", "车前子": "常规用量安全，但利水，肾虚精滑、内无湿热者大量服用可能加重；孕妇慎用，宜包煎。", "红花": "常规用量安全，但活血力强，孕妇忌用（可能动血动胎）；有出血倾向、月经过多者大量服用可能增加出血，正服抗凝药者须医师指导。", "桃仁": "含苦杏仁苷，生品或大量服用可致头晕、恶心甚至呼吸抑制（有小毒）；须炮制、打碎并控制用量，孕妇忌用，血虚无瘀者不宜。", "赤芍": "常规用量安全，但反藜芦；血虚无瘀、脾胃虚寒者大量服用可能加重，不宜与藜芦同用。", "郁金": "常规用量安全，但孕妇慎用；气血虚而无瘀滞者不宜，不宜与丁香、母丁香同用（十九畏）。", "益母草": "常规用量安全，但对子宫有兴奋作用，孕妇忌用（可能引起宫缩）；血虚无瘀、阴虚血少者慎用，不宜长期大量。", "玫瑰花": "常规泡饮量安全，但温香行散，阴虚火旺者长期大量饮用可能助火；孕妇慎用，不宜与茶叶同泡以免影响行气。", "佛手": "常规泡饮量安全，但辛温香燥，阴虚有火、无气滞者长期大量饮用可能伤阴；不宜长期大量。", "合欢花": "常规泡饮量安全，但孕妇慎用；脾胃虚寒者不宜长期单服，不宜长期大量。", "柴胡": "常规用量安全，但升散，肝阳上亢、肝风内动、阴虚火旺者服用可能加重；不宜长期大量使用，须医师辨证，孕妇慎用。", "乌梅": "常规食用量安全，但酸涩收敛，外有表邪、内有实热积滞者大量食用可能留邪；胃酸过多者不宜多食。", "蝉蜕": "常规用量安全，但孕妇慎用；脾胃虚寒者不宜大量，属动物类药材，过敏体质者慎用，须配合过敏原规避。", "白芷": "常规用量安全，但辛温，阴虚血热者忌用；含呋喃香豆素，光敏性皮肤者外用或大量后避免强光曝晒。", "辛夷": "常规用量安全，但辛温，阴虚火旺、鼻病属热者慎用；绒毛须包煎以免刺激咽喉，孕妇慎用。", "灵芝": "常规食用量安全，但外感初起、实证热证者服用可能留邪；手术前后或有出血倾向者须医师指导，破损孢子粉产品注意过敏。", "麻黄": "含麻黄碱，可兴奋中枢与心血管；高血压、心脏病、失眠及孕妇慎用，运动员慎用，切勿自行配伍服用。"};
 const herbMeta=h=>h.fit?h:(HERB_META[h.n]||{fit:[],use:"",dose:"",taboo:""});
 const formulaMeta=f=>f.fit?f:(FORMULA_META[f.n]||{fit:[],use:"",taboo:""});
 const acupMeta=a=>a.fit?a:(ACUP_META[a.n]||{fit:[],msg:"",care:""});
@@ -515,7 +520,10 @@ const SAFE_TOPIC_ANS={
 };
 function safeTopicAns(t){
   const x=SAFE_TOPIC_ANS[t.n];if(!x)return null;
-  return `<b>${t.n} · 中医科普</b><div class="kv"><span class="k">【中医认识】</span>${x.d}</div><div class="kv"><span class="k">【生活提示】</span>${x.life}</div><div class="kv" style="color:var(--red);font-weight:700">${SAFE_TIP}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`;
+  return dlgReply(`我为你查阅了知识库中的养生话题，关于「${t.n}」：`,
+    `${x.d} 生活上，${x.life}`,
+    `完整科普与典籍出处，可前往本站【经典荐读】查看；参考：${t.b||"相关经典"}。`,
+    "",`read.html`,"去经典荐读看相关典籍",SAFE_TIP);
 }
 /* ===== 相似药材外观辨别：长得像不难认，看懂要点一眼分清 ===== */
 const LOOKALIKES=[
@@ -526,11 +534,67 @@ const LOOKALIKES=[
  {a:"陈皮",b:"青皮",sA:"成熟果皮，色橙红、内面白色海绵状，质薄而软",sB:"未成熟果皮，色青黑、质硬皮厚，气味峻烈",tip:"陈皮是<b>成熟</b>橘子的果皮：色橙红或红棕，外露油点、内面白色海绵状，质薄而软；青皮是<b>未成熟</b>的青色果皮或幼果：色青黑、质硬、皮厚，气味更峻烈。同源不同龄，越生越猛。",gj:"陈皮红软性温和，青皮色青力更峻"},
  {a:"枸杞子",b:"五味子",sA:"长卵形，表面红色至暗红、皱缩，味甘微酸",sB:"小球形浆果干缩而成，尝一口五味俱全",tip:"枸杞子呈<b>长卵形</b>：表面红色至暗红、皱缩，顶端有小凸起状花柱痕，味甘、微酸；五味子是<b>小球形</b>浆果干缩而成，皱缩成团，五味俱全——酸、甘、辛、苦、咸一样不落。",gj:"枸杞长卵甜微酸，五味圆球五样味"}
 ];
+/* v63-dialog：对话式回复工具集——拟人化前缀 + 摘要提取 + 引导跳转（+追问） */
+function brief(s,n){s=String(s||"").replace(/<[^>]*>/g,"");return s.length>n?s.slice(0,n)+"…":s;}
+function dlgSafety(txt){return `<div class="chat-safe">${txt||"⚠️ 以上为科普摘要，具体辨证与调理请遵医嘱；本系统不提供药物及食疗处方。"}</div>`;}
+function dlgCta(href,label){return `<div class="chat-cta"><a href="${href}">${label} →</a></div>`;}
+function dlgReply(lead,sum,guide,follow,href,label,safe){
+  return `<div class="chat-lead">${lead}</div><div class="chat-sum">${sum}</div><div class="chat-guide">${guide}</div>`+
+    (follow?`<div class="chat-follow">${follow}</div>`:"")+dlgCta(href,label)+dlgSafety(safe);
+}
+/* 气虚质为范例精确文案，其余八种按同一结构从画像/生活提示即时摘要，做到全覆盖 */
+const TZ_DIALOG={
+ "气虚质":{lead:"我为你查阅了知识库中的体质档案，气虚质的人群主要有以下表现：",sum:"元气不足，容易疲乏、气短、自汗。在生活上，要注意避免过度劳累，推荐练习八段锦。",guide:"完整的调理要点和易患疾病，你可以前往本站的【体质辨识】页面查看详细卡片哦。",follow:"另外，想了解气虚人群可以经常按揉哪个穴位吗？"}
+};
+/* 麻黄为范例精确文案：特殊管理药材，突出安全边界；其余药材按同名结构摘要 */
+const HERB_DIALOG={
+ "麻黄":{lead:"关于'麻黄'，古籍中确有记载，但属于特殊管理药材：",sum:"《本草纲目》记载其能发汗解表。但需特别注意，麻黄含有麻黄碱，高血压、心脏病患者慎用。",guide:"因涉及毒性及配伍禁忌，完整内容请前往【本草名录】查看标准卡片。",safe:"⚠️ 麻黄属特殊管理药材，须凭执业医师处方使用，请勿自行服用或配伍。"}
+};
+/* v68：卡片「问小药童：[药名]」精准回复——不搬运卡片长文，只讲禁忌人群+面诊+追问 */
+const HERB_CARD_TABOO={
+ "黄芪":"阴虚火旺、感冒发热者慎用，高血压及正服抗凝药者宜先咨询医生",
+ "当归":"湿盛中满、大便溏泄者慎用，月经过多者及孕妇须在医师指导下使用",
+ "麻黄":"高血压、心脏病、失眠及孕妇慎用，运动员慎用，切勿自行配伍服用"
+};
+function herbCardAns(n){
+  const taboo=HERB_CARD_TABOO[n]||"相关禁忌人群与配伍需由执业中医师辨证判断，请勿自行长期大量服用";
+  return `<b>关于【${n}】，除了功效外，你需要特别注意它的禁忌人群（如${taboo}）。具体用药需结合体质配伍，建议去正规医院面诊。你想具体了解它的哪方面？</b>`+
+    `<div class="chat-guide">想看完整的性味归经、古籍名言与药理提示，可到本草名录查阅标准卡片。</div>`+
+    dlgCta(`herb.html?h=${encodeURIComponent(n)}`,`查看${n}本草卡片`)+dlgSafety();
+}
+function herbAns(h){
+  const d=HERB_DIALOG[h.n]||{};
+  return dlgReply(d.lead||`我为你查阅了知识库中的本草档案，关于「${h.n}」：`,
+    d.sum||`${brief(h.f||"",38)} 外观辨识：${brief(h.x||"",42)} ${brief(h.e||"",80)}`,
+    d.guide||`想看完整的性味归经、药材形貌、典籍摘句与经典出处，可前往本站【本草名录】查看标准卡片。`,
+    "",`herb.html?h=${encodeURIComponent(h.n)}`,`查看${h.n}本草卡片`,d.safe);
+}
+function formulaAns(f){
+  const nm=f.n.replace(/（[^）]*）/g,"");
+  return dlgReply(`我为你查阅了知识库中的名方档案，关于「${nm}」：`,
+    brief(f.d||f.s,96),
+    `完整的组成、方书源流与方义主治，可前往本站【名方要诀】查看标准卡片。`,
+    "",`formula.html?f=${encodeURIComponent(f.n)}`,`查看${nm}名方卡片`);
+}
+function acupAns(a){
+  return dlgReply(`我为你查阅了知识库中的经络档案，关于「${a.n}」穴：`,
+    `${a.m}穴。${brief(a.d,88)}`,
+    `完整的定位取穴、按摩手法与注意事项，可前往本站【经络要穴】查看标准卡片。`,
+    "",`acupoint.html?a=${encodeURIComponent(a.n)}`,`查看${a.n}穴位卡片`);
+}
+function tzAcupAns(c){
+  const arr=(TZ_EXTRA[c]&&TZ_EXTRA[c].acup)||[];
+  const list=arr.map(n=>{const a=allAcups().find(x=>x.n===n);return `<div class="kv"><span class="k">${n}</span>${a?brief(a.d,86):"经络要穴，详见卡片"}</div>`;}).join("");
+  return dlgReply(`我为你查阅了知识库中的经络档案，${c}人群可常按揉的穴位主要有：`,
+    list||"详见经络要穴卡片",
+    `完整定位、手法与注意事项，可前往本站【经络要穴】按体质查看标准卡片。`,
+    "",`acupoint.html?tz=${encodeURIComponent(c)}`,`查看${c}推荐穴位`);
+}
 const KB=[
  ...LOOKALIKES.map(l=>({keys:[`${l.a}和${l.b}`,`${l.b}和${l.a}`,`${l.a}与${l.b}`,`${l.b}与${l.a}`,`区分${l.a}`,`区分${l.b}`,`分辨${l.a}`,`分辨${l.b}`,`辨别${l.a}`,`辨别${l.b}`,`${l.a}相似`,`${l.b}相似`],cat:`辨别 · ${l.a}/${l.b}`,ans:`<b>火眼金睛 · ${l.a} vs ${l.b}</b><div class="kv"><span class="k">分辨要点</span>${l.tip}</div><div class="kv"><span class="k">药童口诀</span>「${l.gj}」</div><div style="margin-top:8px"><button class="btn ghost" onclick="go('game')">去知识竞赛练练辨药眼力 →</button></div>`})),
- ...ALL_HERBS.map(h=>({keys:[h.n],...(h.cat?{}:{herb:h.n}),ans:`<b>${h.n}</b><div class="kv"><span class="k">性味归经</span>${h.f}</div><div class="kv"><span class="k">外观辨识</span>${h.x}</div><div class="kv"><span class="k">功效主治</span>${h.e}</div><div class="kv"><span class="k">经典出处</span>${h.s}</div><div class="kv"><span class="k">深入阅读</span>${h.b}</div>${h.cat?`<div class="kv" style="color:var(--ink2)">◈ 归入「${h.cat}」类 · 见问答页「本草名录」</div>`:""}`,cat:h.n})),
- ...FORMULAS.map(f=>{const base=f.n.replace(/（[^）]*）/g,"");return {keys:[f.n,base,base.replace("丸","").replace("散","").replace("汤","")],ans:`<b>${f.n}</b><div class="kv"><span class="k">组成</span>${f.comp}</div><div class="kv"><span class="k">方书源流</span>${f.s}</div><div class="kv"><span class="k">方义主治</span>${f.d}</div><div class="kv"><span class="k">深入阅读</span>${f.b}</div>`,cat:f.n};}),
- ...ACUP.map(a=>({keys:[a.n],ans:`<b>穴位 · ${a.n}</b><div class="kv"><span class="k">所属经络</span>${a.m}</div><div class="kv"><span class="k">定位</span>${a.loc}</div><div class="kv"><span class="k">功效主治</span>${a.d}</div><div class="kv"><span class="k">深入阅读</span>${a.b}</div>`,cat:a.n})),
+ ...ALL_HERBS.map(h=>({keys:[h.n],...(h.cat?{}:{herb:h.n}),ans:herbAns(h),cat:h.n})),
+ ...FORMULAS.map(f=>{const base=f.n.replace(/（[^）]*）/g,"");return {keys:[f.n,base,base.replace("丸","").replace("散","").replace("汤","")],ans:formulaAns(f),cat:f.n};}),
+ ...ACUP.map(a=>({keys:[a.n],ans:acupAns(a),cat:a.n})),
  ...TOPICS.map(t=>({keys:[t.n,...(t.k||[])],topic:1,ans:safeTopicAns(t)||`<b>${t.n}</b><div class="kv"><span class="k">本草智答</span>${t.d}</div><div class="kv"><span class="k">深入阅读</span>${t.b}</div>`,cat:t.n}))
 ];
 const SYNONYM={"黄耆":"黄芪","杞子":"枸杞子","忍冬":"金银花","六味地黄":"六味地黄丸","三里":"足三里","人参须":"人参","菊花茶":"菊花","枸杞茶":"枸杞子","洋参":"人参","熟地":"六味地黄丸","按摩哪个穴位":"穴位","艾灸":"足三里"};
@@ -557,8 +621,13 @@ const TZ_SAFE_LIFE={
  "特禀质":"注意规避已知过敏原，饮食清淡；记录诱因；规律作息，避免熬夜。"
 };
 function constitutionAns(c){
-  const o=CONSTITUTIONS[c];
-  return `<b>${c} · 体质科普</b><div class="kv"><span class="k">【体质画像】</span>${o.d}</div><div class="kv"><span class="k">【生活提示】</span>${TZ_SAFE_LIFE[c]||"顺应四时，起居有常，避免过度劳累。"}</div><div class="kv" style="color:var(--red);font-weight:700">⚠️【安全提示】：中医调理需辨证论治，常涉及专业药材配伍。本系统不提供任何药物及食疗处方，请勿自行盲目进补，建议前往正规医院由中医师面诊指导。</div>`;
+  const d=TZ_DIALOG[c]||{
+    lead:`我为你查阅了知识库中的体质档案，${c}的人群主要有以下表现：`,
+    sum:`${CONSTITUTIONS[c].d} 在生活上，${TZ_SAFE_LIFE[c]||"顺应四时，起居有常。"}`,
+    guide:`完整的调理要点和易患疾病，你可以前往本站的【体质辨识】页面查看详细卡片哦。`,
+    follow:`另外，想了解${c.replace("质","")}人群可以经常按揉哪个穴位吗？`
+  };
+  return dlgReply(d.lead,d.sum,d.guide,d.follow,`constitution.html?tz=${encodeURIComponent(c)}`,"去查看完整的体质档案");
 }
 const CONSTITUTIONS={
  "平和质":{d:"阴阳气血调和，体态适中、面色红润、精力充沛。",adv:"顺应四时即可，坚持\u201c食饮有节，起居有常\u201d。",books:["黄帝内经"]},
@@ -974,6 +1043,18 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
   card.addEventListener("mouseenter",on);card.addEventListener("mouseleave",off);
 });
 
+/* v63-dialog：问答跳转按钮落地——?h/?f/?a 精确高亮并滚动到目标卡片 */
+function focusCardByParam(key,sel){
+  let n="";try{n=new URLSearchParams(location.search).get(key)||"";}catch(e){}
+  if(!n)return;
+  setTimeout(function(){
+    const cards=document.querySelectorAll(sel);
+    for(let i=0;i<cards.length;i++){
+      const b=cards[i].querySelector(".mat-card-h b");
+      if(b&&b.textContent.trim()===n){cards[i].classList.add("card-focus");cards[i].scrollIntoView({block:"center",behavior:"smooth"});return;}
+    }
+  },180);
+}
 /* ===== 惰性挂载：7 个页面初始只留空壳，首次进入才注入模板并生成数据视图 ===== */
 const PAGE_MOUNTED={home:true};
 const PAGE_INIT={
@@ -990,10 +1071,10 @@ const PAGE_INIT={
     renderGameIdle();                                               // 待机：不出题、不计时
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
-  herb:()=>{renderHerbPage();},                 // 本草名录：独立页，全部分门卡片
-  formula:()=>{renderFormulaPage();},           // 名方要诀：独立页，全首方卡
+  herb:()=>{renderHerbPage();focusCardByParam("h","#herbArea .mat-card");},                 // 本草名录：独立页，全部分门卡片
+  formula:()=>{renderFormulaPage();focusCardByParam("f","#formulaArea .mat-card");},           // 名方要诀：独立页，全首方卡
   materia:()=>{renderMateria();},               // 旧版合览：本草名录 + 名方要诀 两 tab（保留兼容）
-  acupoint:()=>{renderAcupoint();},             // 经络要穴：独立页，12 处要穴卡片
+  acupoint:()=>{renderAcupoint();focusCardByParam("a","#acupArea .mat-card");},             // 经络要穴：独立页，12 处要穴卡片
   seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());}, // 四时调神：支持 ?s=秋 直达某季
   constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
@@ -1002,7 +1083,10 @@ function herbListHtml(tz){
   tz=tz||tzParam();
   const hit=h=>(herbMeta(h).fit||[]).indexOf(tz)>=0;
   const use=tz?ALL_HERBS.filter(hit):ALL_HERBS;
-  let html=tzBar("herb",tz)+tzSum(use,tz,"味本草")+
+  let html=`<div class="herb-safety"><span class="hs-ico">⚠️</span><span>收录的内容仅供科普，不能替代医生面诊。</span></div>`+
+    tzBar("herb",tz)+
+    (tz?`<div class="tz-warn-box"><span class="tw-ico">⚠️</span><span>中医调养需辨证。体质往往是复合的（如气阴两虚），以下展示的药材仅代表其常用于该方向的调养，不代表处方，切勿自行盲目抓药服用。</span></div>`:`<div class="tz-filter-note">注：按体质筛选仅为科普检索方向，不代表临床配伍处方。</div>`)+
+    tzSum(use,tz,"味本草")+
     `<div class="mat-note">◈ 本草：草木金石虫兽，皆入药笼。下按功效分门；每味附配图、性味归经、药材形貌、典籍摘句、传统用法用量与慎用配伍。${MED_NOTE}</div>`;
   const groups=[["药食同源 · 工笔本草",HERBS,true]].concat(HERB_CATS.map(c=>[c,MATERIA_EXTRA.filter(h=>h.cat===c),false]));
   groups.push(["按九种体质新增",HERB_ADD,false]);
@@ -1157,12 +1241,17 @@ function tzParam(){try{const t=new URLSearchParams(location.search).get("tz");re
 function tzBar(page,tz){
   return `<div class="tz-filter"><b>◈ 按体质筛选</b>`+
     `<a href="${page}.html" class="${tz?"":"on"}">全部</a>`+
-    TZ_ALL.map(t=>`<a href="${page}.html?tz=${encodeURIComponent(t)}" class="${tz===t?"on":""}">${t.replace("质","")}</a>`).join("")+
+    TZ_ALL.map(t=>`<a href="${page}.html?tz=${encodeURIComponent(t)}" class="${tz===t?"on":""}">${page==="herb"?t+"调养参考":t.replace("质","")}</a>`).join("")+
     (tz?`<a href="${page}.html" class="tz-clear">✕ 清除</a>`:"")+`</div>`;
 }
 function tzSum(list,tz,unit){
   return tz?`<p class="tz-sum">◈ 已按 <b>${tz}</b> 筛选：${list.length} ${unit}。体质辨识结果仅为科普自测，调理请以医师四诊合参为准。</p>`
            :`<p class="tz-sum">◈ 共 ${list.length} ${unit}；可按上方体质标签筛选。</p>`;
+}
+/* v70：卡片「常见于X调养」小标签——只标该药归属的体质方向，非处方 */
+function fitCareTags(fit){
+  if(!fit||!fit.length)return "";
+  return `<div class="fit-care">`+fit.map(t=>`<span>[常见于${String(t).replace("质","")}调养]</span>`).join("")+`</div>`;
 }
 function fitTags(fit,tz){
   if(!fit||!fit.length)return "";
@@ -1185,16 +1274,25 @@ function warnBlock(t){
 }
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
+  const tox=HERB_TOX[h.n]||"无毒";
+  const toxCls=tox==="药食同源"?"food":tox==="有小毒"?"small":tox==="需遵医嘱"?"care":"safe";
+  const classic=h.s?h.s:`《神农本草经》将${h.n}列为上品，为常用之品。`;
+  const note=HERB_NOTE[h.n]||"日常请在医师指导下合理使用。";
+  const pharm=HERB_PHARM[h.n]||m.taboo||"常规用量安全，具体用量与禁忌请咨询执业中医师。";
+  const dose=m.dose?`<span class="note-dose">常见量：${m.dose}（科普参考，遵医嘱）</span>`:"";
   return `<div class="mat-card">
     ${ph?`<img class="m-img" src="${ph.src}" alt="${h.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap}</div>`:""}
-    <div class="mat-card-h"><b>${h.n}</b>${illust?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':(h.cat||'本草')}</span></div>
+    <div class="mat-card-h"><b>${h.n}</b><span class="tox-tag tox-${toxCls}">[${tox}]</span>${illust?'<span class="mat-badge">🖌 工笔</span>':''}<span class="mat-cat">${illust?'药食同源':(h.cat||'本草')}</span></div>
     <div class="kv"><span class="k">性味归经</span>${h.f}</div>
     <div class="kv"><span class="k">药材形貌</span>${h.x}</div>
     <div class="kv"><span class="k">功效主治</span>${h.e}</div>
-    <div class="kv"><span class="k">典籍摘句</span>${h.s}</div>
+    <div class="kv"><span class="k">古籍名言</span>${classic}</div>
     <div class="kv"><span class="k">经典出处</span>${h.b}</div>
-    ${useBlock(m,"用法")}${warnBlock(m.taboo)}${fitTags(m.fit,tz)}
-    <button class="btn ghost mat-ask" onclick="askKB('${h.n}')">问小药童 · ${h.n}</button>
+    <div class="m-use"><b>◈ 药童笔记</b>：${note}${dose}</div>
+    <div class="m-warn"><b>⚠️ 现代药理提示：</b>${pharm}</div>
+    ${fitCareTags(m.fit)}
+    ${fitTags(m.fit,tz)}
+    <button class="btn ghost mat-ask" onclick="askKB('${h.n}','herbcard')">问小药童：${h.n}</button>
   </div>`;
 }
 function formulaCard(f){
@@ -2241,8 +2339,8 @@ const QUIZ_HEAD={
  full:`<b>◈ 完整版 · 60 题</b><span>依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 附录《中医体质分类与判定表》整理。九种体质亚量表条目数：平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7；其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，去重后共 60 道作答题。平和质 6 道反向计分（1↔5、2↔4、3 不变），系统已自动换算。</span>${JUDGE_RULE}`
 };
 const QUIZ_SAY={
- brief:"一共 27 题，回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选最贴近的一项；尽量别只按当天的状态作答。我替你算转化分、列出主导体质与兼夹体质，再按体质点亮该读的经典〜",
- full:"一共 60 题，按九种体质分组，回想近一年的总体感受五级作答；平和质带反向的条目我已自动换算。这份是国标附录全条目，答完给你最完整的体质画像〜"
+ brief:"一共 27 题，请回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选择最贴近的一项；请尽量凭第一直觉作答，不要只按当天的状态。答完后，我会为你分析主导体质与兼夹体质，并为你推荐契合的经典。",
+ full:"一共 60 题，按九种体质分组，回想近一年的总体感受五级作答；请尽量凭第一直觉作答，不要只按当天的状态。答完后，我会为你分析主导体质与兼夹体质，并为你推荐契合的经典。"
 };
 function setQuizVersion(v){
   quizVersion=(v==="full")?"full":"brief";
@@ -2332,6 +2430,7 @@ function calcQuiz(){
   $("#quizResult").style.display="block";
   $("#quizResult").innerHTML=`
    <div class="orn">A I · 小 药 童 判 定</div>
+   ${hit.length>1?`<div class="compound-warn"><b>⚠️ 复合体质用药提醒：</b>您本次测出多种体质倾向。中医调养兼夹体质需辨明主次，严禁自行将多种药材/药膳叠加使用。确切调理方案，请面诊专业中医师。</div>`:""}
    <div class="qr-say"><img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async"><span>${qcResultSay}</span></div>
    <div class="const-name">${name.slice(0,3)}<span style="font-size:20px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
    <p style="color:var(--ink2);font-size:14px;max-width:520px;margin:0 auto">${c.d}<br><b style="color:var(--red)">小药童已按这个体质，为你点亮契合的经典书目 ↓</b></p>
@@ -2413,9 +2512,9 @@ function answerBubble(html){ // 打字机：先建好完整气泡，再逐字揭
 function typing(){
   return bubble("本草智答",'<span class="think-line"><span class="typing"><i></i><i></i><i></i></span><span class="think-txt">正在思考：AI小药童正在检索本地典籍库...</span></span>');
 }
-function greet(){bubble("本草智答","嗨呀～我是本草智答🍃，你的中医小伙伴！中医概念、古籍记载、本草穴位，尽管来问我，我都能给你讲得明明白白～不过得先约法三章：看病诊断、开药方、配食疗方这些我可做不了哦，得请正经中医师出马，我嘛，就专心帮你涨知识😉");}greet();
+function greet(){bubble("本草智答","嘿咻〜小药童我来啦🍃！正趴在案头翻典籍呢——中医概念、古籍记载、本草穴位、名方性味，你只管问，我把小书箱翻个底朝天也给你找出来〜不过师父反复叮嘱：瞧病、开方子、配食疗这些，小药童我可不敢揽，得请正经大夫来。认字念书这桩事儿，包在我这小学徒身上😉");}greet();
 function norm(s){Object.keys(SYNONYM).forEach(k=>s=s.split(k).join(SYNONYM[k]));return s;}
-function askKB(q){if(location.pathname.indexOf("chat.html")>=0){try{send(q);}catch(e){}}else{location.href="chat.html?q="+encodeURIComponent(q);}}
+function askKB(q,intent){var from=intent==="herbcard"?"&from=herbcard":"";if(location.pathname.indexOf("chat.html")>=0){try{if(intent==="herbcard"){var inp=document.querySelector("#chatInput");if(inp)inp.value=q;bubble("我",q,true);var t=typing();setTimeout(function(){t.remove();answerBubble(herbCardAns(q));},700);}else send(q);}catch(e){}}else{location.href="chat.html?q="+encodeURIComponent(q)+from;}}
 const QUIPS=[
  "药童碎碎念：是药三分毒，食补前拿不准就问问大夫哦〜",
  "本童子掐指一算，你今晚适合早睡（认真的）。",
@@ -2449,6 +2548,8 @@ function dailySign(){
   const s=pick(SIGNS);
   return `<b>🎫 本草养生签 · ${s[0]}</b><div class="kv" style="margin-top:6px">${s[1]}</div><div class="kv"><span class="k">签辞</span>${s[2]}</div><div class="kv" style="color:var(--ink2)">（科学地讲：这是随机抽取的趣味签～但它说的养生建议，都是真材实料的哦）</div>`;
 }
+/* v71：复合体质高风险拦截——命中固定回复，不给任何配伍建议 */
+const COMPOUND_BLOCK={re:/两种体质|两种.*体质|同时吃|一起吃|加在一起|混着吃|叠加使用|复合体质|复合|配伍建议|一起服用.*体质/,a:()=>"涉及复合体质用药需专业辨证，本系统无法提供配伍建议，请咨询医生。"};
 const FUN=[
  {re:/谢谢|感谢|多谢/,a:()=>pick(["不客气！为你的健康打工，本童子荣幸之至〜 记得回来夸我。","小事一桩！下次有问题继续喊我，喊三声就到（大概）。","《大医精诚》说见彼苦恼若己有之——你开心，我也开心〜"])},
  {re:/再见|拜拜|下次见|晚安|睡了/,a:()=>pick(["再见啦！记得今晚十一点半前躺下，子时一过，肝经加班你就亏大了〜","晚安！睡前放下手机，泡个脚，做个好梦。本童子不闭店，随时回来〜","拜拜〜今日养生作业：喝水、早睡、少生气。作业明天要检查的哦！"])},
@@ -2549,17 +2650,19 @@ function send(q){
         answerBubble(best.ans+(best.topic?fitBookAns():""));
       }else{
         reportMiss(q);
-        answerBubble("哎呀，这个问题可把小药童难住啦～我的本地书箱里暂时还没收录这个答案。为了你的安全，没考证过的内容我可不敢乱讲哦。建议翻翻专业文献，或者咨询执业医师吧😉");
+        answerBubble("哎呀呀〜这题可真把小药童我难住啦😅！我把小书箱翻了个底朝天，也没找着这一条。师父说过，没影儿的事儿可不能瞎编，会耽误人的！要不你换个问法再来考考我？或者去翻翻大部头、问问真正的大夫，他们可比我这小学徒有本事多啦〜😉");
       }
     }
+    else if(COMPOUND_BLOCK.re.test(nq)){answerBubble(COMPOUND_BLOCK.a());}
     else if(funStrong){answerBubble((typeof funStrong.a==="function"?funStrong.a(nq):funStrong.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(cons&&/按揉|按什么|哪个穴位|按摩/.test(nq)){answerBubble(tzAcupAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(cons){answerBubble(constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(seasonQ){answerBubble(seasonCareAns(seasonQ)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);answerBubble(best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(fun){answerBubble((typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
-      answerBubble("哎呀，这个问题可把小药童难住啦～我的本地书箱里暂时还没收录这个答案。为了你的安全，没考证过的内容我可不敢乱讲哦。建议翻翻专业文献，或者咨询执业医师吧😉");
+      answerBubble("哎呀呀〜这题可真把小药童我难住啦😅！我把小书箱翻了个底朝天，也没找着这一条。师父说过，没影儿的事儿可不能瞎编，会耽误人的！要不你换个问法再来考考我？或者去翻翻大部头、问问真正的大夫，他们可比我这小学徒有本事多啦〜😉");
     }
     // AI 典籍详解：本地规则答案之后异步追加一段「依据原文生成」的深挖解读；后端离线时完全无感
     const aiTag=isDetail?"detail":(/你是谁|你叫什么|自我介绍|你好呀?$|^hi$|^hello/i.test(nq)&&nq.length<14)?"intro":funStrong?"fun":"kb";
@@ -2650,7 +2753,7 @@ function openRead(t){
   // SPA 由 mountPage() 置位；MPA 直接注入模板，必须补上，否则 startGame() 会认为试炼页未挂载而拒绝出题
   if(typeof PAGE_MOUNTED!=="undefined")PAGE_MOUNTED[CP]=true;
   if(typeof PAGE_INIT!=="undefined"&&PAGE_INIT[CP])PAGE_INIT[CP]();
-  if(CP==="chat"){try{greet();}catch(e){}const q=new URLSearchParams(location.search).get("q");if(q){try{send(q);}catch(e){}}}
+  if(CP==="chat"){try{greet();}catch(e){}const q=new URLSearchParams(location.search).get("q");const fm=new URLSearchParams(location.search).get("from");if(q){try{if(fm==="herbcard"){const inp=document.getElementById("chatInput");if(inp)inp.value=q;bubble("我",q,true);const t=typing();setTimeout(()=>{t.remove();answerBubble(herbCardAns(q));},700);}else send(q);}catch(e){}}}
   if(CP==="quiz"){const m=new URLSearchParams(location.search).get("m");if(m){try{setQuizMode(m);}catch(e){}}}
 })();
 
