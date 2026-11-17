@@ -1014,7 +1014,7 @@ function setSeason(s){
   document.documentElement.dataset.season=s;
   buildSeasonFx(s);
   document.querySelectorAll(".season-bar button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
-  if(typeof setSkin==="function")setSkin(SEASON_SKIN[s]); // 点季名联动换上对应皮肤并即时演一次专属动作
+  if(typeof setSkin==="function")setSkin(SEASON_SKIN[s],true); // v98: 点季名只换装,不自动演动作
   if(typeof renderBooks==="function")renderBooks();
   if(typeof renderChips==="function")renderChips(); // 快捷问题随季更衣
   updateSeasonImg(); // 当季插画同步更换
@@ -1533,7 +1533,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   };
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   if(!img)return;
-  let acting=false,tipTimer,hintShown=false,tipSkin=null,curSkin="classic";
+  let acting=false,actTimer=null,tipTimer,hintShown=false,tipSkin=null,curSkin="classic";
   /* 动作 WebP（每套 60 帧 / 83ms / 约 0.5-0.7MB）各自按需加载：
      首屏只请求经典待机图，换到哪一套才取哪一段动作，绝不一次性拉四套。 */
   const actLoaded={};
@@ -1566,13 +1566,14 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
     try{sessionStorage.setItem("bcSkin",key);}catch(e){}
     if(img){
       img.dataset.skin=key;
-      if(!acting)img.src=SKINS[key].idle;
+      if(acting){ clearTimeout(actTimer); acting=false; img.classList.remove("acting"); }
+      img.src=SKINS[key].idle;   // v98: 换肤立即落到新待机图,无论是否正在播动作
       img.title="点我互动 · "+SKINS[key].name;
       if(hint)hint.textContent="点我互动 · "+SKINS[key].name;
     }
     syncButtons();
     tipSkin=null;                        // 换装后首次互动必出该皮肤专属金句
-    if(!quiet&&img)act(false);           // 换肤即时演一次该皮肤专属互动动作
+    /* v98: 换肤只换图,不自动演;专属动作仅点击药童才播 */
   }
   /* 新标签 / 新会话一律从经典皮肤开始；同一标签内跨页跳转沿用本次选择 */
   try{const saved=sessionStorage.getItem("bcSkin");if(saved&&SKINS[saved])curSkin=saved;}catch(e){}
@@ -1605,15 +1606,14 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
     img.src=SKINS[curSkin].act;
     showTip();
     if(!hintShown){hint.classList.add("hide");hintShown=true;}
-    setTimeout(()=>{
+    actTimer=setTimeout(()=>{
       img.src=SKINS[curSkin].idle;
       img.classList.remove("acting");
-      acting=false;
+      acting=false; actTimer=null;
     },ACT_MS);
   }
   img.addEventListener("click",()=>act(false));
-  // 进页面 3 秒后自动打个招呼
-  setTimeout(()=>act(true),3000);
+  // v98: 取消进页自动打招呼,动作只在点击药童时播放
   applySkin(curSkin,true); // 把初始皮肤落到 DOM（不额外播动作）
 })();
 
