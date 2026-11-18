@@ -2505,6 +2505,8 @@ function openCheckinBox(fresh,n){
 }
 function closeCheckinBox(){const m=document.getElementById("checkinBox");if(m)m.classList.remove("on");}
 function renderAlbum(){
+  /* 守卫：MPA 下从问答页 askMark 触发本函数时 #albumArea 不存在，静默跳过，避免打断回复气泡渲染 */
+  if(!$("#albumArea"))return;
   /* v100：进页先结算跨页寻方 / 签到达标，再渲染；新点亮的卡补一段水墨晕开 */
   const fresh=syncCrossUnlock().concat(syncSignUnlock());
   const d=alGet(),n=alCount();
