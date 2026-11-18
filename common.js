@@ -110,7 +110,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">本 草 图 鉴</div>
     <h2>集章录<span class="dot"> · </span>百草园藏画</h2>
-    <p class="desc">你与本草的每一次相遇都会被药童记在小本本上：<b>问答里问到</b>、<b>辨药答对</b>、<b>每日本草打卡</b>，都能点亮对应的工笔画像并盖上朱印。集齐十四味，便是百草园主。</p>
+    <p class="desc">十四味本草各有通关路径：<b>问小药童</b>、<b>跨页寻方</b>、<b>药童小考</b>、<b>岐黄签到</b>。未解锁卡片下方写着具体获取方式，点亮后盖上朱印；集齐十四味，便是百草园主。</p>
     <div id="albumArea"></div>
   </div>`,
  game:`
@@ -242,6 +242,123 @@ const HERBS=[
  {n:"山药",f:"甘，平 · 归脾、肺、肾经",x:"圆柱形，表面黄白光滑、有纵沟，断面洁白、富粉性。",e:"补脾养胃、生津益肺、补肾涩精，平补三焦，老幼皆宜。",s:"《本草纲目》薯蓣条：\u201c益肾气，健脾胃……久服耳目聪明，轻身不饥延年。\u201d",b:"《本草纲目》《随息居饮食谱》"},
  {n:"薄荷",f:"辛，凉 · 归肺、肝经",x:"茎方柱形、对叶皱缩，全体被柔毛，搓揉有特异清凉香气。",e:"疏散风热、清利头目、利咽透疹，其气清凉，为辛凉解表之品。",s:"《本草纲目》：\u201c薄荷辛能发散，凉能清利，专于消风散热。\u201d",b:"《本草纲目》草部"}
 ];
+
+/* ===== v99：药童小考题库——每味 4 题，覆盖功效/性味归经/形貌/典籍，答案位置打乱 =====
+   结构 {q:题干, o:[选项], a:正确索引, fb:答后解析}；数据全部取自 HERBS 既有字段，确保科普准确。 */
+const HERB_QUIZ={
+ "黄芪":[
+  {tq:"黄芪的主要功效是益气固表吗？",o:["正确","错误"],a:0,fb:"黄芪甘微温、归脾肺，补气升阳、固表止汗，素有「补气之长」之誉，故说法正确。"},
+  {tq:"黄芪的性味归经是下列哪一项？",o:["苦，寒 · 归心、肝经","甘，微温 · 归脾、肺经","辛，凉 · 归肺、胃经","咸，平 · 归肾经"],a:1,fb:"黄芪性甘、微温，归脾、肺经。"},
+  {tq:"黄芪饮片断面「金盏银盘、菊花心」描述的是它的？",o:["花蕾","药材形貌","典籍出处","炮制方法"],a:1,fb:"这是黄芪圆柱形切片断面的典型形貌特征。"},
+  {tq:"「耆，长也，为补药之长」出自哪部典籍对黄芪的释名？",o:["《神农本草经》","《本草纲目》","《伤寒论》","《千金方》"],a:1,fb:"李时珍《本草纲目》释名：耆，长也，黄耆色黄，为补药之长。"}
+ ],
+ "当归":[
+  {tq:"当归素有「血中圣药」之称，主要能补血活血、调经止痛，对吗？",o:["正确","错误"],a:0,fb:"当归补血活血、调经止痛、润肠通便，自古称「血中圣药」。"},
+  {tq:"当归断面散布的棕色油点也称「朱砂点」，这描述的是？",o:["性味","归经","药材形貌","功效"],a:2,fb:"「朱砂点」是当归断面棕色油点的形貌特征。"},
+  {tq:"当归的性味是？",o:["甘、辛，温","苦，寒","酸，涩","甘、淡，平"],a:0,fb:"当归甘、辛，温，归肝、心、脾经。"},
+  {tq:"古人以「能使气血各有所归」解释哪一味药的名字？",o:["黄芪","当归","枸杞子","陈皮"],a:1,fb:"《本草纲目》记当归之名取「气血各有所归」之义。"}
+ ],
+ "枸杞子":[
+  {tq:"枸杞子能滋补肝肾、益精明目，属平补之剂，对吗？",o:["正确","错误"],a:0,fb:"枸杞子甘平、归肝肾，滋补肝肾、益精明目，适合日常泡饮。"},
+  {tq:"枸杞子归哪两经？",o:["脾、肺","肝、肾","心、胃","胆、大肠"],a:1,fb:"枸杞子归肝、肾经。"},
+  {tq:"枸杞子果实的外形与味道描述正确的是？",o:["长卵形、色红皱缩、味甘微酸","类球形、色白、味极苦","纺锤形、色黄、味辛","块状、色黑、味咸"],a:0,fb:"枸杞子长卵形，表面红至暗红、皱缩有光泽，味甘微酸。"},
+  {tq:"「雪霁茅堂钟磬清，晨斋枸杞一杯羹」是哪位诗人的句子？",o:["李白","杜甫","陆游","苏轼"],a:2,fb:"此为陆游诗句，见《本草纲目》枸杞条引述。"}
+ ],
+ "金银花":[
+  {tq:"金银花初开色白、后转金黄，故名「金银花」，对吗？",o:["正确","错误"],a:0,fb:"金银花初开白色、后转金黄，因而得名。"},
+  {tq:"金银花的主要功效是？",o:["补气升阳","清热解毒、疏散风热","滋阴补血","温中止呕"],a:1,fb:"金银花甘寒、归肺心胃，清热解毒、疏散风热。"},
+  {tq:"金银花的性味是？",o:["甘，寒","辛，热","苦，温","酸，平"],a:0,fb:"金银花性甘、寒。"},
+  {tq:"金银花又名「忍冬」，这一名称最早见于？",o:["《本草纲目》","《温病条辨》","《伤寒论》","《神农本草经》"],a:0,fb:"《本草纲目》载「忍冬久服轻身长年」，忍冬即金银花。"}
+ ],
+ "陈皮":[
+  {tq:"陈皮「陈久者良」，以广东新会陈皮最负盛名，对吗？",o:["正确","错误"],a:0,fb:"陈皮以陈久者良，广东新会陈皮最为著名。"},
+  {tq:"陈皮的主要功效是？",o:["理气健脾、燥湿化痰","补血活血","清热解毒","平肝明目"],a:0,fb:"陈皮辛苦温、归脾肺，理气健脾、燥湿化痰。"},
+  {tq:"陈皮是植物的哪一部位入药？",o:["根","成熟果皮","花蕾","种子"],a:1,fb:"陈皮为橘的成熟果皮。"},
+  {tq:"陈皮性味归经正确的是？",o:["辛、苦，温 · 归脾、肺经","甘，寒 · 归肝经","咸，平 · 归肾经","酸，温 · 归胆经"],a:0,fb:"陈皮辛、苦，温，归脾、肺经。"}
+ ],
+ "茯苓":[
+  {tq:"茯苓能利水渗湿、健脾宁心，药性平和四季可用，对吗？",o:["正确","错误"],a:0,fb:"茯苓甘淡平、归心脾肾，利水渗湿、健脾宁心。"},
+  {tq:"茯苓的性味是？",o:["甘、淡，平","苦，寒","辛，热","酸，涩"],a:0,fb:"茯苓甘、淡，平。"},
+  {tq:"「千年之松，下有茯苓」说明茯苓常与哪种树并提？",o:["松","柏","柳","槐"],a:0,fb:"古人云「千年之松，下有茯苓」。"},
+  {tq:"「主胸胁逆气……久服安魂养神」记载茯苓的是？",o:["《神农本草经》","《本草纲目》","《金匮要略》","《温病条辨》"],a:0,fb:"《神农本草经》列茯苓为上品，载其安魂养神。"}
+ ],
+ "甘草":[
+  {tq:"甘草能调和诸药，有「国老」之誉，对吗？",o:["正确","错误"],a:0,fb:"甘草补脾益气、清热解毒、调和诸药，被尊为「国老」。"},
+  {tq:"「外赤中黄……调和众药有功，故有国老之号」出自？",o:["《神农本草经》","《本草纲目》","《伤寒论》","《药性赋》"],a:1,fb:"李时珍《本草纲目》称甘草有国老之号。"},
+  {tq:"「国老」是哪味本草的誉称？",o:["人参","甘草","黄芪","当归"],a:1,fb:"甘草调和诸药，被称为「国老」。"},
+  {tq:"甘草的性味归经是？",o:["甘，平 · 归心、肺、脾、胃经","苦，寒 · 归肝经","辛，温 · 归肾经","酸，平 · 归胆经"],a:0,fb:"甘草甘、平，归心、肺、脾、胃经。"}
+ ],
+ "菊花":[
+  {tq:"菊花能疏散风热、平肝明目，常与枸杞同泡养目，对吗？",o:["正确","错误"],a:0,fb:"菊花甘苦微寒、归肺肝，疏散风热、平肝明目。"},
+  {tq:"菊花的性味是？",o:["甘、苦，微寒","辛，热","咸，寒","酸，温"],a:0,fb:"菊花甘、苦，微寒。"},
+  {tq:"菊花属于植物的哪一部分入药？",o:["根","头状花序","果皮","叶"],a:1,fb:"菊花为菊的干燥头状花序。"},
+  {tq:"「主诸风头眩、肿痛……久服利血气」出自哪部典籍对菊花的记载？",o:["《神农本草经》","《本草纲目》","《千金方》","《食疗本草》"],a:0,fb:"《神农本草经》列菊花为上品，载其治头眩、利血气。"}
+ ],
+ "山楂":[
+  {tq:"山楂尤善消肉食油腻之积，糖葫芦即源自其消食之用，对吗？",o:["正确","错误"],a:0,fb:"山楂消食化积、行气散瘀，尤善消肉食油腻之积。"},
+  {tq:"山楂的主要功效是？",o:["消食化积、行气散瘀","补气升阳","养阴润肺","温经通脉"],a:0,fb:"山楂酸甘微温、归脾胃肝，消食化积、行气散瘀。"},
+  {tq:"山楂果实的外形描述正确的是？",o:["类球形、深红、有白色小斑点、味酸微甜","长卵形、色黑、味苦","圆柱形、色黄、味辛","纺锤形、色白、味淡"],a:0,fb:"山楂类球形，表面深红色、有细密皱纹和白色小斑点。"},
+  {tq:"山楂的性味是？",o:["酸、甘，微温","苦，寒","辛，凉","甘，平"],a:0,fb:"山楂酸、甘，微温。"}
+ ],
+ "生姜":[
+  {tq:"生姜能解表散寒、温中止呕，有「呕家圣药」之称，对吗？",o:["正确","错误"],a:0,fb:"生姜辛微温、归肺脾胃，温中止呕，被称「呕家圣药」。"},
+  {tq:"「呕家圣药」指的是哪味本草？",o:["半夏","生姜","陈皮","竹茹"],a:1,fb:"生姜温中止呕，素有「呕家圣药」之誉。"},
+  {tq:"生姜药材的外形描述正确的是？",o:["不规则块状、指状分枝、断面浅黄纤维明显","类球形、色白、断面粉性","细长根须、色黑","扁球状花序、气清香"],a:0,fb:"生姜不规则块状、有指状分枝，断面浅黄、纤维明显。"},
+  {tq:"孔子「不撤姜食」说的是哪种食材的养生之功？",o:["葱","姜","蒜","韭"],a:1,fb:"《本草纲目》引孔子「不撤姜食」，重其养生之功。"}
+ ],
+ "人参":[
+  {tq:"人参能大补元气、复脉固脱，是「补气第一要药」，对吗？",o:["正确","错误"],a:0,fb:"人参甘微苦微温、归脾肺心，大补元气、复脉固脱。"},
+  {tq:"「主补五脏，安精神……久服轻身延年」出自？",o:["《神农本草经》","《本草纲目》","《伤寒论》","《千金方》"],a:0,fb:"《神农本草经》列人参为上品，载其补五脏、安精神。"},
+  {tq:"人参主根上端密集的芦碗与什么部位有关？",o:["果实","芦头（根茎）","花蕾","须根"],a:1,fb:"人参上端有芦头与密集芦碗，是根茎的特征。"},
+  {tq:"人参的性味归经是？",o:["甘、微苦，微温 · 归脾、肺、心经","苦，寒 · 归心经","辛，凉 · 归肺经","咸，温 · 归肾经"],a:0,fb:"人参甘、微苦，微温，归脾、肺、心经。"}
+ ],
+ "莲子":[
+  {tq:"莲子能补脾止泻、益肾涩精、养心安神，是药食同源代表，对吗？",o:["正确","错误"],a:0,fb:"莲子甘涩平、归脾肾心，补脾止泻、益肾涩精、养心安神。"},
+  {tq:"《本草纲目》称莲子「乃某脏之果也」，这个脏是？",o:["肝","脾","肺","心"],a:1,fb:"《本草纲目》：「莲之味甘，气温而性啬……乃脾之果也。」"},
+  {tq:"莲子的性味是？",o:["甘、涩，平","苦，寒","辛，热","酸，温"],a:0,fb:"莲子甘、涩，平。"},
+  {tq:"莲子的外形描述正确的是？",o:["卵圆形、浅黄棕、一端乳头状突起、去芯味甘微涩","扁球形、色黑、味苦","长条形、色白、味辛","团块状、色红、味酸"],a:0,fb:"莲子卵圆形，表面浅黄棕色，一端呈乳头状突起。"}
+ ],
+ "山药":[
+  {tq:"山药能平补三焦、补脾养胃、生津益肺、补肾涩精，老幼皆宜，对吗？",o:["正确","错误"],a:0,fb:"山药甘平、归脾肺肾，平补三焦，老幼皆宜。"},
+  {tq:"山药在《本草纲目》中以「薯蓣」为名，其原名是？",o:["山药","薯蓣","淮山","白苕"],a:1,fb:"《本草纲目》薯蓣条即今之山药。"},
+  {tq:"山药的性味归经是？",o:["甘，平 · 归脾、肺、肾经","苦，寒 · 归心经","辛，温 · 归肝经","酸，涩 · 归肾经"],a:0,fb:"山药甘、平，归脾、肺、肾经。"},
+  {tq:"山药饮片的外形描述正确的是？",o:["圆柱形、黄白光滑、断面洁白富粉性","不规则块状、色黑、质硬","纺锤形、色红、味酸","类球形、色黄、味苦"],a:0,fb:"山药圆柱形，表面黄白光滑，断面洁白、富粉性。"}
+ ],
+ "薄荷":[
+  {tq:"薄荷能疏散风热、清利头目、利咽透疹，属辛凉解表之品，对吗？",o:["正确","错误"],a:0,fb:"薄荷辛凉、归肺肝，疏散风热、清利头目。"},
+  {tq:"薄荷的性味是？",o:["辛，凉","甘，温","苦，寒","咸，平"],a:0,fb:"薄荷辛、凉。"},
+  {tq:"薄荷搓揉后有特异清凉香气，其茎的形状是？",o:["圆柱形","方柱形","扁球形","三棱形"],a:1,fb:"薄荷茎方柱形、对叶皱缩，搓揉有清凉香气。"},
+  {tq:"「薄荷辛能发散，凉能清利，专于消风散热」出自？",o:["《神农本草经》","《本草纲目》","《伤寒论》","《温病条辨》"],a:1,fb:"李时珍《本草纲目》对薄荷的论述。"}
+ ]
+};
+/* ===== v100：14 味图鉴本草的四类解锁路径 =====
+   难度梯度：AI问答（问过即点亮）→ 跨页寻方（名方要诀查阅后返回）→ 药童小考（答对解锁）→ 岐黄签到（连续打卡 2/3/4 天）。
+   need 仅签到型使用；hint 直接落在未解锁卡片下方，给用户明确心理预期。 */
+const HERB_PATH={
+ "黄芪":  {k:"ask",  label:"AI问答",   hint:"获取方式：问小药童"},
+ "枸杞子":{k:"ask",  label:"AI问答",   hint:"获取方式：问小药童"},
+ "金银花":{k:"ask",  label:"AI问答",   hint:"获取方式：问小药童"},
+ "茯苓":  {k:"ask",  label:"AI问答",   hint:"获取方式：问小药童"},
+ "当归":  {k:"cross",label:"跨页寻方", hint:"获取方式：跨页寻方"},
+ "生姜":  {k:"cross",label:"跨页寻方", hint:"获取方式：跨页寻方"},
+ "甘草":  {k:"cross",label:"跨页寻方", hint:"获取方式：跨页寻方"},
+ "山药":  {k:"cross",label:"跨页寻方", hint:"获取方式：跨页寻方"},
+ "陈皮":  {k:"quiz", label:"药童小考", hint:"获取方式：药童小考"},
+ "菊花":  {k:"quiz", label:"药童小考", hint:"获取方式：药童小考"},
+ "山楂":  {k:"quiz", label:"药童小考", hint:"获取方式：药童小考"},
+ "莲子":  {k:"sign", label:"岐黄签到", need:2, hint:"获取方式：岐黄签到 · 连签2天"},
+ "薄荷":  {k:"sign", label:"岐黄签到", need:3, hint:"获取方式：岐黄签到 · 连签3天"},
+ "人参":  {k:"sign", label:"岐黄签到", need:4, hint:"获取方式：岐黄签到 · 连签4天"}
+};
+function herbPath(name){return HERB_PATH[name]||{k:"quiz",label:"药童小考",hint:"获取方式：药童小考"};}
+/* 问答回执：按类型给出下一步，避免所有本草都误导游玩小考 */
+function herbUnlockTip(name){
+  const p=herbPath(name);
+  if(p.k==="ask")return `◈ 已记下「${name}」——这味是问答型本草，小药童答过就已经点亮！`;
+  if(p.k==="cross")return `◈ 「${name}」属跨页寻方：回本草图鉴点它的卡片，去【名方要诀】查阅含它的方剂，返回即点亮。`;
+  if(p.k==="sign")return `◈ 「${name}」属岐黄签到：连签 ${p.need} 天即可点亮，去【岐黄打卡】每日签到吧。`;
+  return `◈ 已记下「${name}」〜回本草图鉴点它的卡片，过药童小考即可点亮！`;
+}
 /* ===== 本草扩展名录：常用中药按功效分门别类 =====
    前 14 味（HERBS）配有工笔插画，用于图鉴 / 看图辨药 / 每日本草；
    本组只有文字条目，进入问答知识库、RAG 语料、竞赛题库与「本草名录」索引。
@@ -1155,7 +1272,7 @@ const PAGE_INIT={
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
   herb:()=>{renderHerbPage();focusCardByParam("h","#herbArea .mat-card");},                 // 本草名录：独立页，全部分门卡片
-  formula:()=>{renderFormulaPage();focusCardByParam("f","#formulaArea .mat-card");},           // 名方要诀：独立页，全首方卡
+  formula:()=>{renderFormulaPage();focusCardByParam("f","#formulaArea .mat-card");crossFormulaVisit();}, // v100：跨页寻方回执
   materia:()=>{renderMateria();},               // 旧版合览：本草名录 + 名方要诀 两 tab（保留兼容）
   acupoint:()=>{renderAcupoint();focusCardByParam("a","#acupArea .mat-card");},             // 经络要穴：独立页，12 处要穴卡片
   seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());}, // 四时调神：支持 ?s=秋 直达某季
@@ -1622,8 +1739,8 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
 (function(){
   const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
   const h=HERBS[doy%HERBS.length];
+  /* v100：每日本草只作展示；集章统一走问药童 / 跨页寻方 / 药童小考 / 岐黄签到四条路径 */
   if(!$("#daily"))return;
-  unlockHerb(h.n,true); // 每日本草自动集章（静默）
   $("#daily").innerHTML=`<div class="daily-left"><div class="big">${h.n.slice(0,2)}</div><div class="pinyin">每 日 一 味</div></div>
   <div class="daily-main"><span class="daily-tag">◈ 每日本草 · ${new Date().getMonth()+1}月${new Date().getDate()}日</span>
   <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:14px">${h.e}</p>
@@ -2014,11 +2131,11 @@ function pickGame(name){
     // 竞赛节奏：短反馈自动进入下一题，不打断比拼
     $("#gameFb").innerHTML=right?`<b class="good">✔ 中！</b>`:(name===null?`⏱ 超时！正解：<b>${ansN}</b>`:`✘ 差矣，正解：<b>${ansN}</b>`);
     gameReact(right?"ok":(name===null?"timeout":"bad"));
-    unlockHerb(q.kind==="img"&&right?q.h.n:null,true);
+    /* v100：百草试炼只练眼力，不再绕过四类图鉴解锁路径 */
     setTimeout(nextGame,q.kind==="mcq"?1600:1200);
     return;
   }
-  if(q.kind==="img"&&right)unlockHerb(q.h.n);
+  /* v100：看图辨药答对只给分，集章请按卡片标注的四类路径完成 */
   gameReact(right?"ok":"bad");
   const askQ=q.kind==="img"?q.h.n:`详细讲讲：${q.q}`; // 没看懂？带着题目去问答页追问药童
   $("#gameFb").innerHTML=(right?`<b class="good">✔ ${pick(GAME_OK)}</b>`:`✘ ${pick(q.kind==="mcq"?GAME_MCQ_BAD:GAME_BAD)}<b>${ansN}</b>`)
@@ -2102,6 +2219,170 @@ function alToast(msg){
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),2600);
 }
+/* ===== v100：跨页寻方存档与自动点亮 ===== */
+function crossGet(){try{return JSON.parse(localStorage.getItem("bzCross")||"{}");}catch(e){return{};}}
+function crossMark(name){
+  if(!name)return;
+  const c=crossGet();if(c[name])return;
+  c[name]=new Date().getMonth()+1+"月"+new Date().getDate()+"日";
+  try{localStorage.setItem("bzCross",JSON.stringify(c));}catch(e){}
+}
+/* 回到图鉴时结算：已在名方页查阅过对应方剂的跨页型本草自动点亮 */
+function syncCrossUnlock(){
+  const c=crossGet(),fresh=[];
+  HERBS.forEach(h=>{
+    const p=herbPath(h.n);
+    if(p.k==="cross"&&c[h.n]&&!alGet()[h.n]&&unlockHerb(h.n))fresh.push(h.n);
+  });
+  return fresh;
+}
+/* 签到型结算：连签达到阈值即点亮，达标进度写在卡片极小字提示里 */
+function syncSignUnlock(){
+  const streak=ciStreak(),fresh=[];
+  HERBS.forEach(h=>{
+    const p=herbPath(h.n);
+    if(p.k==="sign"&&streak>=p.need&&!alGet()[h.n]&&unlockHerb(h.n))fresh.push(h.n);
+  });
+  return fresh;
+}
+
+/* ===== v99：药童小考——问答查询记录 + 答题弹层 + 水墨晕开点亮 ===== */
+/* bzAsked：查过但尚未点亮的本草（问答命中本草时记入，供图鉴小考判断可否考） */
+var _askStore=null;
+function askGet(){
+  if(_askStore)return _askStore;
+  try{_askStore=JSON.parse(localStorage.getItem("bzAsked")||"{}");}catch(e){_askStore={};}
+  return _askStore;
+}
+function askMark(name){
+  if(!name||alGet()[name])return;
+  const p=herbPath(name);
+  /* v100：AI问答型问到即点亮；小考型仍只记「已查」，跨页/签到型不因问答跳关 */
+  if(p.k==="ask"){
+    unlockHerb(name);
+    if(typeof renderAlbum==="function")renderAlbum();
+    return;
+  }
+  if(p.k!=="quiz")return;
+  const a=askGet();if(a[name])return;
+  a[name]=1;try{localStorage.setItem("bzAsked",JSON.stringify(a));}catch(e){}
+}
+/* 题库轮换：同一味每次换一题，避免次次同题 */
+var _qzTurn={};
+function quizPick(name){
+  const bank=HERB_QUIZ[name];if(!bank||!bank.length)return null;
+  const i=_qzTurn[name]||0;_qzTurn[name]=i+1;
+  return bank[i%bank.length];
+}
+/* 打开小考浮层（动态建 DOM，不依赖壳页，MPA/SPA 通用） */
+function openHerbQuiz(name){
+  let m=document.getElementById("herbQuiz");
+  if(!m){
+    m=document.createElement("div");m.id="herbQuiz";m.className="qz-mask";
+    m.addEventListener("click",function(e){if(e.target===this)closeHerbQuiz();});
+    document.body.appendChild(m);
+  }
+  const item=quizPick(name);
+  if(!item){askKB(name);return;}
+  m._name=name;m._item=item;
+  const opts=item.o.map((o,i)=>`<button class="qz-opt" onclick="answerQuiz(${i})"><b>${"ABCD"[i]}</b>. ${o}</button>`).join("");
+  m.innerHTML=`<div class="qz-box" onclick="event.stopPropagation()">
+    <div class="qz-ico">✎</div>
+    <div class="qz-t">药童小考 · ${name}</div>
+    <div class="qz-sub">答对就点亮这味本草，答错就去再问问小药童吧〜</div>
+    <div class="qz-q">${item.tq}</div>
+    <div class="qz-opts">${opts}</div>
+    <div class="qz-fb" id="qzFb"></div>
+    <div class="qz-act"><button class="btn ghost" onclick="closeHerbQuiz()">稍后再考</button></div>
+  </div>`;
+  m.classList.add("on");
+}
+function closeHerbQuiz(){
+  const m=document.getElementById("herbQuiz");if(m)m.classList.remove("on");
+}
+/* ===== v100：跨页寻方 / 岐黄签到两种路径的提示浮层 ===== */
+function openPathHint(html){
+  let m=document.getElementById("herbPathHint");
+  if(!m){
+    m=document.createElement("div");m.id="herbPathHint";m.className="qz-mask";
+    m.addEventListener("click",function(e){if(e.target===this)closePathHint();});
+    document.body.appendChild(m);
+  }
+  m.innerHTML='<div class="qz-box" onclick="event.stopPropagation()">'+html+'</div>';
+  m.classList.add("on");
+}
+function closePathHint(){const m=document.getElementById("herbPathHint");if(m)m.classList.remove("on");}
+function openCrossHint(name){
+  const p=herbPath(name),label=p.label;
+  openPathHint(`<div class="qz-ico">◈</div>
+    <div class="qz-t">${label} · ${name}</div>
+    <div class="qz-sub">请前往【名方要诀】查阅含有「${name}」的方剂</div>
+    <div class="qz-q">读到那首方剂后，点导航回「本草图鉴」，这枚印章会自动点亮。</div>
+    <div class="qz-act"><button class="btn red" onclick="goFormulaForHerb('${name}')">去名方要诀 →</button><button class="btn ghost" onclick="closePathHint()">稍后再去</button></div>`);
+}
+function goFormulaForHerb(name){
+  closePathHint();
+  location.href="formula.html?herb="+encodeURIComponent(name)+"&from=album";
+}
+function openSignHint(name){
+  const p=herbPath(name),cur=Math.min(ciStreak(),p.need),left=Math.max(0,p.need-cur);
+  openPathHint(`<div class="qz-ico">◈</div>
+    <div class="qz-t">岐黄签到 · ${name}</div>
+    <div class="qz-sub">获取方式：岐黄签到 · 连续签到 ${p.need} 天</div>
+    <div class="qz-q">当前连签 <b>${cur}</b> 天${left?`，还差 <b>${left}</b> 天`:`，已达标，回图鉴即可点亮`}。中断一天就要从头数哦。</div>
+    <div class="qz-act"><button class="btn red" onclick="closePathHint();go('checkin')">去岐黄打卡 →</button><button class="btn ghost" onclick="closePathHint()">稍后再来</button></div>`);
+}
+/* 名方页落地：找到含目标本草的方卡 → 打光 + 记账；返回图鉴时由 syncCrossUnlock 点亮 */
+function crossFormulaVisit(){
+  let name="";try{name=new URLSearchParams(location.search).get("herb")||"";}catch(e){}
+  if(!name||herbPath(name).k!=="cross")return;
+  const cards=Array.from(document.querySelectorAll("#formulaArea .mat-card"));
+  let hit=null;
+  for(const c of cards){const txt=(c.textContent||c.innerHTML||"");if(txt.indexOf(name)>=0){hit=c;break;}}
+  if(!hit)return;
+  crossMark(name);
+  const b=hit.querySelector(".mat-card-h b"),fm=b?(b.textContent||"").trim():name;
+  hit.classList.add("card-focus");
+  setTimeout(()=>{try{hit.scrollIntoView({block:"center",behavior:"smooth"});}catch(e){}},180);
+  const area=document.getElementById("formulaArea");
+  if(area){
+    const tip=document.createElement("div");tip.className="cross-found";
+    tip.innerHTML=`◈ 跨页寻方：已找到含「${name}」的方剂《${fm}》。<a href="album.html">回本草图鉴领印章 →</a>`;
+    area.insertBefore(tip,area.firstChild);
+  }
+}
+function answerQuiz(i){
+  const m=document.getElementById("herbQuiz");if(!m||!m._item)return;
+  const item=m._item,name=m._name,ok=(i===item.a);
+  const btns=m.querySelectorAll(".qz-opt");
+  btns.forEach((b,j)=>{b.disabled=true;if(j===item.a)b.classList.add("right");});
+  if(!ok)btns[i].classList.add("wrong");
+  const fb=document.getElementById("qzFb");
+  if(ok){
+    fb.className="qz-fb good";
+    fb.innerHTML=`<b>答对啦！</b>${item.fb||""}<div style="margin-top:8px;color:var(--green)">◈ 墨韵渐开，「${name}」这就点亮〜</div>`;
+    const act=m.querySelector(".qz-act");
+    act.innerHTML=`<button class="btn red" onclick="finishQuiz()">◈ 收下这枚本草印</button>`;
+    m._passed=true;
+  }else{
+    fb.className="qz-fb bad";
+    fb.innerHTML="哎呀，再去问问小药童吧~";
+    const act=m.querySelector(".qz-act");
+    act.innerHTML=`<button class="btn red" onclick="closeHerbQuiz();askKB('${name}')">◈ 去问小药童</button><button class="btn ghost" onclick="closeHerbQuiz()">稍后再考</button>`;
+    m._passed=false;
+  }
+}
+/* 答对收尾：关闭浮层 → 卡片水墨晕开 → 点亮 → 重绘图鉴 */
+function finishQuiz(){
+  const m=document.getElementById("herbQuiz");if(!m||!m._passed)return;
+  const name=m._name;closeHerbQuiz();
+  const card=document.querySelector('.al-card[data-herb="'+name+'"]');
+  if(card){
+    card.classList.add("inking");
+    const ink=document.createElement("div");ink.className="al-ink";card.appendChild(ink);
+    setTimeout(()=>{unlockHerb(name);if(typeof renderAlbum==="function")renderAlbum();},720);
+  }else{unlockHerb(name);if(typeof renderAlbum==="function")renderAlbum();}
+}
 /* ===== 岐黄打卡（阅读打卡 · 文化节读者互动） ===== */
 const CI_QUOTES=[
  ["读书不如读无字之书，识药先识身边之药","药童语录"],
@@ -2127,13 +2408,20 @@ function doCheckin(){
   const c=ciGet(),k=ciKey();
   if(c.d.includes(k)){alToast("◈ 今日已打过卡啦，明早再来〜");return;}
   c.d.push(k);ciSave(c);
-  // 打卡联动：静默点亮今日本草章（若未集），合并一条提示
-  const doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
-  const h=HERBS[doy%HERBS.length];
-  const fresh=unlockHerb(h.n,true);
+  /* v100：签到型本草按连签天数梯度点亮（莲子2天 / 薄荷3天 / 人参4天） */
+  const fresh=syncSignUnlock();
   const n=alCount();
-  alToast("◈ 打卡成功 · 连续 "+ciStreak()+" 天"+(fresh?"，顺手点亮「"+h.n+"」图鉴印（"+n+"/14）":""));
   renderCheckin();ciStatSync();
+  /* v101：今日格盖印章微动效 + 中央本草盲盒；盲盒接过正向反馈，故不再叠 alToast */
+  stampTodayCell();
+  setTimeout(()=>openCheckinBox(fresh,n),380);
+}
+/* v101：在今日格上盖下朱红「打卡」印，动画结束保留印面 */
+function stampTodayCell(){
+  const cal=document.querySelector("#checkinArea .ci-cal");if(!cal)return;
+  const cell=Array.from(cal.querySelectorAll(".cell.today")).pop();if(!cell||cell.querySelector(".ci-seal"))return;
+  cell.classList.add("just-stamped");
+  const seal=document.createElement("i");seal.className="ci-seal";seal.textContent="打卡";cell.appendChild(seal);
 }
 function ciStatSync(){const el=$("#ciStat");if(el)el.textContent=ciStreak();}
 function renderCheckin(){
@@ -2175,9 +2463,50 @@ function renderCheckin(){
       <button class="btn ghost" onclick="makePoster()">生成我的名帖 →</button>
       <button class="btn ghost" onclick="go('game')">去知识竞赛 →</button>
       <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
-    </div>`;
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--ink3);margin-top:12px">◈ 签到集章梯度：连签 2 天点亮莲子 · 3 天点亮薄荷 · 4 天点亮人参（当前连签 ${streak} 天，中断重新计数）</div>`;
 }
+
+/* ===== v101：打卡成功 · 本草盲盒特效浮层 ===== */
+const BX_SEASON_WORD={春:"春生",夏:"夏长",秋:"秋收",冬:"冬藏"};
+/* 当令本草：取当季推荐里有配图的条目，按当天序位轮换，天天有惊喜且不重复到无图条目 */
+function bxSeasonHerb(){
+  const s=seasonOf(),list=(SEASON_HERB_REC[s]||[]).filter(r=>!!herbPhoto({n:r.n}));
+  if(!list.length)return {n:"甘草",src:"assets/herbs/gancao.webp",cap:"工 笔 插 画 · 示 意 图",tip:"调和诸药、益气和中，四季皆宜"};
+  const day=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);
+  const pick=list[day%list.length],photo=herbPhoto({n:pick.n});
+  const full=(typeof ALL_HERBS!=="undefined"?ALL_HERBS:[]).find(x=>x.n===pick.n)||{};
+  return {n:pick.n,src:photo.src,cap:photo.cap,tip:full.e||pick.why||"应时而养，顺季而用"};
+}
+function openCheckinBox(fresh,n){
+  fresh=fresh||[];n=(n==null?alCount():n);
+  const word=BX_SEASON_WORD[seasonOf()]||(seasonOf()+"藏"),h=bxSeasonHerb(),streak=ciStreak();
+  let m=document.getElementById("checkinBox");
+  if(!m){
+    m=document.createElement("div");m.id="checkinBox";m.className="bx-mask";
+    m.addEventListener("click",function(e){if(e.target===this)closeCheckinBox();});
+    document.body.appendChild(m);
+  }
+  const tip=String(h.tip).slice(0,52);
+  m.innerHTML=`<div class="bx-card">
+    <button class="bx-x" onclick="closeCheckinBox()" title="关闭">×</button>
+    <div class="bx-rays"></div>
+    <span class="bx-spark s1">✦</span><span class="bx-spark s2">✧</span><span class="bx-spark s3">✧</span><span class="bx-spark s4">✦</span>
+    <div class="bx-lid">🎁</div>
+    <div class="bx-kicker">本 草 盲 盒 · 已 开 启</div>
+    <div class="bx-t">🎉 打卡成功！</div>
+    <div class="bx-meta">今日${word}，你认识了当令本草 <b>【${h.n}】</b>，已收录至你的《本草图鉴》。</div>
+    <div class="bx-herb"><img src="${h.src}" alt="${h.n}" onerror="this.style.visibility='hidden'" loading="lazy" decoding="async"><div class="bi"><div class="bn">${h.n}</div><div class="bp">${h.cap}</div><div class="be">${tip}</div></div></div>
+    ${fresh.length?`<div class="bx-meta">◈ 连签达标，本次点亮图鉴：<b>${fresh.join("、")}</b></div>`:""}
+    <div class="bx-meta">◈ 连续打卡 <b>${streak}</b> 天 · 图鉴已集 <b>${n}/14</b> 味</div>
+    <div class="bx-act"><button class="btn red" onclick="closeCheckinBox();go('album')">去图鉴看看 →</button><button class="btn ghost" onclick="closeCheckinBox()">收下啦</button></div>
+  </div>`;
+  m.classList.add("on");
+}
+function closeCheckinBox(){const m=document.getElementById("checkinBox");if(m)m.classList.remove("on");}
 function renderAlbum(){
+  /* v100：进页先结算跨页寻方 / 签到达标，再渲染；新点亮的卡补一段水墨晕开 */
+  const fresh=syncCrossUnlock().concat(syncSignUnlock());
   const d=alGet(),n=alCount();
   const t=AL_TITLES.find(x=>n>=x[0]);
   $("#albumArea").innerHTML=`
@@ -2188,12 +2517,39 @@ function renderAlbum(){
     </div>
     <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="makePoster()">◈ 生成我的名帖</button></div>
     <div class="album-grid">${HERBS.map(h=>{
-      const got=d[h.n];
-      return got?`<div class="al-card"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`
-        :`<div class="al-card locked" style="cursor:pointer" onclick="askKB('${h.n}')" title="问问药童：${h.n}是哪位？"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>？？？</b><span>点我 · 去问药童点亮</span></div>`;
+      const got=d[h.n],p=herbPath(h.n);
+      if(got)return `<div class="al-card" data-herb="${h.n}" data-path="${p.k}"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`;
+      const asked=!!askGet()[h.n];
+      let action="",title="",label="？？？",sub="",hint=p.hint;
+      if(p.k==="quiz"){
+        action=`openHerbQuiz('${h.n}')`;
+        title=asked?"药童小考：答对点亮 "+h.n:"药童小考："+h.n;
+        label=asked?"✎ "+h.n:"？？？";sub=asked?"点我 · 药童小考点亮":"点我 · 药童小考";
+      }else if(p.k==="cross"){
+        action=`openCrossHint('${h.n}')`;
+        title="跨页寻方：去名方要诀查含「"+h.n+"」的方剂";
+        label="？ "+h.n;sub="点我 · 跨页寻方";
+      }else if(p.k==="sign"){
+        action=`openSignHint('${h.n}')`;
+        const cur=Math.min(ciStreak(),p.need);
+        title="岐黄签到：连签 "+p.need+" 天点亮 "+h.n;
+        label="◈ "+h.n;sub="点我 · 看签到进度";
+        hint=`获取方式：岐黄签到 · 连签${p.need}天（${cur}/${p.need}）`;
+      }else{
+        action=`askKB('${h.n}')`;
+        title="问问小药童："+h.n+"是哪位？";
+        label="？？？";sub="点我 · 去问药童点亮";
+      }
+      return `<div class="al-card locked${p.k==="quiz"&&asked?" quiz-ready":""}" style="cursor:pointer" data-herb="${h.n}" data-path="${p.k}" onclick="${action}" title="${title}"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>${label}</b><span>${sub}</span><span class="al-path">${hint}</span></div>`;
     }).join("")}</div>
-    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">集章途径：问答里问本草 · 百草试炼答对 · 岐黄打卡点亮每日本草 · 图鉴灰卡可点击直达问答　|　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
+    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">四类集章路径：<b>问小药童</b> · <b>跨页寻方</b>（名方要诀） · <b>药童小考</b> · <b>岐黄签到</b>（连签2/3/4天）　|　<a href="formula.html" style="color:var(--green)">去名方要诀 →</a>　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
+  fresh.forEach(name=>{
+    const card=document.querySelector('.al-card[data-herb="'+name+'"]');
+    if(!card)return;
+    card.classList.add("inking");
+    const ink=document.createElement("div");ink.className="al-ink";card.appendChild(ink);
+  });
 }
 function physGet(){try{return JSON.parse(localStorage.getItem("bzPhysique")||"null");}catch(e){return null;}}
 /* 回填：首页图鉴计数 + 体质档案徽标（首页）与提示条（辨识页） */
@@ -2754,7 +3110,7 @@ const FUN=[
  {re:/无聊|好烦|心情不好|不开心|难过|emo|焦虑|压力大/,a:()=>pick(["抱抱你（虚拟的）〜《内经》说「怒伤肝，喜伤心，忧伤肺」——坏情绪是真的会伤身体的！来，深呼吸三次，起来走动走动、晒晒太阳。要是持续心情低落超过两周，一定要找家人朋友聊聊，必要时找心理咨询师，情绪的病也是病，不丢人〜","本童子给你支几招：起来走动走动、做做八段锦拉伸解压、今晚早点睡补元气。焦虑大半天要塌下来时，先照顾好身体，办法总比困难多〜"])},
  {re:/夸夸我|夸我|表扬|我厉害|我棒|鼓励我/,a:()=>pick(["你！今天能想起来问养生问题，就已经赢过 80% 熬夜冠军了！保持好奇，气血自主〜","《内经》夸人如我：上医治未病，你这就是主动「治未病」，本童子给你点个大大的赞！","你很棒！能关注健康的人，未来一定是个有福气的人。药童看人很准的（捋胡须）〜"])},
  {re:/抽签|运势|养生签|求签|幸运|吉运/,first:true,a:dailySign},
- {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——讲清中医通常怎么辨识体质，再按 ZYYXH/T157-2009 提供完整版 60 题与快捷版 27 题，给出体质判定与调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药、辨药、打卡都会自动集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
+ {re:/你会什么|你能干什么|会做什么|有什么功能|功能介绍|怎么玩/,a:()=>"本童子的十八般武艺：①<b>中药方剂穴位</b>——40味本草、6首名方、3处穴位随问随答；②<b>养生话题</b>——感冒、便秘、痛经、减肥、痘痘、手脚冰凉、脱发、中暑等25个话题，还有春夏秋冬四季养生锦囊；③<b>经典荐读</b>——20部岐黄经典的书名、作者、金句、导读都能聊，还能点开原文选读；④<b>体质辨识</b>——讲清中医通常怎么辨识体质，再按 ZYYXH/T157-2009 提供完整版 60 题与快捷版 27 题，给出体质判定与调养锦囊；⑤<b>百草试炼</b>——练习+知识竞赛双模式，竞赛混合出卷（看图辨药+经典考点+辨药眼力），每题限时8秒，答完可发战帖挑战好友；⑥<b>本草图鉴</b>——问药童、跨页寻方、药童小考、岐黄签到四条路径集章，十四味集齐当百草园主；⑦<b>岐黄打卡</b>——中医药文化 · 读者打卡专区，每日签到一格，连续天数记入名帖；⑧<b>趣味互动</b>——可以跟我聊天、让我讲笑话、抽养生签〜 试试问我「推荐读什么书」？"},
  {re:/作者是|谁写的|谁著|谁编|作者简介|的作者/,first:true,a:s=>{const bt=BOOKS.find(b=>s.includes(b.t));if(bt)return authorCard(bt.t);const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));if(an)return authorCard(AUTHOR2BOOK[an]);return `<b>二十部经典 · 作者一览</b><div class="kv">${BOOKS.map(b=>'<span class="k">《'+b.t+"》</span>"+AUTHORS[b.t].n+"（"+AUTHORS[b.t].era+"）").join('</div><div class="kv">')}</div><div class="kv" style="color:var(--ink2)">想深入了解哪位？直接问「李时珍是谁」「张仲景是谁」；或去「经典荐读」点开书卡读原文选段〜</div>`}},
  {re:/张仲景|李时珍|孙思邈|吴鞠通|吴瑭|汪昂|王孟英|王士雄|扁鹊|秦越人|葛洪|陈修园|陈念祖|忽思慧|岐伯/,max:18,a:s=>{const an=Object.keys(AUTHOR2BOOK).find(n=>s.includes(n));return an?authorCard(AUTHOR2BOOK[an]):"这位医家的故事药童也在学！试试问「本草纲目的作者是谁」，二十位岐黄大家我都认识〜"}},
  {re:/推荐.{0,2}书|读什么书|看什么书|书单|荐读|有什么书|经典推荐/,max:20,a:()=>{const s=seasonOf(),r=SEASON_READS[s],doy=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/864e5);return `<b>应季书单 · ${s}季</b><div class="kv"><span class="k">当季推荐</span>${r.list.map(x=>"《"+x+"》").join("　")}</div><div class="kv"><span class="k">今日荐读</span>《${r.list[doy%r.list.length]}》——${r.why}</div><div class="kv" style="color:var(--ink2)">二十部经典都在「经典荐读」页面，点「阅读选段」就能翻开原文选读与白话译文，问书名、问作者我都能答〜</div>`}},
@@ -2839,8 +3195,8 @@ function send(q){
       }else if(lk){
         answerBubble(`<b>药童详解 · 辨药眼力</b><div class="kv"><span class="k">分辨要点</span>${lk.tip}</div><div class="kv"><span class="k">药童口诀</span>「${lk.gj}」</div><div class="kv"><span class="k">趁热打铁</span>想知道更多门道？直接问我「${lk.a}和${lk.b}怎么区分」〜</div>`);
       }else if(best&&bs>=2){
-        if(best.herb)unlockHerb(best.herb);
-        answerBubble(best.ans+(best.topic?fitBookAns():""));
+        if(best.herb){askMark(best.herb);}
+        answerBubble(best.ans+(best.topic?fitBookAns():"")+(best.herb?`<div class="kv" style="color:var(--green)">${herbUnlockTip(best.herb)}</div>`:""));
       }else{
         reportMiss(q);
         answerBubble("哎呀呀〜这题可真把小药童我难住啦😅！我把小书箱翻了个底朝天，也没找着这一条。师父说过，没影儿的事儿可不能瞎编，会耽误人的！要不你换个问法再来考考我？或者去翻翻大部头、问问真正的大夫，他们可比我这小学徒有本事多啦〜😉");
@@ -2852,7 +3208,7 @@ function send(q){
     else if(cons&&/怎么调理|怎么调养|如何调理|如何调养|调理|调养|怎么调/.test(nq)){answerBubble(constitutionCareAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(cons){answerBubble(constitutionAns(cons)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(seasonQ){answerBubble(seasonCareAns(seasonQ)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
-    else if(best&&bs>=2){if(best.herb)unlockHerb(best.herb);answerBubble(best.ans+(best.topic?fitBookAns():"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
+    else if(best&&bs>=2){if(best.herb)askMark(best.herb);answerBubble(best.ans+(best.topic?fitBookAns():"")+(best.herb?`<div class="kv" style="margin-top:6px;color:var(--green)">${herbUnlockTip(best.herb)}</div>`:"")+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else if(fun){answerBubble((typeof fun.a==="function"?fun.a(nq):fun.a)+`<div class="kv" style="margin-top:6px;color:var(--red)">◈ ${quip}</div>`);}
     else{
       reportMiss(q); // 问答盲区上报管理后台（后台离线则静默跳过），供药童进化
