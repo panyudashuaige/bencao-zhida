@@ -102,7 +102,8 @@ const PAGE_HTML={
     <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。先看下方 AI 状态栏：未测体质可一键答题，已测体质可一键筛选契合书目。</p>
     ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
-    <div class="read-path"><b>药童荐读路线</b><em>入门</em>：《汤头歌诀》→《医学三字经》→《随息居饮食谱》→《饮膳正要》　<em>进阶</em>：《神农本草经》→《本草纲目》→《千金方》→《肘后备急方》　<em>硬核</em>：《黄帝内经》→《难经》→《伤寒论》→《温病条辨》</div>
+    <div class="read-path" id="readPath"><b>药童荐读路线</b></div>
+    <div id="searchBar_read"></div>
     <div class="filter" id="filter"></div>
     <div class="books" id="books"></div>
   </div>`,
@@ -141,6 +142,7 @@ const PAGE_HTML={
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
     <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「✍️工笔」者另附手绘画像（见本草图鉴）。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
     ${knowBar('herb','黄芪')}
+    <div id="searchBar_herb"></div>
     <div id="herbArea"></div>
   </div>`,
  formula:`
@@ -150,6 +152,7 @@ const PAGE_HTML={
     <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。点击任意条目可追问 AI 小药童。</p>
     <div class="formula-health-banner"><span>⚠️ 中药需辨证论治，本页仅作文献展示，严禁自行抓药。</span></div>
     ${knowBar('formula','四君子汤')}
+    <div id="searchBar_formula"></div>
     <div id="formulaArea"></div>
   </div>`,
  materia:`
@@ -173,6 +176,7 @@ const PAGE_HTML={
     <p class="desc">本站据中医药经典文献整理 32 处经络要穴：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点击下方按钮可直达 AI 小药童，追问取穴手法与禁忌。</p>
     <div class="acup-health-banner"><span>⚠️ 穴位按摩仅作日常保健辅助，不具备治疗作用。若按压时出现剧烈疼痛，或本身患有严重心血管疾病、处于孕期，请立即停止并咨询医生。</span></div>
     ${knowBar('acupoint','足三里')}
+    <div id="searchBar_acupoint"></div>
     <div id="acupArea"></div>
   </div>`,
  seasons:`
@@ -817,6 +821,13 @@ const CONSTITUTIONS={
  "气郁质":{d:"气机郁滞，神情抑郁、多愁善感、胸胁胀满。",adv:"可适当食用陈皮、佛手等理气食材；如需使用薄荷等药材，请遵医嘱。多交友抒怀，作息规律。",books:["黄帝内经","逍遥散"]},
  "特禀质":{d:"先天禀赋特殊，易过敏，对药物、食物、花粉敏感。",adv:"饮食清淡，避免接触已知致敏之物；如需用玉屏风类成药益气固表，请遵医嘱。规律作息，记录诱因。",books:["神农本草经","玉屏风散"]}
 };
+/* v103：体质荐读中的方剂名归一到 BOOKS 实际收录的书目，确保跳转能精准定位到书卡。
+   仅用于生成「应时荐读」跳转书名，不改 CONSTITUTIONS.books（问答/契合-book 逻辑仍用原值）。 */
+const TZ_BOOK_ALIAS={
+  "四君子汤":"汤头歌诀","六味地黄丸":"医学三字经","逍遥散":"汤头歌诀","玉屏风散":"汤头歌诀",
+  "温病条辨":"温病条辨","黄帝内经":"黄帝内经","神农本草经":"神农本草经","伤寒论":"伤寒论","本草纲目":"本草纲目"
+};
+function tzBookName(x){return TZ_BOOK_ALIAS[x]||x;}
 /* ===== 九种体质通鉴补充知识：画像 / 调养 / 荐书仍只取自 CONSTITUTIONS，此处只补通鉴所需字段 =====
    分组依据《中医体质分类与判定》：一种平和 + 八种偏颇；关联本草、名方、穴位名均与站内名录同源。 */
 const TZ_GROUPS=[
@@ -879,7 +890,7 @@ function renderConstitution(){
         <div class="tz-adv-note">⚠️ 注：药膳需辨证，体质复杂者请咨询中医师，切勿盲目进补。</div>
         ${links(e.herb,"关联本草","herb")}${links(e.acup,"关联穴位","acupoint")}
         ${e.f?`<div class="kv"><span class="k">关联名方文献：</span><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}" onclick="event.preventDefault();guardFormulaDoc(this.href)">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义与服法见「名方要诀」页</span></div>`:""}
-        <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>`<a class="tz-link" href="read.html">《${x}》</a>`).join("")}</div>
+        <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>{const b=tzBookName(x);return `<a class="tz-link" href="read.html?b=${encodeURIComponent(b)}" title="定位到《${b}》书卡">《${b}》</a>`;}).join("")}</div>
         <button class="btn mat-ask-cta" onclick="askKB('${n.replace("质","")}体质怎么调理')">✦ 问小药童 · ${n}怎么调养</button>
       </div>`;
     });
@@ -1243,25 +1254,66 @@ document.querySelectorAll(".home-steps .step[data-p]").forEach(st=>{
   card.addEventListener("mouseenter",on);card.addEventListener("mouseleave",off);
 });
 
-/* v63-dialog：问答跳转按钮落地——?h/?f/?a 精确高亮并滚动到目标卡片 */
+/* v63-dialog：问答跳转按钮落地——?h/?f/?a 精确高亮并滚动到目标卡片
+   v103：加多次重试（页面慢加载时 DOM 尚未就绪）与醒目脉冲类 tz-locate */
 function focusCardByParam(key,sel){
   let n="";try{n=new URLSearchParams(location.search).get(key)||"";}catch(e){}
   if(!n)return;
-  setTimeout(function(){
+  const tryFocus=()=>{
     const cards=document.querySelectorAll(sel);
     for(let i=0;i<cards.length;i++){
       const b=cards[i].querySelector(".mat-card-h b");
-      if(b&&b.textContent.trim()===n){cards[i].classList.add("card-focus");cards[i].scrollIntoView({block:"center",behavior:"smooth"});return;}
+      if(b&&b.textContent.trim()===n){
+        cards[i].classList.add("card-focus","tz-locate");
+        cards[i].scrollIntoView({block:"center",behavior:"smooth"});
+        return true;
+      }
     }
-  },180);
+    return false;
+  };
+  if(tryFocus())return;
+  [180,500,1200].forEach(ms=>setTimeout(()=>tryFocus(),ms));
+}
+/* v104：药童荐读路线——按 BOOKS 的 diff 字段自动生成三档，书名可点击精准定位到书卡。
+   新增典籍只要 push 进 BOOKS（带 diff），路线自动收录，不再手写死 12 部。 */
+const READ_STEPS=[["入门","ez"],["进阶","mid"],["硬核","hard"]];
+function renderReadPath(){
+  const box=document.getElementById("readPath");if(!box)return;
+  let html="<b>药童荐读路线</b>";
+  READ_STEPS.forEach((s,i)=>{
+    const names=BOOKS.filter(b=>b.diff===s[0]).map(b=>b.t);
+    if(!names.length)return;
+    html+=(i?"　":"")+`<em>${s[0]}</em>：`+names.map(n=>`<a class="rp-book ${s[1]}" href="read.html?b=${encodeURIComponent(n)}" title="定位到《${n}》书卡">《${n}》</a>`).join("→");
+  });
+  box.innerHTML=html;
+}
+/* v103：应时荐读 ?b=书名 → 定位到 #books 中对应书卡（标题形如《书名》难度），加高亮并滚动 */
+function focusBookByParam(){
+  let n="";try{n=new URLSearchParams(location.search).get("b")||"";}catch(e){}
+  if(!n)return;
+  const tryFocus=()=>{
+    const cards=document.querySelectorAll("#books .book");
+    for(let i=0;i<cards.length;i++){
+      const h4=cards[i].querySelector("h4");
+      const t=h4?(h4.childNodes[0]&&h4.childNodes[0].textContent||h4.textContent):"";
+      if(t&&t.replace(/[《》\s]/g,"").indexOf(n.replace(/[《》\s]/g,""))>=0){
+        cards[i].classList.add("card-focus","tz-locate");
+        cards[i].scrollIntoView({block:"center",behavior:"smooth"});
+        return true;
+      }
+    }
+    return false;
+  };
+  if(tryFocus())return;
+  [180,500,1200].forEach(ms=>setTimeout(()=>tryFocus(),ms));
 }
 /* ===== 惰性挂载：7 个页面初始只留空壳，首次进入才注入模板并生成数据视图 ===== */
 const PAGE_MOUNTED={home:true};
 const PAGE_INIT={
   quiz:()=>{const v=/[?&]v=full(?:&|$)/.test(location.search||"")?"full":"brief";setQuizVersion(v);restorePhys();initQcSticky();},
   chat:()=>{renderKbIndex();renderChips();},    // MPA：推荐问题须本页渲染（SPA 时代靠 go() 刷新）
-  read:()=>{renderFilter();renderBooks();},     // 筛选条 + 十二张书卡
-  album:()=>{renderAlbum();},                   // MPA：集章墙须本页渲染（SPA 时代靠 go() 刷新）
+  read:()=>{renderFilter();renderReadPath();renderBooks();if(typeof focusBookByParam==="function")focusBookByParam();mountSearchBar("read");}, // 筛选条 + v104 路线 + 书卡 + v103 定位 + v106 搜索条
+  album:()=>{renderAlbum();if(typeof autoPromptQuiz==="function")autoPromptQuiz();}, // MPA：集章墙渲染 + v102 返回自动弹考
   game:()=>{
     const g=window._game;
     const bot=$("#gameBot");if(bot)bot.style.display=g&&g.mode==="contest"?"flex":"none";
@@ -1271,17 +1323,109 @@ const PAGE_INIT={
     renderGameIdle();                                               // 待机：不出题、不计时
   },
   checkin:()=>{renderCheckin();},               // MPA：打卡日历须本页渲染（SPA 时代靠 go() 刷新）
-  herb:()=>{renderHerbPage();focusCardByParam("h","#herbArea .mat-card");},                 // 本草名录：独立页，全部分门卡片
-  formula:()=>{renderFormulaPage();focusCardByParam("f","#formulaArea .mat-card");crossFormulaVisit();}, // v100：跨页寻方回执
+  herb:()=>{renderHerbPage();focusCardByParam("h","#herbArea .mat-card");mountSearchBar("herb");},  // 本草名录：独立页 + v106 搜索条
+  formula:()=>{renderFormulaPage();focusCardByParam("f","#formulaArea .mat-card");crossFormulaVisit();mountSearchBar("formula");}, // v100 跨页寻方回执 + v106 搜索条
   materia:()=>{renderMateria();},               // 旧版合览：本草名录 + 名方要诀 两 tab（保留兼容）
-  acupoint:()=>{renderAcupoint();focusCardByParam("a","#acupArea .mat-card");},             // 经络要穴：独立页，12 处要穴卡片
+  acupoint:()=>{renderAcupoint();focusCardByParam("a","#acupArea .mat-card");mountSearchBar("acupoint");},  // 经络要穴：独立页 + v106 搜索条
   seasons:()=>{const q=new URLSearchParams(location.search).get("s");renderFourSeasons(q&&FOUR_KEYS.indexOf(q)>=0?q:seasonOf());}, // 四时调神：支持 ?s=秋 直达某季
   constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
+/* ===== v106：四页通用页内搜索（经典荐读 / 本草名录 / 名方要诀 / 经络要穴） ===== */
+/* 搜索优先：输入关键词时暂时脱离体质/安全/分类筛选，按全文命中展示；清空即恢复原筛选 */
+const SEARCH_Q={read:"",herb:"",formula:"",acupoint:""};
+const SEARCH_PH={read:"搜书名、作者、导读、金句或标签…",herb:"搜药名、性味、功效或出处…",formula:"搜方名、组成药材、主治或源流…",acupoint:"搜穴名、经络、定位或主治…"};
+function searchEsc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+/* 全文匹配：查询词按空白切成多词，全部命中才算匹配（不区分大小写） */
+function qMatch(text,q){
+  const t=String(text||"").toLowerCase();
+  const ts=String(q||"").toLowerCase().trim().split(/\s+/).filter(Boolean);
+  return ts.length>0&&ts.every(w=>t.indexOf(w)>=0);
+}
+function herbSearchText(h){return [h.n,h.cat,h.f,h.x,h.e,h.s,h.b,HERB_NOTE[h.n]||"",HERB_PHARM[h.n]||""].join(" ");}
+function formulaSearchText(f){const m=formulaMeta(f);return [f.n,f.s,f.comp,f.d,f.b,(m.fit||[]).join(" ")].join(" ");}
+function acupSearchText(a){const m=acupMeta(a);return [a.n,a.m,a.loc,a.d,a.b,(m.fit||[]).join(" "),m.msg||"",m.care||""].join(" ");}
+function bookSearchText(b){return [b.t,b.au,b.d,b.why,b.diff,b.hl,b.hs,(b.tg||[]).join(" "),(b.fit||[]).join(" ")].join(" ");}
+function searchInfo(q,n,unit){
+  if(!q)return "";
+  return `<div class="s-sum">🔍 全文检索「<b>${searchEsc(q)}</b>」：命中 <b>${n}</b> ${unit}（已暂时脱离体质 / 安全 / 分类筛选；点输入框末尾 ✕ 恢复原列表）</div>`;
+}
+function searchEmpty(q){return `<div class="s-empty">没有找到与「${searchEsc(q)}」相关的内容。<br>换个关键词试试，或点 ✕ 清空搜索恢复原列表。</div>`;}
+/* 命中高亮：遍历结果容器的文本节点，把命中词包成 <mark class="s-hit">；先清旧高亮避免叠加 */
+function hlNode(root,q){
+  if(!root||!q)return;
+  const old=root.querySelectorAll?root.querySelectorAll("mark.s-hit"):[];
+  for(let i=0;i<old.length;i++){
+    const m=old[i],p=m.parentNode;if(!p)continue;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    p.removeChild(m);if(p.normalize)p.normalize();
+  }
+  const all=root.querySelectorAll?root.querySelectorAll("*"):[];
+  const nodes=[root].concat(Array.prototype.slice.call(all));
+  const ts=String(q).toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if(!ts.length)return;
+  const re=new RegExp("("+ts.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","gi");
+  for(let i=0;i<nodes.length;i++){
+    const el=nodes[i],kids=el.childNodes?Array.prototype.slice.call(el.childNodes):[];
+    for(let j=0;j<kids.length;j++){
+      const node=kids[j];if(node.nodeType!==3)continue;
+      const txt=node.nodeValue||"";re.lastIndex=0;if(!re.test(txt)){re.lastIndex=0;continue;}
+      re.lastIndex=0;
+      const frag=document.createDocumentFragment();let last=0,m;
+      while((m=re.exec(txt))!==null){
+        if(m.index>last)frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+        const mk=document.createElement("mark");mk.className="s-hit";mk.textContent=m[0];frag.appendChild(mk);
+        last=m.index+m[0].length;
+      }
+      if(last<txt.length)frag.appendChild(document.createTextNode(txt.slice(last)));
+      el.replaceChild(frag,node);
+    }
+  }
+}
+function updateSearchCount(kind){
+  const c=document.getElementById("sCount_"+kind);if(!c)return;
+  c.textContent=(SEARCH_Q[kind]||"").trim()?"「"+SEARCH_Q[kind].trim()+"」":"";
+}
+function rerenderList(kind){
+  try{
+    if(kind==="read"&&typeof renderBooks==="function")renderBooks(window._readFit?"__fit":"全部");
+    else if(kind==="herb"&&typeof renderHerbPage==="function")renderHerbPage();
+    else if(kind==="formula"&&typeof renderFormulaPage==="function")renderFormulaPage();
+    else if(kind==="acupoint"&&typeof renderAcupoint==="function")renderAcupoint();
+  }catch(e){}
+  const sel=kind==="read"?"#books":kind==="herb"?"#herbArea":kind==="formula"?"#formulaArea":"#acupArea";
+  hlNode(sel?$(sel):null,(SEARCH_Q[kind]||"").trim());
+  updateSearchCount(kind);
+}
+function mountSearchBar(kind){
+  const box=$("#searchBar_"+kind);if(!box||box.dataset.bound)return;
+  box.innerHTML=`<div class="s-wrap"><span class="s-ico">🔍</span><input class="s-input" id="sInput_${kind}" type="search" placeholder="${SEARCH_PH[kind]||"输入关键词检索…"}" value="" autocomplete="off" aria-label="站内搜索"><button class="s-clear" id="sClear_${kind}" type="button" title="清空搜索">✕</button><span class="s-count" id="sCount_${kind}"></span></div>`;
+  box.dataset.bound="1";
+  const inp=document.getElementById("sInput_"+kind);
+  if(inp&&inp.addEventListener){
+    let tm=null;
+    inp.addEventListener("input",function(){
+      const v=inp.value||"";
+      if(tm)clearTimeout(tm);
+      tm=setTimeout(function(){SEARCH_Q[kind]=v;rerenderList(kind);},130);
+    });
+  }
+  const clr=document.getElementById("sClear_"+kind);
+  if(clr&&clr.addEventListener)clr.addEventListener("click",function(){
+    SEARCH_Q[kind]="";if(inp)inp.value="";rerenderList(kind);
+  });
+}
+
 /* ===== 本草名录 / 名方要诀：共用列表渲染，合览页与两个独立页同源同貌 ===== */
 /* v81-herb-desc：说明区减负，核心提示并入顶部黄条 */
 function herbListHtml(tz){
   tz=tz||tzParam();
+  /* v106 搜索优先：有词则脱离体质/安全分级，全量按全文命中展示 */
+  const sq=(SEARCH_Q.herb||"").trim();
+  if(sq){
+    const list=ALL_HERBS.filter(h=>qMatch(herbSearchText(h),sq));
+    return searchInfo(sq,list.length,"味本草")+
+      (list.length?`<div class="mat-grid">`+list.map(h=>herbCard(h,true)).join("")+`</div>`:searchEmpty(sq));
+  }
   const safe=safeParam();
   const hit=h=>(herbMeta(h).fit||[]).indexOf(tz)>=0;
   const safeHit=h=>!safe||herbSafe(h.n)===safe;
@@ -1307,6 +1451,12 @@ function herbListHtml(tz){
 /* v82-formula-note：说明条与不提供剂量卡片口径统一 */
 function formulaListHtml(tz){
   tz=tz||tzParam();
+  const sq=(SEARCH_Q.formula||"").trim();
+  if(sq){
+    const list=allFormulas().filter(f=>qMatch(formulaSearchText(f),sq));
+    return searchInfo(sq,list.length,"首名方")+
+      (list.length?`<div class="mat-grid">`+list.map(formulaCard).join("")+`</div>`:searchEmpty(sq));
+  }
   const use=tz?allFormulas().filter(f=>(formulaMeta(f).fit||[]).indexOf(tz)>=0):allFormulas();
   return tzBar("formula",tz)+tzSum(use,tz,"首名方")+
     `<div class="mat-note">◇ 名方：组成、方义、源流与传统服法，一卡尽览。本系统刻意隐去具体剂量克数，仅供方剂文献科普；中医用药需辨证论治，请在执业中医师指导下配伍使用。</div>`+
@@ -1336,6 +1486,13 @@ function renderFormulaPage(){
 function renderAcupoint(){
   const cnt=document.getElementById("cntAcup");if(cnt)cnt.textContent=allAcups().length;
   const ac=$("#acupArea"),tz=tzParam();
+  const sq=(SEARCH_Q.acupoint||"").trim();
+  if(ac&&sq){
+    const list=allAcups().filter(a=>qMatch(acupSearchText(a),sq));
+    ac.innerHTML=searchInfo(sq,list.length,"处要穴")+
+      (list.length?`<div class="mat-grid">`+list.map(acupCard).join("")+`</div>`:searchEmpty(sq));
+    ac.dataset.done="1";return;
+  }
   const use=tz?allAcups().filter(a=>(acupMeta(a).fit||[]).indexOf(tz)>=0):allAcups();
   if(ac){
     ac.innerHTML=tzBar("acupoint",tz)+tzSum(use,tz,"处要穴")+
@@ -1387,7 +1544,7 @@ function renderFourSeasons(s){
   const herbHtml=recs.map(r=>{
     const h=ALL_HERBS.find(x=>x.n===r.n);if(!h)return "";
     return `<div class="four-herb"><div class="fh-why"><b>${r.n}</b> · ${r.why}`+
-      `<span class="fh-fit">当令 · ${s}季 ${seasonTerm}</span></div>`+herbCard(h,!h.cat)+`</div>`;
+      `<span class="fh-fit">当令 · ${s}季 ${seasonTerm}</span></div>`+fourHerbBrief(h)+`</div>`;
   }).join("");
   const bookHtml=rec.list.map(n=>{
     const b=BOOKS.find(x=>x.t===n)||{};
@@ -1414,7 +1571,7 @@ function renderFourSeasons(s){
     <div class="four-sec">
       <h3>叁 · ${s}季当令本草</h3>
       <div class="four-safety-banner"><span>${FOUR_SAFETY_HINT[s]}</span></div>
-      <div class="four-hint">按「${s}季 · ${seasonTerm}」节气从全站本草名录择取当令本草，每味附当令理由。此处只按节气推荐，不按体质区分；若要看体质对应，请到「本草名录」页按体质筛选。性味功效、用法用量与「本草名录」页同源</div>
+      <div class="four-hint">按「${s}季 · ${seasonTerm}」节气从全站本草名录择取当令本草，每味附当令理由与性味功效概要。此处只按节气推荐、简明展示；形貌、古籍、用法用量等完整档案，点「去本草名录看详情」直达该味本草</div>
       <div class="four-herbs">${herbHtml}</div>
     </div>
     <div class="four-sec">
@@ -1520,6 +1677,19 @@ const WARM_TONIC_FIT_NOTE={
   "黄芪":"本品补气升阳，适合气虚自汗、容易疲劳人群，阴虚火旺/湿热体质请避开。",
   "桂枝":"本品辛温通阳，适合阳虚怕冷、手足不温人群，阴虚火旺/实热体质请避开。"
 };
+/* v105：四时调神「当令本草」精简卡——只留配图/性味/功效一行 + 详情跳转，
+   不再把本草名录整张卡(形貌/古籍/药理/问药童等)搬来；详情跳本草名录 ?h= 精准定位。 */
+function fourHerbBrief(h){
+  const ph=herbPhoto(h);
+  return `<div class="fh-brief">
+    ${ph?`<img class="fhb-img" src="${ph.src}" alt="${h.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'">`:""}
+    <div class="fhb-body">
+      <div class="fhb-f">${h.f||"性味归经详见名录"}</div>
+      <div class="fhb-e">${h.e||"功效主治详见名录"}</div>
+      <a class="fhb-more" href="herb.html?h=${encodeURIComponent(h.n)}" title="到本草名录查看《${h.n}》完整档案">去本草名录看详情 →</a>
+    </div>
+  </div>`;
+}
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
   const illustNow=illust||!!HERB_IMG[h.n]||!!HERB_GONGBI[h.n]; // 77 味均有工笔图
@@ -2267,6 +2437,36 @@ function askMark(name){
   const a=askGet();if(a[name])return;
   a[name]=1;try{localStorage.setItem("bzAsked",JSON.stringify(a));}catch(e){}
 }
+/* ===== v102 B方案：问过药童后返回图鉴，自动弹一次小考 =====
+   bzQuizPrompted 记录「已自动弹过」的考核型本草，每味只自动弹一次，防反复打扰；
+   手动点卡片重考不受此标记影响；答对点亮后自然不再弹（alGet 已为真）。 */
+var _promptStore=null;
+function promptGet(){
+  if(_promptStore)return _promptStore;
+  try{_promptStore=JSON.parse(localStorage.getItem("bzQuizPrompted")||"{}");}catch(e){_promptStore={};}
+  return _promptStore;
+}
+function promptMark(name){
+  if(!name)return;
+  const p=promptGet();if(p[name])return;
+  p[name]=1;try{localStorage.setItem("bzQuizPrompted",JSON.stringify(p));}catch(e){}
+}
+/* 找出一味「已问过、未点亮、未自动弹过」的考核型本草 */
+function pendingQuizHerb(){
+  const asked=askGet(),done=alGet(),prompted=promptGet();
+  for(const h of HERBS){
+    if(herbPath(h.n).k==="quiz"&&asked[h.n]&&!done[h.n]&&!prompted[h.n])return h.n;
+  }
+  return null;
+}
+/* 返回图鉴自动弹考：每次进页最多弹一味，先打标记再延迟弹出，避免打断首屏渲染 */
+function autoPromptQuiz(){
+  if(!$("#albumArea"))return; // MPA：仅图鉴页挂载
+  const name=pendingQuizHerb();
+  if(!name)return;
+  promptMark(name);
+  setTimeout(()=>openHerbQuiz(name,true),800);
+}
 /* 题库轮换：同一味每次换一题，避免次次同题 */
 var _qzTurn={};
 function quizPick(name){
@@ -2275,7 +2475,7 @@ function quizPick(name){
   return bank[i%bank.length];
 }
 /* 打开小考浮层（动态建 DOM，不依赖壳页，MPA/SPA 通用） */
-function openHerbQuiz(name){
+function openHerbQuiz(name,auto){
   let m=document.getElementById("herbQuiz");
   if(!m){
     m=document.createElement("div");m.id="herbQuiz";m.className="qz-mask";
@@ -2289,7 +2489,7 @@ function openHerbQuiz(name){
   m.innerHTML=`<div class="qz-box" onclick="event.stopPropagation()">
     <div class="qz-ico">✎</div>
     <div class="qz-t">药童小考 · ${name}</div>
-    <div class="qz-sub">答对就点亮这味本草，答错就去再问问小药童吧〜</div>
+    <div class="qz-sub">${auto?`刚才你问过小药童「${name}」，来验一验学到的吧〜答对即点亮！`:"答对就点亮这味本草，答错就去再问问小药童吧〜"}</div>
     <div class="qz-q">${item.tq}</div>
     <div class="qz-opts">${opts}</div>
     <div class="qz-fb" id="qzFb"></div>
@@ -3267,8 +3467,12 @@ function renderBooks(f){
   let list=fitOnly?BOOKS.filter(b=>!!key&&fitOf(b)):BOOKS.filter(b=>on==="全部"||b.tg.includes(on));
   list=list.slice().sort((a,b)=>(fitOf(b)?1:0)-(fitOf(a)?1:0)); // 契合体质的书排在最前
   const box=$("#books");if(!box)return;
-  if(fitOnly&&!list.length){box.innerHTML=`<div class="fit-empty">还没有与你的体质相契的书目。可点上方分类「全部」浏览二十部经典，或重测体质后再来。</div>`;return;}
-  box.innerHTML=list.map(b=>{
+  /* v106 搜索优先：有词则脱离分类/体质筛选，全量按全文命中展示 */
+  const sq=(SEARCH_Q.read||"").trim();
+  if(sq)list=BOOKS.filter(b=>qMatch(bookSearchText(b),sq));
+  if(fitOnly&&!list.length&&!sq){box.innerHTML=`<div class="fit-empty">还没有与你的体质相契的书目。可点上方分类「全部」浏览二十部经典，或重测体质后再来。</div>`;return;}
+  box.innerHTML=(sq?searchInfo(sq,list.length,"部典籍"):"")+
+    (list.length?list.map(b=>{
     const fit=fitOf(b)&&!!key;
     return `<div class="book">${fit?'<span class="fit-badge">契合你的体质</span>':""}${b.t===today?`<span class="today-badge">今日荐读 · ${season}</span>`:""}
       <h4>《${b.t}》<span class="diff ${dcls[b.diff]}">${b.diff}</span></h4><div class="au">${b.au}</div>
@@ -3279,7 +3483,7 @@ function renderBooks(f){
       <p class="fit">◈ 适合：${b.fit.join(" · ")}${fit?'　<b style="color:var(--red)">与你相契</b>':""}</p>
       <div class="tags">${b.tg.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
       <button class="read-btn" onclick="openRead('${b.t}')">📖 阅读选段 →</button></div>`;
-  }).join("");
+    }).join(""):(sq?searchEmpty(sq):""));
 }
 /* 经典选读弹层：插画封面 + 原文选段 + 白话译文 + 药童领读 */
 function openRead(t){
