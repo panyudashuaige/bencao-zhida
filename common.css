@@ -346,25 +346,10 @@ html[data-season="夏"] .mascot-badge::after{content:"夏"}
 html[data-season="秋"] .mascot-badge::after{content:"秋"}
 html[data-season="冬"] .mascot-badge::after{content:"冬"}
 @keyframes breathe{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}50%{transform:translateX(-50%) scale(1.025) translateY(-4px)}}
-/* ===== v42 药童春夏秋冬装束：每套专属待机律动 + 专属互动表演 ===== */
-.side-mascot[data-skin="classic"]{animation:breathe 3.2s ease-in-out infinite}
-.side-mascot[data-skin="spring"]{animation:idleSpring 2.4s ease-in-out infinite}
-.side-mascot[data-skin="summer"]{animation:idleSummer 1.8s ease-in-out infinite}
-.side-mascot[data-skin="autumn"]{animation:idleAutumn 3.8s ease-in-out infinite}
-.side-mascot[data-skin="winter"]{animation:idleWinter 4.6s ease-in-out infinite}
-@keyframes idleSpring{0%,100%{transform:translateX(-50%) rotate(-2deg) translateY(0)}50%{transform:translateX(-50%) rotate(2deg) translateY(-6px)}}
-@keyframes idleSummer{0%,100%{transform:translateX(-50%) translateY(0) scale(1)}50%{transform:translateX(-50%) translateY(-9px) scale(1.02)}}
-@keyframes idleAutumn{0%,100%{transform:translateX(-50%) rotate(1.5deg) translateY(0)}50%{transform:translateX(-50%) rotate(-1.5deg) translateY(-3px)}}
-@keyframes idleWinter{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}48%,52%{transform:translateX(-50%) scale(.985) translateY(2px)}}
+/* ===== v119 四季换装统一律动：五套待机一律沿用经典 breathe，互动播放经典动图 =====
+   旧版每套专属 idleSpring/actSpring 等已删：既减少 CSS 体积，又让换肤过渡零闪跳。 */
+.side-mascot[data-skin]{animation:breathe 3.2s ease-in-out infinite}
 .side-mascot.acting{animation:none}
-.side-mascot.acting[data-skin="spring"]{animation:actSpring 1.24s ease-in-out 4}
-.side-mascot.acting[data-skin="summer"]{animation:actSummer .83s ease-in-out 6}
-.side-mascot.acting[data-skin="autumn"]{animation:actAutumn 1.66s ease-in-out 3}
-.side-mascot.acting[data-skin="winter"]{animation:actWinter 2.49s ease-in-out 2}
-@keyframes actSpring{0%,100%{transform:translateX(-50%) translateY(0) rotate(0)}25%{transform:translateX(-50%) translateY(-14px) rotate(-4deg)}75%{transform:translateX(-50%) translateY(-6px) rotate(4deg)}}
-@keyframes actSummer{0%,100%{transform:translateX(-50%) rotate(-5deg)}50%{transform:translateX(-50%) rotate(5deg)}}
-@keyframes actAutumn{0%,100%{transform:translateX(-50%) rotate(0) scale(1)}50%{transform:translateX(-50%) rotate(7deg) scale(1.03)}}
-@keyframes actWinter{0%,100%{transform:translateX(-50%) scale(1) translateY(0)}50%{transform:translateX(-50%) scale(.96) translateY(3px)}}
 @media(prefers-reduced-motion:reduce){.side-mascot,.side-mascot.acting{animation:none!important}}
 .season-bar .skin-classic{width:auto;height:34px;padding:0 13px;border-radius:999px;font-size:14.5px;letter-spacing:1px;white-space:nowrap}
 .season-bar .skin-classic.on{background:var(--red);border-color:var(--red);color:#FBF7EC;box-shadow:0 3px 10px rgba(166,62,40,.22)}

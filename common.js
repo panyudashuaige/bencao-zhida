@@ -1842,17 +1842,19 @@ function mountPage(p){
 }
 function go(p){location.href=(p==="home"?"index":p)+".html";}
 
-/* ===== 小药童：春夏秋冬装束 + 每套专属待机 / 互动动作 + 点击互动 ===== */
+/* ===== 小药童：经典 + 春夏秋冬四季换装（AI 换装静图，点击互动共用经典动作） ===== */
 (function(){
-  /* 五套装束：经典为初见默认，四季各有一张待机图与一段 60 帧专属动作。
-     四季图由 .ai-build/gen-mascot-skins.py 从经典原图程序化换装生成，角色完全一致。 */
+  /* 五套装束：经典为初见默认；四季是 AI 换装静图，裁成与经典相同的 269×320 半身构图，
+     显示位置 / 大小 / 头身比与原经典药童一致。v119 起删除四季各自的 60 帧动作图，
+     点击互动统一复用经典动作图 mascot-anim.webp —— 全站只剩一段动作，彻底消除换肤卡顿。 */
   const SKINS={
-    classic:{idle:"assets/mascot-idle.webp",   act:"assets/mascot-anim.webp",        name:"经典",      season:null},
-    spring: {idle:"assets/skin-spring-idle.webp",act:"assets/skin-spring-act.webp", name:"春 · 发陈", season:"春"},
-    summer: {idle:"assets/skin-summer-idle.webp",act:"assets/skin-summer-act.webp", name:"夏 · 蕃秀", season:"夏"},
-    autumn: {idle:"assets/skin-autumn-idle.webp",act:"assets/skin-autumn-act.webp", name:"秋 · 容平", season:"秋"},
-    winter: {idle:"assets/skin-winter-idle.webp",act:"assets/skin-winter-act.webp", name:"冬 · 闭藏", season:"冬"}
+    classic:{idle:"assets/mascot-idle.webp",   name:"经典",      season:null},
+    spring: {idle:"assets/skin-spring-idle.webp", name:"春 · 发陈", season:"春"},
+    summer: {idle:"assets/skin-summer-idle.webp", name:"夏 · 蕃秀", season:"夏"},
+    autumn: {idle:"assets/skin-autumn-idle.webp", name:"秋 · 容平", season:"秋"},
+    winter: {idle:"assets/skin-winter-idle.webp", name:"冬 · 闭藏", season:"冬"}
   };
+  const ACT_SRC="assets/mascot-anim.webp"; // 唯一动作素材：经典动图，五套共用
   const ACT_MS=5100; // 60帧×83ms≈5s，留一点余量
   const TIPS=[
     "上工治未病，不治已病。——《黄帝内经》",
@@ -1875,16 +1877,15 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
   if(!img)return;
   let acting=false,actTimer=null,tipTimer,hintShown=false,tipSkin=null,curSkin="classic";
-  /* 动作 WebP（每套 60 帧 / 83ms / 约 0.5-0.7MB）各自按需加载：
-     首屏只请求经典待机图，换到哪一套才取哪一段动作，绝不一次性拉四套。 */
-  const actLoaded={};
-  function preloadSkinAct(key){
-    if(actLoaded[key])return;
-    actLoaded[key]=true;
-    const pre=new Image();pre.src=SKINS[key].act;
+  /* v119 卡顿治理：四张换装静图各约 10KB，进页即全部预载 → 换肤零等待、无白闪；
+     经典动作图 516KB 在首屏渲染后空闲预载一次，全站共用，点击时已就绪。
+     不再有「悬停即拉 1MB 四季动作图」与「点击解码 60 帧」的双重卡顿。 */
+  function preloadMascotAssets(){
+    Object.keys(SKINS).forEach(k=>{const p=new Image();p.src=SKINS[k].idle;});
+    const a=new Image();a.src=ACT_SRC;
   }
-  function preloadAct(){preloadSkinAct(curSkin);}
-  if(img){img.addEventListener("pointerenter",preloadAct,{once:true});img.addEventListener("touchstart",preloadAct,{once:true});}
+  if(window.requestIdleCallback)requestIdleCallback(preloadMascotAssets,{timeout:1500});
+  else setTimeout(preloadMascotAssets,900);
 
   /* 经典 = 一键复原：药童回经典装，页面主色 / 飘落物 / 插画 / 荐读回到当令真实节气 */
   function restoreSeason(){
@@ -1914,7 +1915,7 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
     }
     syncButtons();
     tipSkin=null;                        // 换装后首次互动必出该皮肤专属金句
-    /* v98: 换肤只换图,不自动演;专属动作仅点击药童才播 */
+    /* v98/v119: 换肤只换图,不自动演;互动动作仅点击药童才播(五套共用经典动图) */
   }
   /* 新标签 / 新会话一律从经典皮肤开始；同一标签内跨页跳转沿用本次选择 */
   try{const saved=sessionStorage.getItem("bcSkin");if(saved&&SKINS[saved])curSkin=saved;}catch(e){}
@@ -1941,14 +1942,13 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   }
   function act(auto){
     if(acting)return;
-    preloadSkinAct(curSkin);
     acting=true;
     img.classList.add("acting");
-    img.src=SKINS[curSkin].act;
+    img.src=ACT_SRC; // v119：五套互动统一复用经典动作图，不再各自加载 1MB 专属动图
     showTip();
     if(!hintShown){hint.classList.add("hide");hintShown=true;}
     actTimer=setTimeout(()=>{
-      img.src=SKINS[curSkin].idle;
+      img.src=SKINS[curSkin].idle; // 动作结束回到当前皮肤静图
       img.classList.remove("acting");
       acting=false; actTimer=null;
     },ACT_MS);
