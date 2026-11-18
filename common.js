@@ -194,7 +194,6 @@ const PAGE_HTML={
     <div class="orn">九 种 体 质 · 因 人 施 养</div>
     <h2>九种体质<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本页依据《中医体质分类与判定》整理平和、气虚、阳虚等九种体质的画像与调养宜忌，并精准关联对应的本草、名方与穴位。想知道自己属于哪一种？可前往「体质辨识」完成问卷自测，或直接点击卡片追问AI小药童。</p>
-    <p class="tz-rule-lead">本页依据《中医体质分类与判定》国标，为你展示九种体质的特征与调养方向。</p>
     <div id="tzArea"></div>
     <div class="tz-qa"><b>◈ 这些体质问题，交给 AI 小药童</b>
       <div class="tz-care3-pick"><select id="tzCare3Sel" aria-label="选择体质调理问题">
@@ -872,7 +871,7 @@ function renderConstitution(){
         <div class="kv"><span class="k">调养原则</span>${t.care}</div>
         <div class="tz-adv-note">⚠️ 注：药膳需辨证，体质复杂者请咨询中医师，切勿盲目进补。</div>
         ${links(e.herb,"关联本草","herb")}${links(e.acup,"关联穴位","acupoint")}
-        ${e.f?`<div class="kv"><span class="k">关联名方文献：</span><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}" onclick="event.preventDefault();guardFormulaDoc(this.href)">${e.f}</a>　<span style="color:var(--ink2);font-size:12px">方义与服法见「名方要诀」页</span></div>`:""}
+        ${e.f?`<div class="kv"><span class="k">关联名方文献：</span><a class="tz-link" href="formula.html?tz=${encodeURIComponent(n)}" onclick="event.preventDefault();guardFormulaDoc(this.href)">${e.f}</a>　<span style="color:var(--ink2);font-size:14px">方义与服法见「名方要诀」页</span></div>`:""}
         <div class="kv"><span class="k">应时荐读</span>${c.books.map(x=>{const b=tzBookName(x);return `<a class="tz-link" href="read.html?b=${encodeURIComponent(b)}" title="定位到《${b}》书卡">《${b}》</a>`;}).join("")}</div>
         <button class="btn mat-ask-cta" onclick="askKB('${n.replace("质","")}体质怎么调理')">✦ 问小药童 · ${n}怎么调养</button>
       </div>`;
@@ -1896,7 +1895,7 @@ const HERB_IMG={黄芪:"huangqi",当归:"danggui",枸杞子:"gouqi",金银花:"j
   if(!$("#daily"))return;
   $("#daily").innerHTML=`<div class="daily-left"><div class="big">${h.n.slice(0,2)}</div><div class="pinyin">每 日 一 味</div></div>
   <div class="daily-main"><span class="daily-tag">◈ 每日本草 · ${new Date().getMonth()+1}月${new Date().getDate()}日</span>
-  <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:14px">${h.e}</p>
+  <h3>${h.n}</h3><div class="flavor">${h.f}</div><p style="font-size:16px">${h.e}</p>
   <div class="src">${h.s}</div>
   <div class="ask"><a href="#" onclick="askKB('${h.n}');return false">问一问「本草智答」：${h.n}怎么吃？ →</a></div></div>
   <div class="daily-pic"><div class="ph"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}工笔插画" onerror="this.parentNode.parentNode.style.display='none'" loading="lazy" decoding="async"></div><span class="cap">本 草 对 照</span></div>`;
@@ -2321,7 +2320,7 @@ function endGame(){
       <div class="title">${r[0]}</div>
       <div class="seal">百草园 · 授</div>
       <p>${contest?"（知识竞赛 · 每题限时 "+CONTEST_LIMIT+" 秒）":""}${r[1]}</p>
-      ${contest?`<p style="font-size:12.5px;color:var(--ink3)">◈ 竞赛最佳成绩已记入名帖：${s} / ${full}</p>`:""}
+      ${contest?`<p style="font-size:14.5px;color:var(--ink3)">◈ 竞赛最佳成绩已记入名帖：${s} / ${full}</p>`:""}
       <button class="btn red" onclick="startGame()">${contest?"再战一轮":"再来一轮"}</button>
       <button class="btn ghost" onclick="copyChallenge(${s},'${r[0]}',${full})">📣 发起挑战 · 复制战帖</button>
       <button class="btn ghost" onclick="go('read')">读读经典 →</button>
@@ -2647,7 +2646,7 @@ function renderCheckin(){
       <button class="btn ghost" onclick="go('game')">去知识竞赛 →</button>
       <button class="btn ghost" onclick="go('album')">翻翻图鉴 →</button>
     </div>
-    <div style="text-align:center;font-size:12px;color:var(--ink3);margin-top:12px">◈ 签到集章梯度：连签 2 天点亮莲子 · 3 天点亮薄荷 · 4 天点亮人参（当前连签 ${streak} 天，中断重新计数）</div>`;
+    <div style="text-align:center;font-size:14px;color:var(--ink3);margin-top:12px">◈ 签到集章梯度：连签 2 天点亮莲子 · 3 天点亮薄荷 · 4 天点亮人参（当前连签 ${streak} 天，中断重新计数）</div>`;
 }
 
 /* ===== v101：打卡成功 · 本草盲盒特效浮层 ===== */
@@ -2700,7 +2699,7 @@ function renderAlbum(){
       <div class="bar"><i style="width:${Math.round(n/14*100)}%"></i></div>
       <div class="title"><b>${t[1]}</b><span>${t[2]}</span></div>
     </div>
-    <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="makePoster()">◈ 生成我的名帖</button></div>
+    <div style="text-align:right;margin-bottom:10px"><button class="btn ghost" style="padding:8px 18px;font-size:15px" onclick="makePoster()">◈ 生成我的名帖</button></div>
     <div class="album-grid">${HERBS.map(h=>{
       const got=d[h.n],p=herbPath(h.n);
       if(got)return `<div class="al-card" data-herb="${h.n}" data-path="${p.k}"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="${h.n}" loading="lazy" decoding="async"></div><div class="al-seal">集于${got}</div><b>${h.n}</b><span>${h.f.split("，")[0]}</span></div>`;
@@ -2727,7 +2726,7 @@ function renderAlbum(){
       }
       return `<div class="al-card locked${p.k==="quiz"&&asked?" quiz-ready":""}" style="cursor:pointer" data-herb="${h.n}" data-path="${p.k}" onclick="${action}" title="${title}"><div class="al-pic"><img src="assets/herbs/${HERB_IMG[h.n]}.webp" alt="未解锁" loading="lazy" decoding="async"><span class="al-q">？</span></div><b>${label}</b><span>${sub}</span><span class="al-path">${hint}</span></div>`;
     }).join("")}</div>
-    <p style="text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px">四类集章路径：<b>问小药童</b> · <b>跨页寻方</b>（名方要诀） · <b>药童小考</b> · <b>岐黄签到</b>（连签2/3/4天）　|　<a href="formula.html" style="color:var(--green)">去名方要诀 →</a>　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
+    <p style="text-align:center;font-size:14.5px;color:var(--ink3);margin-top:16px">四类集章路径：<b>问小药童</b> · <b>跨页寻方</b>（名方要诀） · <b>药童小考</b> · <b>岐黄签到</b>（连签2/3/4天）　|　<a href="formula.html" style="color:var(--green)">去名方要诀 →</a>　<a href="#" onclick="go('checkin');return false" style="color:var(--green)">去打卡 →</a>　<a href="#" onclick="go('game');return false" style="color:var(--green)">去药圃考考眼力 →</a></p>
     <div style="text-align:center;margin-top:16px"><button class="btn red" onclick="makePoster()">◈ 生成我的本草名帖</button></div>`;
   fresh.forEach(name=>{
     const card=document.querySelector('.al-card[data-herb="'+name+'"]');
@@ -2968,11 +2967,11 @@ function closeTermMantra(){const pop=document.getElementById("termPop");if(pop)p
     <img class="season-img" id="seasonImg" src="assets/${SEASON_IMG[seasonOf()]}" alt="当季插画 · ${seasonOf()}" loading="lazy" decoding="async">
     <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
       <span class="term-name">${t[0]}</span>
-      <span style="font-size:12px;color:var(--ink3);letter-spacing:3px">当前节气 · 农历岁时</span>
+      <span style="font-size:14px;color:var(--ink3);letter-spacing:3px">当前节气 · 农历岁时</span>
     </div>
-    <p style="font-size:13.5px;color:var(--ink2);margin:10px 0 0">◈ ${t[3]}</p>
+    <p style="font-size:15.5px;color:var(--ink2);margin:10px 0 0">◈ ${t[3]}</p>
     <div class="quote">「${q[0]}」<span class="src">—— ${q[1]}</span></div>
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" style="padding:8px 18px;font-size:13px" onclick="askKB('怎么养生')">问问小药童：顺时而养 →</button><a class="btn ghost" style="padding:8px 18px;font-size:13px;text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a></div>`;
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" style="padding:8px 18px;font-size:15px" onclick="askKB('怎么养生')">问问小药童：顺时而养 →</button><a class="btn ghost" style="padding:8px 18px;font-size:15px;text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a></div>`;
 })();
 
 /* ===== v48：双版本问卷 + ZYYXH/T157-2009 国标判定标准 ===== */
@@ -3165,22 +3164,22 @@ function calcQuiz(){
    <div class="orn">A I · 小 药 童 判 定</div>
    ${hit.length>1?`<div class="compound-warn"><b>⚠️ 复合体质用药提醒：</b>您本次测出多种体质倾向。中医调养兼夹体质需辨明主次，严禁自行将多种药材/药膳叠加使用。确切调理方案，请面诊专业中医师。</div>`:""}
    <div class="qr-say"><img src="assets/mascot3d.webp" alt="AI 小药童" loading="lazy" decoding="async"><span>${qcResultSay}</span></div>
-   <div class="const-name">${name.slice(0,3)}<span style="font-size:20px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
-   <p style="color:var(--ink2);font-size:14px;max-width:520px;margin:0 auto">${c.d}<br><b style="color:var(--red)">小药童已按这个体质，为你点亮契合的经典书目 ↓</b></p>
-   ${j.note?`<p style="font-size:13px;color:var(--gold);margin-top:8px">◈ ${j.note}</p>`:""}
-   ${judge==="未达阈值"?`<p style="font-size:12.5px;color:var(--ink3);margin-top:8px">九种体质转化分均未达到判定阈值，此处按接近平和呈现；若仍有明显不适，请以中医师四诊合参结论为准。</p>`:""}
-   ${hit.length>1?`<p style="font-size:13px;color:var(--red);margin-top:8px">◈ 检出兼夹体质：${hit.slice(1).map(([k])=>k).join("、")}</p>`:""}
+   <div class="const-name">${name.slice(0,3)}<span style="font-size:23px;letter-spacing:4px">　${judge==="是"?"（判定成立）":`（${judge}）`}</span></div>
+   <p style="color:var(--ink2);font-size:16px;max-width:520px;margin:0 auto">${c.d}<br><b style="color:var(--red)">小药童已按这个体质，为你点亮契合的经典书目 ↓</b></p>
+   ${j.note?`<p style="font-size:15px;color:var(--gold);margin-top:8px">◈ ${j.note}</p>`:""}
+   ${judge==="未达阈值"?`<p style="font-size:14.5px;color:var(--ink3);margin-top:8px">九种体质转化分均未达到判定阈值，此处按接近平和呈现；若仍有明显不适，请以中医师四诊合参结论为准。</p>`:""}
+   ${hit.length>1?`<p style="font-size:15px;color:var(--red);margin-top:8px">◈ 检出兼夹体质：${hit.slice(1).map(([k])=>k).join("、")}</p>`:""}
    ${quizReviewHtml(name,tf,j)}
    <div style="max-width:460px;margin:20px auto 0">
-     ${rows.map(([k,v])=>`<div class="bar-row ${k===name?"top":""}"><span class="nm">${k.slice(0,3)}</span><span class="bar"><i style="width:0" data-w="${v}"></i></span><span class="sc">${v}<em style="font-style:normal;color:${tagColor(badges[k])};font-size:10px;margin-left:3px">${badges[k]}</em></span></div>`).join("")}
-     <p style="font-size:11px;color:var(--ink3);text-align:left;margin-top:8px;line-height:1.7">判定依据 · 中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）：偏颇体质转化分 ≥40 判"是"、30~39 判"倾向是"、＜30 判"否"；平和质 ≥60 且八种偏颇体质均＜30 判"是"，≥60 且八种偏颇体质均＜40 判"基本是"。</p>
+     ${rows.map(([k,v])=>`<div class="bar-row ${k===name?"top":""}"><span class="nm">${k.slice(0,3)}</span><span class="bar"><i style="width:0" data-w="${v}"></i></span><span class="sc">${v}<em style="font-style:normal;color:${tagColor(badges[k])};font-size:11.5px;margin-left:3px">${badges[k]}</em></span></div>`).join("")}
+     <p style="font-size:12.5px;color:var(--ink3);text-align:left;margin-top:8px;line-height:1.7">判定依据 · 中华中医药学会《中医体质分类与判定》（ZYYXH/T157-2009）：偏颇体质转化分 ≥40 判"是"、30~39 判"倾向是"、＜30 判"否"；平和质 ≥60 且八种偏颇体质均＜30 判"是"，≥60 且八种偏颇体质均＜40 判"基本是"。</p>
    </div>
    <div class="book-rec">
-     <h4>◈ 养生建议</h4><p style="font-size:14px">${c.adv}</p>
+     <h4>◈ 养生建议</h4><p style="font-size:16px">${c.adv}</p>
      <div class="tz-adv-note">⚠️ 注：药膳需辨证，体质复杂者请咨询中医师，切勿盲目进补。</div>
-     ${recF.length?`<h4 style="margin-top:14px">◈ 相关名方</h4>${recF.map(f=>`<p style="font-size:14px"><b>${f.n}</b>——${f.d.slice(0,40)}……</p>`).join("")}`:""}
+     ${recF.length?`<h4 style="margin-top:14px">◈ 相关名方</h4>${recF.map(f=>`<p style="font-size:16px"><b>${f.n}</b>——${f.d.slice(0,40)}……</p>`).join("")}`:""}
      <h4 style="margin-top:14px">◈ 按你的体质为你荐读</h4>
-     ${recBooks.map(b=>`<p style="font-size:14px"><b>《${b.t}》</b><span style="color:var(--ink2)">——${b.d}</span></p>`).join("")}
+     ${recBooks.map(b=>`<p style="font-size:16px"><b>《${b.t}》</b><span style="color:var(--ink2)">——${b.d}</span></p>`).join("")}
    </div>
    <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
      <button class="btn" onclick="askKB('${name.replace("质","")}体质')">向本草智答咨询${name.slice(0,2)}调养</button>
@@ -3188,7 +3187,7 @@ function calcQuiz(){
      <button class="btn ghost" onclick="setQuizVersion(quizVersion)">重答当前问卷</button>
      <button class="btn ghost" onclick="go('game')">去药圃练辨药 →</button>
    </div>
-   <p class="small-note" style="font-size:12px;color:var(--ink3);margin-top:14px">* ${quizVersion==="full"?"完整版 60 题按 ZYYXH/T157-2009 附录整理，按九种体质亚量表真实条目数计分（8/8/7/8/8/6/7/7/7），平和质 6 题反向计分":"快捷版 27 题从国标完整版 60 题中选出代表性条目，判定阈值与完整版一致"}；转化分与判定标准依据《中医体质分类与判定》ZYYXH/T157-2009。结果仅用于按体质推荐经典读物，属文化科普自测，不构成医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>`;
+   <p class="small-note" style="font-size:14px;color:var(--ink3);margin-top:14px">* ${quizVersion==="full"?"完整版 60 题按 ZYYXH/T157-2009 附录整理，按九种体质亚量表真实条目数计分（8/8/7/8/8/6/7/7/7），平和质 6 题反向计分":"快捷版 27 题从国标完整版 60 题中选出代表性条目，判定阈值与完整版一致"}；转化分与判定标准依据《中医体质分类与判定》ZYYXH/T157-2009。结果仅用于按体质推荐经典读物，属文化科普自测，不构成医疗诊断，确切判定与调理以中医师四诊合参结论为准。</p>`;
   $("#quizResult").scrollIntoView({behavior:"smooth"});
   setTimeout(()=>document.querySelectorAll("#quizResult .bar i").forEach(b=>b.style.width=b.dataset.w+"%"),60);
 }
