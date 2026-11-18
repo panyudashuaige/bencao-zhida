@@ -2491,9 +2491,11 @@ function askMark(name){
   const a=askGet();if(a[name])return;
   a[name]=1;try{localStorage.setItem("bzAsked",JSON.stringify(a));}catch(e){}
 }
-/* ===== v102 B方案：问过药童后返回图鉴，自动弹一次小考 =====
-   bzQuizPrompted 记录「已自动弹过」的考核型本草，每味只自动弹一次，防反复打扰；
-   手动点卡片重考不受此标记影响；答对点亮后自然不再弹（alGet 已为真）。 */
+/* ===== v102 B方案 + v118 修复：问过药童后返回图鉴，自动弹小考 =====
+   v118：bzQuizPrompted 的写入时机由「弹考前」移到「答对点亮后」（见 finishQuiz）。
+   此前弹前就打标，用户点「稍后再考」关掉后该味永不复弹，属 bug；
+   现在未答对前每次进图鉴都会继续弹，直到答对为止；答对后 alGet 与 promptMark 双重排除不再弹；
+   手动点卡片重考不受此标记影响。 */
 var _promptStore=null;
 function promptGet(){
   if(_promptStore)return _promptStore;
@@ -2513,12 +2515,12 @@ function pendingQuizHerb(){
   }
   return null;
 }
-/* 返回图鉴自动弹考：每次进页最多弹一味，先打标记再延迟弹出，避免打断首屏渲染 */
+/* 返回图鉴自动弹考：每次进页最多弹一味，延迟弹出避免打断首屏渲染。
+   v118：不再在弹考前打标记——用户点「稍后再考」后若能复弹，标记改到答对点亮时写入（finishQuiz）。 */
 function autoPromptQuiz(){
   if(!$("#albumArea"))return; // MPA：仅图鉴页挂载
   const name=pendingQuizHerb();
   if(!name)return;
-  promptMark(name);
   setTimeout(()=>openHerbQuiz(name,true),800);
 }
 /* 题库轮换：同一味每次换一题，避免次次同题 */
@@ -2634,8 +2636,14 @@ function finishQuiz(){
   if(card){
     card.classList.add("inking");
     const ink=document.createElement("div");ink.className="al-ink";card.appendChild(ink);
-    setTimeout(()=>{unlockHerb(name);if(typeof renderAlbum==="function")renderAlbum();},720);
-  }else{unlockHerb(name);if(typeof renderAlbum==="function")renderAlbum();}
+    setTimeout(()=>{unlockHeroQuizDone(name);},720);
+  }else{unlockHeroQuizDone(name);}
+}
+/* v118：答对点亮后统一收尾——点亮本草 + 打「已弹考」标记（防答对后复弹）+ 重绘图鉴 */
+function unlockHeroQuizDone(name){
+  unlockHerb(name);
+  promptMark(name);
+  if(typeof renderAlbum==="function")renderAlbum();
 }
 /* ===== 岐黄打卡（阅读打卡 · 文化节读者互动） ===== */
 const CI_QUOTES=[
