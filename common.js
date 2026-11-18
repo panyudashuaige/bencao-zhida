@@ -138,7 +138,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">本 草 名 录 · 性 味 归 经</div>
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
-    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。每味均附工笔插画，点图可放大细看；14 味代表药另入本草图鉴集章。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
+    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处一卡尽览。可按安全分级、功效、体质多维筛选（一味常兼数效，均标注），也可按药名检索。每味均附工笔插画，点图可放大细看；14 味代表药另入本草图鉴集章。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
     <div id="searchBar_herb"></div>
     <div id="herbArea"></div>
   </div>`,
@@ -576,6 +576,14 @@ const TZ_ALL=["平和质","气虚质","阳虚质","阴虚质","痰湿质","湿�
 const MED_NOTE="用法用量为典籍与药典所载传统用法、常见量范围，仅供科普学习；具体用量与配伍须遵中医师辨证，不构成医疗建议。";
 
 const HERB_CATS=["解表","清热","祛湿","温里","补益","理气","活血","化痰","安神","泻下"];
+/* v113：功效多标签映射——一味可归多类（主功效在前、次功效在后），覆盖全部 77 味，供名录页功效筛选条使用。
+   旧的单一 h.cat 仅保留作知识库速查索引；此处按中药学常识补全主/次功效，避免「补益一大堆、泻下仅一味」的失衡。 */
+const HERB_FX={
+"黄芪":["补益","祛湿"],"当归":["补益","活血"],"枸杞子":["补益"],"金银花":["清热","解表"],"陈皮":["理气","化痰","祛湿"],"茯苓":["祛湿","安神","补益"],"甘草":["补益","清热"],"菊花":["解表","清热"],"山楂":["理气","活血"],"生姜":["解表","温里","化痰"],"人参":["补益","安神"],"莲子":["补益","安神"],"山药":["补益"],"薄荷":["解表","清热"],
+"桂枝":["解表","温里"],"防风":["解表","祛湿"],"葛根":["解表","清热"],"石膏":["清热"],"黄芩":["清热","祛湿"],"黄连":["清热","祛湿"],"生地黄":["清热","补益"],"苍术":["祛湿","解表"],"薏苡仁":["祛湿","补益"],"泽泻":["祛湿","清热"],"干姜":["温里","化痰"],"肉桂":["温里","补益"],"白术":["补益","祛湿"],"党参":["补益"],"熟地黄":["补益"],"麦冬":["补益","安神"],"香附":["理气","活血"],"木香":["理气"],"川芎":["活血","理气","解表"],"丹参":["活血","安神"],"三七":["活血"],"半夏":["化痰","祛湿"],"桔梗":["化痰","解表"],"酸枣仁":["安神","补益"],"五味子":["安神","补益"],"大黄":["泻下","清热","活血"],
+"大枣":["补益","安神"],"黄精":["补益"],"太子参":["补益"],"白扁豆":["祛湿","补益"],"益智仁":["温里","补益"],"菟丝子":["补益"],"艾叶":["温里","活血"],"肉苁蓉":["补益","泻下"],"百合":["补益","安神"],"玉竹":["补益"],"北沙参":["补益"],"石斛":["补益","清热"],"女贞子":["补益"],"桑椹":["补益"],"荷叶":["祛湿","清热"],"冬瓜皮":["祛湿","清热"],"砂仁":["祛湿","理气","温里"],"藿香":["祛湿","解表"],"茵陈":["祛湿","清热"],"栀子":["清热","祛湿"],"蒲公英":["清热","祛湿"],"车前子":["祛湿","清热","化痰"],"红花":["活血"],"桃仁":["活血","泻下","化痰"],"赤芍":["清热","活血"],"郁金":["活血","理气","清热"],"益母草":["活血","祛湿","清热"],"玫瑰花":["理气","活血"],"佛手":["理气","化痰"],"合欢花":["安神","理气"],"柴胡":["解表","理气"],"乌梅":["安神","化痰"],"蝉蜕":["解表","清热"],"白芷":["解表","祛湿"],"辛夷":["解表"],"灵芝":["安神","补益","化痰"],"麻黄":["解表","化痰","祛湿"]
+};
+function herbFxOf(h){const fx=HERB_FX[h.n];if(fx)return fx;return h.cat?[h.cat]:[];}
 const FORMULAS=[
  {n:"四君子汤",s:"《太平惠民和剂局方》",comp:"人参（或党参）、白术、茯苓、炙甘草",d:"益气健脾。主治脾胃气虚证——面色萎白、语声低微、食少便溏、气短乏力。四味皆平和之品，取\u201c君子致中和\u201d之义，为补气剂的基础方，后世诸多补气健脾方多从此化裁。",b:"《太平惠民和剂局方》《汤头歌诀》"},
  {n:"四物汤",s:"始载唐·蔺道人《仙授理伤续断秘方》，后广收《太平惠民和剂局方》",comp:"熟地黄、当归、白芍、川芎",d:"补血调血。主治营血虚滞证——心悸失眠、头晕目眩、面色无华、月经不调或经闭不行。四味补中有行、静中有动，为妇科调经与补血的第一基础方，与四君子汤并称气血双补之基。",b:"《太平惠民和剂局方》《汤头歌诀》"},
@@ -1407,17 +1415,20 @@ function herbListHtml(tz){
     return searchInfo(sq,list.length,"味本草")+
       (list.length?`<div class="mat-grid">`+list.map(h=>herbCard(h,true)).join("")+`</div>`:searchEmpty(sq));
   }
-  const safe=safeParam();
+  const safe=safeParam(),fx=fxParam();
   const hit=h=>(herbMeta(h).fit||[]).indexOf(tz)>=0;
   const safeHit=h=>!safe||herbSafe(h.n)===safe;
-  const use=ALL_HERBS.filter(h=>(!tz||hit(h))&&safeHit(h));
+  const fxHit=h=>!fx||herbFxOf(h).indexOf(fx)>=0;
+  const use=ALL_HERBS.filter(h=>(!tz||hit(h))&&safeHit(h)&&fxHit(h));
   let html=`<div class="herb-safety"><span class="hs-ico">⚠️</span><span>收录内容仅供科普，不能替代医生面诊。具体用法用量与配伍须由中医师辨证，请勿盲目照方自服。</span></div>`+
     safeBar(safe)+
+    fxBar(fx)+
     tzBar("herb",tz)+
     tzSum(use,tz,"味本草")+
+    (fx?`<p class="fx-sum">◈ 已按功效「<b>${fx}</b>」筛选：一味可兼多效，凡含「${fx}」功效者均列出（含主效与次效），共 <b>${use.length}</b> 味。</p>`:"")+
     (tz?`<div class="tz-warn-box"><span class="tw-ico">⚠️</span><span>中医调养需辨证。体质往往是复合的（如气阴两虚），以下展示的药材仅代表其常用于该方向的调养，不代表处方，切勿自行盲目抓药服用。</span></div>`:`<div class="tz-filter-note">注：按体质筛选仅为科普检索方向，不代表临床配伍处方。</div>`);
   const block=(key)=>{
-    const list=ALL_HERBS.filter(h=>herbSafe(h.n)===key&&safeHit(h)&&(!tz||hit(h)));
+    const list=ALL_HERBS.filter(h=>herbSafe(h.n)===key&&safeHit(h)&&fxHit(h)&&(!tz||hit(h)));
     if(!list.length)return "";
     const meta=SAFE_META[key];
     return `<div class="mat-grp safe-grp sg-${key}"><h3 class="mat-h3">${meta.label}（${list.length} 味）</h3>`+
@@ -1589,6 +1600,17 @@ function fourToday(){
 /* ===== v51：按体质筛选 + 用法用量 + 配图（三页共用） ===== */
 function tzParam(){try{const t=new URLSearchParams(location.search).get("tz");return TZ_ALL.indexOf(t)>=0?t:"";}catch(e){return "";}}
 function safeParam(){try{const v=new URLSearchParams(location.search).get("safe");return ["food","common","special"].indexOf(v)>=0?v:"";}catch(e){return "";}}
+function fxParam(){try{const v=new URLSearchParams(location.search).get("fx");return HERB_CATS.indexOf(v)>=0?v:"";}catch(e){return "";}}
+function fxBar(fx){
+  const qs=[];
+  if(tzParam())qs.push("tz="+encodeURIComponent(tzParam()));
+  if(safeParam())qs.push("safe="+safeParam());
+  const base="herb.html"+(qs.length?"?"+qs.join("&"):"");
+  const links=["<a href=\""+base+"\" class=\""+(fx?"":"on")+"\">全部</a>"]
+    .concat(HERB_CATS.map(c=>{const u="herb.html?"+(qs.length?qs.join("&")+"&":"")+"fx="+encodeURIComponent(c);
+      return `<a href="${u}" class="${fx===c?"on":""}">${c}</a>`;}));
+  return `<div class="fx-filter"><b>◈ 按功效筛选</b>`+links.join("")+(fx?`<a href="${base}" class="fx-clear">✕ 清除</a>`:"")+`</div>`;
+}
 function herbSafe(n){return HERB_SAFE[n]||"common";}
 function safeBar(safe){
   const items=[["","全部"],["food","🟢 药食同源（日常可食）"],["common","🟡 常用本草（需辨体质）"],["special","🔴 特殊/有毒（须遵医嘱）"]];
@@ -1697,6 +1719,17 @@ function closeImgZoom(){
   const pic=mask.querySelector(".img-zoom-pic");if(pic)pic.removeAttribute("src");
   document.body.style.overflow="";
 }
+/* v113：卡片功效标签——一味可显示多个功效，点标签即按该功效筛选（并保留当前体质/安全筛选） */
+function fxTagHtml(h){
+  const fx=herbFxOf(h),tz=tzParam(),safe=safeParam();
+  if(!fx.length)return "";
+  return `<span class="mat-fxs">`+fx.map((c,i)=>{
+    const qs=["fx="+encodeURIComponent(c)];
+    if(tz)qs.push("tz="+encodeURIComponent(tz));
+    if(safe)qs.push("safe="+safe);
+    return `<a class="fx-tag${i===0?" fx-main":""}" href="herb.html?${qs.join("&")}" title="按功效「${c}」筛选">${c}</a>`;
+  }).join("")+`</span>`;
+}
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
   const tox=HERB_TOX[h.n]||"无毒";
@@ -1712,7 +1745,7 @@ function herbCard(h,illust){
   const useTip=`<span class="note-dose">日常泡饮、入膳随口味取用即可，具体用量遵医嘱。</span>`;
   return `<div class="mat-card">
     ${ph?`<img class="m-img zoomable" src="${ph.src}" alt="${h.n}配图" title="点击放大" onclick="openImgZoom(this)" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap} · 点击放大</div>`:""}
-    <div class="mat-card-h"><b>${h.n}</b>${tox==="药食同源"?"":`<span class="tox-tag tox-${toxCls}">[${tox}]</span>`}<span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${illust?"":`<span class="mat-cat">${h.cat||'本草'}</span>`}</div>
+    <div class="mat-card-h"><b>${h.n}</b>${tox==="药食同源"?"":`<span class="tox-tag tox-${toxCls}">[${tox}]</span>`}<span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${fxTagHtml(h)}</div>
     <div class="kv"><span class="k">性味归经</span>${h.f}</div>
     <div class="kv"><span class="k">药材形貌</span>${h.x}</div>
     <div class="kv"><span class="k">功效主治</span>${h.e}</div>
@@ -2789,7 +2822,7 @@ function refreshFeatMeta(){
     put("album",`已点亮 ${stamps} / ${HERBS.length} 味`,stamps>0);
     put("read",`${BOOKS.length} 部典籍`+(p?` · 契合${p.n}已点亮`:" · 让小药童识体质后点亮契合书目"),!!p);
     put("checkin",`连续 ${streak} 天 · 今日${doneCi?"已":"未"}打卡`,doneCi);
-    put("herb",`${ALL_HERBS.length} 味本草 · 按功效分门`,false);
+    put("herb",`${ALL_HERBS.length} 味本草 · 多维筛选可查`,false);
     put("formula",`${FORMULAS.length} 首名方 · ${FORMULAS[0].n}等`,false);
     put("acup",`${ACUP.length} 处要穴 · ${ACUP.map(a=>a.n).join(" / ")}`,false);
   }catch(e){}
