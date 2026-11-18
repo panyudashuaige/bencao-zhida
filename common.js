@@ -98,7 +98,7 @@ const PAGE_HTML={
   <div class="card">
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
-    <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。先看下方 AI 状态栏：未测体质可一键答题，已测体质可一键筛选契合书目。</p>
+    <p class="desc">二十部岐黄经典，按你的体质点亮契合书目——辨过体质后，相契的几部会排在最前，附导读与读阶。点「阅读选段」读原文和白话译文；没测体质也能按难度自由翻。下方状态栏可一键答题或按体质筛选。</p>
     <div class="read-rec" id="readRec"></div>
     <div class="read-path" id="readPath"><b>药童荐读路线</b></div>
     <div id="searchBar_read"></div>
@@ -131,14 +131,14 @@ const PAGE_HTML={
   <div class="card" id="checkinBody">
     <div class="orn">岐 黄 打 卡</div>
     <h2>每日一格<span class="dot"> · </span>集满本草</h2>
-    <p class="desc">中医药文化 · 读者互动专区。每日到园中签到一格，顺手认一味当令本草；连续打卡，本草名帖上的印记会越来越满——把岐黄之学读成一种习惯。</p>
+    <p class="desc">每天来园里签到一格，顺手认一味当令本草；签得越久，名帖上的印记越满。不必求快，把岐黄之学读成日常就好——集满本草，你就是百草园的常客。</p>
     <div id="checkinArea"></div>
   </div>`,
  herb:`
   <div class="card mat-card">
     <div class="orn">本 草 名 录 · 性 味 归 经</div>
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
-    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处一卡尽览。可按安全分级、功效、体质多维筛选（一味常兼数效，均标注），也可按药名检索。每味均附工笔插画，点图可放大细看；14 味代表药另入本草图鉴集章。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
+    <p class="desc">77 味本草，一卡看全性味归经、形貌、功效与典籍出处。按药名搜，或按功效、体质、安全分级筛——一味兼数效也逐个标清。点插画能放大细看，卡片下方还能直接问小药童；14 味代表药收在「本草图鉴」等你集章。</p>
     <div id="searchBar_herb"></div>
     <div id="herbArea"></div>
   </div>`,
@@ -146,7 +146,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">名 方 要 诀 · 组 成 方 义</div>
     <h2>名方要诀<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。点击任意条目可追问 AI 小药童。</p>
+    <p class="desc">30 首名方，一卡看清组成配伍、方义主治与方书源流。读懂一首方，先看它为什么这样配；按方名可搜，点条目下方按钮还能直接问小药童。</p>
     <div class="formula-health-banner"><span>⚠️ 中药需辨证论治，本页仅作文献展示，严禁自行抓药。</span></div>
     <div id="searchBar_formula"></div>
     <div id="formulaArea"></div>
@@ -169,7 +169,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">经 络 腧 穴 · 定 位 主 治</div>
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本站据中医药经典文献整理 32 处经络要穴：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点击下方按钮可直达 AI 小药童，追问取穴手法与禁忌。</p>
+    <p class="desc">32 处经络要穴，一卡查清所属经络、定位取穴、功效主治与经典出处。取穴手法、按摩禁忌拿不准，按名称搜到它，点卡片下方按钮问小药童。</p>
     <div class="acup-health-banner"><span>⚠️ 穴位按摩仅作日常保健辅助，不具备治疗作用。若按压时出现剧烈疼痛，或本身患有严重心血管疾病、处于孕期，请立即停止并咨询医生。</span></div>
     <div id="searchBar_acupoint"></div>
     <div id="acupArea"></div>
@@ -178,7 +178,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">四 时 调 神 · 顺 岁 而 养</div>
     <h2>四时调神<span class="dot"> · </span>顺岁而养</h2>
-    <p class="desc">春生、夏长、秋收、冬藏。本页依据《素问·四气调神大论》与二十四节气，整理四时原文要义、当季节气、当令本草与应时荐读。点击节气即可沉浸式预览当季风光。</p>
+    <p class="desc">春生、夏长、秋收、冬藏——顺着《素问·四气调神大论》的节律，过好二十四节气。每一季都备好原文要义、当令本草与应时荐读；点开节气可沉浸式看当季风光，点「回到今日」就回到眼前这一季。</p>
     <div class="four-tabs" id="fourTabs">
       <button class="four-tab" data-s="春" onclick="fourSetSeason('春')">春 · 生</button>
       <button class="four-tab" data-s="夏" onclick="fourSetSeason('夏')">夏 · 长</button>
@@ -192,7 +192,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">九 种 体 质 · 因 人 施 养</div>
     <h2>九种体质<span class="dot"> · </span>通鉴</h2>
-    <p class="desc">本页依据《中医体质分类与判定》整理平和、气虚、阳虚等九种体质的画像与调养宜忌，并精准关联对应的本草、名方与穴位。想知道自己属于哪一种？可前往「体质辨识」完成问卷自测，或直接点击卡片追问AI小药童。</p>
+    <p class="desc">九种体质，看清自己偏向哪一类：每种体质的画像、表现与调养宜忌，都配好了对应的本草、名方与穴位。还没测过？先去「体质辨识」答几题，回来再看更对号；点卡片下方「问小药童」，还能接着深挖。</p>
     <div id="tzArea"></div>
     <div class="tz-qa"><b>◈ 这些体质问题，交给 AI 小药童</b>
       <div class="tz-care3-pick"><select id="tzCare3Sel" aria-label="选择体质调理问题">
