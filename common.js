@@ -100,7 +100,6 @@ const PAGE_HTML={
     <div class="orn">经 典 荐 读 · 按 体 质</div>
     <h2>读经典<span class="dot"> · </span>先识体质再开卷</h2>
     <p class="desc">AI 小药童辨出你的体质后，会从二十部岐黄经典中点亮与你相契的书目并排在最前，并附上导读、阅读难度与适合人群。点击书卡下方的「阅读选段」，即可翻开原文与白话译文；未辨识体质也可按读阶自由翻阅。先看下方 AI 状态栏：未测体质可一键答题，已测体质可一键筛选契合书目。</p>
-    ${knowBar('read','黄帝内经')}
     <div class="read-rec" id="readRec"></div>
     <div class="read-path" id="readPath"><b>药童荐读路线</b></div>
     <div id="searchBar_read"></div>
@@ -141,7 +140,6 @@ const PAGE_HTML={
     <div class="orn">本 草 名 录 · 性 味 归 经</div>
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
     <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「✍️工笔」者另附手绘画像（见本草图鉴）。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
-    ${knowBar('herb','黄芪')}
     <div id="searchBar_herb"></div>
     <div id="herbArea"></div>
   </div>`,
@@ -151,7 +149,6 @@ const PAGE_HTML={
     <h2>名方要诀<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典整理 30 首名方：组成配伍、方义主治与方书源流一卡尽览。点击任意条目可追问 AI 小药童。</p>
     <div class="formula-health-banner"><span>⚠️ 中药需辨证论治，本页仅作文献展示，严禁自行抓药。</span></div>
-    ${knowBar('formula','四君子汤')}
     <div id="searchBar_formula"></div>
     <div id="formulaArea"></div>
   </div>`,
@@ -175,7 +172,6 @@ const PAGE_HTML={
     <h2>经络要穴<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本站据中医药经典文献整理 32 处经络要穴：所属经络、定位取穴、功效主治与经典出处，一卡尽览。点击下方按钮可直达 AI 小药童，追问取穴手法与禁忌。</p>
     <div class="acup-health-banner"><span>⚠️ 穴位按摩仅作日常保健辅助，不具备治疗作用。若按压时出现剧烈疼痛，或本身患有严重心血管疾病、处于孕期，请立即停止并咨询医生。</span></div>
-    ${knowBar('acupoint','足三里')}
     <div id="searchBar_acupoint"></div>
     <div id="acupArea"></div>
   </div>`,
@@ -184,7 +180,6 @@ const PAGE_HTML={
     <div class="orn">四 时 调 神 · 顺 岁 而 养</div>
     <h2>四时调神<span class="dot"> · </span>顺岁而养</h2>
     <p class="desc">春生、夏长、秋收、冬藏。本页依据《素问·四气调神大论》与二十四节气，整理四时原文要义、当季节气、当令本草与应时荐读。点击节气即可沉浸式预览当季风光。</p>
-    ${knowBar('seasons','四时养生')}
     <div class="four-tabs" id="fourTabs">
       <button class="four-tab" data-s="春" onclick="fourSetSeason('春')">春 · 生</button>
       <button class="four-tab" data-s="夏" onclick="fourSetSeason('夏')">夏 · 长</button>
@@ -199,19 +194,7 @@ const PAGE_HTML={
     <div class="orn">九 种 体 质 · 因 人 施 养</div>
     <h2>九种体质<span class="dot"> · </span>通鉴</h2>
     <p class="desc">本页依据《中医体质分类与判定》整理平和、气虚、阳虚等九种体质的画像与调养宜忌，并精准关联对应的本草、名方与穴位。想知道自己属于哪一种？可前往「体质辨识」完成问卷自测，或直接点击卡片追问AI小药童。</p>
-    ${knowBar('constitution','九种体质')}
-    <div class="tz-lead">
-      <a class="btn red" style="text-decoration:none" href="quiz.html?m=full">答 27 题快捷版辨体质</a>
-      <a class="btn ghost" style="text-decoration:none" href="quiz.html?v=full">完整版 60 题（国标全条目）→</a>
-      <a class="btn ghost" style="text-decoration:none" href="seasons.html">四时调神 · 顺岁而养 →</a>
-      <a class="btn ghost" style="text-decoration:none" href="read.html">按体质荐经典 →</a>
-    </div>
     <p class="tz-rule-lead">本页依据《中医体质分类与判定》国标，为你展示九种体质的特征与调养方向。</p>
-    <details class="tz-rule-fold">
-      <summary>❓ 如何判定我的体质？（点击查看国标计分规则）</summary>
-      <div class="mat-note">◈ 九种体质分「一种平和 + 八种偏颇」。偏颇体质并非疾病，只提示易感倾向与调养方向；多数人兼夹两三种，以医师四诊合参结论为准，不宜自行对号入座。</div>
-      <div class="mat-note">◈ <b>判定标准</b>（ZYYXH/T157-2009）：九种体质各成亚量表，按「没有 / 偶尔 / 有时 / 经常 / 总是」五级计分，转化分 ＝ [(原始分 − 条目数) ÷ (条目数 × 4)] × 100。偏颇质 ≥40 判「是」、30~39 判「倾向是」、＜30 判「否」；平和质 ≥60 且八种偏颇质均 ＜30 判「是」，≥60 且八种偏颇质均 ＜40 判「基本是」。兼夹体质即同时有两个以上亚量表过线，本站问卷结果会一并列出。</div>
-    </details>
     <div id="tzArea"></div>
     <div class="tz-qa"><b>◈ 这些体质问题，交给 AI 小药童</b>
       <div class="tz-care3-pick"><select id="tzCare3Sel" aria-label="选择体质调理问题">
@@ -1331,23 +1314,23 @@ const PAGE_INIT={
   constitution:()=>{renderConstitution();}          // 九种体质通鉴：四组九卡 + AI 小药童追问
 };
 /* ===== v106：四页通用页内搜索（经典荐读 / 本草名录 / 名方要诀 / 经络要穴） ===== */
-/* 搜索优先：输入关键词时暂时脱离体质/安全/分类筛选，按全文命中展示；清空即恢复原筛选 */
+/* v108 名称检索：只按 药名/方名/穴名/书名 匹配；输入关键词时暂时脱离体质/安全/分类筛选；清空即恢复原筛选 */
 const SEARCH_Q={read:"",herb:"",formula:"",acupoint:""};
-const SEARCH_PH={read:"搜书名、作者、导读、金句或标签…",herb:"搜药名、性味、功效或出处…",formula:"搜方名、组成药材、主治或源流…",acupoint:"搜穴名、经络、定位或主治…"};
+const SEARCH_PH={read:"搜书名…",herb:"搜药名…",formula:"搜方名…",acupoint:"搜穴名…"};
 function searchEsc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-/* 全文匹配：查询词按空白切成多词，全部命中才算匹配（不区分大小写） */
+/* 名称匹配：查询词按空白切成多词，全部命中才算匹配（不区分大小写）；v108 起索引只取名字，不检索正文 */
 function qMatch(text,q){
   const t=String(text||"").toLowerCase();
   const ts=String(q||"").toLowerCase().trim().split(/\s+/).filter(Boolean);
   return ts.length>0&&ts.every(w=>t.indexOf(w)>=0);
 }
-function herbSearchText(h){return [h.n,h.cat,h.f,h.x,h.e,h.s,h.b,HERB_NOTE[h.n]||"",HERB_PHARM[h.n]||""].join(" ");}
-function formulaSearchText(f){const m=formulaMeta(f);return [f.n,f.s,f.comp,f.d,f.b,(m.fit||[]).join(" ")].join(" ");}
-function acupSearchText(a){const m=acupMeta(a);return [a.n,a.m,a.loc,a.d,a.b,(m.fit||[]).join(" "),m.msg||"",m.care||""].join(" ");}
-function bookSearchText(b){return [b.t,b.au,b.d,b.why,b.diff,b.hl,b.hs,(b.tg||[]).join(" "),(b.fit||[]).join(" ")].join(" ");}
+function herbSearchText(h){return h.n;}
+function formulaSearchText(f){return f.n;}
+function acupSearchText(a){return a.n;}
+function bookSearchText(b){return b.t;}
 function searchInfo(q,n,unit){
   if(!q)return "";
-  return `<div class="s-sum">🔍 全文检索「<b>${searchEsc(q)}</b>」：命中 <b>${n}</b> ${unit}（已暂时脱离体质 / 安全 / 分类筛选；点输入框末尾 ✕ 恢复原列表）</div>`;
+  return `<div class="s-sum">🔍 按名称查找「<b>${searchEsc(q)}</b>」：命中 <b>${n}</b> ${unit}（已暂时脱离体质 / 安全 / 分类筛选；点输入框末尾 ✕ 恢复原列表）</div>`;
 }
 function searchEmpty(q){return `<div class="s-empty">没有找到与「${searchEsc(q)}」相关的内容。<br>换个关键词试试，或点 ✕ 清空搜索恢复原列表。</div>`;}
 /* 命中高亮：遍历结果容器的文本节点，把命中词包成 <mark class="s-hit">；先清旧高亮避免叠加 */
@@ -1419,7 +1402,7 @@ function mountSearchBar(kind){
 /* v81-herb-desc：说明区减负，核心提示并入顶部黄条 */
 function herbListHtml(tz){
   tz=tz||tzParam();
-  /* v106 搜索优先：有词则脱离体质/安全分级，全量按全文命中展示 */
+  /* v106 搜索优先：有词则脱离体质/安全分级，全量按名称命中展示（v108 只匹配名字） */
   const sq=(SEARCH_Q.herb||"").trim();
   if(sq){
     const list=ALL_HERBS.filter(h=>qMatch(herbSearchText(h),sq));
@@ -3467,7 +3450,7 @@ function renderBooks(f){
   let list=fitOnly?BOOKS.filter(b=>!!key&&fitOf(b)):BOOKS.filter(b=>on==="全部"||b.tg.includes(on));
   list=list.slice().sort((a,b)=>(fitOf(b)?1:0)-(fitOf(a)?1:0)); // 契合体质的书排在最前
   const box=$("#books");if(!box)return;
-  /* v106 搜索优先：有词则脱离分类/体质筛选，全量按全文命中展示 */
+  /* v106 搜索优先：有词则脱离分类/体质筛选，全量按名称命中展示（v108 只匹配名字） */
   const sq=(SEARCH_Q.read||"").trim();
   if(sq)list=BOOKS.filter(b=>qMatch(bookSearchText(b),sq));
   if(fitOnly&&!list.length&&!sq){box.innerHTML=`<div class="fit-empty">还没有与你的体质相契的书目。可点上方分类「全部」浏览二十部经典，或重测体质后再来。</div>`;return;}
