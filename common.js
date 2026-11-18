@@ -70,7 +70,6 @@ const PAGE_HTML={
     </div>
     <div class="q-toast" id="qToast"><b>药童</b><span id="qToastTxt"></span></div>
 
-    <div class="quiz-head" id="quizHead"><b>◈ 快捷版 · 27 题</b><span>计分与判定阈值依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009。</span></div>
     <div class="last-phys" id="lastPhys" style="display:none"></div>
     <div id="qList"></div>
     <div id="quizSubmit" style="text-align:center;margin-top:16px"><button class="btn red" onclick="calcQuiz()">提交 · 判定体质并荐经典</button></div>
@@ -139,7 +138,7 @@ const PAGE_HTML={
   <div class="card mat-card">
     <div class="orn">本 草 名 录 · 性 味 归 经</div>
     <h2>本草名录<span class="dot"> · </span>性味归经</h2>
-    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。带「✍️工笔」者另附手绘画像（见本草图鉴）。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
+    <p class="desc">本站据中医药经典整理 77 味本草：性味归经、药材形貌、功效主治与典籍出处，按功效分门一卡尽览。每味均附工笔插画，点图可放大细看；14 味代表药另入本草图鉴集章。点击下方按钮可直达 AI 小药童，深入追问本草细节。</p>
     <div id="searchBar_herb"></div>
     <div id="herbArea"></div>
   </div>`,
@@ -1672,9 +1671,34 @@ function fourHerbBrief(h){
     </div>
   </div>`;
 }
+/* v112：卡片配图点击放大（本草工笔插画 / 穴位定位示意图共用），懒创建浮层 */
+function openImgZoom(img){
+  const src=img&&img.getAttribute("src");if(!src)return;
+  let mask=$("#imgZoomMask");
+  if(!mask){
+    mask=document.createElement("div");mask.id="imgZoomMask";mask.className="img-zoom-mask";
+    mask.innerHTML=`<button class="img-zoom-close" aria-label="关闭" onclick="closeImgZoom()">×</button><div class="img-zoom-box" onclick="event.stopPropagation()"><img class="img-zoom-pic" alt=""><div class="img-zoom-cap"></div></div>`;
+    mask.addEventListener("click",closeImgZoom);
+    document.body.appendChild(mask);
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")closeImgZoom();});
+  }
+  const card=img.closest(".mat-card");
+  const capEl=card?card.querySelector(".m-imgcap"):null;
+  const alt=img.getAttribute("alt")||"配图";
+  mask.querySelector(".img-zoom-pic").src=src;
+  mask.querySelector(".img-zoom-pic").alt=alt;
+  mask.querySelector(".img-zoom-cap").textContent=capEl?capEl.textContent.trim():alt;
+  mask.classList.add("on");
+  document.body.style.overflow="hidden";
+}
+function closeImgZoom(){
+  const mask=$("#imgZoomMask");if(!mask)return;
+  mask.classList.remove("on");
+  const pic=mask.querySelector(".img-zoom-pic");if(pic)pic.removeAttribute("src");
+  document.body.style.overflow="";
+}
 function herbCard(h,illust){
   const m=herbMeta(h),tz=tzParam(),ph=herbPhoto(h);
-  const illustNow=illust||!!HERB_IMG[h.n]||!!HERB_GONGBI[h.n]; // 77 味均有工笔图
   const tox=HERB_TOX[h.n]||"无毒";
   const toxCls=tox==="药食同源"?"food":tox==="有小毒"?"small":tox==="需遵医嘱"?"care":"safe";
   const classic=h.s?h.s:`《神农本草经》将${h.n}列为上品，为常用之品。`;
@@ -1687,8 +1711,8 @@ function herbCard(h,illust){
   }
   const useTip=`<span class="note-dose">日常泡饮、入膳随口味取用即可，具体用量遵医嘱。</span>`;
   return `<div class="mat-card">
-    ${ph?`<img class="m-img" src="${ph.src}" alt="${h.n}配图" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap}</div>`:""}
-    <div class="mat-card-h"><b>${h.n}</b>${tox==="药食同源"?"":`<span class="tox-tag tox-${toxCls}">[${tox}]</span>`}<span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${illustNow?'<span class="mat-badge">🖌 工笔</span>':''}${illust?"":`<span class="mat-cat">${h.cat||'本草'}</span>`}</div>
+    ${ph?`<img class="m-img zoomable" src="${ph.src}" alt="${h.n}配图" title="点击放大" onclick="openImgZoom(this)" loading="lazy" decoding="async" onerror="this.style.display='none'"><div class="m-imgcap">${ph.cap} · 点击放大</div>`:""}
+    <div class="mat-card-h"><b>${h.n}</b>${tox==="药食同源"?"":`<span class="tox-tag tox-${toxCls}">[${tox}]</span>`}<span class="safe-badge sb-${herbSafe(h.n)}">${SAFE_META[herbSafe(h.n)].badge}</span>${illust?"":`<span class="mat-cat">${h.cat||'本草'}</span>`}</div>
     <div class="kv"><span class="k">性味归经</span>${h.f}</div>
     <div class="kv"><span class="k">药材形貌</span>${h.x}</div>
     <div class="kv"><span class="k">功效主治</span>${h.e}</div>
@@ -1729,7 +1753,7 @@ function acupCard(a){
   const m=acupMeta(a),tz=tzParam(),svg=USER_PHOTO[a.n]||ACUP_SVG[a.n],sd=ACUP_SIDE[a.n];
   const cap=USER_PHOTO[a.n]?"实 拍 图 · 用户提供":"取 穴 定 位 示 意 图 · 非 实 拍";
   const find=ACUP_FIND[a.n]||"以骨性标志为准，用同身寸（自身手指宽度）比量取穴。";
-  const imgHtml=svg?`<div class="m-imgwrap"><img class="m-img" src="${svg}" alt="${a.n}配图" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">${sd&&!USER_PHOTO[a.n]?`<span class="m-side-tag" style="left:${sd.x}%;top:${sd.y}%">${sd.t}</span>`:""}</div><div class="m-imgcap">${cap}</div><div class="m-capnote">示意图仅表意，找穴请结合下方骨性标志文字。</div>`:"";
+  const imgHtml=svg?`<div class="m-imgwrap"><img class="m-img zoomable" src="${svg}" alt="${a.n}配图" title="点击放大" onclick="openImgZoom(this)" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">${sd&&!USER_PHOTO[a.n]?`<span class="m-side-tag" style="left:${sd.x}%;top:${sd.y}%">${sd.t}</span>`:""}</div><div class="m-imgcap">${cap} · 点击放大</div><div class="m-capnote">示意图仅表意，找穴请结合下方骨性标志文字。</div>`:"";
   return `<div class="mat-card">
     ${imgHtml}
     <div class="mat-card-h"><b>${a.n}</b><span class="mat-cat">${a.m}</span></div>
@@ -3062,14 +3086,6 @@ function quizReviewHtml(name,tf,j){
     ${quizVersion==="brief"?`<button class="btn ghost qr-more" onclick="setQuizVersion('full')">想更贴近标准判定 · 换完整版 60 题 →</button>`:""}
   </div>`;
 }
-const JUDGE_RULE=`<div class="q-rule"><b>判定标准 · 两版一致，依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009</b>
-<span>转化分 = [(原始分 − 条目数) ÷ (条目数 × 4)] × 100，取值 0~100</span>
-<span>偏颇体质：≥40 判「是」 · 30~39 判「倾向是」 · ＜30 判「否」</span>
-<span>平和体质：转化分 ≥60 且八种偏颇质均 ＜30 判「是」；≥60 且八种偏颇质均 ＜40 判「基本是」；其余判「否」</span></div>`;
-const QUIZ_HEAD={
- brief:`<b>◈ 快捷版 · 27 题</b><span>从国标完整版 60 题中选出 27 条代表性条目（九种体质各 3 条），五级评分（1~5 分），约 3 分钟；适合快速自测。计分方法与判定阈值与完整版一致。</span>${JUDGE_RULE}`,
- full:`<b>◈ 完整版 · 60 题</b><span>依据中华中医药学会《中医体质分类与判定》ZYYXH/T157-2009 附录《中医体质分类与判定表》整理。九种体质亚量表条目数：平和质 8、气虚质 8、阳虚质 7、阴虚质 8、痰湿质 8、湿热质 6、血瘀质 7、气郁质 7、特禀质 7；其中 6 题跨亚量表共用、湿热质性别题二选一合并为 1 题，去重后共 60 道作答题。平和质 6 道反向计分（1↔5、2↔4、3 不变），系统已自动换算。</span>${JUDGE_RULE}`
-};
 const QUIZ_SAY={
  brief:"一共 27 题，请回想近一年的总体感受，按「没有 / 偶尔 / 有时 / 经常 / 总是」选择最贴近的一项；请尽量凭第一直觉作答，不要只按当天的状态。答完后，我会为你分析主导体质与兼夹体质，并为你推荐契合的经典。",
  full:"一共 60 题，按九种体质分组，回想近一年的总体感受五级作答；请尽量凭第一直觉作答，不要只按当天的状态。答完后，我会为你分析主导体质与兼夹体质，并为你推荐契合的经典。"
@@ -3086,13 +3102,12 @@ function setQuizVersion(v){
   if(info)info.innerHTML=quizVersion==="full"
     ?`<p>当前选择：完整版 60题。该版本依据国标附录全条目编制，按九种体质分组呈现，约 8 分钟；回想近一年的总体感受作答即可。</p><p>平和质带反向的 6 题系统已自动换算，第 41 题按自身性别对应的问法作答。</p>`
     :`<p>当前选择：快捷版 27题。该版本从国标 60 题中提取代表性条目，经大样本信效度检验，科学有效且仅需 3 分钟。</p><p>如需最详尽的体质特征分析，可切换至「完整版·60题」。</p>`;
-  const head=$("#quizHead");if(head)head.innerHTML=QUIZ_HEAD[quizVersion];
   const say=$("#faceSay");if(say)say.innerHTML=QUIZ_SAY[quizVersion];
   renderQuiz();
   updateQuizProgress();
 }
 function setQuizMode(m){setQuizVersion("brief");} /* 兼容旧 ?m=face / ?m=quick 外链，一律回落快捷版 */
-function scrollToQuiz(){var t=document.querySelector(".quiz-ver")||document.querySelector(".quiz-companion")||document.querySelector(".quiz-head");if(!t)return;var nav=document.getElementById("nav"),off=(nav?nav.offsetHeight:60)+10,y=t.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:y,behavior:"smooth"});}
+function scrollToQuiz(){var t=document.querySelector(".quiz-ver")||document.querySelector(".quiz-companion");if(!t)return;var nav=document.getElementById("nav"),off=(nav?nav.offsetHeight:60)+10,y=t.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:y,behavior:"smooth"});}
 function goQuiz(m){location.href="quiz.html"+(m?("?m="+encodeURIComponent(m)):"");} /* 构建脚本会替换为带参跨页跳转 */
 function goQuizFull(){location.href="quiz.html?v=full";}
 function renderQuiz(){
