@@ -116,10 +116,12 @@ const PAGE_HTML={
   <div class="card" id="gameBody">
     <div class="orn">看 图 辨 药</div>
     <h2>百草试炼<span class="dot"> · </span>过目识本草</h2>
-    <p class="desc">练习模式：<b>2 道看图辨药 + 5 道经典著作考点</b>（作者、名句、成书之最）+ <b>5 道全站通考点</b>（体质知识、药性理论、养生文化）+ 2 道<b>辨药眼力</b>相似药材题，共 <b>14 题</b>。<b>不限时</b>作答，每题答完奉上解析（看图题附外观辨识），没看懂还能一键去「本草问答」追问根源详解。知识竞赛：加量不加时——<b>3 道看图辨药 + 8 道经典著作考点 + 8 道全站通考点 + 2 道辨药眼力</b>，共 <b>21 题</b>、每题限时 8 秒，小药童亲自当裁判，拼眼力更拼手速，答完领称号、发战帖。<b>本页先不显示题目</b>——点下方「练习模式」按钮才出练习题；选「知识竞赛」会先进入准备预警页，确认「开始答题」后才开卷读秒。</p>
-    <div style="display:flex;gap:10px;justify-content:center;margin:12px 0 2px;flex-wrap:wrap">
-      <button class="btn red" id="btnPractice" onclick="setGameMode('practice')">🌿 练习模式 · 不限时 · 题题有解析</button>
-      <button class="btn ghost" id="btnContest" onclick="setGameMode('contest')">⏱ 知识竞赛 · 每题限时 8 秒</button>
+    <div class="game-intro">
+      <p class="gi-lead">题库涵盖经典、本草、方剂、体质等六线知识。答对得解析，不懂可随时问 AI 小药童。</p>
+    </div>
+    <div class="game-mode-btns">
+      <button class="btn red game-mode-btn" id="btnPractice" onclick="setGameMode('practice')"><b>🌿 练习模式</b><span>不限时 · 题题有解析</span></button>
+      <button class="btn ghost game-mode-btn" id="btnContest" onclick="setGameMode('contest')"><b>⏱ 知识竞赛</b><span>每题限时 8 秒 · 答完领称号</span></button>
     </div>
     <div class="bot-id game-bot" id="gameBot">
       <img id="gameBotImg" src="assets/mascot-idle.webp" alt="小药童裁判" loading="lazy" decoding="async">
@@ -2035,7 +2037,16 @@ const SITE_QS=[
  {q:"八段锦这类功法，在中医治法中属于哪一类？",opts:["导引按跷","针刺","汤药","砭石"],a:"导引按跷",d:1,fb:"导引按跷与针、灸、砭、药并列为中医五大治法——八段锦即导引术的现代传承。",root:"《黄帝内经·异法方宜论》提出中央之民「治宜导引按跷」——靠肢体运动配合呼吸导气引体；八段锦宋代已有歌诀记载，正是这套治法的活化石。"},
  {q:"中医九种体质中，被认为最理想、应努力保持的基准体质是？",opts:["平和质","气虚质","湿热质","特禀质"],a:"平和质",fb:"阴阳气血调和、面色红润精力足——平和质是「稳态天花板」，养生的目标就是朝它靠拢。",root:"王琦体质九分法以平和质为基准：其余八种皆为「偏颇体质」，调体养生即是「以平为期」——《内经》「谨察阴阳所在而调之，以平为期」正是理论源头。"},
  {q:"气虚质的人常疲乏气短，下列哪种调养方式最合适？",opts:["黄芪山药炖汤","通宵熬夜","冷饮解暑","剧烈运动"],a:"黄芪山药炖汤",fb:"气虚质宜补气：山药、莲子、黄芪入膳，忌过度劳累，练八段锦正合适。",root:"「劳则气耗」出自《素问·举痛论》——气虚者再熬夜、剧烈运动只会雪上加霜；黄芪补脾肺之气、山药平补三焦，正是本站给气虚质开出的调养锦囊。"},
- {q:"本站「体质辨识」的立意源自《黄帝内经》哪句话？",opts:["上工治未病，不治已病","冬病夏治","以毒攻毒","药食同源"],a:"上工治未病，不治已病",fb:"最高明的医术是让人不生病——体质辨识就是把\u201c治未病\u201d搬到你手边。",root:"《素问·四气调神大论》原句「圣人不治已病治未病，不治已乱治未乱」，并打比方：病已成而后药之，譬犹渴而穿井、斗而铸锥——体质辨识就是这条思想的现代化落地。"}
+ {q:"本站「体质辨识」的立意源自《黄帝内经》哪句话？",opts:["上工治未病，不治已病","冬病夏治","以毒攻毒","药食同源"],a:"上工治未病，不治已病",fb:"最高明的医术是让人不生病——体质辨识就是把\u201c治未病\u201d搬到你手边。",root:"《素问·四气调神大论》原句「圣人不治已病治未病，不治已乱治未乱」，并打比方：病已成而后药之，譬犹渴而穿井、斗而铸锥——体质辨识就是这条思想的现代化落地。"},
+ /* v124 新增：安全分级（红黄绿标）/ 体质禁忌 / 现代药理风险——与本站最新改版安全口径一致，绝不涉及具体剂量克数 */
+ {q:"本站本草名录的「安全分级」中，🔴 红标代表哪一类？",opts:["药食同源，日常可食","常用本草，需辨体质","特殊/有毒，须遵医嘱","只供外用，不可入口"],a:"特殊/有毒，须遵医嘱",d:1,fb:"红标=特殊/有毒（如麻黄、半夏、大黄、桃仁），须凭医师处方、遵医嘱使用；绿标才是药食同源。",root:"本站把 77 味药按风险分三级：🟢药食同源（日常可食）、🟡常用本草（需辨体质）、🔴特殊/有毒（须遵医嘱）——分级的依据是毒性与使用风险，不是药效贵贱。看到红标，先问医生再开口。"},
+ {q:"下列哪味药在本站被标为 🔴 红标（特殊/有毒）？",opts:["枸杞子","山药","麻黄","生姜"],a:"麻黄",fb:"麻黄含麻黄碱，属特殊管理药材，须凭执业医师处方使用；枸杞子、山药、生姜都是 🟢 药食同源。",root:"本站红标共四味：麻黄、半夏、大黄、桃仁——或含毒性成分、或作用峻烈、或有成瘾/出血风险，都不可自行煎服代茶。麻黄更因含麻黄碱被列入特殊管理，运动员也须慎用。"},
+ {q:"本站 🟢 绿标「药食同源」的正确理解是？",opts:["完全没有风险，可无限量吃","日常可食，仍要辨体质适量","只可入药，不可做菜","孕妇儿童都能随意进补"],a:"日常可食，仍要辨体质适量",d:1,fb:"绿标是日常可食的意思，不代表无风险——比如甘草长期大量吃也可能升高血压。",root:"「药食同源」说的是这些药材兼具食物属性（山药、生姜、莲子等），但「是药三分毒」仍成立：本站每味绿标药都附体质标签与禁忌，吃之前先看自己体质。"},
+ {q:"气虚质的人想日常调养，下列哪组食材更合适？",opts:["山药、小米、大枣","绿豆、苦瓜、西瓜","大量黄芪当水喝","冰饮、冷食清热"],a:"山药、小米、大枣",fb:"气虚质宜补气健脾、忌过度劳累；山药、小米、大枣平和补气，黄芪虽补气也不宜当饭吃。",root:"本站体质档案明确：气虚质「饮食上可多吃山药、小米，但请勿自行将黄芪等药材当饭吃，需遵医嘱」——「劳则气耗」，熬夜与剧烈运动会雪上加霜。"},
+ {q:"湿热质的人面部油腻、口苦口臭，哪种做法最不妥？",opts:["饮食清淡、少油腻","适当用金银花、绿豆清利","长期大量服用黄芩清热","规律作息、少熬夜"],a:"长期大量服用黄芩清热",fb:"湿热质宜清热利湿、饮食清淡；但黄芩苦寒伤胃，长期大量服用反伤脾胃。",root:"本站湿热质档案提醒「请勿自行将黄芩等药材当饭吃，需遵医嘱」；现代药理也提示黄芩苦寒，长期大量可致胃部不适、腹泻——清热也要讲分寸。"},
+ {q:"孕妇最应避免自行服用下列哪类药材？",opts:["活血通经、可能动胎的药材","平和的食药两用食材","补气健脾的常规食材","富含纤维的普通食物"],a:"活血通经、可能动胎的药材",fb:"本站多味药标注「孕妇忌用」：如益母草对子宫有兴奋作用、红花活血动血、桃仁有小毒——孕期切莫自行服用。",root:"孕期用药是高风险的领域：本站 HERB_PHARM 里红花、益母草、桃仁、三七等均标「孕妇忌用/慎用」，因为活血、兴奋子宫或含毒性成分可能引起宫缩或出血——这类问题必须当面问妇产科医生。"},
+ {q:"本站提示：丹参、三七与抗凝药（如华法林）同用会怎样？",opts:["增强补气效果","可能增加出血风险，须医师指导","完全没有影响","一定能防治血栓"],a:"可能增加出血风险，须医师指导",d:1,fb:"活血类中药与抗凝药叠加可能增加出血风险——正在服西药的人，加中药前先问医生。",root:"这是本站「现代药理风险」提示的重点：丹参、三七、红花等活血药与华法林等抗凝药同用会叠加抗凝作用，可能增加出血风险；「中药天然无毒」是误区，中西药同服必须告知医生。"},
+ {q:"关于甘草长期大量服用的现代药理风险，正确的是？",opts:["完全安全，可当日常饮品长期喝","可能引起水钠潴留、血压升高","只会伤肝，与血压无关","越喝越能补气"],a:"可能引起水钠潴留、血压升高",d:1,fb:"甘草长期大剂量可致假性醛固酮增多症——水钠潴留、血压升高，高血压、水肿者尤须慎用。",root:"本站把甘草列为 🟢 药食同源，但在 HERB_PHARM 里明确标注：长期大剂量服用可能引起水钠潴留、血压升高（假性醛固酮增多症）——这就是「绿标也要适量」的最好例证，还反藜芦、反甘遂大戟海藻芫花。"}
 ];
 /* 根源探究：竞赛/练习题追问药童时从根源讲解——每题对应一条「为什么」的底层说明 */
 const ROOTS={
@@ -2096,8 +2107,8 @@ function setGameMode(m){
   if(g&&g.timer){clearInterval(g.timer);g.timer=null;} // 切模式先停表
   if(g&&g.readyTimer){clearInterval(g.readyTimer);g.readyTimer=null;} // 切模式也停开卷倒数
   const bp=$("#btnPractice"),bc=$("#btnContest");
-  if(bp)bp.className=m==="practice"?"btn red":"btn ghost";
-  if(bc)bc.className=m==="contest"?"btn red":"btn ghost";
+  if(bp)bp.className="btn game-mode-btn "+(m==="practice"?"red":"ghost");
+  if(bc)bc.className="btn game-mode-btn "+(m==="contest"?"red":"ghost");
   startGame(m);
 }
 /* ===== 管理后台接入（bencao-admin）：题库热更新 + 成绩/问答盲区上报 =====
@@ -2241,17 +2252,7 @@ function startGame(mode){
 /* 待机屏：进入试炼页先不出题、不计时，等用户点模式按钮 */
 function renderGameIdle(){
   const box=$("#gameArea");if(!box)return;
-  box.innerHTML=`
-    <div class="game-idle">
-      <div class="gi-seal">试</div>
-      <h3>请先选一种试炼方式</h3>
-      <p>题目不会自己蹦出来〜点上方按钮才开卷：<b>练习模式</b>点下即出题；<b>知识竞赛</b>会先给你一张准备预警页，确认「开始答题」后才开始 ${CONTEST_LIMIT} 秒读秒。</p>
-      <div class="gi-grid">
-        <div><b>🌿 练习模式</b>14 题混合卷 · 不限时<br>答完即见解析，还能追问药童</div>
-        <div><b>⏱ 知识竞赛</b>21 题 · 每题限时 ${CONTEST_LIMIT} 秒<br>先预警、再开卷，答完领称号</div>
-      </div>
-      <p class="gi-note">◈ 此刻既没有题面、也没有倒计时，可以先去翻翻经典，准备好了再点按钮。</p>
-    </div>`;
+  box.innerHTML=`<div class="game-idle-simple">请选择一种试炼方式开始。</div>`;
 }
 /* 竞赛开卷预警：确认前不出题、不计时，给用户一个准备缓冲 */
 function renderContestReady(){
@@ -2296,9 +2297,12 @@ function buildPaper(contest){
   const imgs=shuffleArr(HERBS).slice(0,nImg).map(imgQuestion);
   const local=(q,tag)=>({kind:"mcq",tag,q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb,root:q.root});
   let texts;
-  if(contest&&REMOTE_QS&&REMOTE_QS.length>=4){
+  if(contest&&REMOTE_QS&&REMOTE_QS.filter(q=>!/\d\s*(克|g|毫升|ml)\b|剂量|用量/i.test(String(q.q||"")+String(q.a||""))).length>=4){
+    // v124：后台题库也要过滤具体剂量题，与本站「不提供剂量」的安全口径一致
+    const noDose=q=>!/\d\s*(克|g|毫升|ml)\b|剂量|用量/i.test(String(q.q||"")+String(q.a||""));
+    const safeRemote=REMOTE_QS.filter(noDose);
     const toMcq=q=>({kind:"mcq",tag:q.tag||"后台题库",q:q.q,opts:shuffleArr(q.opts),a:q.a,fb:q.fb||""});
-    const rem=pickText(REMOTE_QS,8).map(toMcq);
+    const rem=pickText(safeRemote,8).map(toMcq);
     const pool=shuffleArr(pickText(BOOK_QS,nBook).map(q=>local(q,"经典考点")).concat(pickText(SITE_QS,nSite).map(q=>local(q,"全站通"))));
     texts=rem.concat(pool.slice(0,nBook+nSite-rem.length));
   }else{
