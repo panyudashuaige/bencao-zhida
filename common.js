@@ -1846,17 +1846,16 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
 
 /* ===== 小药童：经典 + 春夏秋冬四季换装（AI 换装静图，点击互动共用经典动作） ===== */
 (function(){
-  /* 五套装束：经典为初见默认；四季是 AI 换装静图，裁成与经典相同的 269×320 半身构图，
-     显示位置 / 大小 / 头身比与原经典药童一致。v119 起删除四季各自的 60 帧动作图，
-     点击互动统一复用经典动作图 mascot-anim.webp —— 全站只剩一段动作，彻底消除换肤卡顿。 */
+  /* 五套装束：经典为初见默认；四季是 AI 换装图，裁成与经典相同的 269×320 半身构图，
+     显示位置 / 大小 / 头身比一致。v127 起五套各有自己的 60 帧互动动图（各自形象、葫芦不变形），
+     各自动作按需加载，点击时播放对应装束的专属动作。 */
   const SKINS={
-    classic:{idle:"assets/mascot-idle.webp",   name:"经典",      season:null},
-    spring: {idle:"assets/skin-spring-idle.webp", name:"春 · 发陈", season:"春"},
-    summer: {idle:"assets/skin-summer-idle.webp", name:"夏 · 蕃秀", season:"夏"},
-    autumn: {idle:"assets/skin-autumn-idle.webp", name:"秋 · 容平", season:"秋"},
-    winter: {idle:"assets/skin-winter-idle.webp", name:"冬 · 闭藏", season:"冬"}
+    classic:{idle:"assets/mascot-idle.webp",   act:"assets/mascot-anim.webp",        name:"经典",      season:null},
+    spring: {idle:"assets/skin-spring-idle.webp",act:"assets/skin-spring-act.webp", name:"春 · 发陈", season:"春"},
+    summer: {idle:"assets/skin-summer-idle.webp",act:"assets/skin-summer-act.webp", name:"夏 · 蕃秀", season:"夏"},
+    autumn: {idle:"assets/skin-autumn-idle.webp",act:"assets/skin-autumn-act.webp", name:"秋 · 容平", season:"秋"},
+    winter: {idle:"assets/skin-winter-idle.webp",act:"assets/skin-winter-act.webp", name:"冬 · 闭藏", season:"冬"}
   };
-  const ACT_SRC="assets/mascot-anim.webp"; // 唯一动作素材：经典动图，五套共用
   const ACT_MS=5100; // 60帧×83ms≈5s，留一点余量
   const TIPS=[
     "上工治未病，不治已病。——《黄帝内经》",
@@ -1877,17 +1876,22 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
     winter:["冬宜早卧晚起，必待日光，使志若伏若匿，勿扰乎阳。","冬主闭藏，围炉读《伤寒论》，最合「藏」字。","寒从脚下起，睡前温水泡脚，水温 40 度刚刚好。","进补须辨体质，阳虚宜温、阴虚宜润，一概峻补反而伤正。"]
   };
   const img=$("#mascot"),bubble=$("#mascotBubble"),hint=$("#mascotHint");
-  if(!img)return;
   let acting=false,actTimer=null,tipTimer,hintShown=false,tipSkin=null,curSkin="classic";
-  /* v119 卡顿治理：四张换装静图各约 10KB，进页即全部预载 → 换肤零等待、无白闪；
-     经典动作图 516KB 在首屏渲染后空闲预载一次，全站共用，点击时已就绪。
-     不再有「悬停即拉 1MB 四季动作图」与「点击解码 60 帧」的双重卡顿。 */
+  /* v127：四季各有自己的 60 帧互动动图（约 0.5-0.6MB），按需加载：
+     进页只预载 5 张静图，动作图在悬停/首次点击该皮肤时才拉取，避免首屏带宽压力。 */
   function preloadMascotAssets(){
     Object.keys(SKINS).forEach(k=>{const p=new Image();p.src=SKINS[k].idle;});
-    const a=new Image();a.src=ACT_SRC;
   }
   if(window.requestIdleCallback)requestIdleCallback(preloadMascotAssets,{timeout:1500});
   else setTimeout(preloadMascotAssets,900);
+  const actLoaded={};
+  function preloadSkinAct(key){
+    if(actLoaded[key])return;
+    actLoaded[key]=true;
+    const pre=new Image();pre.src=SKINS[key].act;
+  }
+  function preloadAct(){preloadSkinAct(curSkin);}
+  if(img){img.addEventListener("pointerenter",preloadAct,{once:true});img.addEventListener("touchstart",preloadAct,{once:true});}
 
   /* 经典 = 一键复原：药童回经典装，页面主色 / 飘落物 / 插画 / 荐读回到当令真实节气 */
   function restoreSeason(){
@@ -1944,9 +1948,10 @@ function go(p){location.href=(p==="home"?"index":p)+".html";}
   }
   function act(auto){
     if(acting)return;
+    preloadSkinAct(curSkin);
     acting=true;
     img.classList.add("acting");
-    img.src=ACT_SRC; // v119：五套互动统一复用经典动作图，不再各自加载 1MB 专属动图
+    img.src=SKINS[curSkin].act; // v127：每套播放自己的专属互动动图（形象一致、葫芦不变形）
     showTip();
     if(!hintShown){hint.classList.add("hide");hintShown=true;}
     actTimer=setTimeout(()=>{
